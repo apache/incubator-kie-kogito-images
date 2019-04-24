@@ -28,11 +28,12 @@ RUN yum install -y --setopt=skip_missing_names_on_install=False \
 COPY ./s2i/bin/ /usr/local/s2i
 RUN chmod 755 /usr/local/s2i/*
 
+COPY ./contrib/settings.xml ${SUBMARINE_HOME}/.m2/settings.xml
+RUN chown -R 1001:0 ${SUBMARINE_HOME}/.m2
+
 USER 1001
 
 WORKDIR ${SUBMARINE_HOME}
-
-COPY ./maven/ ${SUBMARINE_HOME}
 
 # Set the default CMD for the image
 CMD ["/usr/local/s2i/usage"]

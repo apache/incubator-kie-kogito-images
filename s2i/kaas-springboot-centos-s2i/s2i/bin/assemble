@@ -9,10 +9,70 @@
 export JAVA_HOME=/usr/lib/jvm/java
 export MAVEN_HOME=/usr/share/maven
 
+
+# insert settings for HTTP proxy into maven settings.xml if supplied
+function configure_proxy() {
+  
+  # prefer old http_proxy_ format for username/password, but
+  # also allow proxy_ format.
+  HTTP_PROXY_USERNAME=${HTTP_PROXY_USERNAME:-$PROXY_USERNAME}
+  HTTP_PROXY_PASSWORD=${HTTP_PROXY_PASSWORD:-$PROXY_PASSWORD}
+
+  proxy=${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-$http_proxy}}}
+  # if http_proxy_host/port is set, prefer that (oldest mechanism)
+  # before looking at HTTP(S)_PROXY
+  proxyhost=${HTTP_PROXY_HOST:-$(echo $proxy | cut -d : -f 1,2)}
+  proxyport=${HTTP_PROXY_PORT:-$(echo $proxy | cut -d : -f 3)}
+  
+  if [ -n "$proxyhost" ]; then
+    if [[ `echo $proxyhost | grep -i https://` ]]; then
+      proxyport=${proxyport:-443}
+      proxyprotocol="https"
+    else
+      proxyport=${proxyport:-80}
+      proxyprotocol="http"
+    fi
+
+    xml="<proxy>\
+         <id>genproxy</id>\
+         <active>true</active>\
+         <protocol>$proxyprotocol</protocol>\
+         <host>$proxyhost</host>\
+         <port>$proxyport</port>"
+    if [ -n "$HTTP_PROXY_USERNAME" -a -n "$HTTP_PROXY_PASSWORD" ]; then
+      xml="$xml\
+         <username>$HTTP_PROXY_USERNAME</username>\
+         <password>$HTTP_PROXY_PASSWORD</password>"
+    fi
+    if [ -n "$HTTP_PROXY_NONPROXYHOSTS" ]; then
+      xml="$xml\
+         <nonProxyHosts>$HTTP_PROXY_NONPROXYHOSTS</nonProxyHosts>"
+    fi
+  xml="$xml\
+       </proxy>"
+    sed -i "s|<!-- ### configured http proxy ### -->|$xml|" $HOME/.m2/settings.xml
+  fi
+}
+
+# insert settings for mirrors/repository managers into settings.xml if supplied
+function configure_mirrors() {
+  if [ -n "$MAVEN_MIRROR_URL" ]; then
+    xml="    <mirror>\
+      <id>mirror.default</id>\
+      <url>$MAVEN_MIRROR_URL</url>\
+      <mirrorOf>external:*</mirrorOf>\
+    </mirror>"
+    sed -i "s|<!-- ### configured mirrors ### -->|$xml|" $HOME/.m2/settings.xml
+  fi
+}
+
 # If the 'kaas-springboot-centos-s2i' assemble script is executed with the '-h' flag, print the usage.
 if [[ "$1" == "-h" ]]; then
 	exec /usr/libexec/s2i/usage
 fi
+
+configure_proxy
+configure_mirrors
 
 if [ "$(ls /tmp/artifacts/.m2 2>/dev/null)" ]; then
 		echo "---> Restore build artifacts"
@@ -24,13 +84,13 @@ cd /tmp/src/
 
 if [ -f "pom.xml" ]; then
 	echo "---> Building application from source..."
-	$MAVEN_HOME/bin/mvn clean package -s $SUBMARINE_HOME/settings.xml \
+	$MAVEN_HOME/bin/mvn clean package -s $SUBMARINE_HOME/.m2/settings.xml \
     -DskipTests -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
     -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
 else
 	echo "---> Generating project structure..."
 
-	$MAVEN_HOME/bin/mvn archetype:generate -B -DarchetypeGroupId=org.kie -DarchetypeArtifactId=kaas-springboot-archetype -DarchetypeVersion=8.0.0-SNAPSHOT -DgroupId=com.company -DartifactId=project -s $SUBMARINE_HOME/settings.xml
+	$MAVEN_HOME/bin/mvn archetype:generate -B -DarchetypeGroupId=org.kie -DarchetypeArtifactId=kaas-springboot-archetype -DarchetypeVersion=8.0.0-SNAPSHOT -DgroupId=com.company -DartifactId=project -s $SUBMARINE_HOME/.m2/settings.xml
 
 	# copy resources into the generated project
 	for item in *
@@ -47,7 +107,7 @@ else
 	mv project/* .
 
 	echo "---> Building application from source..."
-	$MAVEN_HOME/bin/mvn clean package -s $SUBMARINE_HOME/settings.xml \
+	$MAVEN_HOME/bin/mvn clean package -s $SUBMARINE_HOME/.m2/settings.xml \
     -DskipTests -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
     -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
 fi

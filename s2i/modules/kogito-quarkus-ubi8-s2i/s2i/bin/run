@@ -6,4 +6,8 @@
 # For more information see the documentation:
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
-exec $KOGITO_HOME/bin/*-runner ${JAVA_OPTIONS} -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080
+if [ "${NATIVE^^}" == "FALSE" ]; then
+    exec $JAVA_HOME/jre/bin/java ${JAVA_OPTIONS} -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar $KOGITO_HOME/bin/*runner.jar
+else
+    exec $KOGITO_HOME/bin/*-runner ${JAVA_OPTIONS} -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080
+fi

@@ -1,0 +1,16 @@
+name: Run S2I modules Bats Tests
+
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install bats
+        run: |
+          git clone https://github.com/bats-core/bats-core.git
+          cd bats-core
+          ./install.sh $HOME
+      - name: run data index tests
+        run: |
+          $HOME/bin/bats modules/kogito-data-index/tests/bats

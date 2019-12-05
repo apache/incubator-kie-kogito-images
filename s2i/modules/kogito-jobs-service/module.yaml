@@ -1,0 +1,11 @@
+schema_version: 1
+name: org.kie.kogito.jobs.service
+version: "0.6.0"
+
+artifacts:
+- name: kogito-jobs-service-runner.jar
+  url: https://repository.jboss.org/org/kie/kogito/jobs-service/8.0.0-SNAPSHOT/jobs-service-8.0.0-20191203.211509-90-runner.jar
+  md5: ad2e7347564bdc031db92f6e1f6762e4
+
+execute:
+- script: configure

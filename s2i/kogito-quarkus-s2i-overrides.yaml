@@ -24,6 +24,12 @@ envs:
 - name: ARTIFACT_DIR
   example: mymodule/target
   description:  Path to target/ where the jar files are created for multi-module builds
+- name: KOGITO_DATAINDEX_HTTP_URL
+  example: "http://kogito-data-index.apps.crc.com"
+  description: External HTTP endpoint for the Data Index service
+- name: KOGITO_DATAINDEX_WS_URL
+  example: "ws://kogito-data-index.apps.crc.com"
+  description: External WS (Websocket) endpoint for the Data Index service
 
 modules:
   install:

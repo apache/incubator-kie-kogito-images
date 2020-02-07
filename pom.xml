@@ -51,14 +51,14 @@
       <dependency>
         <groupId>org.kie.kogito</groupId>
         <artifactId>kogito-deps-bom</artifactId>
-        <version>${version.org.kie.kogito}</version>
+        <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
         <artifactId>kogito-bom</artifactId>
-        <version>${version.org.kie.kogito}</version>
+        <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

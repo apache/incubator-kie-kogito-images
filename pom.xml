@@ -45,7 +45,6 @@
 
   <modules>
     <module>kogito-cloud-services</module>
-    <module>kogito-cloud-tests</module>
   </modules>
 
   <dependencyManagement>

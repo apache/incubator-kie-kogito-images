@@ -4,27 +4,19 @@ pipeline{
   stage('Initializing'){
      steps{
      sh """
-         pwd
-         ls -l
-         export PATH=/usr/local/bin/:$PATH
          docker rmi -f \$(docker images -q) || date
          rm -rf /root/kogito-cloud/
          mkdir -p /root/kogito-cloud
    """
    }
   }
-     stage('Clone Sources'){
-         steps{
-         sh """
-         git clone https://github.com/kiegroup/kogito-cloud.git  /root/kogito-cloud
-         """
-        }
-    }
   stage('Update Maven Artifacts'){
    steps{
    sh """
-   python /root/python-scripts/update-data-service-index-url
-   python /root/python-scripts/update_jobs_service_url
+   cp /root/python-scripts/update-data-service-index-url .
+   cp /root/python-scripts/update_jobs_service_url  .
+   python update-data-service-index-url
+   python update_jobs_service_url
    """
    }
   }
@@ -33,7 +25,7 @@ pipeline{
            withDockerRegistry([ credentialsId: "tarkhand-rregistry", url: "https://registry.redhat.io" ]){
                sh """ 
                export MAVEN_MIRROR_URL=http://nexus3-kogito-tools.apps.kogito.automation.rhmw.io/repository/maven-public/
-               cd /root/kogito-cloud/s2i && make build
+               cd s2i && make build
                """
            }
        }
@@ -42,7 +34,7 @@ pipeline{
        steps{
            sh """
            export MAVEN_MIRROR_URL=http://nexus3-kogito-tools.apps.kogito.automation.rhmw.io/repository/maven-public/
-           cd /root/kogito-cloud/s2i && make test
+           cd s2i && make test
            """
        }
    }

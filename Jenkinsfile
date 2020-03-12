@@ -4,6 +4,7 @@ pipeline{
   stage('Initializing'){
      steps{
      sh """
+         ls -l
          docker rmi -f \$(docker images -q) || date
          rm -rf /root/kogito-cloud/
          mkdir -p /root/kogito-cloud

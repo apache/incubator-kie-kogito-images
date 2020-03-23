@@ -34,12 +34,12 @@ function configure_jobs_service() {
     fi
 
     if [ "${ENABLE_EVENTS^^}" == "TRUE" ]; then
-        if [ "${KAFKA_BOOSTRAP_SERVERS}x" = "x" ]; then
-            echo "KAFKA_BOOSTRAP_SERVERS env not found, please set it."
+        if [ "${KAFKA_BOOTSTRAP_SERVERS}x" = "x" ]; then
+            echo "KAFKA_BOOTSTRAP_SERVERS env not found, please set it."
             exit 1
         else
             KOGITO_JOBS_PROPS="${KOGITO_JOBS_PROPS} -Dquarkus.profile=events-support"
-            KOGITO_JOBS_PROPS="${KOGITO_JOBS_PROPS} -Dmp.messaging.outgoing.kogito-job-service-job-status-events.bootstrap.servers=${KAFKA_BOOSTRAP_SERVERS} -Devents-support.quarkus.kafka.bootstrap-servers=${KAFKA_BOOSTRAP_SERVERS}"
+            KOGITO_JOBS_PROPS="${KOGITO_JOBS_PROPS} -Dmp.messaging.outgoing.kogito-job-service-job-status-events.bootstrap.servers=${KAFKA_BOOTSTRAP_SERVERS} -Devents-support.quarkus.kafka.bootstrap-servers=${KAFKA_BOOTSTRAP_SERVERS}"
         fi
     fi
 }

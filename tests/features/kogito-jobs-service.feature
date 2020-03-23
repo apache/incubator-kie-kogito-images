@@ -73,13 +73,13 @@ Feature: Kogito-jobs-service feature.
     When container is started with env
       | variable            | value |
       | ENABLE_EVENTS       | true  |
-     Then container log should contain KAFKA_BOOSTRAP_SERVERS env not found, please set it.
+     Then container log should contain KAFKA_BOOTSTRAP_SERVERS env not found, please set it.
     
   Scenario: verify if the events is correctly enabled
     When container is started with env
       | variable                      | value           |
       | SCRIPT_DEBUG                  | true            |
       | ENABLE_EVENTS                 | true            |
-      | KAFKA_BOOSTRAP_SERVERS        | localhost:11111 |
+      | KAFKA_BOOTSTRAP_SERVERS        | localhost:11111 |
     Then container log should contain bootstrap.servers = [localhost:11111]
      And container log should contain Connection to node -1 (localhost/127.0.0.1:11111) could not be established.

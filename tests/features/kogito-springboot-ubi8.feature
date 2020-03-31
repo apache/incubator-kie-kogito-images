@@ -30,7 +30,7 @@ Feature: springboot-quarkus-ubi8 feature.
       | path                 | /orders/1 |
       | wait                 | 80        |
       | expected_status_code | 204       |
-    And file /home/kogito/bin/jbpm-springboot-example-0.9.0.jar should exist
+    And file /home/kogito/bin/jbpm-springboot-example-8.0.0-SNAPSHOT.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
@@ -45,6 +45,6 @@ Feature: springboot-quarkus-ubi8 feature.
       | path                 | /orders/1 |
       | wait                 | 80        |
       | expected_status_code | 204       |
-    And file /home/kogito/bin/jbpm-springboot-example-0.9.0.jar should exist
+    And file /home/kogito/bin/jbpm-springboot-example-8.0.0-SNAPSHOT.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true

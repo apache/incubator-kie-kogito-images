@@ -30,7 +30,7 @@ Feature: Kogito-quarkus-ubi8 feature.
       | path            | /hello                   |
       | wait            | 80                       |
       | expected_phrase | Mario is older than Mark |
-    And file /home/kogito/bin/drools-quarkus-example-8.0.0-SNAPSHOT-runner.jar should exist
+    And file /home/kogito/bin/drools-quarkus-example-0.9.0-runner.jar should exist
 
   
   Scenario: Verify if the binary build (forcing) is finished as expected and if it is listening on the expected port
@@ -45,4 +45,4 @@ Feature: Kogito-quarkus-ubi8 feature.
       | path            | /hello                   |
       | wait            | 80                       |
       | expected_phrase | Mario is older than Mark |
-    And file /home/kogito/bin/drools-quarkus-example-8.0.0-SNAPSHOT-runner.jar should exist
+    And file /home/kogito/bin/drools-quarkus-example-0.9.0-runner.jar should exist

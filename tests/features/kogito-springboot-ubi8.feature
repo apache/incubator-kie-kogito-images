@@ -19,7 +19,6 @@ Feature: springboot-quarkus-ubi8 feature.
     And run sh -c 'echo $JAVA_VENDOR' in container and immediately check its output for openjdk
     And run sh -c 'echo $JAVA_VERSION' in container and immediately check its output for 11
 
-
   Scenario: Verify if the binary build is finished as expected and if it is listening on the expected port
     Given s2i build /tmp/kogito-examples/process-springboot-example from target
       | variable            | value        |
@@ -30,7 +29,7 @@ Feature: springboot-quarkus-ubi8 feature.
       | path                 | /orders/1 |
       | wait                 | 80        |
       | expected_status_code | 204       |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And file /home/kogito/bin/process-springboot-example-0.9.1-SNAPSHOT.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
@@ -45,6 +44,6 @@ Feature: springboot-quarkus-ubi8 feature.
       | path                 | /orders/1 |
       | wait                 | 80        |
       | expected_status_code | 204       |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And file /home/kogito/bin/process-springboot-example-0.9.1-SNAPSHOT.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true

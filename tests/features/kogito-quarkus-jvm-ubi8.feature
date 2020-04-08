@@ -33,7 +33,7 @@ Feature: Kogito-quarkus-ubi8 feature.
       | request_body    | {"strings":["hello"]}    |
       | wait            | 80                       |
       | expected_phrase | ["hello","world"]        |
-    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-0.9.1-SNAPSHOT-runner.jar should exist
 
   Scenario: Verify if the binary build (forcing) is finished as expected and if it is listening on the expected port
     Given s2i build /tmp/kogito-examples/rules-quarkus-helloworld from target
@@ -50,4 +50,5 @@ Feature: Kogito-quarkus-ubi8 feature.
       | request_body    | {"strings":["hello"]}    |
       | wait            | 80                       |
       | expected_phrase | ["hello","world"]        |
-    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-0.9.1-SNAPSHOT-runner.jar should exist
+

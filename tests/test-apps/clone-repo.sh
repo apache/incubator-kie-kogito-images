@@ -8,7 +8,8 @@ rm -rf kogito-examples/
 git clone https://github.com/kiegroup/kogito-examples.git
 cd kogito-examples/
 git fetch origin --tags
-git checkout -b 0.9.0 0.9.0
+git fetch origin 0.9.x:0.9.x
+git checkout 0.9.x
 
 # generating the app binaries to test the binary build
 mvn -f rules-quarkus-helloworld clean package -DskipTests

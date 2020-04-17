@@ -1,4 +1,5 @@
 #!/bin/bash
 
 microdnf clean all
-rm -rf /var/cache/yum
+# segmentation full if delete /yum dir.
+rm -rf /var/cache/dnf

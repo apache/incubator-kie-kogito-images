@@ -53,3 +53,4 @@ packages:
 
 run:
   workdir: "/home/kogito"
+

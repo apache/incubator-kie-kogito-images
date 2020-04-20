@@ -1,10 +1,10 @@
 schema_version: 1
 name: org.kie.kogito.infinispan.properties
-version: "0.9.1-rc2"
+version: "0.9.1"
 
 envs:
   - name: "INFINISPAN_USEAUTH"
-    example: "false"
+    value: "false"
     description: "Flag that signals to Infinispan Hotrod client to use authentication (Used to set the infinispan.client.hotrod.use_auth system property)"
   - name: "INFINISPAN_USERNAME"
     example: "myUsername"

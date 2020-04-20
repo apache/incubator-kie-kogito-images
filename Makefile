@@ -55,6 +55,7 @@ ifneq ($(findstring "rc",$(IMAGE_VERSION)),"rc")
 	${BUILD_ENGINE} tag quay.io/kiegroup/kogito-management-console:${IMAGE_VERSION} quay.io/kiegroup/kogito-management-console:${SHORTENED_LATEST_VERSION}
 endif
 
+
 # Build and test all images
 .PHONY: test
 test:

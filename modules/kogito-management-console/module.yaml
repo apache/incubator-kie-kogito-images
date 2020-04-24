@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.management.console
-version: "0.9.1"
+version: "0.9.2-rc1"
 
 envs:
   - name: "KOGITO_DATAINDEX_HTTP_URL"
@@ -8,8 +8,8 @@ envs:
 
 artifacts:
   - name: kogito-management-console-runner.jar
-    url: https://repository.jboss.org/org/kie/kogito/management-console/0.9.1/management-console-0.9.1-runner.jar
-    md5: 6ccb41e412ab9df7cd463ee9e9360b6d
+    url: https://repository.jboss.org/org/kie/kogito/management-console/0.9.2-SNAPSHOT/management-console-0.9.2-20200424.054855-2-runner.jar
+    md5: 29b93e37ee6e0c30f3296ee3a3dcf2f4
 
 execute:
   - script: configure

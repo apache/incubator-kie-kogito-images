@@ -1,14 +1,15 @@
 #!/usr/bin/env bats
 
 export KOGITO_HOME=/tmp/kogito
-export HOME=$KOGITO_HOME
 mkdir -p ${KOGITO_HOME}/launch
+cp $BATS_TEST_DIRNAME/../../../kogito-logging/added/logging.sh ${KOGITO_HOME}/launch/
 
 # imports
 load $BATS_TEST_DIRNAME/../../added/launch/kogito-management-console.sh
 
-teardown() {
-    rm -rf ${KOGITO_HOME}
+function setup() {
+  prepareEnv
+  unset KOGITO_MANAGEMENT_CONSOLE_PROPS
 }
 
 @test "test if the default value for data-index url will be set" {

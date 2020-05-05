@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#import
+source ${KOGITO_HOME}/launch/logging.sh
+
 function prepareEnv() {
     # keep it on alphabetical order
     unset BACKOFF_RETRY
@@ -17,7 +20,7 @@ function configure_jobs_service() {
     if [ "${ENABLE_PERSISTENCE^^}" == "TRUE" ]; then
 
         if [ "${INFINISPAN_CLIENT_SERVER_LIST}x" = "x" ]; then
-            echo "INFINISPAN_CLIENT_SERVER_LIST env not found, please set it."
+            log_error "INFINISPAN_CLIENT_SERVER_LIST env not found, please set it."
             exit 1
         else
             KOGITO_JOBS_PROPS="${KOGITO_JOBS_PROPS} -Dkogito.jobs-service.persistence=infinispan"
@@ -35,7 +38,7 @@ function configure_jobs_service() {
 
     if [ "${ENABLE_EVENTS^^}" == "TRUE" ]; then
         if [ "${KAFKA_BOOTSTRAP_SERVERS}x" = "x" ]; then
-            echo "KAFKA_BOOTSTRAP_SERVERS env not found, please set it."
+            log_error "KAFKA_BOOTSTRAP_SERVERS env not found, please set it."
             exit 1
         else
             KOGITO_JOBS_PROPS="${KOGITO_JOBS_PROPS} -Dquarkus.profile=events-support"

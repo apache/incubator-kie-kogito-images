@@ -91,7 +91,7 @@ function update_configmap() {
     body="[ { \"op\": \"replace\", \"path\": \"/metadata/annotations\", \"value\": { ${metadata} } }, { \"op\": \"replace\", \"path\": \"/data\", \"value\": { ${data} } } ]"
     log_info "---> [persistence] About to patch configMap ${config_map}"
     # prints the raw data
-    echo "Body: ${body}"
+    log_info "Body: ${body}"
     printf "%s" "${body}" >$KOGITO_HOME/data/protobufs/configmap_patched.json
     response=$(patch_json_k8s_resource "api" "configmaps/${config_map}" $KOGITO_HOME/data/protobufs/configmap_patched.json)
     if [ "${response: -3}" != "200" ]; then

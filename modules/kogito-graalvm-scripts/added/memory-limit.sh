@@ -29,7 +29,7 @@ function configure() {
             export KOGITO_OPTS="${KOGITO_OPTS} -Dnative-image.xmx=${jvm_limit_memory}"
         fi
     else
-        log_info "Provided memory (${LIMIT_MEMORY}) limit is not valid, native build will use all available memory"
+        log_warning "Provided memory (${LIMIT_MEMORY}) limit is not valid, native build will use all available memory"
     fi
 }
 

@@ -36,8 +36,9 @@ source $BATS_TEST_DIRNAME/../../added/memory-limit.sh
 }
 
 @test "test a invalid memory limit value" {
+    function log_warning() { echo "WARN ${1}"; }
     export LIMIT_MEMORY="1024m"
-    local expected="INFO Provided memory (1024m) limit is not valid, native build will use all available memory"
+    local expected="WARN Provided memory (1024m) limit is not valid, native build will use all available memory"
     run configure
     echo "Expected: ${expected}"
     echo "Result: ${output}"

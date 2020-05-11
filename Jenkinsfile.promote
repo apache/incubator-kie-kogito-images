@@ -1,0 +1,139 @@
+// Promote images
+pipeline {
+    agent { label 'jenkins-slave'}
+
+    environment {
+        IMAGES = ["kogito-quarkus-ubi8", 
+                    "kogito-quarkus-jvm-ubi8",
+                    "kogito-quarkus-ubi8-s2i",
+                    "kogito-springboot-ubi8",
+                    "kogito-springboot-ubi8-s2i",
+                    "kogito-data-index",
+                    "kogito-jobs-service",
+                    "kogito-management-console"]
+    }
+
+    parameters {
+        string(name: 'BASE_IMAGE_REGISTRY_CREDENTIALS', defaultValue: '', description: 'Base Image registry credentials to use to deploy images. Will be ignored if no BASE_IMAGE_REGISTRY is given')
+        string(name: 'BASE_IMAGE_REGISTRY', defaultValue: '', description: 'Base image registry')
+        string(name: 'BASE_IMAGE_NAMESPACE', defaultValue: '', description: 'Base image namespace')
+        string(name: 'BASE_IMAGE_TAG', defaultValue: 'latest', description: 'Base image tag')
+
+        string(name: 'PROMOTE_IMAGE_REGISTRY_CREDENTIALS', defaultValue: '', description: 'Promote Image registry credentials to use to deploy images. Will be ignored if no PROMOTE_IMAGE_REGISTRY is given')
+        string(name: 'PROMOTE_IMAGE_REGISTRY', defaultValue: '', description: 'Promote image registry')
+        string(name: 'PROMOTE_IMAGE_NAMESPACE', defaultValue: '', description: 'Promote image namespace')
+        string(name: 'PROMOTE_IMAGE_TAG', defaultValue: 'latest', description: 'Promote image tag')
+    }
+
+    stages {
+        stage('Initialization') {
+            steps {
+                script {
+                    sh "docker rm -f \$(docker ps -a -q) || docker rmi -f \$(docker images -q) || date"
+
+                    setupImageEnvVarsFromParams("BASE","OLD")
+                    setupImageEnvVarsFromParams("PROMOTE","NEW")
+                }
+            }
+        }
+        stage('Pull "old" images'){
+            steps{
+                script {
+                    if (env.OLD_IMAGE_USE_OPENSHIFT == "true") {
+                        loginOpenshiftRegistry()
+                        pullImages()
+                    }else if (env.OLD_IMAGE_REGISTRY_CREDENTIALS != ''){
+                        withDockerRegistry([ credentialsId: "${OLD_IMAGE_REGISTRY_CREDENTIALS}", url: "https://${OLD_IMAGE_REGISTRY}" ]){        
+                            pullImages()
+                        }
+                    } else {
+                        pullImages()
+                    }
+                }
+            }
+        }
+        stage('Tag images'){
+            steps{
+                script {
+                    for(String imageName : env.IMAGES){
+                        sh "docker tag ${getOldImageFullTag(imageName)} ${getNewImageFullTag(imageName)}"
+                    }
+                }
+            }
+        }
+        stage('Pushing'){
+            steps{
+                script {
+                    if (env.NEW_IMAGE_USE_OPENSHIFT == "true") {
+                        loginOpenshiftRegistry()
+                        pushImages()
+                    }else if (env.NEW_IMAGE_REGISTRY_CREDENTIALS != ''){
+                        withDockerRegistry([ credentialsId: "${NEW_IMAGE_REGISTRY_CREDENTIALS}", url: "https://${NEW_IMAGE_REGISTRY}" ]){        
+                            pushImages()
+                        }
+                    } else {
+                        pushImages()
+                    }
+                }
+            }
+        }
+        stage('Finishing'){
+            steps{
+                sh "docker rmi -f \$(docker images -q) || date"
+            }
+        }
+    }
+}
+
+void pullImages(){
+    for(String imageName : env.IMAGES){
+        sh "docker pull ${getOldImageFullTag(imageName)}"
+    }
+}
+
+void pushImages(){
+    for(String imageName : env.IMAGES){
+        sh "docker push ${getNewImageFullTag(imageName)}"
+    }
+}
+
+String getOldImageFullTag(String imageName){
+    return "${OLD_IMAGE_REGISTRY}/${OLD_IMAGE_NAMESPACE}/${imageName}:${OLD_IMAGE_TAG}"
+}
+
+String getNewImageFullTag(String imageName){
+    return "${OLD_IMAGE_REGISTRY}/${OLD_IMAGE_NAMESPACE}/${imageName}:${OLD_IMAGE_TAG}"
+}
+
+void loginOpenshiftRegistry(){
+    sh "set +x && oc login --token=\$(oc whoami -t) --server=${OPENSHIFT_API} --insecure-skip-tls-verify"
+    sh "set +x && docker login -u jenkins -p \$(oc whoami -t) --tls-verify=false ${OPENSHIFT_REGISTRY}"
+}
+
+/**
+    Setup env variables for image registry/namesapce/tag, depending on parameters
+*/
+void setupImageEnvVarsFromParams(String prefixParam, String prefixEnv){
+    if(params[getKey(prefixParam, "IMAGE_REGISTRY")] == '') {
+        env[getKey(prefixEnv, "IMAGE_REGISTRY")] = env.OPENSHIFT_REGISTRY
+        env[getKey(prefixEnv, "IMAGE_NAMESPACE")] = "openshift"
+        env[getKey(prefixEnv, "USE_OPENSHIFT")] = true
+    } else {
+        env[getKey(prefixEnv, "IMAGE_REGISTRY_CREDENTIALS")] = params[getKey(prefixParam, "IMAGE_REGISTRY_CREDENTIALS")]
+        env[getKey(prefixEnv, "IMAGE_REGISTRY")] = params[getKey(prefixParam, "IMAGE_REGISTRY")]
+        env[getKey(prefixEnv, "IMAGE_NAMESPACE")] = params[getKey(prefixParam, "IMAGE_NAMESPACE")]
+        env[getKey(prefixEnv, "USE_OPENSHIFT")] = false
+    }
+    if (params[getKey(prefixParam, "IMAGE_TAG")] != ''){
+        env[getKey(prefixEnv, "IMAGE_TAG")] = params[getKey(prefixParam, "IMAGE_TAG")]
+    } else {
+        env[getKey(prefixEnv, "IMAGE_TAG")] = sh(script: "echo ${GIT_COMMIT} | cut -c1-7", returnStdOut: true).trim()
+    }
+}
+
+String getKey(String prefix, String envVarName){
+    if (prefix == ''){
+        return envVarName
+    }
+    return "${prefix}_${envVarName}"
+}

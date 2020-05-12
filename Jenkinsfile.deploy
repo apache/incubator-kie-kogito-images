@@ -1,0 +1,190 @@
+//Checks master branch for updates every day
+//If found triggers the pipeline, 
+//The pipeline is set to run between 12:00AM - 3:00AM UTC
+
+IMAGES = ["kogito-quarkus-ubi8", 
+            "kogito-quarkus-jvm-ubi8",
+            "kogito-quarkus-ubi8-s2i",
+            "kogito-springboot-ubi8",
+            "kogito-springboot-ubi8-s2i",
+            "kogito-data-index",
+            "kogito-jobs-service",
+            "kogito-management-console"]
+
+pipeline {
+    agent { label 'jenkins-slave'}
+    parameters {
+        string(name: 'IMAGE_REGISTRY_CREDENTIALS', defaultValue: '', description: 'Image registry credentials to use to deploy images. Will be ignored if no IMAGE_REGISTRY is given')
+        string(name: 'IMAGE_REGISTRY', defaultValue: '', description: 'Image registry to use to deploy images')
+        string(name: 'IMAGE_NAMESPACE', defaultValue: 'kiegroup', description: 'Image namespace to use to deploy images')
+        string(name: 'IMAGE_NAME_SUFFIX', defaultValue: '', description: 'Image name suffix to use to deploy images. In case you need to change the final image name, you can add a suffix to it.')
+        string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag to use to deploy images')
+    }
+    stages {
+        stage('Initialization') {
+            steps {
+                script {
+                    sh "docker rm -f \$(docker ps -a -q) || docker rmi -f \$(docker images -q) || date"
+                    
+                    setupImageEnvVarsFromParams("","DEPLOY")
+                }
+            }
+        }
+        stage('Update Artifacts') {
+            steps {
+                sh "python3 scripts/update-artifacts.py"
+
+                sh "cat modules/kogito-data-index/module.yaml"
+                sh "cat modules/kogito-jobs-service/module.yaml"
+                sh "cat modules/kogito-management-console/module.yaml"
+            }
+        }
+        stage('Prepare offline kogito-examples') {
+            steps {
+                sh "make clone-repos"
+            }
+        }
+        stage('Build and test kogito-quarkus-ubi8 image') {
+            steps {
+                sh "make kogito-quarkus-ubi8"
+            }
+        }
+        stage('Build and test kogito-quarkus-jvm-ubi8 image') {
+            steps {
+                sh "make kogito-quarkus-jvm-ubi8"
+            }
+        }
+        stage('Build and test kogito-quarkus-ubi8-s2i image') {
+            steps {
+                sh "make kogito-quarkus-ubi8-s2i"
+            }
+        }
+        stage('Build and test kogito-springboot-ubi8 image') {
+            steps {
+                sh "make kogito-springboot-ubi8"
+            }
+        }
+        stage('Build and test kogito-springboot-ubi8-s2i image ') {
+            steps {
+                sh "make kogito-springboot-ubi8-s2i"
+            }
+        }
+        stage('Build and test kogito-data-index image ') {
+            steps {
+                sh "make kogito-data-index"
+            }
+        }
+        stage('Build and test kogito-jobs-service image ') {
+            steps {
+                sh "make kogito-jobs-service"
+            }
+        }
+        stage('Build and test kogito-management-console image ') {
+            steps {
+                sh "make kogito-management-console"
+            }
+        }
+        stage('Tagging') {
+            steps {
+                script {
+                    tagImages()
+                }
+            }
+        }
+        stage('Pushing') {
+            steps {
+                script {
+                    if (env.DEPLOY_IMAGE_USE_OPENSHIFT == "true") {
+                        loginOpenshiftRegistry()
+                        pushImages()
+                    }else if (env.DEPLOY_IMAGE_REGISTRY_CREDENTIALS != '') {
+                        withDockerRegistry([ credentialsId: "${DEPLOY_IMAGE_REGISTRY_CREDENTIALS}", url: "https://${IMAGE_REGISTRY}" ]) {        
+                            pushImages()
+                        }
+                    } else {
+                        pushImages()
+                    }
+                }
+            }
+        }
+        stage('Finishing') {
+            steps {
+                sh "docker rmi -f \$(docker images -q) || date"
+            }
+        }
+    }
+    post {
+        always {
+            junit testResults: 'target/test/results/*.xml', allowEmptyResults: true
+        }
+    }
+}
+
+void tagImages() {
+    for(String imageName : IMAGES) {
+        sh "docker tag quay.io/kiegroup/${imageName}:latest ${buildImageName(imageName)}"
+    }
+}
+
+void pushImages() {
+    for(String imageName : IMAGES) {
+        ecshho "docker push ${buildImageName(imageName)}"
+    }
+}
+
+String buildImageName(String imageName) {
+    String finalImageName = imageName
+    if(env.DEPLOY_IMAGE_NAME_SUFFIX != null && env.DEPLOY_IMAGE_NAME_SUFFIX != '') {
+        finalImageName += "-" + env.DEPLOY_IMAGE_NAME_SUFFIX
+    }
+    return "${DEPLOY_IMAGE_REGISTRY}/${DEPLOY_IMAGE_NAMESPACE}/${finalImageName}:${DEPLOY_IMAGE_TAG}"
+}
+
+void loginOpenshiftRegistry() {
+    sh "set +x && oc login --token=\$(oc whoami -t) --server=${OPENSHIFT_API} --insecure-skip-tls-verify"
+    sh "set +x && docker login -u jenkins -p \$(oc whoami -t) --tls-verify=false ${OPENSHIFT_REGISTRY}"
+}
+
+/**
+    Setup env variables for image registry/namesapce/tag, depending on parameters
+*/
+void setupImageEnvVarsFromParams(String prefixParam, String prefixEnv) {
+    if(getParam(prefixParam, "IMAGE_REGISTRY") == '') {
+        setEnv(prefixEnv, "IMAGE_REGISTRY", env.OPENSHIFT_REGISTRY)
+        setEnv(prefixEnv, "IMAGE_NAMESPACE", "openshift")
+        setEnv(prefixEnv, "IMAGE_USE_OPENSHIFT", "true")
+    } else {
+        setEnvFromParam("IMAGE_REGISTRY_CREDENTIALS", prefixEnv, prefixParam)
+        setEnvFromParam("IMAGE_REGISTRY", prefixEnv, prefixParam)
+        setEnvFromParam("IMAGE_NAMESPACE", prefixEnv, prefixParam)
+        setEnv(prefixEnv, "IMAGE_USE_OPENSHIFT", "false")
+    }
+    if (getParam(prefixParam, "IMAGE_TAG") != '') {
+        setEnvFromParam("IMAGE_TAG", prefixEnv, prefixParam)
+    } else {
+        setEnv(prefixEnv, "IMAGE_TAG", sh(script: "echo ${GIT_COMMIT} | cut -c1-7", returnStdout: true).trim())
+    }
+    if(getParam(prefixParam, "IMAGE_NAME_SUFFIX") != '') {
+        setEnvFromParam("IMAGE_NAME_SUFFIX", prefixEnv, prefixParam)
+    }
+}
+
+String getKey(String prefix, String envVarName) {
+    if (prefix == '') {
+        return envVarName
+    }
+    return "${prefix}_${envVarName}"
+}
+
+void setEnv(String keyPrefix, String keyId, String value){
+    echo "setEnv ${getKey(keyPrefix, keyId)} = ${value}"
+    env."${getKey(keyPrefix, keyId)}" = value
+}
+
+void setEnvFromParam(String keyId, String prefixEnv, String prefixParam){
+    setEnv(prefixEnv, keyId, getParam(prefixParam, keyId))
+}
+
+String getParam(String keyPrefix, String keyId){
+    return params."${getKey(keyPrefix, keyId)}"
+}

@@ -20,7 +20,7 @@ Sample invocation:
 $ s2i build -c /Development/project/ quay.io/kiegroup/kogito-quarkus-ubi8-s2i <application image> --runtime-image quay.io/kiegroup/kogito-quarkus-ubi8
 
 
-By default it generate non native build. Use the quay.io/kiegroup/kogito-quarkus-jvm-ubi8 image as runtime-image,
+By default it generates non native build. Use the quay.io/kiegroup/kogito-quarkus-jvm-ubi8 image as runtime-image,
 in that way a *runner.jar will be produced and copied to the runtime image.
 
 Example:

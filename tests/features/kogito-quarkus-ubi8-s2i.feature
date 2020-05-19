@@ -275,3 +275,20 @@ Feature: kogito-quarkus-ubi8-s2i image tests
       | content_type    | application/json                                                                                 |
       | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |
 
+  Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id & archetype
+    Given s2i build /tmp/kogito-examples from dmn-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest --env MAVEN_MIRROR_URL=http://192.168.130.1:8080/repository/local/
+      | variable       | value          |
+      | NATIVE         | false          |
+      | KOGITO_VERSION | 8.0.0-SNAPSHOT |
+      | S2I_GROUP_ID   | com.mycompany  |
+      | S2I_ARTIFACT_ID| myproject      |
+    Then file /home/kogito/bin/myproject-1.0-SNAPSHOT-runner.jar should exist
+    And check that page is served
+      | property        | value                                                                                            |
+      | port            | 8080                                                                                             |
+      | path            | /Traffic%20Violation                                                                             |
+      | wait            | 80                                                                                               |
+      | expected_phrase | Should the driver be suspended?                                                                  |
+      | request_method  | POST                                                                                             |
+      | content_type    | application/json                                                                                 |
+      | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |

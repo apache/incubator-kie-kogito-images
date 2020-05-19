@@ -127,21 +127,21 @@ function build_kogito_app() {
         log_info "---> Generating project structure..."
 
         $MAVEN_HOME/bin/mvn archetype:generate -B -DarchetypeGroupId=org.kie.kogito -DarchetypeArtifactId=kogito-quarkus-archetype \
-        -DarchetypeVersion=$KOGITO_VERSION -DgroupId=com.company -DartifactId=project -s $KOGITO_HOME/.m2/settings.xml
+        -DarchetypeVersion=$KOGITO_VERSION -DgroupId=$S2I_GROUP_ID -DartifactId=$S2I_ARTIFACT_ID -s $KOGITO_HOME/.m2/settings.xml
 
         # copy resources into the generated project
         for item in *
         do
-            if [ -d "${item}" ] && [ "${item}" == "project" ]; then
+            if [ -d "${item}" ] && [ "${item}" == "$S2I_ARTIFACT_ID" ]; then
                 log_info "--> Skipping generated project ..."
             else
-                log_info "--> Coping resource "${item}""
-                cp -Rv "${item}" project/src/main/resources
+                log_info "--> Coping resource ${item}"
+                cp -Rv "${item}" $S2I_ARTIFACT_ID/src/main/resources
             fi
         done
 
         # move all project content into the current directory
-        mv -v project/* .
+        mv -v $S2I_ARTIFACT_ID/* .
 
         $MAVEN_HOME/bin/mvn clean package ${MAVEN_ARGS_APPEND} ${KOGITO_OPTS} ${nativeBuild} -s $KOGITO_HOME/.m2/settings.xml \
             -DskipTests -Dmaven.test.skip -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
@@ -174,4 +174,3 @@ function copy_kogito_app() {
         cp -v $artifactDir/*.jar $KOGITO_HOME/bin
     fi
 }
-

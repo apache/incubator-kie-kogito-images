@@ -370,11 +370,11 @@ Types of Business assets can be:
 - Business Decision definition - dmn files
 
 Upon build, these assets will be copied to a generated maven project and built with Maven to produce a runnable binary. Default
-value of group id is "com.company" and artifact id is "project". To provide custom value we need to set the **S2I_GROUP_ID** and 
-**S2I_ARTIFACT_ID**.
+value of group id is "com.company" and artifact id is "project". To provide custom value we need to set the **PROJECT_GROUP_ID** and 
+**PROJECT_ARTIFACT_ID**.
 
 ```bash
-s2i build -c <source code path/URL> quay.io/kiegroup/kogito-quarkus-ubi8-s2i <application image> --runtime-image <image name> --env S2I_GROUP_ID=com.mycompany --env S2I_ARTIFACT_ID=myproject
+s2i build -c <source code path/URL> quay.io/kiegroup/kogito-quarkus-ubi8-s2i <application image> --runtime-image <image name> --env PROJECT_GROUP_ID=com.mycompany --env PROJECT_ARTIFACT_ID=myproject
 ```
 
 

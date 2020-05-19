@@ -361,8 +361,8 @@ teardown() {
 
 @test "build_kogito_app only checks if it will generate the project in case there's no pom.xml" {
     mkdir /tmp/src
-    S2I_GROUP_ID="com.project"
-    S2I_ARTIFACT_ID="project"
+    PROJECT_GROUP_ID="com.project"
+    PROJECT_ARTIFACT_ID="project"
 
     run build_kogito_app
     rm -rf target/*

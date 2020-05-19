@@ -26,14 +26,14 @@ envs:
     description: ^ Location of mount for source code to be built.  This should not be overridden by end users.
     example: "${S2I_DESTINATION_DIR}/src}"
 
-  - name: S2I_GROUP_ID
+  - name: PROJECT_GROUP_ID
     value: "com.company"
-    description: ^  Indicates the unique identifier of the organization or group that created the project.  This should not be overridden by end users.
+    description: ^  Indicates the unique identifier of the organization or group that created the project.
     example: "com.company"
 
-  - name: S2I_ARTIFACT_ID
+  - name: PROJECT_ARTIFACT_ID
     value: "project"
-    description: ^  Indicates the unique base name of the primary artifact being generated.  This should not be overridden by end users.
+    description: ^  Indicates the unique base name of the primary artifact being generated.
     example: "project"
 
 modules:

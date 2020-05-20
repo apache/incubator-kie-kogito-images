@@ -9,6 +9,7 @@ S2I_ARTIFACTS_DIR="${S2I_DESTINATION_DIR}/artifacts"
 S2I_SOURCE_DIR="${S2I_DESTINATION_DIR}/src"
 PROJECT_GROUP_ID="${PROJECT_GROUP_ID:-com.company}"
 PROJECT_ARTIFACT_ID="${PROJECT_ARTIFACT_ID:-project}"
+PROJECT_VERSION="${PROJECT_VERSION:-1.0-SNAPSHOT}"
 artifactDir="target"
 if [ ! -z "${ARTIFACT_DIR}" ]; then
     artifactDir="${ARTIFACT_DIR}"
@@ -129,7 +130,8 @@ function build_kogito_app() {
         log_info "---> Generating project structure..."
 
         $MAVEN_HOME/bin/mvn archetype:generate -B -DarchetypeGroupId=org.kie.kogito -DarchetypeArtifactId=kogito-quarkus-archetype \
-        -DarchetypeVersion=$KOGITO_VERSION -DgroupId=$PROJECT_GROUP_ID -DartifactId=$PROJECT_ARTIFACT_ID -s $KOGITO_HOME/.m2/settings.xml
+        -DarchetypeVersion=$KOGITO_VERSION -DgroupId=$PROJECT_GROUP_ID -DartifactId=$PROJECT_ARTIFACT_ID -Dversion=$PROJECT_VERSION \
+        -s $KOGITO_HOME/.m2/settings.xml
 
         # copy resources into the generated project
         for item in *

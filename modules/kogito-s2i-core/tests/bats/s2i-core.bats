@@ -361,10 +361,6 @@ teardown() {
 
 @test "build_kogito_app only checks if it will generate the project in case there's no pom.xml" {
     mkdir /tmp/src
-    
-    #PROJECT_GROUP_ID & PROJECT_ARTIFACT_ID are needed and are supplied in module.yaml when used in regular build
-    PROJECT_GROUP_ID="com.project"
-    PROJECT_ARTIFACT_ID="project"
 
     run build_kogito_app
     rm -rf target/*

@@ -275,14 +275,15 @@ Feature: kogito-quarkus-ubi8-s2i image tests
       | content_type    | application/json                                                                                 |
       | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |
 
-  Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id & archetype
+  Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id, archetype & version
     Given s2i build /tmp/kogito-examples from dmn-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable            | value          |
       | NATIVE              | false          |
       | KOGITO_VERSION      | 8.0.0-SNAPSHOT |
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
-    Then file /home/kogito/bin/myproject-1.0-SNAPSHOT-runner.jar should exist
+      | PROJECT_VERSION     | 2.0-SNAPSHOT   |
+    Then file /home/kogito/bin/myproject-2.0-SNAPSHOT-runner.jar should exist
     And check that page is served
       | property        | value                                                                                            |
       | port            | 8080                                                                                             |

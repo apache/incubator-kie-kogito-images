@@ -8,11 +8,13 @@ function prepareEnv() {
     unset HTTP_PROXY_USERNAME
     unset HTTP_PROXY_NONPROXYHOSTS
     unset MAVEN_MIRROR_URL
+    unset MAVEN_DOWNLOAD_OUTPUT
 }
 
 function configure() {
     configure_proxy
     configure_mirrors
+    configure_maven_download_output
 }
 
 # insert settings for HTTP proxy into maven settings.xml if supplied
@@ -72,4 +74,9 @@ function configure_mirrors() {
     fi
 }
 
+function configure_maven_download_output() {
+    if [ "${MAVEN_DOWNLOAD_OUTPUT}" != "true" ]; then
+        export MAVEN_ARGS_APPEND="${MAVEN_ARGS_APPEND} --no-transfer-progress"
+    fi
+}
 

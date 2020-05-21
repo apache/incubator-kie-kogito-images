@@ -311,7 +311,7 @@ sys	0m0.539s
 ```
 
 Here you can see that the build time has again been reduced. 
-If the maven mirror have already have all the dependencies there, the build time can be even faster.
+If the maven mirror have already have all the dependencies there, the build time can be even faster. Maven generates lots of transfer logs for downloading/uploading of maven dependencies. By default, these logs are disabled. To view these logs we need to set env variable **MAVEN_DOWNLOAD_OUTPUT** to true. 
 
 
 ### Kogito Runtime Images

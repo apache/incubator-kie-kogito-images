@@ -14,6 +14,8 @@ cp ${MVN_MODULE}/maven/settings.xml ${HOME}/.m2/settings.xml
 source ${MVN_MODULE}/added/configure-maven.sh
 configure
 
+cat ${HOME}/.m2/settings.xml
+
 # Clone examples
 cd /tmp
 rm -rf kogito-examples/

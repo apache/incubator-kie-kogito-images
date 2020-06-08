@@ -22,9 +22,29 @@ pipeline{
             steps{
                 script{
                     cleanWorkspaces()
+
+                    // Set the mirror url if exist
+                    if (env.MAVEN_MIRROR_REPOSITORY != null
+                            && env.MAVEN_MIRROR_REPOSITORY != ''){
+                        env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
+                    }
                 }
                 sh "docker rm -f \$(docker ps -a -q) || date"
                 sh "docker rmi -f \$(docker images -q) || date"
+            }
+        }
+        stage('Update Maven information') {
+            steps {
+                script {
+                    // Update artifacts
+                    sh "python3 scripts/update-maven-information.py --repo-url https://origin-repository.jboss.org/nexus/content/groups/public/"
+
+                    // For debug
+                    sh "cat modules/kogito-data-index/module.yaml"
+                    sh "cat modules/kogito-jobs-service/module.yaml"
+                    sh "cat modules/kogito-management-console/module.yaml"
+                    sh "cat tests/test-apps/clone-repo.sh"
+                }
             }
         }
         stage('Validate CeKit Image and Modules descriptors'){

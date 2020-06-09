@@ -107,6 +107,7 @@ function handle_image_metadata_json() {
 
 
 function build_kogito_app() {
+    runtime=$1:-quarkus
     cd "${S2I_SOURCE_DIR}"
 
     nativeBuild=""

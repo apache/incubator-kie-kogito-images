@@ -12,5 +12,5 @@ function configure() {
 
 function configure_springboot_s2i_http_port {
     local httpPort=${HTTP_PORT:-8080}
-    KOGITO_SPRINGBOOT_S2I_PROPS="${KOGITO_SPRINGBOOT_S2I_PROPS} -Dquarkus.http.port=${httpPort}"
+    KOGITO_SPRINGBOOT_S2I_PROPS="${KOGITO_SPRINGBOOT_S2I_PROPS} -Dserver.port=${httpPort}"
 }

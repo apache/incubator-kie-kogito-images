@@ -40,6 +40,10 @@ pipeline {
         string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag to use to deploy images')
 
         string(name: 'MAVEN_ARTIFACT_REPOSITORY', defaultValue: '', description: 'Maven repository where the build artifacts are present')
+	
+   	    string(name: 'version', defaultValue: '', description: 'To check version and update it')
+
+	    booleanparam(name: 'isrealease', defaultValue: 'false', description:'To create PR if it's true'
 
         booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip tests')
     }
@@ -74,6 +78,15 @@ pipeline {
                 }
             }
         }
+
+	stage('update version')
+	{
+		when
+		{
+			
+		}	
+	}
+
         stage('Update Maven information') {
             steps {
                 script {

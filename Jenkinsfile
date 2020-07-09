@@ -10,6 +10,7 @@ IMAGES = ["kogito-quarkus-ubi8",
             "kogito-springboot-ubi8",
             "kogito-springboot-ubi8-s2i",
             "kogito-data-index",
+            "kogito-trusty",
             "kogito-jobs-service",
             "kogito-management-console"]
 

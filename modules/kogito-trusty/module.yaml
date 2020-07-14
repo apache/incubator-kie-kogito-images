@@ -4,8 +4,8 @@ version: "0.12.0-rc1"
 
 artifacts:
   - name: kogito-trusty-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service/8.0.0-SNAPSHOT/trusty-service-8.0.0-20200709.022324-96.jar
-    md5: bbe715605179ccfbeea1cd62fd32e8be
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service/8.0.0-SNAPSHOT/trusty-service-8.0.0-20200714.111952-106-runner.jar
+    md5: 9e15c36dea5d261734257901d2bc1d91
 
 execute:
   - script: configure

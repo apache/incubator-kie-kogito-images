@@ -46,3 +46,22 @@ Feature: Kogito-jobs-service feature.
     And container log should contain started in
     And container log should contain Connection to node -1 (localhost/127.0.0.1:11111) could not be established.
 
+  Scenario: verify if auth is correctly set
+    When container is started with env
+      | variable                      | value           |
+      | SCRIPT_DEBUG                  | true            |
+      | ENABLE_PERSISTENCE            | true            |
+      | QUARKUS_INFINISPAN_CLIENT_SERVER_LIST     | 172.18.0.1:11222  |
+      | quarkus.infinispan-client.use-auth        | true              |
+      | QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME   | IamNotExist       |
+      | QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD   | hard2guess        |
+      | quarkus.infinispan-client.auth-realm      | SecretRealm       |
+      | quarkus.infinispan-client.sasl-mechanism  | COOLGSSAPI        |
+    Then container log should contain kogito.jobs-service.persistence=infinispan
+    Then container log should contain QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=172.18.0.1:11222
+    Then container log should contain quarkus.infinispan-client.use-auth=true
+    And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD=hard2guess
+    And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME=IamNotExist
+    And container log should contain quarkus.infinispan-client.auth-realm=SecretReal
+    And container log should contain quarkus.infinispan-client.sasl-mechanism=COOLGSSAPI
+    And container log should not contain Application failed to start

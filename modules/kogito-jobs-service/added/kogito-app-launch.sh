@@ -19,6 +19,7 @@ CONFIGURE_SCRIPTS=(
 source ${KOGITO_HOME}/launch/configure.sh
 #############################################
 
+printenv
+
 exec java ${SHOW_JVM_SETTINGS} ${JAVA_OPTIONS} ${KOGITO_JOBS_PROPS} \
     -jar $KOGITO_HOME/bin/kogito-jobs-service-runner.jar
-

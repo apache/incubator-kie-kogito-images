@@ -34,7 +34,7 @@ Feature: Kogito-trusty feature.
       | SCRIPT_DEBUG                  | true            |
       | ENABLE_PERSISTENCE            | true            |
       | QUARKUS_INFINISPAN_CLIENT_SERVER_LIST     | 172.18.0.1:11222  |
-      | quarkus.infinispan-client.use-auth        | true              |
+      | QUARKUS_INFINISPAN_CLIENT_USE_AUTH        | true              |
       | QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME   | IamNotExist       |
       | QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD   | hard2guess        |
       | QUARKUS_INFINISPAN_CLIENT_AUTH_REALM       | SecretRealm       |

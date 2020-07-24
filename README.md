@@ -53,6 +53,7 @@ Table of Contents
   - [Kogito Component Images](#kogito-component-images)
     - [Kogito Data Index Component Image](#kogito-data-index-component-image)
     - [Kogito Trusty Component Image](#kogito-trusty-component-image)
+    - [Kogito Explainability Component Image](#kogito-explainability-component-image)
     - [Kogito Jobs Service Component Image](#kogito-jobs-service-component-image)
     - [Kogito Management Console Component Image](#kogito-management-console-component-image)
   - [Using Kogito Images to Deploy Apps on OpenShift](#using-kogito-images-to-deploy-apps-on-openshift)
@@ -567,6 +568,7 @@ Today we have 3 Kogito Component Images:
 
 * [quay.io/kiegroup/kogito-data-index](https://quay.io/kiegroup/kogito-data-index)
 * [quay.io/kiegroup/kogito-trusty](https://quay.io/kiegroup/kogito-trusty)
+* [quay.io/kiegroup/kogito-explainability](https://quay.io/kiegroup/kogito-explainability)
 * [quay.io/kiegroup/kogito-jobs-service](htps://quay.io/kiegroup/kogito-jobs-service)
 * [quay.io/kiegroup/kogito-management-console](https://quay.io/kiegroup/kogito-management-console)
 
@@ -595,6 +597,26 @@ To know what configurations this image accepts please take a look [here](kogito-
 The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Data Index Service 
 to your Kogito infrastructure on a Kubernetes cluster and provide its capabilities to your Kogito applications.
 
+### Kogito Explainability Component Image
+
+The Explainability Service aims to provide explainability on the decisions that have been taken by kogito runtime applications. 
+
+Basic usage
+```bash
+$ docker run -it quay.io/kiegroup/kogito-explainability:latest
+```
+
+To enable debug just use this env while running this image:
+
+```bash
+docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-explainability:latest
+```
+You should notice a few debug messages being printed in the system output.
+
+To know what configurations this image accepts please take a look [here](kogito-explainability-overrides.yaml) on the **envs** section.
+
+The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Explainability Service 
+to your Kogito infrastructure on a Kubernetes cluster and provide its capabilities to your Kogito applications.
 
 ### Kogito Trusty Component Image
 
@@ -897,6 +919,7 @@ With this Makefile you can:
      $ make kogito-springboot-ubi8-s2i
      $ make kogito-data-index
      $ make kogito-trusty
+     $ make kogito-explainability
      $ make kogito-jobs-service 
      $ make kogito-management-console
      ```
@@ -946,6 +969,7 @@ Below you can find all modules used to build the Kogito Images
 
 - [kogito-data-index](modules/kogito-data-index): Installs and Configure the data-index jar inside the image.
 - [kogito-trusty](modules/kogito-trusty): Installs and Configure the trusty jar inside the image.
+- [kogito-explainability](modules/kogito-explainability): Installs and Configure the explainability jar inside the image.
 - [kogito-epel](modules/kogito-epel): Configures the epel repository on the target image.
 - [kogito-graalvm-installer](modules/kogito-graalvm-installer): Installs the GraalVM on the target Image.
 - [kogito-graalvm-scripts](modules/kogito-graalvm-scripts): Configures the GraalVM on the target image and provides custom configuration script. 
@@ -973,6 +997,7 @@ Please inspect the images overrides files to learn which modules are being insta
 
 - [quay.io/kiegroup/kogito-data-index](kogito-data-index-overrides.yaml)
 - [quay.io/kiegroup/kogito-trusty](kogito-trusty-overrides.yaml)
+- [quay.io/kiegroup/kogito-explainability](kogito-explainability-overrides.yaml)
 - [quay.io/kiegroup/kogito-jobs-service](kogito-jobs-service-overrides.yaml)
 - [quay.io/kiegroup/kogito-management-console](kogito-management-console-overrides.yaml)
 - [quay.io/kiegroup/kogito-quarkus-jvm-ubi8](kogito-quarkus-jvm-overrides.yaml)

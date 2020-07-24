@@ -9,6 +9,7 @@ IMAGES = ["kogito-quarkus-ubi8",
             "kogito-springboot-ubi8-s2i",
             "kogito-data-index",
             "kogito-trusty",
+            "kogito-explainability",
             "kogito-jobs-service",
             "kogito-management-console"]
 
@@ -48,6 +49,7 @@ pipeline{
                     ./cekit-image-validator-runner image.yaml
                     ./cekit-image-validator-runner kogito-data-index-overrides.yaml
                     ./cekit-image-validator-runner kogito-trusty-overrides.yaml
+                    ./cekit-image-validator-runner kogito-explainability-overrides.yaml
                     ./cekit-image-validator-runner kogito-jobs-service-overrides.yaml
                     ./cekit-image-validator-runner kogito-management-console-overrides.yaml
                     ./cekit-image-validator-runner kogito-quarkus-jvm-overrides.yaml
@@ -100,6 +102,7 @@ pipeline{
                 docker tag quay.io/kiegroup/kogito-springboot-ubi8-s2i:latest             quay.io/kiegroup/kogito-springboot-ubi8-s2i-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                 docker tag quay.io/kiegroup/kogito-data-index:latest                      quay.io/kiegroup/kogito-data-index-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                 docker tag quay.io/kiegroup/kogito-trusty:latest                          quay.io/kiegroup/kogito-trusty-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
+                docker tag quay.io/kiegroup/kogito-explainability:latest                  quay.io/kiegroup/kogito-explainability-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                 docker tag quay.io/kiegroup/kogito-jobs-service:latest                    quay.io/kiegroup/kogito-jobs-service-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                 docker tag quay.io/kiegroup/kogito-management-console:latest              quay.io/kiegroup/kogito-management-console-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
 	        """
@@ -116,6 +119,7 @@ pipeline{
                         docker push quay.io/kiegroup/kogito-springboot-ubi8-s2i-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                         docker push quay.io/kiegroup/kogito-data-index-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                         docker push quay.io/kiegroup/kogito-trusty-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
+                        docker push quay.io/kiegroup/kogito-explainability-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                         docker push quay.io/kiegroup/kogito-jobs-service-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                         docker push quay.io/kiegroup/kogito-management-console-nightly:\$(echo \${GIT_COMMIT} | cut -c1-7)
                        """

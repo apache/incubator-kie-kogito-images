@@ -44,6 +44,6 @@ Feature: Kogito-trusty feature.
     Then container log should contain quarkus.infinispan-client.use-auth=true
     And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD=hard2guess
     And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME=IamNotExist
-    And container log should contain quarkus.infinispan-client.auth-realm=SecretReal
+    And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_REALM=SecretReal
     And container log should contain quarkus.infinispan-client.sasl-mechanism=COOLGSSAPI
     And container log should not contain Application failed to start

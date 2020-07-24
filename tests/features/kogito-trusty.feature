@@ -41,7 +41,7 @@ Feature: Kogito-trusty feature.
       | quarkus.infinispan-client.sasl-mechanism  | COOLGSSAPI        |
     Then container log should contain kogito.jobs-service.persistence=infinispan
     Then container log should contain QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=172.18.0.1:11222
-    Then container log should contain quarkus.infinispan-client.use-auth=true
+    Then container log should contain QUARKUS_INFINISPAN_CLIENT_USE_AUTH=true
     And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD=hard2guess
     And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME=IamNotExist
     And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_REALM=SecretReal

@@ -27,3 +27,20 @@ Feature: Kogito-data-index feature.
       | SCRIPT_DEBUG  | true  |
       | HTTP_PORT     | 9090  |
     Then container log should contain + exec java -XshowSettings:properties -Dquarkus.http.port=9090 -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -jar /home/kogito/bin/kogito-data-index-runner.jar
+
+  Scenario: verify if all parameters are correctly set
+    When container is started with env
+      | variable                                  | value             |
+      | SCRIPT_DEBUG                              | true              |
+      | QUARKUS_INFINISPAN_CLIENT_SERVER_LIST     | 172.18.0.1:11222  |
+      | quarkus.infinispan-client.use-auth        | true              |
+      | QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME   | IamNotExist       |
+      | QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD   | hard2guess        |
+      | quarkus.infinispan-client.auth-realm      | SecretRealm       |
+      | quarkus.infinispan-client.sasl-mechanism  | COOLGSSAPI        |
+    Then container log should contain QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=172.18.0.1:11222
+    Then container log should contain quarkus.infinispan-client.use-auth=true
+    And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD=hard2guess
+    And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME=IamNotExist
+    And container log should contain quarkus.infinispan-client.auth-realm=SecretReal
+    And container log should contain quarkus.infinispan-client.sasl-mechanism=COOLGSSAPI

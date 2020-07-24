@@ -104,6 +104,7 @@ ifneq ($(ignore_test),true)
 endif
 ifneq ($(findstring rc,$(IMAGE_VERSION)), rc)
 	${BUILD_ENGINE} tag quay.io/kiegroup/kogito-trusty:${IMAGE_VERSION} quay.io/kiegroup/kogito-trusty:${SHORTENED_LATEST_VERSION}
+endif
 
 # build the quay.io/kiegroup/kogito-explainability image
 kogito-explainability:

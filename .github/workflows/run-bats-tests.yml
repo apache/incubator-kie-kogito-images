@@ -20,4 +20,4 @@ jobs:
             ${{ runner.os }}-bats-binaries
       - name: run bats
         run: |
-          ./script/run-bats.sh
+          ./scripts/run-bats.sh

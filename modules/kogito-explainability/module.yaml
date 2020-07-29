@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.explainability
-version: "0.13.0-rc1"
+version: "0.13.0"
 
 artifacts:
   - name: kogito-explainability-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service/8.0.0-SNAPSHOT/explainability-service-8.0.0-20200720.112616-115-runner.jar
-    md5: a85ebcc521ef22d5f9372f43cf2de5cf
+    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17128/org/kie/kogito/explainability-service/0.13.0/explainability-service-0.13.0-runner.jar
+    md5: d1e59d81b61c5b5a545a5c65cb48d892
 
 execute:
   - script: configure

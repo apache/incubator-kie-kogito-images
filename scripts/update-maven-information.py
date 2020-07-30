@@ -19,8 +19,7 @@ import os
 import argparse
 
 DEFAULT_REPO_URL = "https://repository.jboss.org/nexus/content/groups/public/"
-DEFAULT_VERSION = "8.0.0-SNAPSHOT"
-DEFAULT_ARTIFACT_PATH = "org/kie/kogito"
+KOGITO_ARTIFACT_PATH = "org/kie/kogito"
 
 Modules = {
     #service-name: module-name(directory in which module's module.yaml file is present)
@@ -105,13 +104,12 @@ def update_artifacts(service,modulePath):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Update Maven information in repo from the given artifact url and version.')
     parser.add_argument('--repo-url', dest='repo_url', default=DEFAULT_REPO_URL, help='Defines the url of the repository to extract the artifacts from, defaults to {}'.format(DEFAULT_REPO_URL))
-    parser.add_argument('--version', dest='version', default=DEFAULT_VERSION, help='Defines the version of artifacts to retrieve from the repository url, defaults to {}'.format(DEFAULT_VERSION))
     args = parser.parse_args()
     
     # Update Kogito Service modules
     for serviceName, modulePath in Modules.items():
         service = {
-            "repo_url" : args.repo_url + "{}/{}/{}/".format(DEFAULT_ARTIFACT_PATH, serviceName, args.version),
+            "repo_url" : args.repo_url + "{}/{}/{}/".format(KOGITO_ARTIFACT_PATH, serviceName, args.version),
             "name" : serviceName,
             "version" : args.version
         }
@@ -119,6 +117,3 @@ if __name__ == "__main__":
         
         update_artifacts(service, moduleYamlFile)
         print("Successfully updated the artifacts for: ", serviceName)
-    
-    # Need also to set the KOGITO_VERSION for artifacts to the given one
-    common.update_kogito_version_env_in_modules(args.version)

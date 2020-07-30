@@ -59,19 +59,8 @@ def update_test_apps_clone_repo(target_branch):
     print('Updating file {}'.format(file))
     if target_branch == 'master':
         os.system('sed -i \'s/^git checkout.*/git checkout master/\' ' + file)
-    elif 'x' in target_branch:
-        os.system('sed -i \'s/^git checkout.*/git checkout -b ' + target_branch + '/\' ' + file)
     else:
         os.system('sed -i \'s/^git checkout.*/git checkout -b ' + target_branch + ' ' + target_branch + '/\' ' + file)
-
-def update_python_scripts(target_version):
-    '''
-    Updates the clone-repo.sh script for adding the given repository URL to the Maven settings.
-    :param target_version: Maven Repository URL to set
-    '''
-    file = 'scripts/update-maven-information.py'
-    print('Updating file {}'.format(file))
-    os.system('sed -i \'s|^DEFAULT_VERSION = .*|DEFAULT_VERSION = \"{}\"|\' '.format(target_version) + file)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Kogito Version Manager')
@@ -108,7 +97,6 @@ if __name__ == "__main__":
             common.update_kogito_version_env_in_modules(args.bump_to)
             update_behave_tests(args.bump_to, tests_branch)
             update_test_apps_clone_repo(tests_branch)
-            update_python_scripts(args.bump_to)
         else:
             print("Provided version {0} does not match the expected regex - {1}".format(args.bump_to, pattern))
     else:

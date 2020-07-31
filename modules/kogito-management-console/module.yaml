@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.management.console
-version: "0.13.0"
+version: "0.13.1-snapshot"
 
 envs:
   - name: "KOGITO_DATAINDEX_HTTP_URL"

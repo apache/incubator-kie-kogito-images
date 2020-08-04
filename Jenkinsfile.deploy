@@ -1,38 +1,25 @@
 @Library('jenkins-pipeline-shared-libraries')_
 
-// As Cekit is not compatible with podman, we use docker in that pipeline
-
-IMAGES = [
-            "kogito-quarkus-ubi8", 
+IMAGES = ["kogito-quarkus-ubi8", 
             "kogito-quarkus-jvm-ubi8",
             "kogito-quarkus-ubi8-s2i",
             "kogito-springboot-ubi8",
             "kogito-springboot-ubi8-s2i",
             "kogito-data-index",
-            "kogito-trusty",
-            "kogito-explainability",
             "kogito-jobs-service",
-            "kogito-management-console"
-         ]
+            "kogito-management-console"]
 
-// Should be a single pipeline (not multibranch)
+
+deploy_properties = [ : ]
+
+
 pipeline {
-    agent {
-        label 'kogito-image-slave && !master'
-    }
-
-    // Needed for local build
-    tools {
-        jdk 'kie-jdk11'
-    }
-
+    agent { label 'jenkins-slave' }
     parameters {
         string(name: 'DISPLAY_NAME', defaultValue: '', description: 'Setup a specific build display name')
-        
         string(name: 'BUILD_BRANCH_NAME', defaultValue: 'master', description: 'Which branch to build ? Set if you are not on a multibranch pipeline.')
-        string(name: 'GIT_AUTHOR', defaultValue: 'kiegroup', description: 'Which Git author repository ?')
-
         booleanParam(name: 'IMAGE_USE_OPENSHIFT_REGISTRY', defaultValue: false, description: 'Set to true if image should be deployed in Openshift registry.In this case, IMAGE_REGISTRY_CREDENTIALS, IMAGE_REGISTRY and IMAGE_NAMESPACE parameters will be ignored')
+        string(name: 'GIT_AUTHOR', defaultValue: 'kiegroup', description: 'Which Git author repository ?')
         string(name: 'IMAGE_REGISTRY_CREDENTIALS', defaultValue: '', description: 'Image registry credentials to use to deploy images. Will be ignored if no IMAGE_REGISTRY is given')
         string(name: 'IMAGE_REGISTRY', defaultValue: '', description: 'Image registry to use to deploy images')
         string(name: 'IMAGE_NAMESPACE', defaultValue: 'kiegroup', description: 'Image namespace to use to deploy images')
@@ -40,53 +27,90 @@ pipeline {
         string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag to use to deploy images')
 
         string(name: 'MAVEN_ARTIFACT_REPOSITORY', defaultValue: '', description: 'Maven repository where the build artifacts are present')
-	
-   	    string(name: 'version', defaultValue: '', description: 'To check version and update it')
-
-	    booleanparam(name: 'isrealease', defaultValue: 'false', description:'To create PR if it's true'
-
+        
+        string(name: 'PROJECT_VERSION', defaultValue: '', description: 'To check version and update it')
+        booleanparam(name: 'RELEASE', defaultValue: 'false', description:'To create PR if it's true')
+    
         booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip tests')
     }
 
-    environment {
-        JAVA_HOME = "${GRAALVM_HOME}"
+        // OPENSHIFT_API => Taken from Jenkins global env
+        // OPENSHIFT_REGISTRY_ROUTE => Taken from Jenkins global env
 
-        OPENSHIFT_API = credentials("OPENSHIFT_API")
-        OPENSHIFT_REGISTRY = credentials("OPENSHIFT_REGISTRY")
-        OPENSHIFT_CREDS_KEY = "OPENSHIFT_CREDS"
-    }
+        // DEPLOY_IMAGE_REGISTRY_CREDENTIALS
+        // DEPLOY_IMAGE_USE_OPENSHIFT
+        // DEPLOY_IMAGE_REGISTRY
+        // DEPLOY_IMAGE_NAMESPACE
+        // DEPLOY_IMAGE_NAME_SUFFIX
+        // DEPLOY_IMAGE_TAG
+    // }
 
     stages {
         stage('Initialization') {
             steps {
-                script {  
-                    clean()
+                script {
+                    cleanWorkspaces()
+                    sh "docker rm -f \$(docker ps -a -q) || date"
+                    sh "docker rmi -f \$(docker images -q) || date"
+                    
+                    setupImageEnvVarsFromParams("","DEPLOY")
 
                     if (params.DISPLAY_NAME != "") {
                         currentBuild.displayName = params.DISPLAY_NAME
                     }
 
-                    checkout(githubscm.resolveRepository("kogito-images", params.GIT_AUTHOR, params.BUILD_BRANCH_NAME, false))
+                    if (env.BRANCH_NAME != "") {
+                        // Switch to branch if not on a multibranch pipeline
+                        env.BRANCH_NAME = params.BUILD_BRANCH_NAME
+                        checkout([$class: 'GitSCM', branches: [[name: env.BRANCH_NAME]], browser: [$class: 'GithubWeb', repoUrl: "${GIT_URL}"], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'user-kie-ci10', url: "${GIT_URL}"]]])
+                    }
 
                     // Set the mirror url only if no artifact repository is given
-                    if (params.MAVEN_ARTIFACT_REPOSITORY == '' 
+                    if (params.MAVEN_ARTIFACT_REPOSITORY != '' 
                             && env.MAVEN_MIRROR_REPOSITORY != null
                             && env.MAVEN_MIRROR_REPOSITORY != ''){
-                        echo "Set Maven mirror url"
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
                     }
+                    if (params.RELEASE) {
+                        assert params.PROJECT_VERSION != ''
+                    }
+                    setDeployPropertyIfneeded('git.branch', params.BUILD_BRANCH_NAME)
+                    setDeployPropertyIfneeded('git.author', params.GIT_AUTHOR)
+                    setDeployPropertyIfneeded('project.version', params.PROJECT_VERSION)
+                    setDeployPropertyIfneeded('release', params.RELEASE)
+
                 }
             }
         }
-
-	stage('update version')
-	{
-		when
-		{
-			
-		}	
-	}
-
+        stage('Prepare for PR') {
+            when {
+                expression {
+                    return params.RELEASE
+                }
+            }
+            steps {
+                script {
+                    githubscm.forkRepo( "bsig-gh-bot" )
+                    githubscm.createBranch(params.PROJECT_VERSION)
+                }
+            }
+        }
+        stage('Update Version'){
+            when {
+                expression{
+                    return params.PROJECT_VERSION != ''
+                }
+            }
+            steps {
+                script{
+                    versionCmd = "python manage-kogito-version.py --bump-to ${params.PROJECT_VERSION} --confirm"
+                    if(params.BUILD_BRANCH_NAME != 'master'){
+                        versionCmd += " --apps-branch ${params.BUILD_BRANCH_NAME}"
+                    }
+                    sh versionCmd
+                }
+            }
+        }
         stage('Update Maven information') {
             steps {
                 script {
@@ -95,15 +119,23 @@ pipeline {
                     if(params.MAVEN_ARTIFACT_REPOSITORY != ''){
                         updateArtifactCmd += " --repo-url ${params.MAVEN_ARTIFACT_REPOSITORY}"
                     }
+                    if(params.PROJECT_VERSION != ''){
+                        updateArtifactCmd += " --version ${params.PROJECT_VERSION}"
+                    }
                     sh updateArtifactCmd
 
-                    // Debug purpose in case of issue
+                    // For debug
                     sh "cat modules/kogito-data-index/module.yaml"
-                    sh "cat modules/kogito-trusty/module.yaml"
-                    sh "cat modules/kogito-explainability/module.yaml"
                     sh "cat modules/kogito-jobs-service/module.yaml"
                     sh "cat modules/kogito-management-console/module.yaml"
                 }
+            }
+        }
+        stage('Commit Changes'){
+            steps {
+                script {
+                    githubscm.commitChanges("Update project version to ${params.PROJECT_VERSION}")    
+                } 
             }
         }
         stage('Setup tests repository') {
@@ -119,8 +151,7 @@ pipeline {
 
                     // Debug purpose in case of issue
                     sh "cat tests/test-apps/clone-repo.sh"
-                    sh "cat tests/features/kogito-quarkus-ubi8-s2i.feature"
-                    sh "cat tests/features/kogito-springboot-ubi8-s2i.feature"
+                    sh "cat ${HOME}/.m2/settings.xml"
                 }
             }
         }
@@ -135,8 +166,6 @@ pipeline {
                 sh """
                     ./cekit-image-validator-runner image.yaml
                     ./cekit-image-validator-runner kogito-data-index-overrides.yaml
-                    ./cekit-image-validator-runner kogito-trusty-overrides.yaml
-                    ./cekit-image-validator-runner kogito-explainability-overrides.yaml
                     ./cekit-image-validator-runner kogito-jobs-service-overrides.yaml
                     ./cekit-image-validator-runner kogito-management-console-overrides.yaml
                     ./cekit-image-validator-runner kogito-quarkus-jvm-overrides.yaml
@@ -148,11 +177,6 @@ pipeline {
             }
         }
         stage('Prepare offline kogito-examples') {
-            when {
-                expression {
-                    return !params.SKIP_TESTS;
-                }
-            }
             steps {
                 sh "make clone-repos"
             }
@@ -172,6 +196,22 @@ pipeline {
             steps {
                 script {
                     launchParallelForEachImage("Test", {img -> testImage(img)})
+                    build_stages = [:]
+                    IMAGES.each{ image -> build_stages["${image}"] = {
+                            createWorkspace("$image")
+                            copyWorkspace("$image")
+                            dir(getWorkspacePath("$image")){
+                                try{
+                                    sh "make ${image}"
+                                }
+                                finally{
+                                    junit 'target/test/results/*.xml'
+                                }
+                            
+                            }
+                        }
+                    }
+                    parallel build_stages
                 }
             }
         }
@@ -185,12 +225,31 @@ pipeline {
         stage('Pushing') {
             steps {
                 script {
-                    if (isDeployImageInOpenshiftRegistry()) {
+                    if (env.DEPLOY_IMAGE_USE_OPENSHIFT == "true") {
                         loginOpenshiftRegistry()
-                    } else if (getDeployImageRegistryCredentials() != ''){
-                        loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
+                        pushImages()
+                    } else if (env.DEPLOY_IMAGE_REGISTRY_CREDENTIALS != '') {
+                        withDockerRegistry([ credentialsId: "${DEPLOY_IMAGE_REGISTRY_CREDENTIALS}", url: "https://${DEPLOY_IMAGE_REGISTRY}" ]) {        
+                            pushImages()
+                        }
+                    } else {
+                        pushImages()
                     }
-                    pushImages()
+                }
+            }
+        }
+        stage('Create PR')
+        {
+            when {
+                expression {
+                    return params.RELEASE
+                }
+            }
+            steps{
+                script{
+                    githubscm.pushObject("origin", params.PROJECT_VERSION, "bsig-gh-bot")
+                    //store it in the deploy_properties map
+                    deploy_properties["kogito-images.pr.link"]=githubscm.createPR("Update project version to ${params.PROJECT_VERSION}", "Generated by build ${BUILD_TAG}: ${BUILD_URL}", params.BUILD_BRANCH_NAME, "bsig-gh-bot")
                 }
             }
         }
@@ -198,6 +257,11 @@ pipeline {
     post {
         always {
             script{
+                //create properties file with the content from map 
+                def propertiesStr = deploy_properties.collect{ entry -> "${entry.key}=${entry.value}" }.join("\n")
+                writeFile( file : 'deployment.properties' , text : propertiesStr)
+                //archive it 
+                archiveArtifacts artifacts: 'deployment.properties', allowEmptyArchive:true
                 clean()
             }
         }
@@ -255,30 +319,49 @@ void pushImages() {
 
 String buildImageName(String imageName) {
     String finalImageName = imageName
-    if(getDeployImageNameSuffix() != ''){
-        finalImageName += "-" + getDeployImageNameSuffix()
+    if(env.DEPLOY_IMAGE_NAME_SUFFIX != null && env.DEPLOY_IMAGE_NAME_SUFFIX != '') {
+        finalImageName += "-" + env.DEPLOY_IMAGE_NAME_SUFFIX
     }
-    return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${finalImageName}:${getDeployImageTag()}"
+    return "${DEPLOY_IMAGE_REGISTRY}/${DEPLOY_IMAGE_NAMESPACE}/${finalImageName}:${DEPLOY_IMAGE_TAG}"
 }
 
-void loginOpenshift(){
-    withCredentials([usernamePassword(credentialsId: env.OPENSHIFT_CREDS_KEY, usernameVariable: 'OC_USER', passwordVariable: 'OC_PWD')]){
-        sh "oc login --username=${OC_USER} --password=${OC_PWD} --server=${env.OPENSHIFT_API} --insecure-skip-tls-verify"
-    }
-}
-
-void loginOpenshiftRegistry(){
-    loginOpenshift()
-    // username can be anything. See https://docs.openshift.com/container-platform/4.4/registry/accessing-the-registry.html#registry-accessing-directly_accessing-the-registry
-    sh "set +x && docker login -u anything -p \$(oc whoami -t) ${env.OPENSHIFT_REGISTRY}"
-}
-
-void loginContainerRegistry(String registry, String credsId){
-    withCredentials([usernamePassword(credentialsId: credsId, usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PWD')]) {
-        sh "docker login -u ${REGISTRY_USER} -p ${REGISTRY_PWD} ${registry}"
+void loginOpenshiftRegistry() {
+    // Use creds & route as `jenkins-slave` is not running directly on Openshift
+    withCredentials([string(credentialsId: 'openshift-login-passwd', variable: 'OC_PASSWORD')]) {
+        sh "set +x && oc login -u admin -p ${OC_PASSWORD} --server=${OPENSHIFT_API} --insecure-skip-tls-verify"
+        sh "set +x && docker login -u admin -p \$(oc whoami -t) ${OPENSHIFT_REGISTRY_ROUTE}"
     }
 }
 
+/**
+    Setup env variables for image registry/namesapce/tag, depending on parameters
+*/
+void setupImageEnvVarsFromParams(String prefixParam, String prefixEnv) {
+    if(getParam(prefixParam, "IMAGE_REGISTRY") == '') {
+        setEnv(prefixEnv, "IMAGE_REGISTRY", env.OPENSHIFT_REGISTRY_ROUTE) // Use route as `jenkins-slave` is not running directly on Openshift
+        setEnv(prefixEnv, "IMAGE_NAMESPACE", "openshift")
+        setEnv(prefixEnv, "IMAGE_USE_OPENSHIFT", "true")
+    } else {
+        setEnvFromParam("IMAGE_REGISTRY_CREDENTIALS", prefixEnv, prefixParam)
+        setEnvFromParam("IMAGE_REGISTRY", prefixEnv, prefixParam)
+        setEnvFromParam("IMAGE_NAMESPACE", prefixEnv, prefixParam)
+        setEnv(prefixEnv, "IMAGE_USE_OPENSHIFT", "false")
+    }
+    if (getParam(prefixParam, "IMAGE_TAG") != '') {
+        setEnvFromParam("IMAGE_TAG", prefixEnv, prefixParam)
+    } else {
+        setEnv(prefixEnv, "IMAGE_TAG", sh(script: "echo ${GIT_COMMIT} | cut -c1-7", returnStdout: true).trim())
+    }
+    if(getParam(prefixParam, "IMAGE_NAME_SUFFIX") != '') {
+        setEnvFromParam("IMAGE_NAME_SUFFIX", prefixEnv, prefixParam)
+    }
+}
+
+void setDeployPropertyIfneeded(String key, def value){
+    if(value != null && value != "") {
+        deploy_properties[key] = value
+    }
+}
 ////////////////////////////////////////////////////////////////////////
 // Deploy image information
 ////////////////////////////////////////////////////////////////////////
@@ -295,29 +378,23 @@ String getDeployImageRegistry(){
     return isDeployImageInOpenshiftRegistry() ? env.OPENSHIFT_REGISTRY : params.IMAGE_REGISTRY
 }
 
-String getDeployImageNamespace(){
-    return isDeployImageInOpenshiftRegistry() ? "openshift" : params.IMAGE_NAMESPACE
+void setEnv(String keyPrefix, String keyId, String value){
+    echo "setEnv ${getKey(keyPrefix, keyId)} = ${value}"
+    env."${getKey(keyPrefix, keyId)}" = value
 }
 
-String getDeployImageNameSuffix(){
-    return params.IMAGE_NAME_SUFFIX
+void setEnvFromParam(String keyId, String prefixEnv, String prefixParam){
+    setEnv(prefixEnv, keyId, getParam(prefixParam, keyId))
 }
 
-String getDeployImageTag(){
-    if (params.IMAGE_TAG != ""){
-        return params.IMAGE_TAG
-    } else {
-        return sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-    }
+String getParam(String keyPrefix, String keyId){
+    return params."${getKey(keyPrefix, keyId)}"
 }
 
-
-////////////////////////////////////////////////////////////////////////
-// Workspaces
-////////////////////////////////////////////////////////////////////////
-
-void initWorkspace(String image){
+void  createWorkspace(String image){
     sh "mkdir -p ${getWorkspacePath(image)}"
+}
+void copyWorkspace(String image){
     sh "rsync -av --progress . ${getWorkspacePath(image)} --exclude workspaces"
 }
 
@@ -332,3 +409,4 @@ String getWorkspacesPath(){
 String getWorkspacePath(String image){
     return "${getWorkspacesPath()}/${image}"
 }
+

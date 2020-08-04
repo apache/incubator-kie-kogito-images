@@ -178,7 +178,7 @@ This will set the default artifacts version to 1.0.0 into the behave tests.
 ##### Update Examples URI and Ref
 
 ```bash
-$ python update-tests.py --examples-uri https://github.com/<yournamespace>/kogito-examples --examples_uri 1.0.0
+$ python update-tests.py --examples-uri https://github.com/<yournamespace>/kogito-examples --examples-ref 1.0.0
 ```
 
 This will update the examples uri and/or the ref for the tests.

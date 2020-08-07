@@ -19,7 +19,7 @@ CONFIGURE_SCRIPTS=(
 source ${KOGITO_HOME}/launch/configure.sh
 #############################################
 
-if [ "$EXPLAINABILITY_COMMUNICATION" = "rest" ] ; then 
+if [ ${EXPLAINABILITY_COMMUNICATION^^} = "REST" ] ; then 
       EXPLAINABILITY_JAR="kogito-explainability-rest-runner.jar"
     else
       EXPLAINABILITY_JAR="kogito-explainability-messaging-runner.jar"

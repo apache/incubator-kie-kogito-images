@@ -20,9 +20,9 @@ pipeline{
     tools {
         jdk 'kie-jdk11'
     }
-    environment {
-        JAVA_HOME = "${GRAALVM_HOME}"
-    }
+    // environment {
+    //     JAVA_HOME = "${GRAALVM_HOME}"
+    // }
     stages{
         stage('Initialization'){
             steps{
@@ -64,6 +64,7 @@ pipeline{
         }
         stage('Prepare offline kogito-examples'){
             steps{
+                sh "mvn --version"
                 sh "make clone-repos"
             }
         }

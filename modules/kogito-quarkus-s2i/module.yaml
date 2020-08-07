@@ -7,4 +7,4 @@ execute:
 
 envs:
   - name: "KOGITO_VERSION"
-    value: "0.13.1-snapshot"
+    value: "0.13.1-SNAPSHOT"

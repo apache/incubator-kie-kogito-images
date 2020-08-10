@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #Script responsible for fetching the latest artifacts of kogito services and updating their module.yaml files as well as updating Maven version
 #Should be run from root directory of the repository
-#Sample usage:  python3 scripts/update-maven-information.py
+#Sample usage:  python3 scripts/update-maven-artifacts.py
 #
 #Dependencies
 # ruamel.yaml
@@ -19,8 +19,9 @@ import os
 import argparse
 
 DEFAULT_REPO_URL = "https://repository.jboss.org/nexus/content/groups/public/"
-DEFAULT_VERSION = "0.13.1-snapshot"
-DEFAULT_ARTIFACT_PATH = "org/kie/kogito"
+KOGITO_ARTIFACT_PATH = "org/kie/kogito"
+
+ARTIFACTS_VERSION="0.13.1-SNAPSHOT"
 
 Modules = {
     #service-name: module-name(directory in which module's module.yaml file is present)
@@ -74,7 +75,8 @@ def getRunnerURL(service):
     finalVersion = service["version"]
     if isSnapshotVersion(finalVersion):
         finalVersion=getSnapshotVersion(service)
-    url = service["repo_url"] + "{}-{}-runner.jar".format(service["name"], finalVersion)
+    url = service["repo_url"] + "{0}-{1}-runner.jar".format(service["name"], finalVersion)
+    checkUrl(url)
     return url
 
 def getMD5(service):
@@ -85,8 +87,18 @@ def getMD5(service):
     '''
     runnerURL=getRunnerURL(service)
     runnerMD5URL=runnerURL+".md5"
+    checkUrl(runnerMD5URL)
     runnerMD5=sp.getoutput("curl -s  {}".format(runnerMD5URL))
     return runnerMD5
+
+def checkUrl(url):
+    '''
+    Check url returns 2xx code. 
+    :param url
+    '''
+    resultCode=int(sp.getoutput('curl -I -s -o /dev/null -w "%{0}" {1}'.format('{http_code}', url)))
+    if resultCode < 200 or resultCode >= 300:
+        raise ValueError('Got http code {0} for url {1}'.format(resultCode, url))
 
 def update_artifacts(service,modulePath):
     '''
@@ -103,22 +115,18 @@ def update_artifacts(service,modulePath):
         common.yaml_loader().dump(data, module)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Update Maven information in repo from the given artifact url and version.')
+    parser = argparse.ArgumentParser(description='Update Maven information in repo from the given maven repository')
     parser.add_argument('--repo-url', dest='repo_url', default=DEFAULT_REPO_URL, help='Defines the url of the repository to extract the artifacts from, defaults to {}'.format(DEFAULT_REPO_URL))
-    parser.add_argument('--version', dest='version', default=DEFAULT_VERSION, help='Defines the version of artifacts to retrieve from the repository url, defaults to {}'.format(DEFAULT_VERSION))
     args = parser.parse_args()
     
     # Update Kogito Service modules
     for serviceName, modulePath in Modules.items():
         service = {
-            "repo_url" : args.repo_url + "{}/{}/{}/".format(DEFAULT_ARTIFACT_PATH, serviceName, args.version),
+            "repo_url" : args.repo_url + "{}/{}/{}/".format(KOGITO_ARTIFACT_PATH, serviceName, ARTIFACTS_VERSION),
             "name" : serviceName,
-            "version" : args.version
+            "version" : ARTIFACTS_VERSION
         }
         moduleYamlFile = "modules/{}/module.yaml".format(modulePath)
         
         update_artifacts(service, moduleYamlFile)
         print("Successfully updated the artifacts for: ", serviceName)
-    
-    # Need also to set the KOGITO_VERSION for artifacts to the given one
-    common.update_kogito_version_env_in_modules(args.version)

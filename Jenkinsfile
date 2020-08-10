@@ -64,6 +64,9 @@ pipeline{
         }
         stage('Prepare offline kogito-examples'){
             steps{
+                // Temp fix as Maven mirror does not work
+                sh "python3 scripts/update-tests.py --repo-url https://origin-repository.jboss.org/nexus/content/groups/public/"
+
                 sh "make clone-repos"
             }
         }

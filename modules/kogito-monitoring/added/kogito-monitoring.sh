@@ -91,7 +91,6 @@ function update_monitoring_configmap() {
     log_info "---> [monitoring] About to patch configMap ${config_map}"
     # prints the raw data
     echo "Body: ${body}"
-    echo "${body}" > /tmp/sucatest$md5
     printf "%s" "${body}" >$KOGITO_HOME/data/dashboards/configmap_patched.json
     response=$(patch_json_k8s_resource "api" "configmaps/${config_map}" $KOGITO_HOME/data/dashboards/configmap_patched.json)
     if [ "${response: -3}" != "200" ]; then

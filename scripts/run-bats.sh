@@ -37,5 +37,8 @@ echo "----> running bats on kogito-maven"
 echo "----> running bats on kogito-persistence"
 ./bats/bin/bats modules/kogito-persistence/tests/bats
 
+echo "----> running bats on kogito-monitoring"
+./bats/bin/bats modules/kogito-monitoring/tests/bats
+
 echo "----> running bats on kogito-s2i-core"
 ./bats/bin/bats modules/kogito-s2i-core/tests/bats

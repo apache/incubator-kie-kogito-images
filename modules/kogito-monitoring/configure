@@ -1,0 +1,12 @@
+#!/bin/sh
+
+SCRIPT_DIR=$(dirname $0)
+
+# kogito-monitoring
+mkdir -p ${KOGITO_HOME}/launch/
+cp -v ${SCRIPT_DIR}/added/* ${KOGITO_HOME}/launch/
+chmod +x-w ${KOGITO_HOME}/launch/kogito-monitoring.sh
+chmod +x-w ${KOGITO_HOME}/launch/post-hook-monitoring.sh
+
+mkdir -p ${KOGITO_HOME}/data/dashboards
+chmod +w ${KOGITO_HOME}/data/dashboards

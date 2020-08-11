@@ -184,7 +184,6 @@ pipeline {
         stage('Build Images') {
             steps{
                 script {
-                    IMAGES.each{ image -> initWorkspace(image) }
                     launchParallelForEachImage("Build", {img -> buildImage(img)})
                 }
             }

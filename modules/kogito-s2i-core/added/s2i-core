@@ -3,6 +3,7 @@
 # imports
 source ${KOGITO_HOME}/launch/logging.sh
 source $KOGITO_HOME/launch/kogito-persistence.sh
+source $KOGITO_HOME/launch/kogito-monitoring.sh
 
 S2I_DESTINATION_DIR="${S2I_DESTINATION_DIR:-/tmp}"
 S2I_ARTIFACTS_DIR="${S2I_DESTINATION_DIR}/artifacts"
@@ -51,6 +52,7 @@ function assemble_runtime() {
     fi
     # handle persistence files
     move_persistence_files
+    move_monitoring_files
 }
 
 
@@ -85,6 +87,7 @@ function runtime_assemble() {
         handle_image_metadata_json
         copy_kogito_app
         copy_persistence_files
+        copy_monitoring_files
     else
         cp -Rv --parents ./* ${KOGITO_HOME}/
     fi

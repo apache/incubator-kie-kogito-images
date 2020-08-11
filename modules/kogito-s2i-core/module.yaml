@@ -41,6 +41,7 @@ envs:
 modules:
   install:
     - name: org.kie.kogito.persistence
+    - name: org.kie.kogito.monitoring
 
 run:
   cmd:

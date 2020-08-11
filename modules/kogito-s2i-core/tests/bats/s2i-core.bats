@@ -5,6 +5,7 @@ mkdir -p ${KOGITO_HOME}/launch/
 
 cp $BATS_TEST_DIRNAME/../../../kogito-logging/added/logging.sh $KOGITO_HOME/launch/
 cp $BATS_TEST_DIRNAME/../../../kogito-persistence/added/kogito-persistence.sh $KOGITO_HOME/launch/
+cp $BATS_TEST_DIRNAME/../../../kogito-monitoring/added/kogito-monitoring.sh $KOGITO_HOME/launch/
 cp $BATS_TEST_DIRNAME/../../../kogito-kubernetes-client/added/kogito-kubernetes-client.sh $KOGITO_HOME/launch/
 
 # imports

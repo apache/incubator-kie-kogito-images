@@ -36,3 +36,6 @@ handle_image_metadata_json
 
 # handle persistence files
 copy_persistence_files
+
+# handle monitoring files
+copy_monitoring_files

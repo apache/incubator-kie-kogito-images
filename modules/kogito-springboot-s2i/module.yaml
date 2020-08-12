@@ -1,10 +1,10 @@
 schema_version: 1
 name: org.kie.kogito.springboot.s2i
-version: "0.13.1"
+version: "0.13.2-snapshot"
 
 execute:
   - script: configure
 
 envs:
   - name: "KOGITO_VERSION"
-    value: "0.13.1"
+    value: "0.13.2-SNAPSHOT"

@@ -4,7 +4,7 @@ version: "0.13.1"
 
 artifacts:
   - name: kogito-jobs-service-runner.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17157/org/kie/kogito/jobs-service/0.13.1/jobs-service-0.13.1-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service/0.13.1/jobs-service-0.13.1-runner.jar
     md5: 8ca40bd7bd29510230670a3ca29dfa1c
 
 execute:

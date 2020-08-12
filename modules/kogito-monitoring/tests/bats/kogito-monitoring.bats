@@ -152,7 +152,7 @@ teardown() {
 
     echo "result= ${lines[@]}"
     [ "$status" -eq 0 ]
-    [ "${lines[1]}" = "INFO ---> [monitoring] About to patch configMap exampleapp-cm" ]
+    [ "${lines[1]}" = "INFO ---> [monitoring] About to patch configMap examplemonitoring-cm" ]
     [ "${lines[2]}" = "Body: ${expected}" ]
 }
 
@@ -165,7 +165,7 @@ teardown() {
     
     echo "result= ${lines[@]}"
     [ "$status" -eq 0 ]
-    [ "${lines[1]}" = "INFO ---> [monitoring] About to patch configMap exampleapp-cm" ]
+    [ "${lines[1]}" = "INFO ---> [monitoring] About to patch configMap examplemonitoring-cm" ]
     [ "${lines[2]}" = "Body: ${expected}" ]
 }
 
@@ -182,6 +182,6 @@ teardown() {
     
     echo "result= ${lines[@]}"
     [ "$status" -eq 0 ]
-    [ "${lines[1]}" = "INFO ---> [monitoring] About to patch configMap exampleapp-cm" ]
+    [ "${lines[1]}" = "INFO ---> [monitoring] About to patch configMap examplemonitoring-cm" ]
     [ "${lines[2]}" = "Body: ${expected}" ]
 }

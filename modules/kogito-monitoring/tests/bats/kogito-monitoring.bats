@@ -41,7 +41,7 @@ setup() {
     mkdir -p $KOGITO_HOME/bin
     mkdir -p $KOGITO_HOME/data/dashboards/
     mkdir -p $KOGITO_HOME/podinfo
-    echo "exampleapp-cm" > $KOGITO_HOME/podinfo/protobufcm
+    echo "examplemonitoring-cm" > $KOGITO_HOME/podinfo/monitoringcm
 }
 
 teardown() {

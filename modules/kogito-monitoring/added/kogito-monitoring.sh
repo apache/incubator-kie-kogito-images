@@ -57,7 +57,7 @@ function update_monitoring_configmap() {
         return 0
     fi
 
-    local config_map=$(cat $KOGITO_HOME/podinfo/protobufcm)
+    local config_map=$(cat $KOGITO_HOME/podinfo/monitoringcm)
     local file_contents=""
     local file_name=""
     local md5=""

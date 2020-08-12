@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.launch.scripts
-version: "0.13.1"
+version: "0.13.2-snapshot"
 
 execute:
   - script: configure

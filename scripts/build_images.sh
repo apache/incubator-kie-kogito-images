@@ -46,7 +46,7 @@ do
   folder=$(getWorkspacesPath $IMAGE)
   echo "[INFO] Creating folder $folder for image $IMAGE"
   mkdir -p $folder
-  rsync -av --progress . $folder --exclude workspaces
+  rsync -av --progress . $folder --exclude images_workspace
 
   cd $folder
   

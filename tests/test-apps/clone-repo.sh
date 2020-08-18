@@ -13,6 +13,8 @@ export JBOSS_MAVEN_REPO_URL="https://repository.jboss.org/nexus/content/groups/p
 # export MAVEN_REPO_URL=
 mkdir -p ${HOME}/.m2/
 cp ${MVN_MODULE}/maven/settings.xml ${HOME}/.m2/settings.xml
+echo "[DEBUG] MVN_MODULE ${MVN_MODULE}"
+echo "[DEBUG] SCRIPT_DIR ${SCRIPT_DIR}"
 source ${MVN_MODULE}/added/configure-maven.sh
 configure
 

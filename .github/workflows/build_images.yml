@@ -1,0 +1,18 @@
+name: Build Images
+
+on: [pull_request]
+
+jobs:
+  build-chain-images:
+    runs-on: ubuntu-latest
+    name: Build Images
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Chain
+        id: build-chain
+        uses: kiegroup/github-action-build-chain@BXMSPROD-946
+        with:
+          build-command: "scripts/build_images.sh"
+          workflow-file-name: "build_images.yml"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

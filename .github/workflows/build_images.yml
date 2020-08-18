@@ -16,6 +16,6 @@ jobs:
         uses: kiegroup/github-action-build-chain@BXMSPROD-946
         with:
           build-command: "scripts/prepare_environment_build_images.sh | mkdir -p ${{ matrix.images }} | rsync -av --progress . ${{ matrix.images }} --exclude workspaces | make ${{ matrix.images }} ignore_test=true cekit_option='--work-dir .' | make ${{ matrix.images }} ignore_build=true cekit_option='--work-dir .'"
-          workflow-file-name: "build_images_second_approach.yml"
+          workflow-file-name: "build_images.yml"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

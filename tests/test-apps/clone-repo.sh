@@ -17,6 +17,8 @@ echo "[DEBUG] MVN_MODULE ${MVN_MODULE}"
 echo "[DEBUG] SCRIPT_DIR ${SCRIPT_DIR}"
 echo "[DEBUG] ls /github/workspace/kogito_images/modules/kogito-maven/3.6.x $(ls /github/workspace/kogito_images/modules/kogito-maven/3.6.x)"
 echo "[DEBUG] ls /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x $(ls /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x)"
+echo "[DEBUG] ls ${MVN_MODULE}/added/ $(ls /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x/added)"
+echo "[DEBUG] cat ${MVN_MODULE}/added/configure-maven.sh $(cat /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x/added/configure-maven.sh)"
 source ${MVN_MODULE}/added/configure-maven.sh
 configure
 

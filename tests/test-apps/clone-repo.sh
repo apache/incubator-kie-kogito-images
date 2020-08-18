@@ -19,7 +19,7 @@ echo "[DEBUG] ls /github/workspace/kogito_images/modules/kogito-maven/3.6.x $(ls
 echo "[DEBUG] ls /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x $(ls /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x)"
 echo "[DEBUG] ls ${MVN_MODULE}/added/ $(ls /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x/added)"
 echo "[DEBUG] cat ${MVN_MODULE}/added/configure-maven.sh $(cat /github/workspace/kogito_images/tests/test-apps/../../modules/kogito-maven/3.6.x/added/configure-maven.sh)"
-source ${MVN_MODULE}/added/configure-maven.sh
+. ${MVN_MODULE}/added/configure-maven.sh
 configure
 
 cat ${HOME}/.m2/settings.xml

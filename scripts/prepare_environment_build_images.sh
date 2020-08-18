@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/1.0-SNAPSHOT/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
 tar -xzvf cekit-image-validator-runner.tgz

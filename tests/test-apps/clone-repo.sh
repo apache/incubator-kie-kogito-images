@@ -11,7 +11,6 @@ set -e
 # setup maven env
 export JBOSS_MAVEN_REPO_URL="https://repository.jboss.org/nexus/content/groups/public/"
 # export MAVEN_REPO_URL=
-mkdir -p ${HOME}/.m2/
 cp ${MVN_MODULE}/maven/settings.xml ${HOME}/.m2/settings.xml
 source ${MVN_MODULE}/added/configure-maven.sh
 configure

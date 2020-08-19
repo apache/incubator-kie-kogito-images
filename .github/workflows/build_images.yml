@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build Chain
         id: build-chain
-        uses: kiegroup/github-action-build-chain@BXMSPROD-946
+        uses: kiegroup/github-action-build-chain@python3-cekit
         with:
           build-command: "scripts/build_images.sh"
           workflow-file-name: "build_images.yml"

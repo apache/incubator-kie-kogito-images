@@ -1,0 +1,22 @@
+name: Build Images
+
+on: [pull_request]
+
+jobs:
+  build-chain-images:
+    name: Build Images
+    strategy:
+      matrix:
+        images: ["kogito-quarkus-ubi8", "kogito-quarkus-jvm-ubi8", "kogito-quarkus-ubi8-s2i", "kogito-springboot-ubi8", "kogito-springboot-ubi8-s2i", "kogito-data-index", "kogito-trusty", "kogito-explainability", "kogito-jobs-service", "kogito-management-console"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Chain
+        id: build-chain
+        uses: kiegroup/github-action-build-chain@python3-cekit
+        with:
+          build-command: 'sh scripts/prepare_environment_build_images.sh | mkdir -p ${{ matrix.images }} | rsync -av --progress . ${{ matrix.images }} --exclude workspaces | make ${{ matrix.images }} ignore_test=true cekit_option="--work-dir ." | make ${{ matrix.images }} ignore_build=true cekit_option="--work-dir ."'
+          workflow-file-name: "build_images.yml"
+          matrix-variables: "matrix.images: ${{ matrix.images }}"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

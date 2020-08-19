@@ -4,7 +4,7 @@ version: "0.14.0"
 
 artifacts:
   - name: kogito-trusty-runner.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17176/org/kie/kogito/trusty-service/0.14.0/trusty-service-0.14.0-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service/0.14.0/trusty-service-0.14.0-runner.jar
     md5: 04973b5ed15ce50aebd5334e55e3fa13
 
 execute:

@@ -4,7 +4,7 @@ version: "0.14.0"
 
 artifacts:
   - name: kogito-data-index-runner.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17176/org/kie/kogito/data-index-service/0.14.0/data-index-service-0.14.0-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service/0.14.0/data-index-service-0.14.0-runner.jar
     md5: 7963fedc98b955f9c07d0a3bfdbc2051
 
 execute:

@@ -19,4 +19,4 @@ echo "[INFO] Executing cekit-image-validator-runner"
 ./cekit-image-validator-runner kogito-springboot-s2i-overrides.yaml
 
 echo "[INFO] Make clone-repos"
-# make clone-repos
+make clone-repos

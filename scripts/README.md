@@ -138,6 +138,7 @@ The command will update the needed files with the new URL:
 - kogito-data-index/module.yaml
 - kogito-jobs-service/module.yaml
 - kogito-management-console/module.yaml
+- kogito-trusty-ui/module.yaml
 - kogito-trusty/module.yaml
 - kogito-explainability/module.yaml
 

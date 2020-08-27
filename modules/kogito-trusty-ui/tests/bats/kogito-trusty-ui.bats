@@ -35,7 +35,7 @@ teardown() {
 
 @test "check if default http port is correctly set" {
 
-  configure_trusty_http_port
+  configure_trusty_ui_http_port
 
   result="${KOGITO_TRUSTY_UI_PROPS}"
   expected=" -Dquarkus.http.port=8080"

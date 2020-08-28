@@ -35,7 +35,7 @@ Feature: kogito-trusty-ui feature
     When container is started with env
       | variable                  | value            |
       | SCRIPT_DEBUG              | true             |
-      | KOGITO_DATAINDEX_HTTP_URL | http://test:9090 |
+      | KOGITO_TRUSTY_HTTP_URL | http://test:9090 |
     Then container log should contain + exec java -XshowSettings:properties -Dkogito.trusty.http.url=http://test:9090 -Dquarkus.http.port=8080 -Dquarkus.http.host=0.0.0.0 -jar /home/kogito/bin/kogito-trusty-ui-runner.jar
     And container log should not contain Trusty url not set, default will be used: http://localhost:8180
     And container log should contain started in

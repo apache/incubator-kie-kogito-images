@@ -19,9 +19,15 @@ CONFIGURE_SCRIPTS=(
 source ${KOGITO_HOME}/launch/configure.sh
 #############################################
 
+if [ ${DATA_INDEX_STORAGE^^} = "MONGODB" ] ; then 
+      DATA_INDEX_JAR="kogito-data-index-mongodb.jar"
+    else
+      DATA_INDEX_JAR="kogito-data-index-infinispan.jar"
+fi
+
 printenv
 
 exec java ${SHOW_JVM_SETTINGS} ${JAVA_OPTIONS} ${KOGITO_DATA_INDEX_PROPS} \
         -Djava.library.path=$KOGITO_HOME/lib \
         -Dquarkus.http.host=0.0.0.0 \
-        -jar $KOGITO_HOME/bin/kogito-data-index-runner.jar
+        -jar $KOGITO_HOME/bin/$DATA_INDEX_JAR

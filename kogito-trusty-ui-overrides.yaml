@@ -19,7 +19,7 @@ envs:
     description: "If set to true, ensures that the bash scripts are executed with the -x option, printing the commands and their arguments as they are executed. Also debug JVM initialization."
   - name: "KOGITO_TRUSTY_HTTP_URL"
     example: "http://trusty.service:8080"
-    description: "Trusty service address, defaults tohttp://localhost:8180."
+    description: "Trusty service address, defaults to http://localhost:8180."
   - name: "HTTP_PORT"
     example: "9090"
     description: "Defines which port the trusty ui Container Image will listen on."
@@ -42,4 +42,3 @@ run:
   user: 1001
   cmd:
     - "/home/kogito/kogito-app-launch.sh"
-

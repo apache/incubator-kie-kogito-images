@@ -18,7 +18,7 @@ function configure_trusty_http_port {
 }
 
 function enable_explainability {
-    local explainabilityEnabled=${EXPLAINABILITY_ENABLED:"true"}
+    local explainabilityEnabled=${EXPLAINABILITY_ENABLED:="true"}
     if [ "${explainabilityEnabled^^}" = "FALSE" ] ; then 
           explainabilityEnabled="false"
     fi

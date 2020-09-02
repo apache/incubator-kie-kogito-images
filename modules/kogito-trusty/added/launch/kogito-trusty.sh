@@ -19,8 +19,8 @@ function configure_trusty_http_port {
 
 function enable_explainability {
     local explainabilityEnabled=${EXPLAINABILITY_ENABLED:"true"}
-    if [ "${explainabilityEnabled^^}" = "TRUE" ] ; then 
-          explainabilityEnabled="true"
+    if [ "${explainabilityEnabled^^}" = "FALSE" ] ; then 
+          explainabilityEnabled="false"
     fi
     KOGITO_TRUSTY_PROPS="${KOGITO_TRUSTY_PROPS} -Dtrusty.explainability.enabled=${explainabilityEnabled}"
 }

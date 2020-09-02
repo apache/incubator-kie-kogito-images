@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#import
+source ${KOGITO_HOME}/launch/logging.sh
 
 function prepareEnv() {
     # keep it on alphabetical order
@@ -18,9 +20,13 @@ function configure_trusty_http_port {
 }
 
 function enable_explainability {
-    local explainabilityEnabled=${EXPLAINABILITY_ENABLED:="true"}
-    if [ "${explainabilityEnabled^^}" = "FALSE" ] ; then 
-          explainabilityEnabled="false"
+    local allowed_values=("TRUE" "FALSE")
+    local explainability_enabled="true"
+    if [[ ! "${allowed_values[@]}" =~ "${EXPLAINABILITY_ENABLED^^}" ]]; then
+        log_warning "Explainability enabled type ${EXPLAINABILITY_ENABLED} is not allowed, the allowed types are [${allowed_values[*]}]. Defaulting to ${explainability_enabled}."
+    elif [ "${EXPLAINABILITY_ENABLED^^}" == "FALSE" ]; then
+        explainability_enabled="${EXPLAINABILITY_ENABLED^^}"
     fi
-    KOGITO_TRUSTY_PROPS="${KOGITO_TRUSTY_PROPS} -Dtrusty.explainability.enabled=${explainabilityEnabled}"
+    log_info "Explainability is enabled: ${explainability_enabled}"
+    KOGITO_TRUSTY_PROPS="${KOGITO_TRUSTY_PROPS} -Dtrusty.explainability.enabled=${explainability_enabled,,}"
 }

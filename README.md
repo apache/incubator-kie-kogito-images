@@ -701,7 +701,7 @@ to your Kogito infrastructure on a Kubernetes cluster and provide its capabiliti
 
 ### Kogito Trusty UI Component Image
 
-The Kogito Trusty UI provides an audit tool that allows you to retrieve and inspect the decisions that have been taken by kogito runtime services.
+The Kogito Trusty UI provides an audit tool that allows you to retrieve and inspect the decisions that have been taken by Kogito Runtime Services.
 It depends on the Kogito Trusty Service on which the Trusty UI will connect to so it can be able to retrieve the information to display.
 
 To work correctly, the Kogito Trusty UI needs the Kogito Trusty Service url. If not provided, it will try to connect to the default one (http://localhost:8180).
@@ -709,13 +709,13 @@ To work correctly, the Kogito Trusty UI needs the Kogito Trusty Service url. If 
 Basic usage:
 
 ```bash
-$ docker run -it --env KOGITO_TRUSTY_HTTP_URL=trusty-service-url:9090 quay.io/kiegroup/kogito-trusty-ui:latest
+$ docker run -it --env KOGITO_TRUSTY_ENDPOINT=trusty-service-url:9090 quay.io/kiegroup/kogito-trusty-ui:latest
 ```
 
 To enable debug just use this env while running this image:
 
 ```bash
-docker run -it --env SCRIPT_DEBUG=true --env KOGITO_TRUSTY_HTTP_URL=trusty-service-url:9090 quay.io/kiegroup/kogito-trusty-ui:latest
+docker run -it --env SCRIPT_DEBUG=true --env KOGITO_TRUSTY_ENDPOINT=trusty-service-url:9090 quay.io/kiegroup/kogito-trusty-ui:latest
 ```
 You should notice a few debug messages being printed in the system output.
 

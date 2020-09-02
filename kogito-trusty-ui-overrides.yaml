@@ -17,7 +17,7 @@ envs:
   - name: "SCRIPT_DEBUG"
     example: "true"
     description: "If set to true, ensures that the bash scripts are executed with the -x option, printing the commands and their arguments as they are executed. Also debug JVM initialization."
-  - name: "KOGITO_TRUSTY_HTTP_URL"
+  - name: "KOGITO_TRUSTY_ENDPOINT"
     example: "http://trusty.service:8080"
     description: "Trusty service address, defaults to http://localhost:8180."
   - name: "HTTP_PORT"

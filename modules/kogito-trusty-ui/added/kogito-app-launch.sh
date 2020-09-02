@@ -8,6 +8,7 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     SHOW_JVM_SETTINGS="-XshowSettings:properties"
     log_info "Script debugging is enabled, allowing bash commands and their arguments to be printed as they are executed"
     log_info "JVM settings debug is enabled."
+    printenv
 fi
 
 

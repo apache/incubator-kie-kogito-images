@@ -6,7 +6,7 @@ source ${KOGITO_HOME}/launch/logging.sh
 function prepareEnv() {
     # keep it on alphabetical order
     unset HTTP_PORT
-    unset KOGITO_TRUSTY_HTTP_URL
+    unset KOGITO_TRUSTY_ENDPOINT
 }
 
 function configure() {
@@ -18,7 +18,7 @@ function configure() {
 #   10 - invalid url
 function configure_trusty_url {
     url_simple_regex='(https?)://'
-    local trustyURL=${KOGITO_TRUSTY_HTTP_URL}
+    local trustyURL=${KOGITO_TRUSTY_ENDPOINT}
     if [ "${trustyURL}x" != "x" ]; then
         if [[ ! "${trustyURL}x" =~ $url_simple_regex ]]; then
             log_error "URL must start with http or https."

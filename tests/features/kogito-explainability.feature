@@ -47,4 +47,4 @@ Feature: Kogito-explainability feature.
       | variable               | value    |
       | SCRIPT_DEBUG           | true     |
       | EXPLAINABILITY_COMMUNICATION | nonsense |
-    Then container log should contain WARN Explainability communication type nonsense is not allowed, the allowed types are [REST, MESSAGING]. Defaulting to MESSAGING.
+    Then container log should contain WARN Explainability communication type nonsense is not allowed, the allowed types are [REST MESSAGING]. Defaulting to MESSAGING.

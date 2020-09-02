@@ -20,7 +20,7 @@ function configure_explainability_http_port {
 }
 
 function configure_explainability_jar {
-    local allowed_communication_types=("REST", "MESSAGING")
+    local allowed_communication_types=("REST" "MESSAGING")
     local communication="MESSAGING"
     if [[ ! "${allowed_communication_types[@]}" =~ "${EXPLAINABILITY_COMMUNICATION^^}" ]]; then
         log_warning "Explainability communication type ${EXPLAINABILITY_COMMUNICATION} is not allowed, the allowed types are [${allowed_communication_types[*]}]. Defaulting to ${communication}."

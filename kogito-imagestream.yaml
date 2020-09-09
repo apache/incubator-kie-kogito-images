@@ -185,9 +185,9 @@ items:
       tags:
         - name: '1.0.0-snapshot'
           annotations:
-            description: Runtime image for the Kogito Trusty Service
+            description: Runtime image for the Kogito Explainability Service
             iconClass: icon-jbpm
-            tags: kogito,trusty
+            tags: kogito,explainability
             supports: explainability for decisions
             version: '1.0.0-snapshot'
           referencePolicy:

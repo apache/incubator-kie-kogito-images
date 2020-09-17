@@ -21,7 +21,7 @@ import argparse
 DEFAULT_REPO_URL = "https://repository.jboss.org/nexus/content/groups/public/"
 KOGITO_ARTIFACT_PATH = "org/kie/kogito"
 
-ARTIFACTS_VERSION="0.15.0"
+ARTIFACTS_VERSION="0.15.1-SNAPSHOT"
 
 Modules = {
     #service-name: module-name(directory in which module's module.yaml file is present)

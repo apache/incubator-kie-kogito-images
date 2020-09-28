@@ -35,9 +35,10 @@ Feature: Kogito-jobs-service feature.
       | variable                | value           |
       | SCRIPT_DEBUG            | true            |
       | ENABLE_EVENTS           | true            |
-    Then container log should contain bootstrap.servers = [localhost:9092]
+      | kafka.bootstrap.servers | localhost:11111 |
+    Then container log should contain bootstrap.servers = [localhost:11111]
     And container log should contain started in
-    And container log should contain Connection to node -1 (localhost/127.0.0.1:9092) could not be established.
+    And container log should contain Connection to node -1 (localhost/127.0.0.1:11111) could not be established.
 
   Scenario: verify if auth is correctly set
     When container is started with env

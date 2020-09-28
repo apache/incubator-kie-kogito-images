@@ -32,10 +32,10 @@ Feature: Kogito-jobs-service feature.
 
   Scenario: verify if the events is correctly enabled
     When container is started with env
-      | variable                | value           |
-      | SCRIPT_DEBUG            | true            |
-      | ENABLE_EVENTS           | true            |
-      | kafka.bootstrap.servers | localhost:11111 |
+      | variable                | value                                     |
+      | SCRIPT_DEBUG            | true                                      |
+      | ENABLE_EVENTS           | true                                      |
+      | KOGITO_JOBS_PROPS       | -Dkafka.bootstrap.servers=localhost:11111 |
     Then container log should contain bootstrap.servers = [localhost:11111]
     And container log should contain started in
     And container log should contain Connection to node -1 (localhost/127.0.0.1:11111) could not be established.

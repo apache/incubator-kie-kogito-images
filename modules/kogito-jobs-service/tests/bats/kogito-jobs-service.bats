@@ -61,13 +61,6 @@ teardown() {
     [ "${result}" = "${expected}" ]
 }
 
-@test "enable event without set kafka bootstrap server" {
-    export ENABLE_EVENTS="true"
-    run configure_jobs_service
-    echo "status is ${status}"
-    [ "$status" -eq 1 ]
-}
-
 @test "check if default http port is correctly set" {
     configure_jobs_service_http_port
 

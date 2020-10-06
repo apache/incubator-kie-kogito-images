@@ -69,11 +69,14 @@ pipeline {
     }
 
     environment {
-        CI = true
+        CI = true // Used by scripts
+        
         OPENSHIFT_API = credentials('OPENSHIFT_API')
         OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
         OPENSHIFT_CREDS_KEY = 'OPENSHIFT_CREDS'
+        
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
+        
         GITHUB_REPO = 'kogito-images' // for github-release cli
     }
 

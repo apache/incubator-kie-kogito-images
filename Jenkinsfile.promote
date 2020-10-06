@@ -115,10 +115,12 @@ pipeline {
                         sh 'git fetch origin'
                         sh "git checkout ${getPRSourceBranch()}"
 
-                        sh 'python3 scripts/update-maven-artifacts.py'
+                        // Update artifacts
+                        updateArtifactCmd = 'python3 scripts/update-maven-artifacts.py'
                         if(getMavenArtifactRepository() != ''){
                             updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()}"
                         }
+                        sh updateArtifactCmd
 
                         // Debug purpose in case of issue
                         sh 'cat modules/kogito-data-index/module.yaml'

@@ -40,7 +40,7 @@ pipeline {
         booleanParam(name: 'BASE_IMAGE_USE_OPENSHIFT_REGISTRY', defaultValue: false, description: 'Override `deployment.properties`. Set to true if base image should be retrieved from Openshift registry.In this case, BASE_IMAGE_REGISTRY_CREDENTIALS, BASE_IMAGE_REGISTRY and BASE_IMAGE_NAMESPACE parameters will be ignored')
         string(name: 'BASE_IMAGE_REGISTRY_CREDENTIALS', defaultValue: '', description: 'Override `deployment.properties`. Base Image registry credentials to use to deploy images. Will be ignored if no BASE_IMAGE_REGISTRY is given')
         string(name: 'BASE_IMAGE_REGISTRY', defaultValue: '', description: 'Override `deployment.properties`. Base image registry')
-        string(name: 'BASE_IMAGE_NAMESPACE', defaultValue: 'kiegroup', description: 'Override `deployment.properties`. Base image namespace')
+        string(name: 'BASE_IMAGE_NAMESPACE', defaultValue: '', description: 'Override `deployment.properties`. Base image namespace')
         string(name: 'BASE_IMAGE_NAME_SUFFIX', defaultValue: '', description: 'Override `deployment.properties`. Base image name suffix')
         string(name: 'BASE_IMAGE_TAG', defaultValue: '', description: 'Override `deployment.properties`. Base image tag')
 
@@ -48,7 +48,7 @@ pipeline {
         booleanParam(name: 'PROMOTE_IMAGE_USE_OPENSHIFT_REGISTRY', defaultValue: false, description: 'Set to true if base image should be deployed in Openshift registry.In this case, PROMOTE_IMAGE_REGISTRY_CREDENTIALS, PROMOTE_IMAGE_REGISTRY and PROMOTE_IMAGE_NAMESPACE parameters will be ignored')
         string(name: 'PROMOTE_IMAGE_REGISTRY_CREDENTIALS', defaultValue: '', description: 'Promote Image registry credentials to use to deploy images. Will be ignored if no PROMOTE_IMAGE_REGISTRY is given')
         string(name: 'PROMOTE_IMAGE_REGISTRY', defaultValue: '', description: 'Promote image registry')
-        string(name: 'PROMOTE_IMAGE_NAMESPACE', defaultValue: 'kiegroup', description: 'Promote image namespace')
+        string(name: 'PROMOTE_IMAGE_NAMESPACE', defaultValue: '', description: 'Promote image namespace')
         string(name: 'PROMOTE_IMAGE_NAME_SUFFIX', defaultValue: '', description: 'Promote image name suffix')
         string(name: 'PROMOTE_IMAGE_TAG', defaultValue: '', description: 'Promote image tag')
         booleanParam(name: 'DEPLOY_WITH_LATEST_TAG', defaultValue: false, description: 'Set to true if you want the deployed images to also be with the `latest` tag')         
@@ -57,6 +57,7 @@ pipeline {
         booleanParam(name: 'RELEASE', defaultValue: false, description: 'Override `deployment.properties`. Is this build for a release?')
         string(name: 'PROJECT_VERSION', defaultValue: '', description: 'Override `deployment.properties`. Optional if not RELEASE. If RELEASE, cannot be empty.')
         string(name: 'GIT_TAG', defaultValue: '', description: 'Git tag to set, if different from PROJECT_VERSION')
+        string(name: 'MAVEN_ARTIFACT_REPOSITORY', defaultValue: '', description: 'Maven repository where the released jar artifacts are present. To be set if git author is not `kiegroup` and repository is different from JBoss repository.')
         string(name: 'RELEASE_NOTES', defaultValue: '', description: 'Release notes to be added. If none provided, a default one will be given.')
 
         // Bot author information. Set as params for easy testing.
@@ -112,6 +113,9 @@ pipeline {
                         sh "git checkout ${getPRSourceBranch()}"
 
                         sh 'python3 scripts/update-maven-artifacts.py'
+                        if(getMavenArtifactRepository() != ''){
+                            updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()}"
+                        }
 
                         // Debug purpose in case of issue
                         sh 'cat modules/kogito-data-index/module.yaml'
@@ -415,6 +419,10 @@ String getGitAuthorCredsID(){
 
 String getBotAuthorCredsID(){
     return params.BOT_CREDENTIALS_ID
+}
+
+String getMavenArtifactRepository() {
+    return params.MAVEN_ARTIFACT_REPOSITORY
 }
 
 String getNextVersion() {

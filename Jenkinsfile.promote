@@ -111,7 +111,8 @@ pipeline {
                         sh 'git fetch origin'
                         sh "git checkout ${getPRSourceBranch()}"
 
-                        sh 'python3 scripts/update-maven-artifacts.py'
+                        // TODO remove repo-url
+                        sh 'python3 scripts/update-maven-artifacts.py --repo-url http://nexus3-tradisso-release-nexus.apps.playground.rhba.openshift-psi.rhocf-dev.net/repository/kogito-test/'
 
                         // Debug purpose in case of issue
                         sh 'cat modules/kogito-data-index/module.yaml'

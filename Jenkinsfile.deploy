@@ -213,6 +213,10 @@ pipeline {
                         updateTestsCommand += " --examples-uri ${params.EXAMPLES_URI}"
                     }
 
+                    //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
+                    if(env.MAVEN_MIRROR_URL != ""){
+                        updateTestsCommand += --ignore-self-signed-cert=True
+                    }
                     // Launch update tests
                     sh updateTestsCommand
 

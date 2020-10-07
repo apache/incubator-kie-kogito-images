@@ -224,7 +224,7 @@ def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
     update_in_behave_tests(pattern, replacement)
 def ignore_maven_self_signed_certificate_in_behave_tests():
     """
-    Sets the enviornment variable to ignore the self-signed certificates in maven
+    Sets the environment variable to ignore the self-signed certificates in maven
     """
     print("Setting MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE env in behave tests")
     pattern = re.compile('\|\s*variable[\s]*\|[\s]*value[\s]*\|')

@@ -215,7 +215,7 @@ pipeline {
 
                     //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
                     if(env.MAVEN_MIRROR_URL != ''){
-                        updateTestsCommand += " --ignore-self-signed-cert"
+                        updateTestsCommand += ' --ignore-self-signed-cert'
                     }
                     // Launch update tests
                     sh updateTestsCommand

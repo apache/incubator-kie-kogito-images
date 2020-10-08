@@ -4,10 +4,10 @@ version: "0.16.0"
 
 artifacts:
   - name: kogito-explainability-rest-runner.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17328/org/kie/kogito/explainability-service-rest/0.16.0/explainability-service-rest-0.16.0-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service-rest/0.16.0/explainability-service-rest-0.16.0-runner.jar
     md5: 628f191dce77d85f02ea279942371b21
   - name: kogito-explainability-messaging-runner.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17328/org/kie/kogito/explainability-service-messaging/0.16.0/explainability-service-messaging-0.16.0-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service-messaging/0.16.0/explainability-service-messaging-0.16.0-runner.jar
     md5: bba65ea549ebc1a4e04a1fbd6a99dd1c
 
 execute:

@@ -4,10 +4,10 @@ version: "0.16.0"
 
 artifacts:
   - name: data-index-service-infinispan.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17328/org/kie/kogito/data-index-service-infinispan/0.16.0/data-index-service-infinispan-0.16.0-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-infinispan/0.16.0/data-index-service-infinispan-0.16.0-runner.jar
     md5: 3a5bb9f86548ad735374194516d0ecfe
   - name: data-index-service-mongodb.jar
-    url: https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-17328/org/kie/kogito/data-index-service-mongodb/0.16.0/data-index-service-mongodb-0.16.0-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/0.16.0/data-index-service-mongodb-0.16.0-runner.jar
     md5: 2d09a89b81a21378e7dbf10b7a911c91
 
 execute:

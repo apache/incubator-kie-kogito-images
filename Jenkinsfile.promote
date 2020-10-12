@@ -82,6 +82,10 @@ pipeline {
                         assert getProjectVersion() != ''
                     }
 
+                    dir('kogito-images') {
+                        checkoutRepo()
+                    }
+
                     installGitHubReleaseCLI()
                 }
             }
@@ -181,8 +185,6 @@ pipeline {
             steps{
                 script {
                     dir('kogito-images') {
-                        checkoutRepo()
-
                         // Merge PR
                         String prLink = getDeployProperty('kogito-images.pr.link')
                         if(prLink != ''){                            

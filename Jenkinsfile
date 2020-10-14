@@ -1,3 +1,4 @@
+//ignore me
 @Library('jenkins-pipeline-shared-libraries')_
 
 def changeAuthor = env.ghprbPullAuthorLogin ?: CHANGE_AUTHOR

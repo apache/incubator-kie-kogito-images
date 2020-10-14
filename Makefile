@@ -1,3 +1,4 @@
+#ignore me
 IMAGE_VERSION := $(shell cat image.yaml | egrep ^version  | cut -d"\"" -f2)
 SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"."$$2}')
 BUILD_ENGINE := docker

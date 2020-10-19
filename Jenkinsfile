@@ -37,6 +37,9 @@ pipeline{
             steps {
                 script {
                     sh '''
+                        echo "===================="
+                        echo $MAVEN_MIRROR_REPOSITORY
+                        echo "===================="
                         curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/1.0-SNAPSHOT/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
                         tar -xzvf cekit-image-validator-runner.tgz
                         chmod +x cekit-image-validator-runner

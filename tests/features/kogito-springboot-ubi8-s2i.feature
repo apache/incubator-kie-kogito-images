@@ -2,7 +2,7 @@
 Feature: kogito-springboot-ubi8-s2i image tests
 
   Scenario: Verify if the s2i build is finished as expected with debug enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 0.17.x and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
       | variable | value |
       | JAVA_OPTIONS | -Ddebug=true |
     Then check that page is served
@@ -19,7 +19,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
   Scenario: Verify if the s2i build is finished as expected with no runtime image and debug enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 0.17.x
       | variable | value |
       | JAVA_OPTIONS        | -Ddebug=true |
     Then check that page is served
@@ -36,7 +36,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
   Scenario: Verify if the s2i build is finished as expected and if it is listening on the expected port, test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
+    Given s2i build /tmp/kogito-examples from process-springboot-example using 0.17.x and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable | value |
     Then check that page is served
@@ -52,7 +52,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And container log should contain Tomcat initialized with port(s): 8080 (http)
 
   Scenario: Verify if the s2i build is finished as expected and if it is listening on the custom port, test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
+    Given s2i build /tmp/kogito-examples from process-springboot-example using 0.17.x and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
       | variable            | value |
       | HTTP_PORT           | 9090  |
     Then check that page is served
@@ -68,7 +68,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And container log should contain Tomcat initialized with port(s): 9090 (http)
 
   Scenario: Verify if the s2i build is finished as expected with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 0.17.x and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
       | variable | value |
       | MAVEN_ARGS_APPEND | -Ppersistence |
     Then file /home/kogito/bin/process-springboot-example.jar should exist
@@ -79,7 +79,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And run sh -c 'cat /home/kogito/data/protobufs/demo.orders-md5.txt' in container and immediately check its output for 02b40df868ebda3acb3b318b6ebcc055
 
   Scenario: Verify if the s2i build is finished as expected using multi-module build with debug enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using master and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 0.17.x and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
       | variable | value |
       | JAVA_OPTIONS      | -Ddebug=true                       |
       | ARTIFACT_DIR      | process-springboot-example/target  |
@@ -98,7 +98,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
   Scenario: Perform a incremental s2i build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 0.17.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable | value |
     Then check that page is served
@@ -114,7 +114,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
   Scenario: Perform a second incremental s2i build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 0.17.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable | value |
     Then s2i build log should contain Expanding artifacts from incremental build...
@@ -139,7 +139,7 @@ Feature: kogito-springboot-ubi8-s2i image tests
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.6.2
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 0.17.x and runtime-image quay.io/kiegroup/kogito-springboot-ubi8:latest
       | variable | value |
-      | KOGITO_VERSION | 1.0.0-SNAPSHOT | 
+      | KOGITO_VERSION | 0.17.0-SNAPSHOT |  
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist

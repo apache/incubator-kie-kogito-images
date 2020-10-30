@@ -69,8 +69,7 @@ pipeline {
                     }
 
                     // Set the mirror url only if no artifact repository is given
-                    if (getMavenArtifactRepository() == '' 
-                            && env.MAVEN_MIRROR_REPOSITORY != null
+                    if (env.MAVEN_MIRROR_REPOSITORY != null
                             && env.MAVEN_MIRROR_REPOSITORY != ''){
                         echo 'Set Maven mirror url'
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
@@ -191,8 +190,8 @@ pipeline {
                         updateTestsCommand += " --examples-uri ${params.EXAMPLES_URI}"
                     }
 
-                    //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
-                    if(env.MAVEN_MIRROR_URL != ''){
+                    //Ignore self-signed certificates if MAVEN_MIRROR_URL and/or artifact repo is defined
+                    if(env.MAVEN_MIRROR_URL != '' || getMavenArtifactRepository() != ''){
                         updateTestsCommand += ' --ignore-self-signed-cert'
                     }
                     // Launch update tests

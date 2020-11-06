@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.springboot.s2i
-version: "0.17.1"
+version: "0.17.2-snapshot"
 
 execute:
   - script: configure

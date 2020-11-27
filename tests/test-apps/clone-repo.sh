@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Clone the kogito-examples and edit the rules-quarkus-helloworld and dmn-quarkus-example for testing purposes
 
 SCRIPT_DIR=`pwd`
-MVN_MODULE="${SCRIPT_DIR}/../../modules/kogito-maven/3.6.x"
+MVN_MODULE=""${SCRIPT_DIR}"/../../modules/kogito-maven/3.6.x"
 CONTAINER_ENGINE="docker"
 MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS="-Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=${CONTAINER_ENGINE}"
 
@@ -44,7 +44,7 @@ cp /tmp/kogito-examples/dmn-quarkus-example/src/main/resources/* /tmp/kogito-exa
 # by adding the application.properties file telling app to start on
 # port 10000, the purpose of this tests is make sure that the images
 # will ensure the use of the port 8080.
-cp ${SCRIPT_DIR}/application.properties /tmp/kogito-examples/rules-quarkus-helloworld/src/main/resources/META-INF/
+cp "${SCRIPT_DIR}"/application.properties /tmp/kogito-examples/rules-quarkus-helloworld/src/main/resources/META-INF/
 (echo ""; echo "server.port=10000") >> /tmp/kogito-examples/process-springboot-example/src/main/resources/application.properties
 
 git add --all  :/

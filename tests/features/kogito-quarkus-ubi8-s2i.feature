@@ -2,7 +2,7 @@
 Feature: kogito-quarkus-ubi8-s2i image tests
 
   Scenario: Verify if the s2i build is finished as expected using native build and runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
       | variable | value |
       | NATIVE       | true       |
       | LIMIT_MEMORY | 3221225472 |
@@ -21,7 +21,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And s2i build log should contain -J-Xmx4g
 
   Scenario: Verify if the s2i build is finished as expected using native build and no runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.0.x
       | variable | value |
       | NATIVE       | true       |
       | LIMIT_MEMORY | 3221225472 |
@@ -40,7 +40,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And s2i build log should contain -J-Xmx4g
 
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.0.x
       | variable | value |
       | NATIVE   | false |
     Then check that page is served
@@ -57,7 +57,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable | value |
       | NATIVE       | false                     |
       | JAVA_OPTIONS | -Dquarkus.log.level=DEBUG |
@@ -75,7 +75,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Dquarkus.log.level=DEBUG
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build and if it is listening on the expected port , test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
+    Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable | value |
       | NATIVE   | false |
     Then check that page is served
@@ -90,7 +90,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a native build and if it is listening on the expected port, test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
+    Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
       | variable | value |
       | NATIVE       | true       |
       | LIMIT_MEMORY | 6442450944 |
@@ -106,7 +106,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable | value |
       | NATIVE            | false         |
       | MAVEN_ARGS_APPEND | -Ppersistence |
@@ -117,7 +117,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
   #ignore until https://issues.redhat.com/browse/KOGITO-3638 is resolved
   @ignore
   Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
       | variable | value |
       | NATIVE            | true          |
       | LIMIT_MEMORY      | 6442450944    |
@@ -127,7 +127,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
   Scenario: Verify if the multi-module s2i build is finished as expected performing a non native build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable | value |
       | NATIVE            | false                            |
       | ARTIFACT_DIR      | rules-quarkus-helloworld/target  |
@@ -144,7 +144,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
 
   Scenario: Verify if the multi-module s2i build is finished as expected performing a native build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using master and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
       | variable | value |
       | NATIVE            | true                             |
       | LIMIT_MEMORY      | 6442450944                       |
@@ -162,7 +162,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
 
   Scenario: Perform a incremental s2i build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.0.x
       | variable | value |
       | NATIVE   | false |
     Then s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
@@ -179,7 +179,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
   Scenario: Perform a second incremental s2i build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.0.x
       | variable | value |
       | NATIVE   | false |
     Then s2i build log should contain Expanding artifacts from incremental build...
@@ -196,7 +196,7 @@ Feature: kogito-quarkus-ubi8-s2i image tests
       | expected_phrase | ["hello","world"]     |
 
   Scenario: Perform a third incremental s2i build, this time, with native enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.0.x
       | variable | value |
       | NATIVE       | true       |
       | LIMIT_MEMORY | 6442450944 |
@@ -237,10 +237,10 @@ Feature: kogito-quarkus-ubi8-s2i image tests
     And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 20.2.0
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable | value |
       | NATIVE         | false          |
-      | KOGITO_VERSION | 1.0.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.0.0.Final |  
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner.jar should exist
     And check that page is served
       | property        | value                                                                                            |
@@ -253,11 +253,11 @@ Feature: kogito-quarkus-ubi8-s2i image tests
       | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly using native build
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-ubi8:latest
       | variable | value |
       | NATIVE         | true           |
       | LIMIT_MEMORY   | 6442450944     |
-      | KOGITO_VERSION | 1.0.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.0.0.Final |  
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner should exist
     And check that page is served
       | property        | value                                                                                            |
@@ -270,10 +270,10 @@ Feature: kogito-quarkus-ubi8-s2i image tests
       | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id, archetype & version
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.0.x and runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest
       | variable | value |
       | NATIVE              | false          |
-      | KOGITO_VERSION      | 1.0.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.0.0.Final |  
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |

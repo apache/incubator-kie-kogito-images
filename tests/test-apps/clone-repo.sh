@@ -3,22 +3,22 @@
 # Clone the kogito-examples and edit the rules-quarkus-helloworld and dmn-quarkus-example for testing purposes
 
 SCRIPT_DIR=`pwd`
-MVN_MODULE=""${SCRIPT_DIR}"/../../modules/kogito-maven/3.6.x"
+MVN_MODULE="${SCRIPT_DIR}/../../modules/kogito-maven/3.6.x"
 CONTAINER_ENGINE="docker"
 MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS="-Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=${CONTAINER_ENGINE}"
 
 # exit when any command fails
 set -e
 #Setup maven configuration only on CI
-if [ $CI ]; then
+if [ "${CI}" ]; then
 # setup maven env
     export JBOSS_MAVEN_REPO_URL="https://repository.jboss.org/nexus/content/groups/public/"
     # export MAVEN_REPO_URL=
-    cp ${MVN_MODULE}/maven/settings.xml ${HOME}/.m2/settings.xml
-    source ${MVN_MODULE}/added/configure-maven.sh
+    cp "${MVN_MODULE}"/maven/settings.xml "${HOME}"/.m2/settings.xml
+    source "${MVN_MODULE}"/added/configure-maven.sh
     configure
 
-    cat ${HOME}/.m2/settings.xml
+    cat "${HOME}"/.m2/settings.xml
 fi
 
 # Clone examples
@@ -50,6 +50,6 @@ cp "${SCRIPT_DIR}"/application.properties /tmp/kogito-examples/rules-quarkus-hel
 git add --all  :/
 git commit -am "test"
 
-if [ $CI ]; then
-    rm ${HOME}/.m2/settings.xml
+if [ "${CI}" ]; then
+    rm "${HOME}"/.m2/settings.xml
 fi

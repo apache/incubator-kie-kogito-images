@@ -71,7 +71,8 @@ function configure_proxy() {
             xml="$xml\
          <nonProxyHosts>$nonproxyhosts</nonProxyHosts>"
         fi
-        xml="$xml       </proxy>"
+        xml="$xml\
+       </proxy>"
         sed -i "s|<!-- ### configured http proxy ### -->|${xml}|" "${HOME}"/.m2/settings.xml
     fi
 }
@@ -111,18 +112,18 @@ function add_maven_repo() {
     # single remote repository scenario: respect fully qualified url if specified, otherwise find and use service
     local single_repo_url="${MAVEN_REPO_URL}"
     if [ -n "$single_repo_url" ]; then
-      single_repo_id=$(_maven_find_env "MAVEN_REPO_ID" "repo-$(_generate_random_id)")
-      _add_maven_repo "$single_repo_url" "$single_repo_id" ""
+     single_repo_id=$(_maven_find_env "MAVEN_REPO_ID" "repo-$(_generate_random_id)")
+     _add_maven_repo "$single_repo_url" "$single_repo_id" ""
     fi
 
     # multiple remote repositories scenario: respect fully qualified url(s) if specified, otherwise find and use service(s); can be used together with "single repo scenario" above
     local multi_repo_counter=1
     IFS=',' read -r -a multi_repo_prefixes <<<"${MAVEN_REPOS}"
     for multi_repo_prefix in "${multi_repo_prefixes[@]}"; do
-      multi_repo_url=$(_maven_find_prefixed_env "${multi_repo_prefix}" "MAVEN_REPO_URL")
-      multi_repo_id=$(_maven_find_prefixed_env "${multi_repo_prefix}" "MAVEN_REPO_ID" "repo${multi_repo_counter}-$(_generate_random_id)")
-      _add_maven_repo "$multi_repo_url" "$multi_repo_id" "$multi_repo_prefix"
-      multi_repo_counter=$((multi_repo_counter + 1))
+     multi_repo_url=$(_maven_find_prefixed_env "${multi_repo_prefix}" "MAVEN_REPO_URL")
+     multi_repo_id=$(_maven_find_prefixed_env "${multi_repo_prefix}" "MAVEN_REPO_ID" "repo${multi_repo_counter}-$(_generate_random_id)")
+     _add_maven_repo "$multi_repo_url" "$multi_repo_id" "$multi_repo_prefix"
+     multi_repo_counter=$((multi_repo_counter + 1))
     done
 }
 # add maven repositories
@@ -219,7 +220,7 @@ function _maven_find_prefixed_env() {
 
         local var_name="${prefix}_${2}"
         echo "${!var_name:-${3}}"
-    fi
+   fi
 }
 
 # private

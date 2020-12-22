@@ -1165,7 +1165,6 @@ As an example, let's execute the tests from the [kogito-s2i-core](modules/kogito
  $ bats modules/kogito-s2i-core/tests/bats/s2i-core.bats 
  ✓ test manage_incremental_builds
  ✓ test assemble_runtime no binaries
- ✓ test assemble_runtime with binaries binaries
  ✓ test runtime_assemble
  ✓ test runtime_assemble with binary builds
  ✓ test runtime_assemble with binary builds entire target!

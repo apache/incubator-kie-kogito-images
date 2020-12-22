@@ -58,23 +58,7 @@ teardown() {
 @test "test assemble_runtime no binaries" {
     run assemble_runtime
     echo "result= ${lines[@]}"
-    [ "${lines[0]}" = "---> Application binaries NOT found, failing build..." ]
     [ "$status" -eq 1 ]
-}
-
-
-@test "test assemble_runtime with binaries binaries" {
-    mkdir "${KOGITO_HOME}"/bin
-    touch "${KOGITO_HOME}"/bin/artifact.jar
-
-    run assemble_runtime
-
-    rm -rf "${KOGITO_HOME}"/bin/artifact.jar
-
-    echo "result= ${lines[@]}"
-
-    [ "$status" -eq 0 ]
-    [ "${lines[0]}" = "---> Application binaries found and ready to use" ]
 }
 
 @test "test runtime_assemble" {

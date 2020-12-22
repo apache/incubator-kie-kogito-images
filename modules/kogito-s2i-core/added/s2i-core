@@ -33,12 +33,6 @@ function manage_incremental_build() {
 
 
 function assemble_runtime() {
-    if [ -d ""${KOGITO_HOME}"/bin" ]; then
-        log_info "---> Application binaries found and ready to use"
-    else
-        log_error "---> Application binaries NOT found, failing build..."
-        exit 1
-    fi
     # handle persistence files
     move_persistence_files
 }

@@ -102,7 +102,7 @@ teardown() {
 
     echo "result= ${lines[@]}"
     [ "$status" -eq 0 ]
-    [ "${lines[6]}" = "'./myapp.jar' -> '"${KOGITO_HOME}"/bin/myapp.jar'" ]
+    [ "${lines[5]}" = "'./myapp.jar' -> '"${KOGITO_HOME}"/bin/myapp.jar'" ]
 }
 
 @test "test runtime_assemble with binary builds native binary" {
@@ -115,7 +115,7 @@ teardown() {
 
     echo "result= ${lines[@]}"
     [ "$status" -eq 0 ]
-    [ "${lines[7]}" = "'./myapp-0.0.1-runner' -> '"${KOGITO_HOME}"/bin/myapp-0.0.1-runner'" ]
+    [ "${lines[6]}" = "'./myapp-0.0.1-runner' -> '"${KOGITO_HOME}"/bin/myapp-0.0.1-runner'" ]
 
     # Only runner is located in bin directory
     [ -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-runner" ]
@@ -135,7 +135,7 @@ teardown() {
 
     echo "result= ${lines[@]}"
     [ "$status" -eq 0 ]
-    [ "${lines[8]}" = "'./myapp.jar' -> '"${KOGITO_HOME}"/bin/myapp.jar'" ]
+    [ "${lines[7]}" = "'./myapp.jar' -> '"${KOGITO_HOME}"/bin/myapp.jar'" ]
 }
 
 # Check that the irrelevant binaries are excluded

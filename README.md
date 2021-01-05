@@ -569,7 +569,8 @@ Today we have 3 Kogito Component Images:
 
 * [quay.io/kiegroup/kogito-data-index-infinispan](https://quay.io/kiegroup/kogito-data-index-infinispan)
 * [quay.io/kiegroup/kogito-data-index-mongodb](https://quay.io/kiegroup/kogito-data-index-mongodb)
-* [quay.io/kiegroup/kogito-trusty](https://quay.io/kiegroup/kogito-trusty)
+* [quay.io/kiegroup/kogito-trusty-infinispan](https://quay.io/kiegroup/kogito-trusty-infinispan)
+* [quay.io/kiegroup/kogito-trusty-redis](https://quay.io/kiegroup/kogito-trusty-redis)
 * [quay.io/kiegroup/kogito-explainability](https://quay.io/kiegroup/kogito-explainability)
 * [quay.io/kiegroup/kogito-jobs-service](htps://quay.io/kiegroup/kogito-jobs-service)
 * [quay.io/kiegroup/kogito-management-console](https://quay.io/kiegroup/kogito-management-console)
@@ -634,12 +635,28 @@ to your Kogito infrastructure on a Kubernetes cluster and provide its capabiliti
 ### Kogito Trusty Component Image
 
 The Trusty Service aims at collecting tracing information by one or more Kogito runtime services and provides analytical capabilities on top of the collected data. 
-The Trusty Service depends on a running Infinispan Server.
+The Trusty Service depends on a running Infinispan or Redis Server.
+The Persistence service can be switched by using its corresponding image
 
+- Infinispan: quay.io/kiegroup/kogito-trusty-infinispan
+    [image.yaml](kogito-trusty-infinispan-overrides.yaml)
+- Redis: quay.io/kiegroup/kogito-trusty-redis
+    [image.yaml](kogito-trusty-redis-overrides.yaml)
+
+
+Basic usage with Infinispan:
+```bash
+$ docker run -it --env QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=my-infinispan-server:11222 quay.io/kiegroup/kogito-trusty-infinispan:latest
+```
+
+Basic usage with Redis:
+```bash
+$ docker run -it --env KOGITO_PERSISTENCE_REDIS_URL=redis://localhost:6379 quay.io/kiegroup/kogito-trusty-redis:latest
+```
 
 Basic usage
 ```bash
-$ docker run -it -e QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=my-infinispan-server:11222 -e KAFKA_BOOTSTRAP_SERVER=my-kafka:9092 quay.io/kiegroup/kogito-trusty:latest
+$ docker run -it -e QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=my-infinispan-server:11222 -e KAFKA_BOOTSTRAP_SERVER=my-kafka:9092 quay.io/kiegroup/kogito-trusty-infinispan:latest
 ```
 
 To enable debug just use this env while running this image:
@@ -653,7 +670,6 @@ To know what configurations this image accepts please take a look [here](kogito-
 
 The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Trusty Service 
 to your Kogito infrastructure on a Kubernetes cluster and provide its capabilities to your Kogito applications.
-
 
 ### Kogito Jobs Service Component Image
 
@@ -769,7 +785,8 @@ imagestream.image.openshift.io/kogito-springboot-ubi8 created
 imagestream.image.openshift.io/kogito-springboot-ubi8-s2i created
 imagestream.image.openshift.io/kogito-data-index-infinispan created
 imagestream.image.openshift.io/kogito-data-index-mongodb created
-imagestream.image.openshift.io/kogito-trusty created
+imagestream.image.openshift.io/kogito-trusty-infinispan created
+imagestream.image.openshift.io/kogito-trusty-redis created
 imagestream.image.openshift.io/kogito-jobs-service created
 imagestream.image.openshift.io/kogito-management-console created
 
@@ -957,7 +974,8 @@ With this Makefile you can:
      $ make build-image image_name=kogito-springboot-ubi8-s2i
      $ make build-image image_name=kogito-data-index-infinispan
      $ make build-image image_name=kogito-data-index-mongodb
-     $ make build-image image_name=kogito-trusty
+     $ make build-image image_name=kogito-trusty-infinispan
+     $ make build-image image_name=kogito-trusty-redis
      $ make build-image image_name=kogito-explainability
      $ make build-image image_name=kogito-jobs-service 
      $ make build-image image_name=kogito-management-console
@@ -1019,7 +1037,8 @@ Below you can find all modules used to build the Kogito Images
 - [kogito-data-index-common](modules/kogito-data-index-common): Data Index common module.
 - [kogito-data-index-infinispan](modules/kogito-data-index-infinispan): Installs and Configure the infinispan data-index jar inside the image.
 - [kogito-data-index-mongodb](modules/kogito-data-index-mongodb): Installs and Configure the mongodb data-index jar inside the image.
-- [kogito-trusty](modules/kogito-trusty): Installs and Configure the trusty jar inside the image.
+- [kogito-trusty-infinispan](modules/kogito-trusty-infinispan): Installs and Configure the infinispan trusty jar inside the image.
+- [kogito-trusty-redis](modules/kogito-trusty-redis): Installs and Configure the redis trusty jar inside the image.
 - [kogito-explainability](modules/kogito-explainability): Installs and Configure the explainability jar inside the image.
 - [kogito-epel](modules/kogito-epel): Configures the epel repository on the target image.
 - [kogito-graalvm-installer](modules/kogito-graalvm-installer): Installs the GraalVM on the target Image.
@@ -1048,7 +1067,8 @@ Please inspect the images overrides files to learn which modules are installed o
 
 - [quay.io/kiegroup/kogito-data-index-infinispan](kogito-data-index-infinispan-overrides.yaml)
 - [quay.io/kiegroup/kogito-data-index-mongodb](kogito-data-index-mongodb-overrides.yaml)
-- [quay.io/kiegroup/kogito-trusty](kogito-trusty-overrides.yaml)
+- [quay.io/kiegroup/kogito-trusty-infinispan](kogito-trusty-infinispan-overrides.yaml)
+- [quay.io/kiegroup/kogito-trusty-redis](kogito-trusty-redis-overrides.yaml)
 - [quay.io/kiegroup/kogito-explainability](kogito-explainability-overrides.yaml)
 - [quay.io/kiegroup/kogito-jobs-service](kogito-jobs-service-overrides.yaml)
 - [quay.io/kiegroup/kogito-management-console](kogito-management-console-overrides.yaml)

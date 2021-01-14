@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "quay.io/kiegroup/kogito-jit-dmn"
-description: "Runtime image for Kogito JIT DMN"
+description: "Runtime image for Kogito JIT DMN Service"
 
 labels:
 - name: "io.k8s.description"

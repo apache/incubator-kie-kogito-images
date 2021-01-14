@@ -3,6 +3,7 @@ set -e
 
 SOURCES_DIR=/tmp/artifacts
 SCRIPT_DIR=$(dirname "${0}")
+ADDED_DIR="${SCRIPT_DIR}"/added
 
 cp -v ${SOURCES_DIR}/kogito-jit-dmn.jar "${KOGITO_HOME}"/bin/
 

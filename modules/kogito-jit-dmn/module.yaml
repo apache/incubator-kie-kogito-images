@@ -1,0 +1,12 @@
+schema_version: 1
+name: org.kie.kogito.jit-dmn
+version: "2.0.0-snapshot"
+
+artifacts:
+  - name: kogito-jit-dmn.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jitexecutor-dmnexecutor/2.0.0-SNAPSHOT/jitexecutor-dmnexecutor-2.0.0-SNAPSHOT-runner.jar
+    md5: 48355d3b31eba72299ef6b179aa1bdbb
+
+execute:
+  - script: configure
+

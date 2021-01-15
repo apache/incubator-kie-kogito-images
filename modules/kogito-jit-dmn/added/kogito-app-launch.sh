@@ -19,8 +19,8 @@ source "${KOGITO_HOME}"/launch/configure.sh
 #############################################
 
 # shellcheck disable=SC2086
-exec java ${SHOW_JVM_SETTINGS} ${JAVA_OPTIONS} ${KOGITO_JIT_DMN_PROPS} \
+exec java ${SHOW_JVM_SETTINGS} ${JAVA_OPTIONS} ${KOGITO_JIT_RUNNER_PROPS} \
         -Djava.library.path="${KOGITO_HOME}"/lib \
         -Dquarkus.http.host=0.0.0.0 \
         -Dquarkus.http.port=8080 \
-        -jar "${KOGITO_HOME}"/bin/kogito-jit-dmn.jar
+        -jar "${KOGITO_HOME}"/bin/kogito-jit-runner.jar

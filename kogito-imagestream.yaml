@@ -198,24 +198,24 @@ items:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: kogito-jit-dmn
+      name: kogito-jit-runner
       annotations:
-        openshift.io/display-name: Runtime image for the Kogito JIT DMN Service
+        openshift.io/display-name: Runtime image for the Kogito JIT Runner
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
         - name: '2.0.0-snapshot'
           annotations:
-            description: Runtime image for the Kogito JIT DMN Service
+            description: Runtime image for the Kogito JIT Runner
             iconClass: icon-jbpm
-            tags: kogito,jit-dmn
-            supports: JIT DMN
+            tags: kogito,jit-runner
+            supports: JIT Runner
             version: '2.0.0-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-jit-dmn:2.0.0-snapshot
+            name: quay.io/kiegroup/kogito-jit-runner:2.0.0-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:

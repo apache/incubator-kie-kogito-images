@@ -1,15 +1,15 @@
 schema_version: 1
 
-name: "quay.io/kiegroup/kogito-jit-dmn"
-description: "Runtime image for Kogito JIT DMN Service"
+name: "quay.io/kiegroup/kogito-jit-runner"
+description: "Runtime image for Kogito JIT Runner"
 
 labels:
 - name: "io.k8s.description"
-  value: "Runtime image for Kogito JIT DMN, manage your Business Process easily."
+  value: "Runtime image for Kogito JIT Runner"
 - name: "io.k8s.display-name"
-  value: "Kogito JIT DMN"
+  value: "Kogito JIT Runner"
 - name: "io.openshift.tags"
-  value: "kogito,jit,jit-dmn"
+  value: "kogito,jit-runner"
 - name: "io.openshift.expose-services"
   value: "8080:http"
 
@@ -29,7 +29,7 @@ modules:
   - name: org.kie.kogito.openjdk
     version: "11-headless"
   - name: org.kie.kogito.launch.scripts
-  - name: org.kie.kogito.jit-dmn
+  - name: org.kie.kogito.jit-runner
 
 run:
   workdir: "/home/kogito"

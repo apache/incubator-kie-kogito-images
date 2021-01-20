@@ -731,7 +731,7 @@ to your Kogito infrastructure on a Kubernetes cluster and provide its capabiliti
 
 ### Kogito JIT Runner Component Image
 
-The Kogito JIT Runner provides a tool that allows you to submit a DMN model and evaluate it on the fly with a simple request.
+The Kogito JIT Runner provides a tool that allows you to submit a DMN model and evaluate it on the fly with a simple HTTP request.
 
 Basic usage:
 

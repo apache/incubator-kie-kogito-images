@@ -744,7 +744,7 @@ To enable debug just use this env while running this image:
 ```bash
 docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-jit-runner:latest
 ```
-You should notice a few debug messages being printed in the system output.
+You should notice a few debug messages being printed in the system output. You can then visit `localhost:8080/index.html` to test the service.
 
 To know what configurations this image accepts please take a look [here](kogito-jit-runner-overrides.yaml) on the **envs** section.
 

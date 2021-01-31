@@ -1,7 +1,7 @@
 schema_version: 1
 
-name: "quay.io/kiegroup/kogito-quarkus-ubi8-s2i"
-description: "Platform for building Kogito based on Quarkus"
+name: "quay.io/kiegroup/kogito-builder"
+description: "Platform for building Kogito based on Quarkus and Springboot"
 
 labels:
 - name: "io.k8s.description"
@@ -15,9 +15,12 @@ envs:
 - name: "SCRIPT_DEBUG"
   example: "true"
   description: "If set to true, ensures that the bash scripts are executed with the -x option, printing the commands and their arguments as they are executed. Also debug JVM initialization."
+- name: "RUNTIME_TYPE"
+  example: "springboot"
+  description: "Defines the runtime type of your kogito application, defaults to quarkus, Allowed values are springboot and quarkus"
 - name: NATIVE
   example: true
-  description: If set to true, perform a native build.
+  description: If set to true, perform a native build. Only supported for RUNTIME_TYPE quarkus
 - name: JAVA_OPTIONS
   example: "-Dquarkus.log.level=DEBUG"
   description: JVM options passed to the Java command.
@@ -42,7 +45,7 @@ modules:
   - name: org.kie.kogito.maven
     version: "3.6.2"
   - name: org.kie.kogito.s2i.core
-  - name: org.kie.kogito.quarkus.s2i
+  - name: org.kie.kogito.builder
 
 packages:
   install:

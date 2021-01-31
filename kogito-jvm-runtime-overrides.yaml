@@ -1,7 +1,7 @@
 schema_version: 1
 
-name: "quay.io/kiegroup/kogito-quarkus-jvm-ubi8"
-description: "Runtime image for Kogito based on Quarkus JVM image"
+name: "quay.io/kiegroup/kogito-runtime-jvm"
+description: "Runtime image for Kogito based on Quarkus and Springboot JVM image"
 
 labels:
 - name: "io.k8s.description"
@@ -17,6 +17,9 @@ envs:
 - name: "SCRIPT_DEBUG"
   example: "true"
   description: "If set to true, ensures that the bash scripts are executed with the -x option, printing the commands and their arguments as they are executed. Also debug JVM initialization."
+- name: "RUNTIME_TYPE"
+  example: "springboot"
+  description: "Defines the runtime type of your kogito application, defaults to quarkus, Allowed values are springboot and quarkus"
 - name: JAVA_OPTIONS
   example: "-Dquarkus.log.level=DEBUG"
   description: JVM options passed to the Java command.
@@ -33,7 +36,7 @@ modules:
   - name: org.kie.kogito.openjdk
     version: "11-headless"
   - name: org.kie.kogito.s2i.core
-  - name: org.kie.kogito.quarkus.jvm
+  - name: org.kie.kogito.jvm.runtime
 
 
 ## s2i build . quay.io/kiegroup/kogito-quarkus-ubi8-s2i:latest kogitotest:10.0 --runtime-image quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest

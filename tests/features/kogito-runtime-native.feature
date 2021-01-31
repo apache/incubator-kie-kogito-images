@@ -1,5 +1,5 @@
-@quay.io/kiegroup/kogito-quarkus-ubi8
-Feature: Kogito-quarkus-ubi8 feature.
+@quay.io/kiegroup/kogito-runtime-native
+Feature: Kogito-runtime-native feature.
 
   Scenario: verify if all labels are correctly set.
     Given image is built
@@ -21,6 +21,7 @@ Feature: Kogito-quarkus-ubi8 feature.
     Given s2i build /tmp/kogito-examples/rules-quarkus-helloworld-native/ from target
       | variable            | value                     |
       | NATIVE              | false                     |
+      | RUNTIME_TYPE        | quarkus                   |
       | JAVA_OPTIONS        | -Dquarkus.log.level=DEBUG |
     Then check that page is served
       | property        | value                    |

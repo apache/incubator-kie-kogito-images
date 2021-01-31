@@ -17,11 +17,19 @@ fi
 CONFIGURE_SCRIPTS=(
 
 )
+source ${S2I_MODULE_LOCATION}/s2i-core
 source "${KOGITO_HOME}"/launch/configure.sh
+
+runtime_type=$(get_runtime_type)
+
 #############################################
 
 # shellcheck disable=SC2086
-exec java ${JAVA_OPTIONS}  ${KOGITO_QUARKUS_JVM_PROPS} \
-      -Dquarkus.http.host=0.0.0.0 \
-      -Dquarkus.http.port=8080 \
-      -jar "${KOGITO_HOME}"/bin/*runner.jar
+if [ "${runtime_type}" == "quarkus" ]; then
+    exec java ${JAVA_OPTIONS}  ${KOGITO_QUARKUS_JVM_PROPS} \
+        -Dquarkus.http.host=0.0.0.0 \
+        -Dquarkus.http.port=8080 \
+        -jar "${KOGITO_HOME}"/bin/*runner.jar
+else
+    exec java ${JAVA_OPTIONS} ${KOGITO_SPRINGBOOT_PROPS} -Dserver.address=0.0.0.0 -Dserver.port=8080 -jar "${KOGITO_HOME}"/bin/*.jar
+fi

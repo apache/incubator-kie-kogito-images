@@ -1,4 +1,4 @@
-.schema_version: 1
+schema_version: 1
 
 name: "quay.io/kiegroup/kogito-runtime-jvm"
 description: "Runtime image for Kogito based on Quarkus and Springboot JVM image"

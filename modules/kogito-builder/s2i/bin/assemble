@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# S2I assemble script for the 'kogito-quarkus-ubi8-s2i' image.
+# S2I assemble script for the 'kogito-builder' image.
 # The 'assemble' script builds your application source so that it is ready to run.
 #
 # For more information refer to the documentation:

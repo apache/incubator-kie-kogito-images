@@ -31,8 +31,7 @@ ARTIFACTS_VERSION_ENV_KEY="KOGITO_VERSION"
 
 # behave tests that needs to be update
 BEHAVE_BASE_DIR = 'tests/features'
-BEHAVE_TESTS = {"kogito-quarkus-ubi8-s2i.feature", "kogito-springboot-ubi8-s2i.feature",
-                "kogito-quarkus-jvm-ubi8.feature", "kogito-springboot-ubi8.feature"}
+BEHAVE_TESTS = {"kogito-builder.feature", "kogito-runtime-jvm.feature", "kogito-runtime-native"}
 
 CLONE_REPO_SCRIPT='tests/test-apps/clone-repo.sh'
 

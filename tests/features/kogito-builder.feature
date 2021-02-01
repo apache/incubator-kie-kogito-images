@@ -76,24 +76,6 @@ Feature: kogito-builder image tests
     And file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
 
-  Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image and wrong RUNTIME_TYPE defined
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master
-      | variable     | value               |
-      | NATIVE       | false               |
-      | RUNTIME_TYPE | somethingNotAllowed |
-    Then check that page is served
-      | property        | value                 |
-      | port            | 8080                  |
-      | path            | /hello                |
-      | request_method  | POST                  |
-      | content_type    | application/json      |
-      | request_body    | {"strings":["hello"]} |
-      | wait            | 80                    |
-      | expected_phrase | ["hello","world"]     |
-    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
-    And file /home/kogito/ssl-libs/libsunec.so should exist
-    And file /home/kogito/cacerts should exist
-
   Scenario: Verify if the s2i build is finished as expected performing a non native build with runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable     | value                     |

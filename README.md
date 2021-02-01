@@ -745,7 +745,7 @@ Once the images are built and imported into a registry (quay.io or any other reg
 
 As a first step, we need to make the Kogito Images available as Image Streams in OpenShift. If you have `cluster-admin` 
 rights you can deploy it into the **openshift** namespace, otherwise, deploy it into the namespace where you have permissions. 
-To install the image stream use this imagestream file: [kogito-imagestream.yaml](https://raw.githubusercontent.com/kiegroup/kogito-images/0.9.0/kogito-imagestream.yaml).
+To install the image stream use this imagestream file: [kogito-imagestream.yaml](https://raw.githubusercontent.com/kiegroup/kogito-images/master/kogito-imagestream.yaml).
 It points to the latest released version.
 
 Let's use the *rules-quarkus-helloworld* from [Kogito Examples](https://github.com/kiegroup/kogito-examples).
@@ -773,10 +773,10 @@ imagestream.image.openshift.io/kogito-jobs-service created
 imagestream.image.openshift.io/kogito-management-console created
 
 # performing a new build
-$ oc new-build --name=rules-quarkus-helloworld-builder --image-stream=kogito-builder:0.9.0 \ 
+$ oc new-build --name=rules-quarkus-helloworld-builder --image-stream=kogito-builder:latest \ 
     https://github.com/kiegroup/kogito-examples.git#master --context-dir=rules-quarkus-helloworld \
     --strategy=source --env NATIVE=false 
---> Found image 8c9d756 (5 days old) in image stream "rules-quarkus-helloworld/kogito-builder" under tag "0.9.0" for "kogito-builder:0.9.0"
+--> Found image 8c9d756 (5 days old) in image stream "rules-quarkus-helloworld/kogito-builder" under tag "latest" for "kogito-builder:latest"
 
     Kogito based on Quarkus 
     ----------------------- 
@@ -806,8 +806,8 @@ to the Kogito Runtime Image. To do this, execute the following command:
 
 ```bash
 $ oc new-build --name=rules-quarkus-helloworld-service --source-image=rules-quarkus-helloworld-builder \
-  --source-image-path=/home/kogito/bin:. --image-stream=kogito-runtime-jvm:0.9.0
---> Found image 1608e71 (6 days old) in image stream "rules-quarkus-helloworld/kogito-runtime-jvm" under tag "0.9.0" for "kogito-runtime-jvm:0.9.0"
+  --source-image-path=/home/kogito/bin:. --image-stream=kogito-runtime-jvm:latest
+--> Found image 1608e71 (6 days old) in image stream "rules-quarkus-helloworld/kogito-runtime-jvm" under tag "latest" for "kogito-runtime-jvm:latest"
 
     Kogito based on Quarkus JVM image 
     --------------------------------- 

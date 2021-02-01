@@ -11,6 +11,7 @@ if [[ "$1" == "-h" ]]; then
     exec /usr/local/s2i/usage
     exit 0
 fi
+set -e
 
 # Configuration scripts
 # Any configuration script that needs to run on image startup must be added here.
@@ -25,11 +26,17 @@ runtime_type=$(get_runtime_type)
 #############################################
 
 # shellcheck disable=SC2086
-if [ "${runtime_type}" == "quarkus" ]; then
-    exec java ${JAVA_OPTIONS}  ${KOGITO_QUARKUS_JVM_PROPS} \
-        -Dquarkus.http.host=0.0.0.0 \
-        -Dquarkus.http.port=8080 \
-        -jar "${KOGITO_HOME}"/bin/*runner.jar
-else
-    exec java ${JAVA_OPTIONS} ${KOGITO_SPRINGBOOT_PROPS} -Dserver.address=0.0.0.0 -Dserver.port=8080 -jar "${KOGITO_HOME}"/bin/*.jar
-fi
+case ${runtime_type} in 
+    "quarkus") 
+            exec java ${JAVA_OPTIONS}  ${KOGITO_QUARKUS_JVM_PROPS} \
+                -Dquarkus.http.host=0.0.0.0 \
+                -Dquarkus.http.port=8080 \
+                -jar "${KOGITO_HOME}"/bin/*runner.jar
+    ;;
+    "springboot") 
+            exec java ${JAVA_OPTIONS} ${KOGITO_SPRINGBOOT_PROPS} -Dserver.address=0.0.0.0 -Dserver.port=8080 -jar "${KOGITO_HOME}"/bin/*.jar
+    ;;
+    *)
+            echo "${runtime_type} is not supported."
+            exit 1
+esac

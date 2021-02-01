@@ -23,19 +23,24 @@ source "${KOGITO_HOME}"/launch/configure.sh
 runtime_type=$(get_runtime_type)
 
 #############################################
-if [ "${runtime_type}" == "quarkus" ]; then
 
-    if [ "${NATIVE^^}" == "TRUE" ]; then
+case ${runtime_type} in 
+    "quarkus")  
+                if [ "${NATIVE^^}" == "TRUE" ]; then
+                    # shellcheck disable=SC2086
+                    exec "${KOGITO_HOME}"/bin/*-runner ${JAVA_OPTIONS} ${KOGITO_QUARKUS_S2I_PROPS} \
+                    -Dquarkus.http.host=0.0.0.0 -Djava.library.path="${KOGITO_HOME}"/ssl-libs \
+                    -Dquarkus.http.port=8080 \
+                    -Djavax.net.ssl.trustStore="${KOGITO_HOME}"/cacerts
+                else
         # shellcheck disable=SC2086
-        exec "${KOGITO_HOME}"/bin/*-runner ${JAVA_OPTIONS} ${KOGITO_QUARKUS_S2I_PROPS} \
-            -Dquarkus.http.host=0.0.0.0 -Djava.library.path="${KOGITO_HOME}"/ssl-libs \
-            -Dquarkus.http.port=8080 \
-            -Djavax.net.ssl.trustStore="${KOGITO_HOME}"/cacerts
-    else
-        # shellcheck disable=SC2086
-        exec java ${JAVA_OPTIONS} ${KOGITO_QUARKUS_S2I_PROPS} -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar "${KOGITO_HOME}"/bin/*runner.jar
-    fi
-else
-    # shellcheck disable=SC2086
-    exec java ${JAVA_OPTIONS} ${KOGITO_SPRINGBOOT_S2I_PROPS} -Dserver.address=0.0.0.0 -Dserver.port=8080 -jar "${KOGITO_HOME}"/bin/*.jar
-fi
+                    exec java ${JAVA_OPTIONS} ${KOGITO_QUARKUS_S2I_PROPS} -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar "${KOGITO_HOME}"/bin/*runner.jar
+                fi
+    ;;
+    "springboot") # shellcheck disable=SC2086
+                exec java ${JAVA_OPTIONS} ${KOGITO_SPRINGBOOT_S2I_PROPS} -Dserver.address=0.0.0.0 -Dserver.port=8080 -jar "${KOGITO_HOME}"/bin/*.jar
+    ;;
+    *)
+                echo "${runtime_type} is not supported."
+                exit 1
+esac

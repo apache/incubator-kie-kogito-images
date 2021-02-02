@@ -41,6 +41,6 @@ case ${runtime_type} in
                 exec java ${JAVA_OPTIONS} ${KOGITO_SPRINGBOOT_S2I_PROPS} -Dserver.address=0.0.0.0 -Dserver.port=8080 -jar "${KOGITO_HOME}"/bin/*.jar
     ;;
     *)
-                echo "${runtime_type} is not supported."
+                log_error "${runtime_type} is not supported."
                 exit 1
 esac

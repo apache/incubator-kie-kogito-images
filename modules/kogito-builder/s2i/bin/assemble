@@ -35,7 +35,7 @@ case ${runtime_type} in
               )
     ;;
     *)
-              echo "${runtime_type} is not supported."
+              log_error "${runtime_type} is not supported."
               exit 1
 esac
 

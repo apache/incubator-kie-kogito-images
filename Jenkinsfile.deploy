@@ -34,6 +34,8 @@ pipeline {
         OPENSHIFT_CREDS_KEY = 'OPENSHIFT_CREDS'
 
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
+
+        MAX_REGISTRY_RETRIES = 3
     }
 
     stages {
@@ -241,7 +243,7 @@ pipeline {
                     }
                     pushImages()
 
-                    if (isQuayRegistry() && getDeployQuayTokenCredentials()) {
+                    if (isQuayRegistry()) {
                         makeQuayImagesPublic()
                     }
                 }
@@ -364,7 +366,13 @@ void tagImages() {
 
 void pushImages() {
     for (String imageName : getImages()) {
-        sh "docker push ${buildImageName(imageName)}"
+        pushImage(buildImageName(imageName))
+    }
+}
+
+void pushImage(String fullImageName) {
+    retry(env.MAX_REGISTRY_RETRIES) {
+        sh "docker push ${fullImageName}"
     }
 }
 
@@ -375,7 +383,7 @@ void makeQuayImagesPublic() {
         String repository = getFinalImageName(imageName)
         echo "Check and set public if needed Quay repository ${namespace}/${repository}"
         try {
-            cloud.makeQuayImagePublic(namespace, repository, getDeployQuayTokenCredentials())
+            cloud.makeQuayImagePublic(namespace, repository, [ usernamePassword: getDeployImageRegistryCredentials()])
         } catch (err) {
             echo "[ERROR] Cannot set image quay.io/${namespace}/${repository} as visible"
         }
@@ -420,10 +428,6 @@ void setDeployPropertyIfneeded(String key, def value) {
 
 boolean isDeployImageInOpenshiftRegistry() {
     return params.IMAGE_USE_OPENSHIFT_REGISTRY
-}
-
-String getDeployQuayTokenCredentials() {
-    return params.QUAY_TOKEN_CREDENTIALS
 }
 
 String getDeployImageRegistryCredentials() {

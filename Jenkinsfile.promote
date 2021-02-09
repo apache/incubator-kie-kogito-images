@@ -27,6 +27,8 @@ pipeline {
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
 
         GITHUB_REPO = "${REPO_NAME}" // for github-release cli
+
+        MAX_REGISTRY_RETRIES = 3
     }
 
     stages {
@@ -136,7 +138,7 @@ pipeline {
                     dir(getRepoName()) {
                         pushImages()
 
-                        if (isQuayRegistry(getNewImageRegistry()) && getNewImageQuayTokenCredentials()) {
+                        if (isQuayRegistry(getNewImageRegistry())) {
                             makeQuayNewImagesPublic()
                         }
                     }
@@ -239,33 +241,49 @@ void cleanImages() {
 
 void pullImages() {
     for (String imageName : getImages()) {
-        sh "podman pull ${getOldImageFullTag(imageName)}"
+        pullImage(getOldImageFullTag(imageName))
+    }
+}
+
+void pullImage(String fullImageName) {
+    retry(env.MAX_REGISTRY_RETRIES) {
+        sh "podman pull ${fullImageName}"
     }
 }
 
 void tagImages() {
     for (String imageName : getImages()) {
-        sh "podman tag ${getOldImageFullTag(imageName)} ${getNewImageFullTag(imageName, getNewImageTag())}"
+        tagImage(getOldImageFullTag(imageName), getNewImageFullTag(imageName, getNewImageTag()))
         if (isDeployLatestTag()) {
-            sh "podman tag ${getOldImageFullTag(imageName)} ${getNewImageFullTag(imageName, 'latest')}"
+            tagImage(getOldImageFullTag(imageName), getNewImageFullTag(imageName, 'latest'))
         }
         String reducedTag = getReducedTag()
-        if (reducedTag != '') {
-            sh "podman tag ${getOldImageFullTag(imageName)} ${getNewImageFullTag(imageName, reducedTag)}"
+        if (reducedTag) {
+            tagImage(getOldImageFullTag(imageName), getNewImageFullTag(imageName, reducedTag))
         }
     }
 }
 
+void tagImage(String oldImageName, String newImageName) {
+    sh "podman tag ${oldImageName} ${newImageName}"
+}
+
 void pushImages() {
     for (String imageName : getImages()) {
-        sh "podman push ${getNewImageFullTag(imageName, getNewImageTag())}"
+        pushImage(getNewImageFullTag(imageName, getNewImageTag()))
         if (isDeployLatestTag()) {
-            sh "podman push ${getNewImageFullTag(imageName, 'latest')}"
+            pushImage(getNewImageFullTag(imageName, 'latest'))
         }
         String reducedTag = getReducedTag()
-        if (reducedTag != '') {
-            sh "podman push ${getNewImageFullTag(imageName, reducedTag)}"
+        if (reducedTag) {
+            pushImage(getNewImageFullTag(imageName, reducedTag))
         }
+    }
+}
+
+void pushImage(String fullImageName) {
+    retry(env.MAX_REGISTRY_RETRIES) {
+        sh "podman push ${fullImageName}"
     }
 }
 
@@ -276,7 +294,7 @@ void makeQuayNewImagesPublic() {
         String repository = getFinalImageName(imageName, getNewImageNameSuffix())
         echo "Check and set public if needed Quay repository ${namespace}/${repository}"
         try {
-            cloud.makeQuayImagePublic(namespace, repository, getNewImageQuayTokenCredentials())
+            cloud.makeQuayImagePublic(namespace, repository, [ usernamePassword: getNewImageRegistryCredentials()])
         } catch (err) {
             echo "[ERROR] Cannot set image quay.io/${namespace}/${repository} as visible"
         }
@@ -458,10 +476,6 @@ String getOldImageTag() {
 
 boolean isNewImageInOpenshiftRegistry() {
     return params.PROMOTE_IMAGE_USE_OPENSHIFT_REGISTRY
-}
-
-String getNewImageQuayTokenCredentials() {
-    return params.PROMOTE_QUAY_TOKEN_CREDENTIALS
 }
 
 String getNewImageRegistryCredentials() {

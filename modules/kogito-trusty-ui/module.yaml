@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.trusty.ui
-version: "1.2.0-snapshot"
+version: "1.2.0"
 
 artifacts:
   - name: kogito-trusty-ui-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-ui/1.2.0-SNAPSHOT/trusty-ui-1.2.0-20210206.032520-12-runner.jar
-    md5: 85b827b27c5af185dd561bc460d432d2
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-ui/1.2.0.Final/trusty-ui-1.2.0.Final-runner.jar
+    md5: 7a355f32fe8c102dfb80fc6daa84dea9
 
 execute:
   - script: configure

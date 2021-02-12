@@ -34,10 +34,6 @@ pipeline {
         OPENSHIFT_CREDS_KEY = 'OPENSHIFT_CREDS'
 
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
-
-        MAX_REGISTRY_RETRIES = 3
-        CONTAINER_ENGINE = 'docker'
-        CONTAINER_TLS_OPTIONS = ''
     }
 
     stages {

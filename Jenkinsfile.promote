@@ -27,10 +27,6 @@ pipeline {
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
 
         GITHUB_REPO = "${REPO_NAME}" // for github-release cli
-
-        MAX_REGISTRY_RETRIES = 3
-        CONTAINER_ENGINE = 'podman'
-        CONTAINER_TLS_OPTIONS = '--tls-verify=false'
     }
 
     stages {

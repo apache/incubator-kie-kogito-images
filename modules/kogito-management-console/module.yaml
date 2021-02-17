@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.management.console
-version: "2.0.0-snapshot"
+version: "1.3.0-snapshot"
 
 artifacts:
   - name: kogito-management-console-runner.jar

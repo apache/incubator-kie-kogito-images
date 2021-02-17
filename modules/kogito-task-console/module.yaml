@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.task.console
-version: "2.0.0-snapshot"
+version: "1.3.0-snapshot"
 
 artifacts:
   - name: kogito-task-console-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/task-console/2.0.0-SNAPSHOT/task-console-2.0.0-20210210.034803-79-runner.jar
-    md5: d4fbffaf866f7ef23602aac488359c57
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/task-console/1.3.0-SNAPSHOT/task-console-1.3.0-20210217.110517-1-runner.jar
+    md5: a56672a5faf912d00472c4f802cf1348
 
 execute:
   - script: configure

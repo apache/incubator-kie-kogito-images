@@ -42,7 +42,7 @@ function assemble_runtime() {
 function runtime_assemble() {
     log_info "-----> [s2i-core] Running runtime assemble script"
     cd ${S2I_DESTINATION_DIR}/src
-    if [ "${BINARY_BUILD^^}" == "TRUE" ] || ls | grep -E '*.jar|classes|maven*|*-runner|target' 1> /dev/null 2>&1; then
+    if [ "${BINARY_BUILD^^}" == "TRUE" ] || ls | grep -E '*.jar|classes|maven*|*-runner|quarkus-app|target' 1> /dev/null 2>&1; then
         log_info "-----> Binary build enabled, artifacts were uploaded directly to the image build"
         if ls target 1> /dev/null 2>&1; then
             log_info "-----> Entire target dir uploaded"
@@ -54,6 +54,11 @@ function runtime_assemble() {
             log_info "-----> Found binary file, native build."
             NATIVE="TRUE"
         else
+            if ls | grep -E 'quarkus-app' 1> /dev/null 2>&1;then
+                log_info "-----> Found jar file, not native build."
+                NATIVE="FALSE"
+            fi
+            # Keep compatibility with runner jar
             if ls | grep -E '*-runner.jar' 1> /dev/null 2>&1;then
                 log_info "-----> Found jar file, not native build."
                 NATIVE="FALSE"
@@ -148,8 +153,16 @@ function copy_kogito_app() {
         cp -v $artifactDir/*-runner "${KOGITO_HOME}"/bin/
         chmod +x "${KOGITO_HOME}"/bin/*-runner
       fi
+    elif ls $artifactDir/quarkus-app/quarkus-run.jar 1> /dev/null 2>&1; then
+        # handle quarkus java build
+        log_info "---> Installing jar file"
+        cp -v $artifactDir/quarkus-app/quarkus-run.jar "${KOGITO_HOME}"/bin/quarkus-runner.jar # rename for compatibility with runtime script
+        if [ -d "${artifactDir}/quarkus-app/lib" ]; then
+            log_info "---> Copying application libraries"
+            cp -r $artifactDir/quarkus-app/lib/ "${KOGITO_HOME}"/bin
+        fi
     elif ls $artifactDir/*-runner.jar 1> /dev/null 2>&1; then
-      # handle quarkus java build
+        # handle quarkus legacy java build
         log_info "---> Installing jar file"
         cp -v $artifactDir/*-runner.jar "${KOGITO_HOME}"/bin
         if [ -d "${artifactDir}/lib" ]; then

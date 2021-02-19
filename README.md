@@ -28,12 +28,10 @@ Table of Contents
   - [Kogito Images Requirements](#kogito-images-requirements)
   - [Kogito Runtime and Builder Images](#kogito-runtime-and-builder-images)
     - [Kogito Builder Images](#kogito-builder-images)
-      - [Kogito Quarkus Builder Image](#kogito-quarkus-builder-image)
-        - [Kogito Quarkus Builder Image usage](#kogito-quarkus-builder-image-usage)
-        - [Kogito Quarkus Builder Image example](#kogito-quarkus-builder-image-example)
-      - [Kogito Spring Boot Builder Image](#kogito-spring-boot-builder-image)
-        - [Kogito Spring Boot Builder Image usage](#kogito-spring-boot-builder-image-usage)
-        - [Kogito Spring Boot Builder Image example](#kogito-spring-boot-builder-image-example)
+      - [Kogito Builder Image usage](#kogito-builder-image-usage)
+      - [Kogito Builder Image example](#kogito-builder-image-example)
+        - [Builder Image Examples with Quarkus](#builder-image-example-with-quarkus)
+        - [Builder Image Examples with Springboot](#builder-image-example-with-springboot)
       - [Improving Build Time](#improving-build-time)
         - [Using incremental builds](#using-incremental-builds)
         - [Using a Maven mirror](#using-a-maven-mirror)
@@ -41,22 +39,21 @@ Table of Contents
       - [Binary Builds](#binary-builds)
         - [KJAR Maven Project](#kjar-maven-project)
         - [Assets only](#assets-only)
-      - [Kogito Quarkus JVM Runtime Image](#kogito-quarkus-jvm-runtime-image)
-        - [Kogito Quarkus JVM Runtime Image usage](#kogito-quarkus-jvm-runtime-image-usage)
-        - [Kogito Quarkus JVM Runtime Image examples](#kogito-quarkus-jvm-runtime-image-examples)
-      - [Kogito Quarkus Native Runtime Image](#kogito-quarkus-native-runtime-image)
-        - [Kogito Quarkus Native Runtime Image usage](#kogito-quarkus-native-runtime-image-usage)
-        - [Kogito Quarkus Native Runtime Image example](#kogito-quarkus-native-runtime-image-example)
-      - [Kogito Spring Boot Runtime Image](#kogito-spring-boot-runtime-image)
-        - [Kogito Spring Boot Runtime Image usage](#kogito-spring-boot-runtime-image-usage)
-        - [Kogito Spring Boot Runtime Image example](#kogito-spring-boot-runtime-image-example)
+      - [Kogito Runtime JVM Image](#kogito-runtime-jvm-image)
+        - [Kogito Runtime JVM Image usage](#kogito-runtime-jvm-image-usage)
+        - [Kogito Runtime JVM Image examples](#kogito-runtime-jvm-image-examples)
+      - [Kogito Runtime Native Image](#kogito-runtime-native-image)
+        - [Kogito Runtime Native Image usage](#kogito-runtime-native-image-usage)
+        - [Kogito Runtime Native Image example](#kogito-runtime-native-image-example)
   - [Kogito Component Images](#kogito-component-images)
     - [Kogito Data Index Component Images](#kogito-data-index-component-images)
     - [Kogito Trusty Component Image](#kogito-trusty-component-image)
     - [Kogito Explainability Component Image](#kogito-explainability-component-image)
     - [Kogito Jobs Service Component Image](#kogito-jobs-service-component-image)
     - [Kogito Management Console Component Image](#kogito-management-console-component-image)
+    - [Kogito Task Console Component Image](#kogito-task-console-component-image)
     - [Kogito Trusty UI Component Image](#kogito-trusty-ui-component-image)
+    - [Kogito JIT Runner Component Image](#kogito-jit-runner-component-image)
   - [Using Kogito Images to Deploy Apps on OpenShift](#using-kogito-images-to-deploy-apps-on-openshift)
     - [Using released images](#using-released-images)
     - [Pushing the built images to a local OCP registry:](#pushing-the-built-images-to-a-local-ocp-registry)
@@ -119,51 +116,49 @@ Those are described bellow.
 The Kogito Builder Images are responsible for building the project with Apache Maven and generate the binary that will 
 be used by the Kogito Runtime images to run the Kogito application.
 
-The current available Kogito Builder images are:
+The current available Kogito Builder image is:
 
-* [quay.io/kiegroup/kogito-quarkus-ubi8-s2i](https://quay.io/kiegroup/kogito-quarkus-ubi8-s2i)
-* [quay.io/kiegroup/kogito-springboot-ubi8-s2i](https://quay.io/kiegroup/kogito-springboot-ubi8-s2i)
+* [quay.io/kiegroup/kogito-builder](https://quay.io/kiegroup/kogito-builder)
 
-The Kogito Quarkus Builder Image allows you to create native image using GraalVM which allows you to have
-lightweight and fast applications ready to run in the Cloud.
+The builder image supports building applications based on Spring Boot and Quarkus. To define your runtime, specify the `RUNTIME_TYPE` environment variable. If var is not defined, it defaults to `quarkus`.
+When `RUNTIME_TYPE` quarkus is chosen, the Builder Image allows you to create a native image using GraalVM, which allows you to have lightweight and fast applications ready to run in the Cloud.
 
 
-#### Kogito Quarkus Builder Image
-
-The Kogito Quarkus Builder Image is equipped with the following components:
+The Kogito Builder Image is equipped with the following components:
 
  * GraalVM 20.2.0-java11
  * OpenJDK 11.0.6
  * Maven 3.6.2
  
-For more information about what is installed on this image take a look [here](kogito-quarkus-s2i-overrides.yaml) in the
+For more information about what is installed on this image, take a look [here](kogito-builder-overrides.yaml) in the
 **modules.install** section. 
 
-##### Kogito Quarkus Builder Image usage
+#### Kogito Builder Image usage
 
 This image contains a helper option to better understand how to it:
 
 ```bash
-$ docker run -it quay.io/kiegroup/kogito-quarkus-ubi8-s2i:latest /home/kogito/kogito-app-launch.sh -h
+$ docker run -it quay.io/kiegroup/kogito-builder:latest /home/kogito/kogito-app-launch.sh -h
 ```
 
-By default, a normal java build will be performed. To perform a native build just set the **NATIVE**
-build environment variable to **true**.
+By default, quarkus is selected as runtime, and a normal java build will be performed. To perform a native build, just set the **NATIVE** build environment variable to **true**.
 
 See the next topic for an example.
  
 
-##### Kogito Quarkus Builder Image example
+#### Kogito Builder Image example
 
-In this example, let's use a simple application available in the [Kogito Examples](https://github.com/kiegroup/kogito-examples)
+##### Builder Image Example with Quarkus
+In this example, let's use a simple application based on Quarkus that is available in the [Kogito Examples](https://github.com/kiegroup/kogito-examples)
 repository: the *rules-quarkus-helloworld* example, with native compilation disabled.
 
 
 ```bash
 $ s2i build https://github.com/kiegroup/kogito-examples.git \
     --ref master \
+    -e RUNTIME_TYPE=quarkus \
     --context-dir rules-quarkus-helloworld \
-    quay.io/kiegroup/kogito-quarkus-ubi8-s2i:latest \
+    quay.io/kiegroup/kogito-builder:latest \
     rules-example:1.0
 ...
 [INFO] BUILD SUCCESS
@@ -175,10 +170,6 @@ $ s2i build https://github.com/kiegroup/kogito-examples.git \
 ---> Installing jar file
 'target/rules-quarkus-helloworld-runner.jar' -> '/home/kogito/bin/rules-quarkus-helloworld-runner.jar'
 ---> Copying application libraries
----> [s2i-core] Copy image metadata file...
-'/tmp/src/target/image_metadata.json' -> '/tmp/.s2i/image_metadata.json'
-'/tmp/src/target/image_metadata.json' -> '/tmp/src/.s2i/image_metadata.json'
-'/tmp/src/target/image_metadata.json' -> '/home/kogito/bin/image_metadata.json'
 INFO ---> [persistence] Copying persistence files...
 INFO ---> [persistence] Skip copying files, persistence directory does not exist...
 Build completed successfully
@@ -204,35 +195,18 @@ $ curl -H "Content-Type: application/json" -X POST -d '{"strings":["hello"]}' ht
 ```
 
 
-#### Kogito Spring Boot Builder Image
 
-The Kogito Spring Boot Builder Image is equipped with the following components:
-
- * OpenJDK 11.0.6
- * Maven 3.6.2
- 
-For more information about what is installed on this image take a look [here](kogito-springboot-s2i-overrides.yaml) 
-in the **modules.install** section. 
-
-##### Kogito Spring Boot Builder Image usage
-
-This image contains a helper option to better understand how to it:
-
-```bash
-$ docker run -it quay.io/kiegroup/kogito-springboot-ubi8-s2i:latest /home/kogito/kogito-app-launch.sh -h
-```
-
-##### Kogito Spring Boot Builder Image example
-
-In this example, let's use a simple application available in the [Kogito Examples](https://github.com/kiegroup/kogito-examples)
+##### Builder Image Example with Springboot
+In this example, let's use a simple application based on Spring Boot that is available in the [Kogito Examples](https://github.com/kiegroup/kogito-examples)
 repository: the *process-springboot-example*.
 
 ```bash
 $ s2i build https://github.com/kiegroup/kogito-examples.git \
     --ref master \
     --context-dir \
+    -e RUNTIME_TYPE=springboot \
     process-springboot-example \
-    quay.io/kiegroup/kogito-springboot-ubi8-s2i:latest \
+    quay.io/kiegroup/kogito-builder:latest \
     springboot-example:1.0
 ```
 
@@ -267,8 +241,9 @@ Let's start 2 builds with the incremental option enabled and compare the time sp
 # First incremental build
 $ time s2i build https://github.com/kiegroup/kogito-examples.git \
     --ref master \
+    -e RUNTIME_TYPE=quarkus
     --context-dir rules-quarkus-helloworld \
-    quay.io/kiegroup/kogito-quarkus-ubi8-s2i:latest \
+    quay.io/kiegroup/kogito-builder:latest \
     rules-example-incremental:1.0 \
     --incremental \    
     --env NATIVE=false
@@ -284,8 +259,9 @@ And now, let's run it again.
 # Second incremental build
 $ time s2i build https://github.com/kiegroup/kogito-examples.git \
     --ref master \
+    -e RUNTIME_TYPE=quarkus
     --context-dir rules-quarkus-helloworld \
-    quay.io/kiegroup/kogito-quarkus-ubi8-s2i:latest \
+    quay.io/kiegroup/kogito-builder:latest \
     rules-example-incremental:1.0 \
     --incremental \
     --env NATIVE=false
@@ -311,8 +287,9 @@ To turn it possible we just need to set the **MAVEN_MIRROR_URL** environment var
 # Third incremental build, with Maven mirror option
 $ time s2i build https://github.com/kiegroup/kogito-examples.git \
     --ref master \
+    -e RUNTIME_TYPE=quarkus
     --context-dir rules-quarkus-helloworld \
-    quay.io/kiegroup/kogito-quarkus-ubi8-s2i:latest \
+    quay.io/kiegroup/kogito-builder:latest \
     rules-example-incremental-1 \
     --incremental \
     --env NATIVE=false \
@@ -352,9 +329,8 @@ With this approach, we can have smaller and more compact images that do not incl
 
 Today we have the following Kogito Runtime Images:
 
-* [quay.io/kiegroup/kogito-quarkus-jvm-ubi8](https://quay.io/kiegroup/kogito-quarkus-jvm-ubi8)
-* [quay.io/kiegroup/kogito-quarkus-ubi8](http://quay.io/kiegroup/kogito-quarkus-ubi8)
-* [quay.io/kiegroup/kogito-springboot-ubi8](http://quay.io/kiegroup/kogito-springboot-ubi8)
+* [quay.io/kiegroup/kogito-runtime-jvm](https://quay.io/kiegroup/kogito-runtime-jvm)
+* [quay.io/kiegroup/kogito-runtime-native](http://quay.io/kiegroup/kogito-runtime-native)
 
 #### Binary Builds
 
@@ -398,21 +374,22 @@ Types of Business assets can be:
 
 Upon build, these assets will be copied to a generated maven project and built with Maven to produce a runnable binary. Default value of group id is "com.company", artifact id is "project" and version is "1.0-SNAPSHOT". To provide custom value we need to set the **PROJECT_GROUP_ID**, **PROJECT_ARTIFACT_ID** and **PROJECT_VERSION**.
 
-#### Kogito Quarkus JVM Runtime Image
+#### Kogito Runtime JVM Image
 
 This Kogito Runtime Image contains only the needed files to execute a pre built Kogito application and a JRE.
+The Image can run an application based on Quarkus or Springboot. Users can define `RUNTIME_TYPE` environment variable to switch between the two.
 
 
-##### Kogito Quarkus JVM Runtime Image usage
+##### Kogito Runtime JVM Image usage
 
 This image contains a helper option to better understand how to it:
 
 ```bash
-docker run -it quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest /home/kogito/kogito-app-launch.sh -h
+docker run -it quay.io/kiegroup/kogito-runtime-jvm:latest /home/kogito/kogito-app-launch.sh -h
 ```
 
 
-##### Kogito Quarkus JVM Runtime Image examples
+##### Kogito Runtime JVM Image examples
 
 In the next few lines let's take a look on how this image can be used to receive an already built UberJAR. 
 To configure Quarkus to generate a UberJAR please follow the instructions described [here](https://quarkus.io/guides/maven-tooling#configuration-reference)
@@ -428,7 +405,7 @@ $ mvn clean package -Dquarkus.package.uber-jar
 $ java -jar target/jbpm-quarkus-example-runner.jar 
 
 # performing a source to image build to copy the artifacts to the runtime image
-$ s2i build target/ quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest process-quarkus-example
+$ s2i build target/ -e RUNTIME_TYPE=quarkus quay.io/kiegroup/kogito-runtime-jvm:latest process-quarkus-example
 
 # run the generated image
 $ docker run -p 8080:8080 -it process-quarkus-example
@@ -451,7 +428,7 @@ Note that this time there is a *lib* folder into the **target** directory. The s
 Just perform a build:
 
 ```bash
-$ s2i build target/ quay.io/kiegroup/kogito-quarkus-jvm-ubi8:latest process-quarkus-example-non-uberjar
+$ s2i build target/ quay.io/kiegroup/kogito-runtime-jvm:latest process-quarkus-example-non-uberjar
 $ docker run -p 8080:8080 -it process-quarkus-example-non-uberjar
 
 # On another shell do a simple post request 
@@ -460,24 +437,55 @@ $ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" :
 #repare the container logs the following message:
 Order has been created Order[12345] with assigned approver JOHN
 ```
+**Runtime Image example with springboot**
+Let's try, here, the *process-springboot-example*: 
 
+```bash
+$ mvn clean package
+```
 
-#### Kogito Quarkus Native Runtime Image
+An uberjar file has been generated into the **target directory**. 
+Let's use this uberjar to perform the build:
+
+```bash
+$ s2i build target/ -e RUNTIME_TYPE=springboot quay.io/kiegroup/kogito-runtime-jvm:latest spring-binary-example
+-----> [s2i-core] Running runtime assemble script
+-----> Binary build enabled, artifacts were uploaded directly to the image build
+-----> Cleaning up unneeded jar files
+removed 'process-springboot-example-tests.jar'
+removed 'process-springboot-example-sources.jar'
+removed 'process-springboot-example-test-sources.jar'
+-----> Copying uploaded files to /home/kogito
+---> Installing application binaries
+'./process-springboot-example.jar' -> '/home/kogito/bin/process-springboot-example.jar'
+...
+
+# run the output image
+$ docker run -it -p 8080:8080 spring-binary-example
+
+# on another terminal, interact with the kogito service
+$ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}}' -H "Content-Type: application/json" -X POST http://localhost:8080/orders
+
+#repare the container logs the following message:
+Order has been created Order[12345] with assigned approver JOHN
+```
+
+#### Kogito Runtime Native Image
 
 This Kogito Runtime Image contains only the needed files to execute a pre built Kogito application.
 
 
-##### Kogito Quarkus Native Runtime Image usage
+##### Kogito Runtime Native Image Usage
 
 This image contains a helper option to better understand how to it:
 
 ```bash
-docker run -it quay.io/kiegroup/kogito-quarkus-ubi8:latest /home/kogito/kogito-app-launch.sh -h
+docker run -it quay.io/kiegroup/kogito-runtime-native:latest /home/kogito/kogito-app-launch.sh -h
 ```
 
-##### Kogito Quarkus Native Runtime Image example
+##### Kogito Runtime Native Image Example
 
-For this example let's use the same than the previous one (process-quarkus-example). 
+For this example, let's use the same as the previous one (process-quarkus-example). 
 But this time, let's perform a native build:
 
 ```bash
@@ -488,7 +496,7 @@ A binary has been generated into the **target directory**.
 Let's use this binary to perform the source-to-image build:
 
 ```bash
-s2i build target/ quay.io/kiegroup/kogito-quarkus-ubi8:latest binary-test-example
+s2i build target/ -e RUNTIME_TYPE=quarkus quay.io/kiegroup/kogito-runtime-native:latest binary-test-example
 -----> [s2i-core] Running runtime assemble script
 -----> Binary build enabled, artifacts were uploaded directly to the image build
 -----> Found binary file, native build.
@@ -508,59 +516,6 @@ $ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" :
 Order has been created Order[12345] with assigned approver JOHN
 ```
 
-
-#### Kogito Spring Boot Runtime Image
-
-This Kogito Runtime Image contains only the needed files to execute a pre built Kogito application and a JRE.
-
-
-##### Kogito Spring Boot Runtime Image usage
-
-This image contains a helper option to better understand how to it:
-
-```bash
-docker run -it quay.io/kiegroup/kogito-springboot-ubi8:latest /home/kogito/kogito-app-launch.sh -h
-```
-
-##### Kogito Spring Boot Runtime Image example
-
-Let's try, here, the *process-springboot-example*: 
-
-```bash
-$ mvn clean package
-```
-
-A uberjar file has been generated into the **target directory**. 
-Let's use this uberjar to perform the build:
-
-```bash
-$ s2i build target/ quay.io/kiegroup/kogito-springboot-ubi8:latest spring-binary-example
------> [s2i-core] Running runtime assemble script
------> Binary build enabled, artifacts were uploaded directly to the image build
------> Cleaning up unneeded jar files
-removed 'process-springboot-example-tests.jar'
-removed 'process-springboot-example-sources.jar'
-removed 'process-springboot-example-test-sources.jar'
------> Copying uploaded files to /home/kogito
----> [s2i-core] Copy image metadata file...
-'/tmp/src/./image_metadata.json' -> '/tmp/.s2i/image_metadata.json'
-'/tmp/src/./image_metadata.json' -> '/tmp/src/.s2i/image_metadata.json'
-'/tmp/src/./image_metadata.json' -> '/home/kogito/bin/image_metadata.json'
----> Installing application binaries
-'./process-springboot-example.jar' -> '/home/kogito/bin/process-springboot-example.jar'
-...
-
-# run the output image
-$ docker run -it -p 8080:8080 spring-binary-example
-
-# on another terminal, interact with the kogito service
-$ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}}' -H "Content-Type: application/json" -X POST http://localhost:8080/orders
-
-#repare the container logs the following message:
-Order has been created Order[12345] with assigned approver JOHN
-```
-
-
 ## Kogito Component Images
 
 The Kogito Component Images can be considered as lightweight images that will complement the Kogito core engine 
@@ -574,7 +529,9 @@ Today we have 3 Kogito Component Images:
 * [quay.io/kiegroup/kogito-explainability](https://quay.io/kiegroup/kogito-explainability)
 * [quay.io/kiegroup/kogito-jobs-service](htps://quay.io/kiegroup/kogito-jobs-service)
 * [quay.io/kiegroup/kogito-management-console](https://quay.io/kiegroup/kogito-management-console)
+* [quay.io/kiegroup/kogito-task-console](https://quay.io/kiegroup/kogito-task-console)
 * [quay.io/kiegroup/kogito-trusty-ui](https://quay.io/kiegroup/kogito-trusty-ui)
+* [quay.io/kiegroup/kogito-jit-runner](https://quay.io/kiegroup/kogito-jit-runner)
 
 
 ### Kogito Data Index Component Images
@@ -726,6 +683,31 @@ To know what configurations this image accepts please take a look [here](kogito-
 The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Management Console 
 to your Kogito infrastructure on a Kubernetes cluster and provide its capabilities to your Kogito applications.
 
+### Kogito Task Console Component Image
+
+The Kogito Task Console allows you to have a intuitive way to work with User Tasks in Kogito processes.
+It depends on the Kogito Data Index Service on which the Console will connect to so it can be able to manage it.
+
+To work correctly, the Kogito Task Console needs the Kogito Data Index Service url. If not provided, it will try to connect to the default one (http://localhost:8180).
+
+Basic usage:
+
+```bash
+$ docker run -it --env KOGITO_DATAINDEX_HTTP_URL=data-index-service-url:9090 quay.io/kiegroup/kogito-task-console:latest
+```
+
+To enable debug just use this env while running this image:
+
+```bash
+docker run -it --env SCRIPT_DEBUG=true --env KOGITO_DATAINDEX_HTTP_URL=data-index-service-url:9090 quay.io/kiegroup/kogito-task-console:latest
+```
+You should notice a few debug messages being printed in the system output.
+
+To know what configurations this image accepts please take a look [here](kogito-task-console-overrides.yaml) on the **envs** section.
+
+The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Task Console
+to your Kogito infrastructure on a Kubernetes cluster and provide its capabilities to your Kogito applications.
+
 ### Kogito Trusty UI Component Image
 
 The Kogito Trusty UI provides an audit tool that allows you to retrieve and inspect the decisions that have been taken by Kogito Runtime Services.
@@ -751,6 +733,25 @@ To know what configurations this image accepts please take a look [here](kogito-
 The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Trusty UI 
 to your Kogito infrastructure on a Kubernetes cluster and provide its capabilities to your Kogito applications.
 
+### Kogito JIT Runner Component Image
+
+The Kogito JIT Runner provides a tool that allows you to submit a DMN model and evaluate it on the fly with a simple HTTP request. You can find more details on JIT [here](https://github.com/kiegroup/kogito-apps/tree/master/jitexecutor).
+
+Basic usage:
+
+```bash
+$ docker run -it quay.io/kiegroup/kogito-jit-runner:latest
+```
+
+To enable debug just use this env while running this image:
+
+```bash
+docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-jit-runner:latest
+```
+You should notice a few debug messages being printed in the system output. You can then visit `localhost:8080/index.html` to test the service.
+
+To know what configurations this image accepts please take a look [here](kogito-jit-runner-overrides.yaml) on the **envs** section.
+
 ## Using Kogito Images to Deploy Apps on OpenShift
 
 Once the images are built and imported into a registry (quay.io or any other registry), new applications can be built and deployed within a few steps.
@@ -760,7 +761,7 @@ Once the images are built and imported into a registry (quay.io or any other reg
 
 As a first step, we need to make the Kogito Images available as Image Streams in OpenShift. If you have `cluster-admin` 
 rights you can deploy it into the **openshift** namespace, otherwise, deploy it into the namespace where you have permissions. 
-To install the image stream use this imagestream file: [kogito-imagestream.yaml](https://raw.githubusercontent.com/kiegroup/kogito-images/0.9.0/kogito-imagestream.yaml).
+To install the image stream use this imagestream file: [kogito-imagestream.yaml](https://raw.githubusercontent.com/kiegroup/kogito-images/master/kogito-imagestream.yaml).
 It points to the latest released version.
 
 Let's use the *rules-quarkus-helloworld* from [Kogito Examples](https://github.com/kiegroup/kogito-examples).
@@ -778,11 +779,9 @@ to build a new example application in Ruby.
 
 # installing the imagestream on the current namespace
 $ oc create -f https://raw.githubusercontent.com/kiegroup/kogito-images/0.16.0/kogito-imagestream.yaml
-imagestream.image.openshift.io/kogito-quarkus-ubi8 created
-imagestream.image.openshift.io/kogito-quarkus-jvm-ubi8 created
-imagestream.image.openshift.io/kogito-quarkus-ubi8-s2i created
-imagestream.image.openshift.io/kogito-springboot-ubi8 created
-imagestream.image.openshift.io/kogito-springboot-ubi8-s2i created
+imagestream.image.openshift.io/kogito-runtime-native created
+imagestream.image.openshift.io/kogito-runtime-jvm created
+imagestream.image.openshift.io/kogito-builder created
 imagestream.image.openshift.io/kogito-data-index-infinispan created
 imagestream.image.openshift.io/kogito-data-index-mongodb created
 imagestream.image.openshift.io/kogito-trusty-infinispan created
@@ -791,10 +790,10 @@ imagestream.image.openshift.io/kogito-jobs-service created
 imagestream.image.openshift.io/kogito-management-console created
 
 # performing a new build
-$ oc new-build --name=rules-quarkus-helloworld-builder --image-stream=kogito-quarkus-ubi8-s2i:0.9.0 \ 
+$ oc new-build --name=rules-quarkus-helloworld-builder --image-stream=kogito-builder:latest \ 
     https://github.com/kiegroup/kogito-examples.git#master --context-dir=rules-quarkus-helloworld \
     --strategy=source --env NATIVE=false 
---> Found image 8c9d756 (5 days old) in image stream "rules-quarkus-helloworld/kogito-quarkus-ubi8-s2i" under tag "0.9.0" for "kogito-quarkus-ubi8-s2i:0.9.0"
+--> Found image 8c9d756 (5 days old) in image stream "rules-quarkus-helloworld/kogito-builder" under tag "latest" for "kogito-builder:latest"
 
     Kogito based on Quarkus 
     ----------------------- 
@@ -824,8 +823,8 @@ to the Kogito Runtime Image. To do this, execute the following command:
 
 ```bash
 $ oc new-build --name=rules-quarkus-helloworld-service --source-image=rules-quarkus-helloworld-builder \
-  --source-image-path=/home/kogito/bin:. --image-stream=kogito-quarkus-jvm-ubi8:0.9.0
---> Found image 1608e71 (6 days old) in image stream "rules-quarkus-helloworld/kogito-quarkus-jvm-ubi8" under tag "0.9.0" for "kogito-quarkus-jvm-ubi8:0.9.0"
+  --source-image-path=/home/kogito/bin:. --image-stream=kogito-runtime-jvm:latest
+--> Found image 1608e71 (6 days old) in image stream "rules-quarkus-helloworld/kogito-runtime-jvm" under tag "latest" for "kogito-runtime-jvm:latest"
 
     Kogito based on Quarkus JVM image 
     --------------------------------- 
@@ -910,24 +909,24 @@ For more complex deployment, please use the [Kogito Cloud Operator](https://gith
 
 To be able to build the image it should be installed and available on OpenShift before it can be used.
 
-Suppose we have built the Quarkus s2i Image with the following command:
+Suppose we have built the kogito-builder with the following command:
 
 ```bash
-$ make kogito-quarkus-ubi8-s2i 
+$ make build-image image_name=kogito-builder
 ```
 
 We'll have as output the following image:
 
 ```bash
-quay.io/kiegroup/kogito-quarkus-ubi8-s2i:X.X.X
+quay.io/kiegroup/kogito-builder:X.X.X
 ```
 
 Then we need to tag the image properly. 
 Suppose your local registry is openshift.local.registry:8443, you should do:
 
 ```bash
-$ docker tag quay.io/kiegroup/kogito-quarkus-ubi8-s2i:X.X.X \
-    openshift.local.registry:8443/{NAMESPACE}/kogito-quarkus-ubi8-s2i:X.X.X
+$ docker tag quay.io/kiegroup/kogito-builder:X.X.X \
+    openshift.local.registry:8443/{NAMESPACE}/kogito-builder:X.X.X
 ```
 
 Where the namespace is the place where you want the image to be available for usage. 
@@ -935,7 +934,7 @@ Once the image is properly tagged, log in to the registry and push the new image
 
 ```bash
 $ docker login -u <USERNAME> -p <PASSWORD>  openshift.local.registry:8443
-$ docker push  openshift.local.registry:8443/{NAMESPACE}/kogito-quarkus-ubi8-s2i:X.X.X
+$ docker push  openshift.local.registry:8443/{NAMESPACE}/kogito-builder:X.X.X
 ```
 
 To deploy and test the new image, follow the same steps as described [here](#using-released-images)
@@ -967,11 +966,9 @@ With this Makefile you can:
  
 - Build images individually, by default it will build and test each image
      ```bash
-     $ make build-image image_name=kogito-quarkus-ubi8
-     $ make build-image image_name=kogito-quarkus-jvm-ubi8
-     $ make build-image image_name=kogito-quarkus-ubi8-s2i
-     $ make build-image image_name=kogito-springboot-ubi8 
-     $ make build-image image_name=kogito-springboot-ubi8-s2i
+     $ make build-image image_name=kogito-builder
+     $ make build-image image_name=kogito-runtime-jvm-ubi8
+     $ make build-image image_name=kogito-runtime-native
      $ make build-image image_name=kogito-data-index-infinispan
      $ make build-image image_name=kogito-data-index-mongodb
      $ make build-image image_name=kogito-trusty-infinispan
@@ -980,6 +977,7 @@ With this Makefile you can:
      $ make build-image image_name=kogito-jobs-service 
      $ make build-image image_name=kogito-management-console
      $ make build-image image_name=kogito-trusty-ui
+     $ make build-image image_name=kogito-jit-runner
      ```
   
      We can ignore the build or the tests while interacting with a specific image as well, to build only:
@@ -1051,15 +1049,14 @@ Below you can find all modules used to build the Kogito Images
 - [kogito-logging](modules/kogito-logging): Provides common logging functions.
 - [kogito-management-console](modules/kogito-management-console): Installs and Configure the management-console jar inside the image
 - [kogito-trusty-ui](modules/kogito-trusty-ui): Installs and Configure the trusty-ui jar inside the image
+- [kogito-jit-runner](modules/kogito-jit-runner): Installs and Configure the jit-runner jar inside the image
 - [kogito-maven](modules/kogito-maven): Installs and configure Maven on the S2I images, also provides custom configuration script.
 - [kogito-openjdk](modules/kogito-openjdk): Provides OpenJDK and JRE.
 - [kogito-persistence](modules/kogito-persistence): Provides the needed configuration scripts to properly configure the Kogito Services in the target image.
-- [kogito-quarkus](modules/kogito-quarkus): Main module for the quay.io/kiegroup/kogito-quarkus-ubi8 image.
-- [kogito-quarkus-jvm](modules/kogito-quarkus-jvm): Main module for the quay.io/kiegroup/kogito-quarkus-jvm-ubi8 image.
-- [kogito-quarkus-s2i](modules/kogito-quarkus-s2i): Main module for the quay.io/kiegroup/kogito-quarkus-ubi8-s2i image.
+- [kogito-runtime-native](modules/kogito-runtime-native): Main module for the quay.io/kiegroup/kogito-runtime-native image.
+- [kogito-runtime-jvm](modules/kogito-runtime-jvm): Main module for the quay.io/kiegroup/kogito-runtime-jvm image.
+- [kogito-builder](modules/kogito-builder): Main module for the quay.io/kiegroup/kogito-builder image.
 - [kogito-s2i-core](modules/kogito-s2i-core): Provides the source-to-image needed scripts and configurations.
-- [kogito-springboot](modules/kogito-springboot): Main module for the quay.io/kiegroup/kogito-springboot-ubi8 image.
-- [kogito-springboot-s2i](modules/kogito-springbot-s2i): Main module for the quay.io/kiegroup/kogito-springboot-ubi8-s2i image.
 
 
 For each image, we use a specific *-overrides.yaml file which will specific the modules needed.
@@ -1073,11 +1070,10 @@ Please inspect the images overrides files to learn which modules are installed o
 - [quay.io/kiegroup/kogito-jobs-service](kogito-jobs-service-overrides.yaml)
 - [quay.io/kiegroup/kogito-management-console](kogito-management-console-overrides.yaml)
 - [quay.io/kiegroup/kogito-trusty-ui](kogito-trusty-ui-overrides.yaml)
-- [quay.io/kiegroup/kogito-quarkus-jvm-ubi8](kogito-quarkus-jvm-overrides.yaml)
-- [quay.io/kiegroup/kogito-quarkus-ubi8](kogito-quarkus-overrides.yaml)
-- [quay.io/kiegroup/kogito-quarkus-ubi8-s2i](kogito-quarkus-s2i-overrides.yaml)
-- [quay.io/kiegroup/kogito-springboot-ubi8](kogito-springboot-overrides.yaml)
-- [quay.io/kiegroup/kogito-springboot-ubi8-s2i](kogito-springboot-s2i-overrides.yaml)
+- [quay.io/kiegroup/kogito-jit-runner](kogito-jit-runner-overrides.yaml)
+- [quay.io/kiegroup/kogito-runtime-jvm](kogito-runtime-jvm-overrides.yaml)
+- [quay.io/kiegroup/kogito-runtime-native](kogito-runtime-native-overrides.yaml)
+- [quay.io/kiegroup/kogito-builder](kogito-builder-overrides.yaml)
 
 
 ### Testing Images
@@ -1193,13 +1189,9 @@ As an example, let's execute the tests from the [kogito-s2i-core](modules/kogito
  $ bats modules/kogito-s2i-core/tests/bats/s2i-core.bats 
  ✓ test manage_incremental_builds
  ✓ test assemble_runtime no binaries
- ✓ test assemble_runtime with binaries binaries
- ✓ test assemble_runtime with binaries binaries and metadata
  ✓ test runtime_assemble
  ✓ test runtime_assemble with binary builds
  ✓ test runtime_assemble with binary builds entire target!
- ✓ test handle_image_metadata_json no metadata
- ✓ test handle_image_metadata_json with metadata
  ✓ test copy_kogito_app default java build no jar file present
  ✓ test copy_kogito_app default java build jar file present
  ✓ test copy_kogito_app default quarkus java build no jar file present

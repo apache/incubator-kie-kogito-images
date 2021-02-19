@@ -142,6 +142,7 @@ The command will update the needed files with the new URL:
 - kogito-trusty-ui/module.yaml
 - kogito-trusty-infinispan/module.yaml
 - kogito-trusty-redis/module.yaml
+- kogito-jit-runner/module.yaml
 - kogito-explainability/module.yaml
 
 ### Update tests script

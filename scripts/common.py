@@ -16,10 +16,10 @@ MODULES = {"kogito-data-index-common", "kogito-data-index-mongodb",
            "kogito-jq", "kogito-kubernetes-client",
            "kogito-launch-scripts", "kogito-logging",
            "kogito-management-console", "kogito-task-console",
-           "kogito-persistence", "kogito-quarkus",
-           "kogito-quarkus-jvm", "kogito-quarkus-s2i",
-           "kogito-s2i-core", "kogito-springboot",
-           "kogito-springboot-s2i", "kogito-system-user"}
+           "kogito-persistence", "kogito-runtime-native",
+           "kogito-runtime-jvm", "kogito-builder",
+           "kogito-s2i-core", "kogito-system-user",
+           "kogito-jit-runner"}
 MODULE_FILENAME = "module.yaml"
 MODULES_DIR = "modules"
 
@@ -31,8 +31,7 @@ ARTIFACTS_VERSION_ENV_KEY="KOGITO_VERSION"
 
 # behave tests that needs to be update
 BEHAVE_BASE_DIR = 'tests/features'
-BEHAVE_TESTS = {"kogito-quarkus-ubi8-s2i.feature", "kogito-springboot-ubi8-s2i.feature",
-                "kogito-quarkus-jvm-ubi8.feature", "kogito-springboot-ubi8.feature"}
+BEHAVE_TESTS = {"kogito-builder.feature", "kogito-runtime-jvm.feature", "kogito-runtime-native.feature"}
 
 CLONE_REPO_SCRIPT='tests/test-apps/clone-repo.sh'
 
@@ -307,6 +306,15 @@ def update_maven_repo_in_clone_repo(repo_url, replaceJbossRepository):
     else :
         pattern = re.compile(r'(# export MAVEN_REPO_URL=.*)')
         replacement = 'export MAVEN_REPO_URL="{}"'.format(repo_url)
+    update_in_file(CLONE_REPO_SCRIPT, pattern, replacement)
+
+def ignore_maven_self_signed_certificate_in_clone_repo():
+    """
+    Sets the environment variable to ignore the self-signed certificates in maven
+    """
+    print("Setting MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE env in clone repo")
+    pattern = re.compile(r'(# MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE=.*)')
+    replacement = "MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE=true"
     update_in_file(CLONE_REPO_SCRIPT, pattern, replacement)
 
 

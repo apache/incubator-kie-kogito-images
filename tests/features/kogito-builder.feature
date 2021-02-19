@@ -55,7 +55,7 @@ Feature: kogito-builder image tests
       | request_body    | {"strings":["hello"]} |
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
     And file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
 
@@ -72,7 +72,7 @@ Feature: kogito-builder image tests
       | request_body    | {"strings":["hello"]} |
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
     And file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
 
@@ -91,7 +91,7 @@ Feature: kogito-builder image tests
       | request_body    | {"strings":["hello"]} |
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
     And container log should contain DEBUG [io.qua.
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Dquarkus.log.level=DEBUG
 
@@ -109,7 +109,7 @@ Feature: kogito-builder image tests
       | request_body    | {"strings":["hello"]} |
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a native build and if it is listening on the expected port, test uses custom properties file to test the port configuration.
     Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using 1.3.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
@@ -134,7 +134,7 @@ Feature: kogito-builder image tests
       | NATIVE            | false         |
       | RUNTIME_TYPE      | quarkus       |
       | MAVEN_ARGS_APPEND | -Ppersistence |
-    Then file /home/kogito/bin/quarkus-runner.jar should exist
+    Then file /home/kogito/bin/process-quarkus-example-runner.jar should exist
     And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
@@ -167,7 +167,7 @@ Feature: kogito-builder image tests
       | request_body    | {"strings":["hello"]} |
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
 
   Scenario: Verify if the multi-module s2i build is finished as expected performing a native build
     Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.3.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
@@ -194,7 +194,7 @@ Feature: kogito-builder image tests
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
     Then s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
     And check that page is served
       | property        | value                 |
       | port            | 8080                  |
@@ -213,7 +213,7 @@ Feature: kogito-builder image tests
       | NATIVE       | false   |
     Then s2i build log should contain Expanding artifacts from incremental build...
     And s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
-    And file /home/kogito/bin/quarkus-runner.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist
     And check that page is served
       | property        | value                 |
       | port            | 8080                  |
@@ -272,7 +272,7 @@ Feature: kogito-builder image tests
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
       | KOGITO_VERSION | 1.3.0-SNAPSHOT |   
-    Then file /home/kogito/bin/quarkus-runner.jar should exist
+    Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner.jar should exist
     And check that page is served
       | property        | value                                                                                            |
       | port            | 8080                                                                                             |
@@ -310,7 +310,7 @@ Feature: kogito-builder image tests
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |
-    Then file /home/kogito/bin/quarkus-runner.jar should exist
+    Then file /home/kogito/bin/myproject-2.0-SNAPSHOT-runner.jar should exist
     And check that page is served
       | property        | value                                                                                            |
       | port            | 8080                                                                                             |

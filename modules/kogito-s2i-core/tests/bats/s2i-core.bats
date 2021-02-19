@@ -156,40 +156,6 @@ teardown() {
     mkdir -p "${KOGITO_HOME}"/bin
     # emulating an upload
     mkdir -p /tmp/src/target
-    mkdir -p /tmp/src/target/quarkus-app
-    mkdir -p /tmp/src/target/quarkus-app/app
-    touch /tmp/src/target/quarkus-app/app/myapp-0.0.1.jar
-    touch /tmp/src/target/quarkus-app/quarkus-run.jar
-    touch /tmp/src/target/myapp-0.0.1-sources.jar
-    touch /tmp/src/target/myapp-0.0.1-tests.jar
-    touch /tmp/src/target/myapp-0.0.1-tests-sources.jar
-    mkdir -p /tmp/src/target/classes
-    mkdir -p /tmp/src/target/generated-sources
-    mkdir -p /tmp/src/target/quarkus-app/lib
-    touch /tmp/src/target/quarkus-app/lib/mydependency-0.0.1.jar
-
-    run runtime_assemble
-
-    echo "result= ${lines[@]}"
-    [ "$status" -eq 0 ]
-
-    # Target directory is removed from initial location
-    [ ! -d "/tmp/src/target" ]
-
-    # Only runner and dependency is located in bin directory
-    [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1.jar" ]
-    [ -f ""${KOGITO_HOME}"/bin/quarkus-runner.jar" ]
-    [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-sources.jar" ]
-    [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-tests.jar" ]
-    [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-tests-sources.jar" ]
-    [ -f ""${KOGITO_HOME}"/bin/lib/mydependency-0.0.1.jar" ]
-}
-
-# Check that the irrelevant binaries are excluded
-@test "test runtime_assemble with binary builds entire target Quarkus build legacy" {
-    mkdir -p "${KOGITO_HOME}"/bin
-    # emulating an upload
-    mkdir -p /tmp/src/target
     touch /tmp/src/target/myapp-0.0.1.jar
     touch /tmp/src/target/myapp-0.0.1-runner.jar
     touch /tmp/src/target/myapp-0.0.1-sources.jar
@@ -222,18 +188,16 @@ teardown() {
     mkdir -p "${KOGITO_HOME}"/bin
     # emulating an upload
     mkdir -p /tmp/src/target
-    mkdir -p /tmp/src/target/quarkus-app
-    mkdir -p /tmp/src/target/quarkus-app/app
-    touch /tmp/src/target/quarkus-app/app/myapp-0.0.1.jar
+    touch /tmp/src/target/myapp-0.0.1.jar
     cp $BATS_TEST_DIRNAME/mocks/myapp-0.0.1-runner /tmp/src/target/myapp-0.0.1-runner
-    touch /tmp/src/target/quarkus-app/quarkus-run.jar
+    touch /tmp/src/target/myapp-0.0.1-runner.jar
     touch /tmp/src/target/myapp-0.0.1-sources.jar
     touch /tmp/src/target/myapp-0.0.1-tests.jar
     touch /tmp/src/target/myapp-0.0.1-tests-sources.jar
     mkdir -p /tmp/src/target/classes
     mkdir -p /tmp/src/target/generated-sources
-    mkdir -p /tmp/src/target/quarkus-app/lib
-    touch /tmp/src/target/quarkus-app/lib/mydependency-0.0.1.jar
+    mkdir -p /tmp/src/target/lib
+    touch /tmp/src/target/lib/mydependency-0.0.1.jar
 
     run runtime_assemble
 
@@ -245,7 +209,7 @@ teardown() {
 
     # Only runner and dependency is located in bin directory
     [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1.jar" ]
-    [ ! -f ""${KOGITO_HOME}"/bin/quarkus-runner.jar" ]
+    [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-runner.jar" ]
     [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-sources.jar" ]
     [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-tests.jar" ]
     [ ! -f ""${KOGITO_HOME}"/bin/myapp-0.0.1-tests-sources.jar" ]
@@ -279,10 +243,9 @@ teardown() {
 @test "test copy_kogito_app default quarkus java build no jar file present" {
     NATIVE="false"
     mkdir "${KOGITO_HOME}"/bin
-    mkdir target/quarkus-app
-    touch target/quarkus-app/quarkus-run.jar
-    mkdir target/quarkus-app/lib
-    touch target/quarkus-app/lib/{lib.jar,lib1.jar}
+    touch target/app-runner.jar
+    mkdir target/lib
+    touch target/lib/{lib.jar,lib1.jar}
 
     run copy_kogito_app
     rm -rf target/*
@@ -292,7 +255,7 @@ teardown() {
 
     [ "$status" -eq 0 ]
     [ "${lines[0]}" = "---> Installing jar file" ]
-    [ "${lines[1]}" = "'target/quarkus-app/quarkus-run.jar' -> '"${KOGITO_HOME}"/bin/quarkus-runner.jar'" ]
+    [ "${lines[1]}" = "'target/app-runner.jar' -> '"${KOGITO_HOME}"/bin/app-runner.jar'" ]
     [ "${lines[2]}" = "---> Copying application libraries" ]
 }
 

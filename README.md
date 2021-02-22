@@ -611,11 +611,6 @@ Basic usage with Redis:
 $ docker run -it --env KOGITO_PERSISTENCE_REDIS_URL=redis://localhost:6379 quay.io/kiegroup/kogito-trusty-redis:latest
 ```
 
-Basic usage
-```bash
-$ docker run -it -e QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=my-infinispan-server:11222 -e KAFKA_BOOTSTRAP_SERVER=my-kafka:9092 quay.io/kiegroup/kogito-trusty-infinispan:latest
-```
-
 To enable debug just use this env while running this image:
 
 ```bash

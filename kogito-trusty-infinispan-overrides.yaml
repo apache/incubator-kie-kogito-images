@@ -9,7 +9,7 @@ labels:
 - name: "io.k8s.display-name"
   value: "Kogito Trusty Service - Infinispan"
 - name: "io.openshift.tags"
-  value: "kogito,trusty,trusty-infinspan"
+  value: "kogito,trusty,trusty-infinispan"
 - name: "io.openshift.expose-services"
   value: "8080:http"
 

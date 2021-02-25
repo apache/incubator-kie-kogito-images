@@ -9,4 +9,3 @@ cp -v "${SOURCES_DIR}"/trusty-service-infinispan.jar "${KOGITO_HOME}"/bin/
 
 cp -v "${ADDED_DIR}"/kogito-app-launch.sh "${KOGITO_HOME}"
 chmod +x-w "${KOGITO_HOME}"/kogito-app-launch.sh
-

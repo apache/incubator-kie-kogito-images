@@ -437,4 +437,10 @@ Feature: kogito-builder image tests
       | RUNTIME_TYPE   | springboot     |  
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
 
+  Scenario: Verify if the s2i build is finished as expected with persistence enabled
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+      | variable          | value                           |
+      | MAVEN_ARGS_APPEND | -Dquarkus.package.type=uber-jar |
+      | RUNTIME_TYPE      | quarkus                         |
+    Then file /home/kogito/bin/process-quarkus-example-runner.jar should exist
 

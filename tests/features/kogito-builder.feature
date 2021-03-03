@@ -271,7 +271,7 @@ Feature: kogito-builder image tests
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
-      | KOGITO_VERSION | 1.3.0-SNAPSHOT |   
+      | KOGITO_VERSION | 1.3.0.Final |    
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner.jar should exist
     And check that page is served
       | property        | value                                                                                            |
@@ -289,7 +289,7 @@ Feature: kogito-builder image tests
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | true           |
       | LIMIT_MEMORY   | 6442450944     |
-      | KOGITO_VERSION | 1.3.0-SNAPSHOT |   
+      | KOGITO_VERSION | 1.3.0.Final |    
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner should exist
     And check that page is served
       | property        | value                                                                                            |
@@ -306,7 +306,7 @@ Feature: kogito-builder image tests
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |
-      | KOGITO_VERSION | 1.3.0-SNAPSHOT |   
+      | KOGITO_VERSION | 1.3.0.Final |    
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |
@@ -433,7 +433,7 @@ Feature: kogito-builder image tests
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
     Given s2i build /tmp/kogito-examples from dmn-example using 1.3.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable       | value          |
-      | KOGITO_VERSION | 1.3.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.3.0.Final |  
       | RUNTIME_TYPE   | springboot     |  
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
 

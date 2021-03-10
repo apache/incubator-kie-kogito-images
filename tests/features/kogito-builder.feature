@@ -1,6 +1,16 @@
 @quay.io/kiegroup/kogito-builder
 Feature: kogito-builder image tests
 
+  Scenario: verify if all labels are correctly set.
+    Given image is built
+    Then the image should contain label maintainer with value kogito <kogito@kiegroup.com>
+    And the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
+    And the image should contain label io.openshift.s2i.destination with value /tmp
+    And the image should contain label io.openshift.expose-services with value 8080:http
+    And the image should contain label io.k8s.description with value Platform for building Kogito based on Quarkus or Spring Boot
+    And the image should contain label io.k8s.display-name with value Kogito based on Quarkus or Spring Boot
+    And the image should contain label io.openshift.tags with value builder,kogito,quarkus,springboot
+
   Scenario: Verify if the s2i build is finished as expected using native build and runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable     | value      |
@@ -242,16 +252,6 @@ Feature: kogito-builder image tests
       | request_body    | {"strings":["hello"]} |
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
-
-  Scenario: verify if all labels are correctly set.
-    Given image is built
-    Then the image should contain label maintainer with value kogito <kogito@kiegroup.com>
-    And the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
-    And the image should contain label io.openshift.s2i.destination with value /tmp
-    And the image should contain label io.openshift.expose-services with value 8080:http
-    And the image should contain label io.k8s.description with value Platform for building Kogito based on Quarkus or Spring Boot
-    And the image should contain label io.k8s.display-name with value Kogito based on Quarkus or Spring Boot
-    And the image should contain label io.openshift.tags with value builder,kogito,quarkus,springboot
 
   Scenario: verify java cacerts and libsunec are available in the given container.
     When container is started with command bash

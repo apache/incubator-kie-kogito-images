@@ -13,9 +13,4 @@ Feature: kogito-runtime-jvm feature.
     And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
     And the image should contain label com.redhat.component with value rhpam-7-kogito-runtime-jvm-rhel8-container
 
-  Scenario: verify if the java installation is correct
-    When container is started with command bash
-    Then run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
-    And run sh -c 'echo $JAVA_VENDOR' in container and immediately check its output for openjdk
-    And run sh -c 'echo $JAVA_VERSION' in container and immediately check its output for 11
 

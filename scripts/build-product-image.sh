@@ -17,18 +17,20 @@ if [ "x${image}" == "x" ]; then
     exit 8
 fi
 
+# extract the community image name from its prodcut relative.0
+# $1 - prod image name
 function get_parent_image_overrides() {
-    echo $()
+    echo "${1}" | awk -v FS="(rhpam-|-rhel8)" '{print $2}'
 }
 
 ACTION=${1}
 case ${ACTION} in
     "build")
-        ${CEKIT_CMD} build --overrides-file $(python3 scripts/list-images.py --parent-image=${image})-overrides.yaml --overrides-file ${image_name}-overrides.yaml ${BUILD_ENGINE}
+        ${CEKIT_CMD} build --overrides-file $(get_parent_image_overrides ${image})-overrides.yaml --overrides-file ${image_name}-overrides.yaml ${BUILD_ENGINE}
     ;;
 
     "test")
-        ${CEKIT_CMD} test --overrides-file $(python3 scripts/list-images.py --parent-image=${image})-overrides.yaml --overrides-file ${image_name}-overrides.yaml behave
+        ${CEKIT_CMD} test --overrides-file $(get_parent_image_overrides ${image})-overrides.yaml --overrides-file ${image_name}-overrides.yaml behave
     ;;
     *)
         echo "Please use build or test actions."

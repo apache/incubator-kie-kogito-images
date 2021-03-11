@@ -38,9 +38,12 @@ ifneq ($(findstring rc,$(IMAGE_VERSION)),rc)
 endif
 
 
+# Build all images
 .PHONY: build-prod
-build-prod:
+# start to build the images
+build-prod: clone-repos
 	@for iname in $(shell make list arg=--prod); do make build-prod-image image_name=$${iname} ; done
+
 
 .PHONY: build-prod-image
 image_name=

@@ -28,7 +28,9 @@ if __name__ == "__main__":
         print(images_map[args.parent_image])
     else:
         for img in sorted(common.get_all_images()):
-            if img.startswith(PRODUCT_PREFIX) and args.prod:
-                print(img)
-            elif not img.startswith(PRODUCT_PREFIX) and not args.prod:
-                print(img)
+            if args.prod:
+                if img.startswith(PRODUCT_PREFIX):
+                    print(img)
+            else:
+                if not img.startswith(PRODUCT_PREFIX):
+                    print(img)

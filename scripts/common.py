@@ -31,7 +31,8 @@ ARTIFACTS_VERSION_ENV_KEY = "KOGITO_VERSION"
 
 # behave tests that needs to be updated
 BEHAVE_BASE_DIR = 'tests/features'
-BEHAVE_TESTS = {"kogito-common-builder.feature", "kogito-common-runtime-jvm.feature", "kogito-runtime-native.feature"}
+BEHAVE_TESTS = {"kogito-builder-native.feature", "kogito-common-builder-jvm.feature",
+                "kogito-common-runtime-jvm.feature", "kogito-runtime-native.feature"}
 
 CLONE_REPO_SCRIPT = 'tests/test-apps/clone-repo.sh'
 

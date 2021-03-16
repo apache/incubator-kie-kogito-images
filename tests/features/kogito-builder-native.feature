@@ -84,7 +84,7 @@ Feature: kogito-builder image native build tests
     And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
-  Scenario: Perform a incremental s2i build
+  Scenario: Perform a incremental s2i build for native test
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
@@ -102,7 +102,7 @@ Feature: kogito-builder image native build tests
       | expected_phrase | ["hello","world"]     |
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario:Perform a second incremental s2i build, this time, with native enabled
+  Scenario:Perform a second incremental s2i build for native scenario, this time, with native enabled
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
       | variable     | value      |
       | RUNTIME_TYPE | quarkus    |

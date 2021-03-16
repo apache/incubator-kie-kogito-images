@@ -106,7 +106,7 @@ Feature: kogito-builder image JVM build tests
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
 
-  Scenario: Perform a incremental s2i build
+  Scenario: Perform a incremental s2i build using quarkus runtime type
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
@@ -124,7 +124,7 @@ Feature: kogito-builder image JVM build tests
       | expected_phrase | ["hello","world"]     |
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario: Perform a second incremental s2i build
+  Scenario: Perform a second incremental s2i build using quarkus runtime type
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
@@ -263,7 +263,7 @@ Feature: kogito-builder image JVM build tests
     And container log should contain main] .c.l.ClasspathLoggingApplicationListener
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
-  Scenario: Perform a incremental s2i build
+  Scenario: Perform a incremental s2i build using springboot runtime type
     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
@@ -280,7 +280,7 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/bin/process-springboot-example.jar should exist
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario: Perform a second incremental s2i build
+  Scenario: Perform a second incremental s2i build using quarkus runtime type
     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |

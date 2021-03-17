@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.trusty.redis
-version: "1.4.0-snapshot"
+version: "1.4.0"
 
 artifacts:
   - name: trusty-service-redis.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/1.4.0-SNAPSHOT/trusty-service-redis-1.4.0-20210316.053554-5-runner.jar
-    md5: 20fe7ba3c064e1be4e94fc0e1ebe8e54
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/1.4.0.Final/trusty-service-redis-1.4.0.Final-runner.jar
+    md5: ded0aa8077661020971d72f80006b0c0
 
 execute:
   - script: configure

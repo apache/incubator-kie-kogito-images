@@ -4,7 +4,7 @@ version: "1.4.0"
 
 artifacts:
   - name: kogito-trusty-ui-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/kogito-public/org/kie/kogito/trusty-ui/1.4.0.Final/trusty-ui-1.4.0.Final-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-ui/1.4.0.Final/trusty-ui-1.4.0.Final-runner.jar
     md5: 917d0ba8a1250ff183778277257e70cb
 
 execute:

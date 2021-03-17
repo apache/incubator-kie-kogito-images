@@ -153,14 +153,19 @@ pipeline {
                     dir(getRepoName()) {
                         // Merge PR
                         String prLink = getDeployProperty("${getRepoName()}.pr.link")
-                        if (prLink != '') {
+                        if (prLink) {
                             githubscm.mergePR(prLink, getGitAuthorCredsID())
                             githubscm.pushObject('origin', getBuildBranch(), getGitAuthorCredsID())
                         }
 
-                        if (getGitTag() != '') {
+                        if (getGitTag()) {
+                            if (githubscm.isTagExist(getGitTag())) {
+                                githubscm.removeLocalTag(getGitTag())
+                                githubscm.removeRemoteTag('origin', getGitTag(), getGitAuthorCredsID())
+                            }
+
                             def releaseName = "Kogito Images Version ${getProjectVersion()}"
-                            def description = params.RELEASE_NOTES != '' ? params.RELEASE_NOTES : "We are glad to announce that the Kogito ${getProjectVersion()} release is now available!"
+                            def description = params.RELEASE_NOTES ?: "We are glad to announce that the Kogito ${getProjectVersion()} release is now available!"
                             withCredentials([string(credentialsId: env.GITHUB_TOKEN_CREDS_ID, variable: 'GITHUB_TOKEN')]) {
                                 sh """
                                     export GITHUB_USER=${getGitAuthor()}
@@ -201,7 +206,7 @@ pipeline {
                         prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getBotAuthorCredsID())
                     }
                     dir(getRepoName()) {
-                        if (prLink != '') {
+                        if (prLink) {
                             githubscm.mergePR(prLink, getGitAuthorCredsID())
                             githubscm.pushObject('origin', getBuildBranch(), getGitAuthorCredsID())
                         }

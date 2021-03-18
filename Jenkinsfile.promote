@@ -159,7 +159,7 @@ pipeline {
                         }
 
                         if (getGitTag()) {
-                            if (githubscm.isTagExist(getGitTag())) {
+                            if (githubscm.isTagExist('origin', getGitTag())) {
                                 githubscm.removeLocalTag(getGitTag())
                                 githubscm.removeRemoteTag('origin', getGitTag(), getGitAuthorCredsID())
                             }

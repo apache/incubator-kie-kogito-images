@@ -1,7 +1,7 @@
 @quay.io/kiegroup/kogito-builder @rhpam-7/rhpam-kogito-builder-rhel8
 Feature: kogito-builder image JVM build tests
 
-  Scenario: verify if the maven and graal vm settings are correct
+  Scenario: verify if the maven and java installation are correct
     When container is started with command bash
     Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.6.2
@@ -76,7 +76,6 @@ Feature: kogito-builder image JVM build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
-
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with persistence enabled
     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
@@ -280,7 +279,7 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/bin/process-springboot-example.jar should exist
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario: Perform a second incremental s2i build using quarkus runtime type
+  Scenario: Perform a second incremental s2i build using springboot runtime type
     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |

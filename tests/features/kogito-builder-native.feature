@@ -1,12 +1,12 @@
-@quay.io/kiegroup/kogito-builder
+@quay.io/kiegroup/kogito-builder @rhpam-7/rhpam-kogito-builder-rhel8
 Feature: kogito-builder image native build tests
 
-  Scenario: verify java cacerts and libsunec are available in the given container.
+  Scenario: verify java cacerts and libsunec are available in the given kogito builder container.
     When container is started with command bash
     Then  file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
 
-  Scenario: verify if the maven and graal vm settings are correct
+  Scenario: verify if the maven and graal vm settings are correct on kogito-builder image for native
     When container is started with command bash
     Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.6.2

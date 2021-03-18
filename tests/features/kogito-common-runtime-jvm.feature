@@ -7,7 +7,7 @@ Feature: kogito-runtime-jvm feature.
     And run sh -c 'echo $JAVA_VENDOR' in container and immediately check its output for openjdk
     And run sh -c 'echo $JAVA_VERSION' in container and immediately check its output for 11
 
-  Scenario: Verify if the binary build is finished as expected and if it is listening on the expected port
+  Scenario: Verify if the binary build is finished as expected and if it is listening on the expected port with quarkus
     Given s2i build /tmp/kogito-examples/rules-quarkus-helloworld from target
       | variable            | value                     |
       | RUNTIME_TYPE        | quarkus                   |
@@ -42,7 +42,7 @@ Feature: kogito-runtime-jvm feature.
       | expected_phrase | ["hello","world"]        |
     And file /home/kogito/bin/quarkus-run.jar should exist
 
-  Scenario: Verify if the binary build is finished as expected and if it is listening on the expected port
+  Scenario: Verify if the binary build is finished as expected and if it is listening on the expected port with springboot
     Given s2i build /tmp/kogito-examples/process-springboot-example from target
       | variable            | value        |
       | JAVA_OPTIONS        | -Ddebug=true |

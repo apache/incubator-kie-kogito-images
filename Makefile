@@ -49,7 +49,7 @@ build-prod: clone-repos
 image_name=
 build-prod-image:
 ifneq ($(ignore_build),true)
-	scripts/build-product-image.sh "build" $(image_name)
+	scripts/build-product-image.sh "build" $(image_name) ${BUILD_ENGINE}
 endif
 # if ignore_test is set to true, ignore the tests
 ifneq ($(ignore_test),true)

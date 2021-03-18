@@ -19,6 +19,14 @@ Today we have these scripts:
 ### Build Product Image Script
 
 Script should not be used to build community images. Handled by `make build-prod` command.
+
+To switch the `build_engine` do the following:
+
+```bash
+make BUILD_ENGINE=osbs build-prod
+```
+
+
 It receives the Product image name to build the images.
 
 The build works in the follow CEKit build hierarchy:

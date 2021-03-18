@@ -11,7 +11,7 @@ items:
     metadata:
       name: rhpam-kogito-runtime-jvm-rhel8
       annotations:
-        openshift.io/display-name: Runtime image for Kogito based on Quarkus or Springboot JVM image
+        openshift.io/display-name: Runtime image for Kogito based on Quarkus or SpringBoot JVM image
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:

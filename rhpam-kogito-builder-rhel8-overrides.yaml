@@ -9,7 +9,7 @@ labels:
   - name: "com.redhat.component"
     value: "rhpam-7-kogito-runtime-jvm-rhel8-container"
   - name: "io.k8s.display-name"
-    value: "Red Hat build of Kogito based on Quarkus or Spring Boot"
+    value: "Red Hat build of Kogito based on Quarkus or SpringBoot"
   - name: "io.openshift.tags"
     value: "rhpam-kogito,builder,kogito,quarkus,springboot"
 

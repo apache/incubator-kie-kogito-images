@@ -17,7 +17,7 @@ items:
       tags:
         - name: '7.11.0'
           annotations:
-            description: Runtime image for Kogito based on Quarkus or Springboot JVM image
+            description: Runtime image for Kogito based on Quarkus or SpringBoot JVM image
             iconClass: icon-jbpm
             tags: rhpam-kogito,runtime,kogito,quarkus,springboot,jvm
             supports: quarkus

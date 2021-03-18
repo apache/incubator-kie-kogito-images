@@ -32,7 +32,7 @@ items:
     metadata:
       name: rhpam-kogito-builder-rhel8
       annotations:
-        openshift.io/display-name: Platform for building Kogito based on Quarkus or Springboot
+        openshift.io/display-name: Platform for building Kogito based on Quarkus or SpringBoot
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:

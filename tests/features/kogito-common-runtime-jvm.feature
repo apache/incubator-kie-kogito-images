@@ -79,3 +79,10 @@ Feature: kogito-runtime-jvm feature.
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
+  Scenario: Verify if a custom certificate is correctly handled
+    When container is started with command /home/kogito/kogito-app-launch.sh
+      | variable            | value              |
+      | CUSTOM_TRUSTSTORE   | my-truststore.jks  |
+      | RUNTIME_TYPE        | quarkus            |
+    Then container log should contain INFO ---> Configuring custom Java Truststore
+    Then container log should contain ERROR ---> A custom truststore was specified

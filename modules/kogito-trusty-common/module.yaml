@@ -5,3 +5,7 @@ description: "Common modules for trusty provider images, any addition that is co
 
 execute:
   - script: configure
+
+modules:
+  install:
+    - name: org.kie.kogito.security.custom.truststores

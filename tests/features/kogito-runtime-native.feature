@@ -33,3 +33,11 @@ Feature: Kogito-runtime-native feature.
       | wait            | 80                       |
       | expected_phrase | ["hello","world"]        |
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
+
+  Scenario: Verify if a custom certificate is correctly handled
+    When container is started with command /home/kogito/kogito-app-launch.sh
+      | variable            | value              |
+      | CUSTOM_TRUSTSTORE   | my-truststore.jks  |
+      | RUNTIME_TYPE        | quarkus            |
+    Then container log should contain INFO ---> Configuring custom Java Truststore
+    Then container log should contain ERROR ---> A custom truststore was specified

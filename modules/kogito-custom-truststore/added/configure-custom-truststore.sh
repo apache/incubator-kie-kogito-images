@@ -34,7 +34,7 @@ Make sure that the path is mounted and accessible in your container"
         fi
         CUSTOM_TRUSTSTORE_ARGS="-Djavax.net.ssl.trustStore=${CUSTOM_TRUSTSTORE_PATH}"
         if [ ! -z "${CUSTOM_TRUSTSTORE_PASSWORD}" ]; then
-            CUSTOM_TRUSTSTORE_ARGS="-Djavax.net.ssl.trustStorePassword=${CUSTOM_TRUSTSTORE_PASSWORD}"
+            CUSTOM_TRUSTSTORE_ARGS="${CUSTOM_TRUSTSTORE_ARGS} -Djavax.net.ssl.trustStorePassword=${CUSTOM_TRUSTSTORE_PASSWORD}"
         fi
     fi
 }

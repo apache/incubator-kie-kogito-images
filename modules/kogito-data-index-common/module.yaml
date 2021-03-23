@@ -5,3 +5,7 @@ description: "Common modules for data-index persistence provider images, any add
 
 execute:
   - script: configure
+
+modules:
+  install:
+    - name: org.kie.kogito.security.custom.truststores

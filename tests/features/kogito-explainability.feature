@@ -40,3 +40,11 @@ Feature: Kogito-explainability feature.
       | SCRIPT_DEBUG           | true     |
       | EXPLAINABILITY_COMMUNICATION | nonsense |
     Then container log should contain WARN Explainability communication type nonsense is not allowed, the allowed types are [REST MESSAGING]. Defaulting to MESSAGING.
+
+  Scenario: Verify if a custom certificate is correctly handled
+    When container is started with command /home/kogito/kogito-app-launch.sh
+      | variable            | value              |
+      | CUSTOM_TRUSTSTORE   | my-truststore.jks  |
+      | RUNTIME_TYPE        | quarkus            |
+    Then container log should contain INFO ---> Configuring custom Java Truststore
+    Then container log should contain ERROR ---> A custom truststore was specified

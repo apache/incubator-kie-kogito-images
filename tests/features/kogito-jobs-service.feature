@@ -52,11 +52,3 @@ Feature: Kogito-jobs-service feature.
     And container log should contain QUARKUS_INFINISPAN_CLIENT_AUTH_REALM=SecretReal
     And container log should contain QUARKUS_INFINISPAN_CLIENT_SASL_MECHANISM=COOLGSSAPI
     And container log should not contain Application failed to start
-
-  Scenario: Verify if a custom certificate is correctly handled
-    When container is started with command /home/kogito/kogito-app-launch.sh
-      | variable            | value              |
-      | CUSTOM_TRUSTSTORE   | my-truststore.jks  |
-      | RUNTIME_TYPE        | quarkus            |
-    Then container log should contain INFO ---> Configuring custom Java Truststore
-    Then container log should contain ERROR ---> A custom truststore was specified

@@ -6,13 +6,8 @@ source "${KOGITO_HOME}"/launch/logging.sh
 
 function prepareEnv() {
     # keep it on alphabetical order
-    unset CUSTOM_TRUSTSTORE_ARGS
-    unset CUSTOM_TRUSTSTORE_PATH
-}
-
-function preConfigure() {
-    export CUSTOM_TRUSTSTORE_ARGS=""
-    export CUSTOM_TRUSTSTORE_PATH=""
+    unset CUSTOM_TRUSTSTORE
+    unset CUSTOM_TRUSTSTORE_PASSWORD
 }
 
 function configure() {

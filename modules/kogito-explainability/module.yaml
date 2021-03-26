@@ -12,7 +12,3 @@ artifacts:
 
 execute:
   - script: configure
-
-modules:
-  install:
-    - name: org.kie.kogito.security.custom.truststores

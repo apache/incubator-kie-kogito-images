@@ -1,4 +1,3 @@
-@wip
 @quay.io/kiegroup/kogito-runtime-jvm 
 @quay.io/kiegroup/kogito-data-index-infinispan @quay.io/kiegroup/kogito-data-index-mongodb 
 @quay.io/kiegroup/kogito-task-console 

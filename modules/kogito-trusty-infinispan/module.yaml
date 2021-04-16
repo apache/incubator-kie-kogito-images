@@ -4,7 +4,7 @@ version: "1.5.0"
 
 artifacts:
   - name: trusty-service-infinispan.jar
-    url: https://repository.jboss.org/nexus/content/groups/kogito-public/org/kie/kogito/trusty-service-infinispan/1.5.0.Final/trusty-service-infinispan-1.5.0.Final-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-infinispan/1.5.0.Final/trusty-service-infinispan-1.5.0.Final-runner.jar
     md5: 128490ef94fe54554ea126f64a873009
 
 execute:

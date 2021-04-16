@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.trusty.infinispan
-version: "1.5.0"
+version: "1.5.1-snapshot"
 
 artifacts:
   - name: trusty-service-infinispan.jar

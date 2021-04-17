@@ -4,8 +4,8 @@ version: "1.5.1-snapshot"
 
 artifacts:
   - name: kogito-task-console-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/task-console/1.5.0.Final/task-console-1.5.0.Final-runner.jar
-    md5: a2bfc665f04a6501aada87beb15f77f6
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/task-console/1.5.1-SNAPSHOT/task-console-1.5.1-20210417.041220-3-runner.jar
+    md5: c240c40c20e8a02a1ebe7da34eea84f1
 
 execute:
   - script: configure

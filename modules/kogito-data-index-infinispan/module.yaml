@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.infinispan
-version: "2.0.0-snapshot"
+version: "1.6.0-snapshot"
 
 artifacts:
   - name: data-index-service-infinispan.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-infinispan/2.0.0-SNAPSHOT/data-index-service-infinispan-2.0.0-20210419.053248-127-runner.jar
-    md5: 5685589e4376aa4175970959981b3663
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-infinispan/1.6.0-SNAPSHOT/data-index-service-infinispan-1.6.0-20210421.121148-1-runner.jar
+    md5: a7988104b3417b6b14ead39eed654a74
 
 execute:
   - script: configure

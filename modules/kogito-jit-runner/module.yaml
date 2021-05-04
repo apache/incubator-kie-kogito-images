@@ -4,7 +4,7 @@ version: "1.6.0"
 
 artifacts:
   - name: kogito-jit-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/kogito-public/org/kie/kogito/jitexecutor-runner/1.6.0.Final/jitexecutor-runner-1.6.0.Final-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jitexecutor-runner/1.6.0.Final/jitexecutor-runner-1.6.0.Final-runner.jar
     md5: 12ea7aa8d261fe92ebb7d6360ea12ac7
 
 execute:

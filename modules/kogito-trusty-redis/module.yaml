@@ -4,7 +4,7 @@ version: "1.6.0"
 
 artifacts:
   - name: trusty-service-redis.jar
-    url: https://repository.jboss.org/nexus/content/groups/kogito-public/org/kie/kogito/trusty-service-redis/1.6.0.Final/trusty-service-redis-1.6.0.Final-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/1.6.0.Final/trusty-service-redis-1.6.0.Final-runner.jar
     md5: f82420be3caa4c3a158f634d069423fa
 
 execute:

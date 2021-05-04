@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service
-version: "1.6.0-snapshot"
+version: "1.6.0"
 
 artifacts:
   - name: kogito-jobs-service-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service/1.6.0-SNAPSHOT/jobs-service-1.6.0-20210429.064057-3-runner.jar
-    md5: fe177c6a1ee0a5a59383255729bdcf91
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service/1.6.0.Final/jobs-service-1.6.0.Final-runner.jar
+    md5: 3668d9921439e74f15ffd0f52cda2ec4
 
 execute:
   - script: configure

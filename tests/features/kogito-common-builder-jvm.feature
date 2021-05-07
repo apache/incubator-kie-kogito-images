@@ -277,8 +277,8 @@ Feature: kogito-builder image JVM build tests
 
 
   Scenario: Verify if the s2i build is finished as expected with uber-jar package type built
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value                           |
       | MAVEN_ARGS_APPEND | -Dquarkus.package.type=uber-jar |
       | RUNTIME_TYPE      | quarkus                         |
-    Then file /home/kogito/bin/process-quarkus-example-runner.jar should exist
+    Then file /home/kogito/bin/rules-quarkus-helloworld-runner.jar should exist

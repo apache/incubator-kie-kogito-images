@@ -55,7 +55,7 @@ Feature: kogito-runtime-jvm feature.
       | request_method       | POST                                                                                                                       |
       | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
       | content_type         | application/json                                                                                                           |
-      | expected_status_code | 201                                                                                                                        |
+      | expected_status_code | 200                                                                                                                        |
     And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
@@ -74,7 +74,7 @@ Feature: kogito-runtime-jvm feature.
       | request_method       | POST                                                                                                                       |
       | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
       | content_type         | application/json                                                                                                           |
-      | expected_status_code | 201                                                                                                                        |
+      | expected_status_code | 200                                                                                                                        |
     And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true

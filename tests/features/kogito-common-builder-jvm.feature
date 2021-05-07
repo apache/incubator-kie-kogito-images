@@ -176,14 +176,14 @@ Feature: kogito-builder image JVM build tests
         | RUNTIME_TYPE | springboot   |
         | JAVA_OPTIONS | -Ddebug=true |
       Then check that page is served
-        | property             | value                                                                         |
-        | port                 | 8080                                                                          |
-        | path                 | /find-approved                                                                       |
-        | wait                 | 80                                                                            |
-        | request_method       | POST                                                                          |
+        | property             | value                                                                                                                      |
+        | port                 | 8080                                                                                                                       |
+        | path                 | /find-approved                                                                                                             |
+        | wait                 | 80                                                                                                                         |
+        | request_method       | POST                                                                                                                       |
         | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
-        | content_type         | application/json                                                              |
-        | expected_status_code | 201                                                                           |
+        | content_type         | application/json                                                                                                           |
+        | expected_status_code | 200                                                                                                                        |
       And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
       And container log should contain main] .c.l.ClasspathLoggingApplicationListener
       And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
@@ -194,14 +194,14 @@ Feature: kogito-builder image JVM build tests
       | JAVA_OPTIONS        | -Ddebug=true |
       | RUNTIME_TYPE        | springboot   |
     Then check that page is served
-      | property             | value                                                                         |
-      | port                 | 8080                                                                          |
-      | path                 | /find-approved                                                                       |
-      | wait                 | 80                                                                            |
-      | request_method       | POST                                                                          |
+      | property             | value                                                                                                                      |
+      | port                 | 8080                                                                                                                       |
+      | path                 | /find-approved                                                                                                             |
+      | wait                 | 80                                                                                                                         |
+      | request_method       | POST                                                                                                                       |
       | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
-      | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
+      | content_type         | application/json                                                                                                           |
+      | expected_status_code | 200                                                                                                                        |
     And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain main] .c.l.ClasspathLoggingApplicationListener
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
@@ -212,14 +212,14 @@ Feature: kogito-builder image JVM build tests
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
     Then check that page is served
-      | property             | value                                                                         |
-      | port                 | 8080                                                                          |
-      | path                 | /find-approved                                                                       |
-      | wait                 | 80                                                                            |
-      | request_method       | POST                                                                          |
+      | property             | value                                                                                                                      |
+      | port                 | 8080                                                                                                                       |
+      | path                 | /find-approved                                                                                                             |
+      | wait                 | 80                                                                                                                         |
+      | request_method       | POST                                                                                                                       |
       | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
-      | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
+      | content_type         | application/json                                                                                                           |
+      | expected_status_code | 200                                                                                                                        |
     And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain Tomcat initialized with port(s): 8080 (http)
   
@@ -231,14 +231,14 @@ Feature: kogito-builder image JVM build tests
       | ARTIFACT_DIR      | ruleunit-springboot-example/target  |
       | MAVEN_ARGS_APPEND | -pl ruleunit-springboot-example -am |
     Then check that page is served
-      | property             | value                                                                         |
-      | port                 | 8080                                                                          |
-      | path                 | /find-approved                                                                        |
-      | wait                 | 80                                                                            |
-      | request_method       | POST                                                                          |
+      | property             | value                                                                                                                      |
+      | port                 | 8080                                                                                                                       |
+      | path                 | /find-approved                                                                                                             |
+      | wait                 | 80                                                                                                                         |
+      | request_method       | POST                                                                                                                       |
       | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
-      | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
+      | content_type         | application/json                                                                                                           |
+      | expected_status_code | 200                                                                                                                        |
     And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain main] .c.l.ClasspathLoggingApplicationListener
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
@@ -249,14 +249,14 @@ Feature: kogito-builder image JVM build tests
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
     Then check that page is served
-      | property             | value                                                                         |
-      | port                 | 8080                                                                          |
-      | path                 | /find-approved                                                                        |
-      | wait                 | 80                                                                            |
-      | request_method       | POST                                                                          |
+      | property             | value                                                                                                                      |
+      | port                 | 8080                                                                                                                       |
+      | path                 | /find-approved                                                                                                             |
+      | wait                 | 80                                                                                                                         |
+      | request_method       | POST                                                                                                                       |
       | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
-      | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
+      | content_type         | application/json                                                                                                           |
+      | expected_status_code | 200                                                                                                                        |
     And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.

@@ -9,9 +9,9 @@ MAVEN_OPTIONS="-DskipTests -U"
 MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS="-Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=${CONTAINER_ENGINE}"
 # MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE=true
 
-NATIVE_ENABLED=$1
-if [ -z $NATIVE_ENABLED ]; then
-    NATIVE_ENABLED=true
+NATIVE_BUILD=$1
+if [ -z $NATIVE_BUILD ]; then
+    NATIVE_BUILD=true
 fi
 
 # exit when any command fails
@@ -47,7 +47,7 @@ cp -rv  /tmp/kogito-examples/rules-quarkus-helloworld/ /tmp/kogito-examples/rule
 mvn -f rules-quarkus-helloworld clean package ${MAVEN_OPTIONS}
 mvn -f ruleunit-springboot-example clean package ${MAVEN_OPTIONS}
 
-if [ $NATIVE_ENABLED ]; then
+if [ "$NATIVE_BUILD" = 'true' ]; then
     mvn -f rules-quarkus-helloworld-native -Pnative clean package ${MAVEN_OPTIONS} ${MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS}
 fi
 

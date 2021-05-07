@@ -18,8 +18,8 @@ if __name__ == "__main__":
     parser.add_argument('--examples-ref', dest='examples_ref', help='To update the examples ref for testing')
     parser.add_argument('--artifacts-version', dest='artifacts_version', help='To update the artifacts version for testing')
     parser.add_argument('--ignore-self-signed-cert', dest='ignore_self_signed_cert', default=False, action='store_true', help='If set to true will relax the SSL for user-generated self-signed certificates')
-    parser.add_argument('--runtime-image-jvm', dest='runtime_image_jvm', help='To update the runtime jvm image for testing')
-    parser.add_argument('--runtime-image-native', dest='runtime_image_native', help='To update the runtime native image for testing')
+    parser.add_argument('--runtime-image-jvm', dest='runtime_image_jvm', help='To update the runtime jvm image name in behave tests\'s steps')
+    parser.add_argument('--runtime-image-native', dest='runtime_image_native', help='To update the runtime native image name in behave tests\'s steps')
     args = parser.parse_args()
 
     if args.repo_url:

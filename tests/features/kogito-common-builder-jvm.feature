@@ -77,16 +77,6 @@ Feature: kogito-builder image JVM build tests
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
 
-  Scenario: Verify if the s2i build is finished as expected performing a non native build with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
-      | variable          | value         |
-      | NATIVE            | false         |
-      | RUNTIME_TYPE      | quarkus       |
-      | MAVEN_ARGS_APPEND | -Ppersistence |
-    Then file /home/kogito/bin/quarkus-run.jar should exist
-    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
-
   Scenario: Verify if the multi-module s2i build is finished as expected performing a non native build
     Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value                            |
@@ -181,106 +171,97 @@ Feature: kogito-builder image JVM build tests
 #### SpringBoot Scenarios
 
   Scenario: Verify if the s2i build is finished as expected with debug enabled
-      Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+      Given s2i build https://github.com/kiegroup/kogito-examples.git from ruleunit-springboot-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
         | variable     | value        |
         | RUNTIME_TYPE | springboot   |
         | JAVA_OPTIONS | -Ddebug=true |
       Then check that page is served
         | property             | value                                                                         |
         | port                 | 8080                                                                          |
-        | path                 | /orders                                                                       |
+        | path                 | /find-approved                                                                       |
         | wait                 | 80                                                                            |
         | request_method       | POST                                                                          |
-        | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
+        | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
         | content_type         | application/json                                                              |
         | expected_status_code | 201                                                                           |
-      And file /home/kogito/bin/process-springboot-example.jar should exist
+      And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
       And container log should contain main] .c.l.ClasspathLoggingApplicationListener
       And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
   
   Scenario: Verify if the s2i build is finished as expected with no runtime image and debug enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.5.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from ruleunit-springboot-example using 1.5.x
       | variable            | value        |
       | JAVA_OPTIONS        | -Ddebug=true |
       | RUNTIME_TYPE        | springboot   |
     Then check that page is served
       | property             | value                                                                         |
       | port                 | 8080                                                                          |
-      | path                 | /orders                                                                       |
+      | path                 | /find-approved                                                                       |
       | wait                 | 80                                                                            |
       | request_method       | POST                                                                          |
-      | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
+      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain main] .c.l.ClasspathLoggingApplicationListener
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
   
   Scenario: Verify if the s2i build is finished as expected and if it is listening on the expected port, test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from process-springboot-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from ruleunit-springboot-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
     Then check that page is served
       | property             | value                                                                         |
       | port                 | 8080                                                                          |
-      | path                 | /orders                                                                       |
+      | path                 | /find-approved                                                                       |
       | wait                 | 80                                                                            |
       | request_method       | POST                                                                          |
-      | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
+      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain Tomcat initialized with port(s): 8080 (http)
-
-  Scenario: Verify if the s2i build is finished as expected with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
-      | variable          | value         |
-      | MAVEN_ARGS_APPEND | -Ppersistence |
-      | RUNTIME_TYPE      | springboot    |
-    Then file /home/kogito/bin/process-springboot-example.jar should exist
-    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
   
   Scenario: Verify if the s2i build is finished as expected using multi-module build with debug enabled
     Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value |
       | JAVA_OPTIONS      | -Ddebug=true                       |
       | RUNTIME_TYPE      | springboot                         |
-      | ARTIFACT_DIR      | process-springboot-example/target  |
-      | MAVEN_ARGS_APPEND | -pl process-springboot-example -am |
+      | ARTIFACT_DIR      | ruleunit-springboot-example/target  |
+      | MAVEN_ARGS_APPEND | -pl ruleunit-springboot-example -am |
     Then check that page is served
       | property             | value                                                                         |
       | port                 | 8080                                                                          |
-      | path                 | /orders                                                                       |
+      | path                 | /find-approved                                                                        |
       | wait                 | 80                                                                            |
       | request_method       | POST                                                                          |
-      | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
+      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain main] .c.l.ClasspathLoggingApplicationListener
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
   Scenario: Perform a incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.5.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from ruleunit-springboot-example with env and incremental using 1.5.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
     Then check that page is served
       | property             | value                                                                         |
       | port                 | 8080                                                                          |
-      | path                 | /orders                                                                       |
+      | path                 | /find-approved                                                                        |
       | wait                 | 80                                                                            |
       | request_method       | POST                                                                          |
-      | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
+      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
   Scenario: Perform a second incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.5.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from ruleunit-springboot-example with env and incremental using 1.5.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |

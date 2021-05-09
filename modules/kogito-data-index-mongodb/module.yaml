@@ -4,8 +4,8 @@ version: "1.5.1-snapshot"
 
 artifacts:
   - name: data-index-service-mongodb.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/1.5.1-SNAPSHOT/data-index-service-mongodb-1.5.1-20210507.031044-14-runner.jar
-    md5: 0d3f8b580c3e880c6501d119173afe43
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/1.5.1-SNAPSHOT/data-index-service-mongodb-1.5.1-20210509.040433-15-runner.jar
+    md5: 48af95aa9f4000b1ec5353d91cf7e055
 
 execute:
   - script: configure

@@ -5,7 +5,7 @@ description: "Runtime image for Kogito based on Quarkus or Springboot JVM image"
 
 labels:
 - name: "maintainer"
-  value: "kogito <kogito@kiegroup.com>"
+  value: "kogito <bsig-cloud@redhat.com>"
 - name: "io.k8s.description"
   value: "Runtime image for Kogito based on Quarkus or Spring Boot JVM image"
 - name: "io.k8s.display-name"

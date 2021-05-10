@@ -5,7 +5,7 @@ description: "Runtime image for Kogito Data Index Service for Infinispan persist
 
 labels:
 - name: "maintainer"
-  value: "kogito <kogito@kiegroup.com>"
+  value: "kogito <bsig-cloud@redhat.com>"
 - name: "io.k8s.description"
   value: "Runtime image for Kogito Data Index Service for Infinispan persistence provider"
 - name: "io.k8s.display-name"

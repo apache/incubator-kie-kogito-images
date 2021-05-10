@@ -24,7 +24,7 @@ Feature: kogito-runtime-jvm feature.
       | expected_phrase | ["hello","world"]        |
     And file /home/kogito/bin/quarkus-run.jar should exist
 
-  Scenario: Verify if the binary build (forcing) is finished as expected and if it is listening on the expected port
+  Scenario: Verify if the binary build (forcing) is finished as expected and if it is listening on the expected port with quarkus
     Given s2i build /tmp/kogito-examples/rules-quarkus-helloworld from target
       | variable            | value                     |
       | RUNTIME_TYPE        | quarkus                   |
@@ -43,38 +43,38 @@ Feature: kogito-runtime-jvm feature.
     And file /home/kogito/bin/quarkus-run.jar should exist
 
   Scenario: Verify if the binary build is finished as expected and if it is listening on the expected port with springboot
-    Given s2i build /tmp/kogito-examples/process-springboot-example from target
+    Given s2i build /tmp/kogito-examples/ruleunit-springboot-example from target
       | variable            | value        |
       | JAVA_OPTIONS        | -Ddebug=true |
       | RUNTIME_TYPE        | springboot   |
     Then check that page is served
-      | property             | value                                                                         |
-      | port                 | 8080                                                                          |
-      | path                 | /orders                                                                       |
-      | wait                 | 80                                                                            |
-      | request_method       | POST                                                                          |
-      | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
-      | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+      | property             | value                                                                                                                      |
+      | port                 | 8080                                                                                                                       |
+      | path                 | /find-approved                                                                                                             |
+      | wait                 | 80                                                                                                                         |
+      | request_method       | POST                                                                                                                       |
+      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
+      | content_type         | application/json                                                                                                           |
+      | expected_status_code | 200                                                                                                                        |
+    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
-  Scenario: Verify if the (forcing) binary build is finished as expected and if it is listening on the expected port
-    Given s2i build /tmp/kogito-examples/process-springboot-example from target
+  Scenario: Verify if the binary build (forcing) is finished as expected and if it is listening on the expected port with springboot
+    Given s2i build /tmp/kogito-examples/ruleunit-springboot-example from target
       | variable            | value        |
       | JAVA_OPTIONS        | -Ddebug=true |
       | BINARY_BUILD        | true         |
       | RUNTIME_TYPE        | springboot   |
     Then check that page is served
-      | property             | value                                                                         |
-      | port                 | 8080                                                                          |
-      | path                 | /orders                                                                       |
-      | wait                 | 80                                                                            |
-      | request_method       | POST                                                                          |
-      | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
-      | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
+      | property             | value                                                                                                                      |
+      | port                 | 8080                                                                                                                       |
+      | path                 | /find-approved                                                                                                             |
+      | wait                 | 80                                                                                                                         |
+      | request_method       | POST                                                                                                                       |
+      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
+      | content_type         | application/json                                                                                                           |
+      | expected_status_code | 200                                                                                                                        |
+    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
     And container log should contain DEBUG 1 --- [           main] o.s.boot.SpringApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true

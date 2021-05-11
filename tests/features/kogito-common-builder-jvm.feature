@@ -8,7 +8,7 @@ Feature: kogito-builder image JVM build tests
     And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
 
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.7.x
       | variable     | value   |
       | NATIVE       | false   |
       | RUNTIME_TYPE | quarkus |
@@ -26,7 +26,7 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image and no RUNTIME_TYPE defined
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.7.x
       | variable     | value   |
       | NATIVE       | false   |
     Then check that page is served
@@ -43,7 +43,7 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable     | value                     |
       | NATIVE       | false                     |
       | RUNTIME_TYPE | quarkus                   |
@@ -62,7 +62,7 @@ Feature: kogito-builder image JVM build tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Dquarkus.log.level=DEBUG
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build and if it is listening on the expected port , test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
@@ -78,7 +78,7 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/bin/quarkus-run.jar should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value         |
       | NATIVE            | false         |
       | RUNTIME_TYPE      | quarkus       |
@@ -88,7 +88,7 @@ Feature: kogito-builder image JVM build tests
     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
   Scenario: Verify if the multi-module s2i build is finished as expected performing a non native build
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value                            |
       | RUNTIME_TYPE      | quarkus                          |
       | NATIVE            | false                            |
@@ -106,7 +106,7 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/bin/quarkus-run.jar should exist
 
   Scenario: Perform a incremental s2i build using quarkus runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.7.x
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
@@ -124,7 +124,7 @@ Feature: kogito-builder image JVM build tests
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
   Scenario: Perform a second incremental s2i build using quarkus runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.7.x
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
@@ -142,11 +142,11 @@ Feature: kogito-builder image JVM build tests
       | expected_phrase | ["hello","world"]     |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
-      | KOGITO_VERSION | 2.0.0-SNAPSHOT |  
+      | KOGITO_VERSION | 1.7.0-SNAPSHOT |   
     Then file /home/kogito/bin/quarkus-run.jar should exist
     And check that page is served
       | property        | value                                                                                            |
@@ -159,11 +159,11 @@ Feature: kogito-builder image JVM build tests
       | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id, archetype & version
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |
-      | KOGITO_VERSION      | 2.0.0-SNAPSHOT |  
+      | KOGITO_VERSION | 1.7.0-SNAPSHOT |   
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |
@@ -181,7 +181,7 @@ Feature: kogito-builder image JVM build tests
 #### SpringBoot Scenarios
 
   Scenario: Verify if the s2i build is finished as expected with debug enabled
-      Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+      Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
         | variable     | value        |
         | RUNTIME_TYPE | springboot   |
         | JAVA_OPTIONS | -Ddebug=true |
@@ -199,7 +199,7 @@ Feature: kogito-builder image JVM build tests
       And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
   
   Scenario: Verify if the s2i build is finished as expected with no runtime image and debug enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.7.x
       | variable            | value        |
       | JAVA_OPTIONS        | -Ddebug=true |
       | RUNTIME_TYPE        | springboot   |
@@ -217,7 +217,7 @@ Feature: kogito-builder image JVM build tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
   
   Scenario: Verify if the s2i build is finished as expected and if it is listening on the expected port, test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from process-springboot-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
@@ -234,7 +234,7 @@ Feature: kogito-builder image JVM build tests
     And container log should contain Tomcat initialized with port(s): 8080 (http)
 
   Scenario: Verify if the s2i build is finished as expected with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value         |
       | MAVEN_ARGS_APPEND | -Ppersistence |
       | RUNTIME_TYPE      | springboot    |
@@ -243,7 +243,7 @@ Feature: kogito-builder image JVM build tests
     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
   
   Scenario: Verify if the s2i build is finished as expected using multi-module build with debug enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value |
       | JAVA_OPTIONS      | -Ddebug=true                       |
       | RUNTIME_TYPE      | springboot                         |
@@ -263,7 +263,7 @@ Feature: kogito-builder image JVM build tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
   Scenario: Perform a incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.7.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
@@ -280,7 +280,7 @@ Feature: kogito-builder image JVM build tests
 
   # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
   Scenario: Perform a second incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using master
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.7.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
@@ -288,15 +288,15 @@ Feature: kogito-builder image JVM build tests
     And s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable       | value          |
-      | KOGITO_VERSION | 2.0.0-SNAPSHOT |
+      | KOGITO_VERSION | 1.7.0-SNAPSHOT | 
       | RUNTIME_TYPE   | springboot     |
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
 
 
   Scenario: Verify if the s2i build is finished as expected with uber-jar package type built
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.7.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value                           |
       | MAVEN_ARGS_APPEND | -Dquarkus.package.type=uber-jar |
       | RUNTIME_TYPE      | quarkus                         |

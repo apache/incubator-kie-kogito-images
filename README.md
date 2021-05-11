@@ -1087,11 +1087,16 @@ To run all behave tests:
 make test
 ```
 
+
 CeKit also allows you to run a specific test.
 See [Writing Behave Tests](#writing-behave-tests).
 
-You can also add `cekit_option` to the make command, which will be appended to the Cekit command. Default is `cekit -v`.
+Example:
+```bash
+make build-image image_name=kogito-builder wip=--wip
+```
 
+You can also add `cekit_option` to the make command, which will be appended to the Cekit command. Default is `cekit -v`.
 
 ##### Writing Behave tests
 

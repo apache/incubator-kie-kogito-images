@@ -1,0 +1,15 @@
+schema_version: 1
+name: org.kie.kogito.jobs.service.ephemeral
+version: "2.0.0-snapshot"
+
+artifacts:
+  - name: jobs-service-common-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/2.0.0-SNAPSHOT/jobs-service-common-2.0.0-20210429.061304-7-runner.jar
+    md5: 9811739d77d96bd4a6767f406c810f78
+
+execute:
+  - script: configure
+
+modules:
+  install:
+    - name: org.kie.kogito.jobs.service.common

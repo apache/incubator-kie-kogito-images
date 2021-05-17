@@ -42,7 +42,7 @@ Feature: kogito-builder image tests
     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
@@ -60,7 +60,7 @@ Feature: kogito-builder image tests
       | request_body    | {"Driver": {"Points": 2}, "Violation": {"Type": "speed","Actual Speed": 120,"Speed Limit": 100}} |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id, archetype & version
-    Given s2i build /tmp/kogito-examples from dmn-example using master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.5.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |

@@ -32,7 +32,7 @@ Modules = {
     "explainability-service-messaging": "kogito-explainability",
     "jobs-service-infinispan": "kogito-jobs-service-infinispan",
     "jobs-service-mongodb": "kogito-jobs-service-mongodb",
-    "jobs-service-ephemeral": "kogito-jobs-service-ephemeral",
+    "jobs-service-common": "kogito-jobs-service-ephemeral",
     "management-console": "kogito-management-console",
     "task-console": "kogito-task-console",
     "trusty-ui": "kogito-trusty-ui",
@@ -122,6 +122,9 @@ def update_artifacts(service, modulePath):
 
     with open(modulePath) as module:
         data = common.yaml_loader().load(module)
+        print(service)
+        print(data['artifacts'])
+        # print(filter(lambda x: service['name'] in x['name']))
         artifact = next(filter(lambda x: service['name'] in x['name'], data['artifacts']))
         artifact['url'] = getRunnerURL(service)
         artifact['md5'] = getMD5(service)

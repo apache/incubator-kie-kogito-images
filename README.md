@@ -653,9 +653,8 @@ docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-jobs-service-infi
 You should notice a few debug messages being printed in the system output.
 
 The ephemeral image does not have external dependencies like a backend persistence provider, it uses in-memory persistence
-while working with Jobs Services, while the `infinispan` and `mongodb` variants will need an Infinispan and MongoDB server,
+while working with Jobs Services `infinispan` and `mongodb` variants, it will need to have an Infinispan and MongoDB server,
 respectively, previously running.
-is not set to *true* it will use the default implementation (in-memory).
 
 
 The [Kogito Operator](https://github.com/kiegroup/kogito-cloud-operator) can be used to deploy the Kogito Jobs Service

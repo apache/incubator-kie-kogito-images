@@ -530,6 +530,7 @@ Today we have 3 Kogito Component Images:
 * [quay.io/kiegroup/kogito-jobs-service-ephemeral](https://quay.io/kiegroup/kogito-jobs-service-ephemeral) 
 * [quay.io/kiegroup/kogito-jobs-service-infinispan](https://quay.io/kiegroup/kogito-jobs-service-infinispan)
 * [quay.io/kiegroup/kogito-jobs-service-mongodb](https://quay.io/kiegroup/kogito-jobs-service-mongodb)
+* [quay.io/kiegroup/kogito-jobs-service-postgresql](https://quay.io/kiegroup/kogito-jobs-service-postgresql)
 * [quay.io/kiegroup/kogito-management-console](https://quay.io/kiegroup/kogito-management-console)
 * [quay.io/kiegroup/kogito-task-console](https://quay.io/kiegroup/kogito-task-console)
 * [quay.io/kiegroup/kogito-trusty-ui](https://quay.io/kiegroup/kogito-trusty-ui)
@@ -557,6 +558,11 @@ $ docker run -it --env QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=my-infinispan-serve
 Basic usage with Mongodb:
 ```bash
 $ docker run -it --env QUARKUS_MONGODB_CONNECTION_STRING=mongodb://localhost:27017 quay.io/kiegroup/kogito-data-index-mongodb:latest
+```
+
+Basic usage with Postgresql:
+```bash
+$ docker run -it --env QUARKUS_POSTGRESQL_CONNECTION_STRING=postgresql://localhost:5432 quay.io/kiegroup/kogito-data-index-postgresql:latest
 ```
 
 To enable debug just use this env while running this image:
@@ -637,6 +643,7 @@ Today, the Jobs service contains two images:
 - [ephemeral](kogito-jobs-service-ephemeral-overrides.yaml)
 - [infinispan](kogito-jobs-service-infinispan-overrides.yaml)
 - [mongodb](kogito-jobs-service-mongodb-overrides.yaml)
+- [postgresql](kogito-jobs-service-postgresql-overrides.yaml)
 
 Basic usage:
 
@@ -653,7 +660,7 @@ docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-jobs-service-infi
 You should notice a few debug messages being printed in the system output.
 
 The ephemeral image does not have external dependencies like a backend persistence provider, it uses in-memory persistence
-while working with Jobs Services `infinispan` and `mongodb` variants, it will need to have an Infinispan and MongoDB server,
+while working with Jobs Services `infinispan`, `mongodb` and `postgres` variants, it will need to have an Infinispan, MongoDB and Postgresql server,
 respectively, previously running.
 
 

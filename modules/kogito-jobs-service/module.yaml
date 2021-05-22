@@ -4,11 +4,11 @@ version: "1.7.0-snapshot"
 
 artifacts:
   - name: jobs-service-common-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/1.7.0-SNAPSHOT/jobs-service-common-1.7.0-20210521.053225-3-runner.jar
-    md5: 2387b3eb445b9a09f47c77716c8560d1
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/1.7.0-SNAPSHOT/jobs-service-common-1.7.0-20210522.053543-4-runner.jar
+    md5: 8f06b50b12173d03d88c2739efad4217
   - name: jobs-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-infinispan/1.7.0-SNAPSHOT/jobs-service-infinispan-1.7.0-20210521.053319-3-runner.jar
-    md5: 647418b454ff5f4afa68fec66473d5f2
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-infinispan/1.7.0-SNAPSHOT/jobs-service-infinispan-1.7.0-20210522.053654-4-runner.jar
+    md5: 79b9204056f3716640b6cba1f1339c56
 
 execute:
   - script: configure

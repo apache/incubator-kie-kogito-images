@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.mongodb
-version: "1.7.0-snapshot"
+version: "1.7.0"
 
 artifacts:
   - name: data-index-service-mongodb-runner.jar

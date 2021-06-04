@@ -34,11 +34,6 @@ ARTIFACTS_VERSION_ENV_KEY = "KOGITO_VERSION"
 
 # behave tests that needs to be updated
 BEHAVE_BASE_DIR = 'tests/features'
-BEHAVE_TESTS = {"kogito-builder.feature",
-                "kogito-builder-native.feature", 
-                "kogito-common-builder-jvm.feature",
-                "kogito-common-runtime-jvm.feature", 
-                "kogito-runtime-native.feature"}
 
 CLONE_REPO_SCRIPT = 'tests/test-apps/clone-repo.sh'
 
@@ -257,6 +252,10 @@ def update_runtime_image_in_behave_tests(runtime_image_name, image_suffix):
     replacement = 'runtime-image {}'.format(runtime_image_name)
     update_in_behave_tests(pattern, replacement)
 
+    pattern = re.compile(r'(runtime-image rhpam-7/rhpam-kogito-runtime-{}-rhel8:latest)'.format(image_suffix))
+    replacement = 'runtime-image {}'.format(runtime_image_name)
+    update_in_behave_tests(pattern, replacement)
+
 
 def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
     """
@@ -290,8 +289,9 @@ def update_in_behave_tests(pattern, replacement):
     :param pattern: Pattern to look for into file
     :param replacement: What to put instead if pattern found
     """
-    for feature in BEHAVE_TESTS:
-        update_in_file(os.path.join(BEHAVE_BASE_DIR, feature), pattern, replacement)
+    for f in os.listdir(BEHAVE_BASE_DIR):
+        if f.endswith('.feature'):
+            update_in_file(os.path.join(BEHAVE_BASE_DIR, f), pattern, replacement)
 
 
 def update_examples_ref_in_clone_repo(examples_ref):

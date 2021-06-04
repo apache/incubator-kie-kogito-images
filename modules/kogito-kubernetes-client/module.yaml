@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.kubernetes.client
-version: "1.7.0-snapshot"
+version: "1.7.0"
 
 execute:
   - script: configure

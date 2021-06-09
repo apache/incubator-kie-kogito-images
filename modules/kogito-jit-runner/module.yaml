@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.jit-runner
-version: "1.7.0-snapshot"
+version: "1.7.0"
 
 artifacts:
   - name: jitexecutor-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jitexecutor-runner/1.7.0-SNAPSHOT/jitexecutor-runner-1.7.0-20210524.055706-6-runner.jar
-    md5: 296601a9544b8dd7d93831174846c81a
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jitexecutor-runner/1.7.0.Final/jitexecutor-runner-1.7.0.Final-runner.jar
+    md5: d7c5246e1e3189e33b6df44ccde56c18
 
 execute:
   - script: configure

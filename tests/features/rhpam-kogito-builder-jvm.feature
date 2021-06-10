@@ -31,7 +31,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
       | KOGITO_VERSION | 1.5.0.redhat-00001 |
-    Then file /home/kogito/bin/quarkus-run.jar should exist
+    Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
     And s2i build log should contain Generating quarkus project structure using the kogito-quarkus-dm-archetype archetype...
     And check that page is served
       | property        | value                                                                                            |
@@ -52,7 +52,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |
-    Then file /home/kogito/bin/quarkus-run.jar should exist
+    Then file /home/kogito/bin/myproject-2.0-SNAPSHOT.jar should exist
     And s2i build log should contain Generating quarkus project structure using the kogito-quarkus-dm-archetype archetype...
     And check that page is served
       | property        | value                                                                                            |

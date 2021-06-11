@@ -69,7 +69,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
     Given s2i build /tmp/kogito-examples from dmn-example using nightly-master and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
       | variable       | value          |
-      | KOGITO_VERSION | 2.0.0-SNAPSHOT |
+      | KOGITO_VERSION | 1.5.0.redhat-00001 |
       | RUNTIME_TYPE   | springboot     |
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
     And s2i build log should contain Generating quarkus project structure using the kogito-springboot-dm-archetype archetype...

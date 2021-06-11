@@ -211,8 +211,8 @@ def update_examples_ref_in_behave_tests(examples_ref):
     :param examples_ref: kogito-examples reference
     """
     print("Set examples_ref {} in behave tests".format(examples_ref))
-    # this pattern will look for any occurrences of using master or using x.x.x
-    pattern = re.compile(r'(using nightly-master)|(using nightly-\s*([\d.]+.x))|(using \s*([\d.]+))')
+    # this pattern will look for any occurrences of using main or using x.x.x
+    pattern = re.compile(r'(using nightly-main)|(using nightly-\s*([\d.]+.x))|(using \s*([\d.]+))')
     replacement = 'using {}'.format(examples_ref)
     update_in_behave_tests(pattern, replacement)
 
@@ -301,8 +301,8 @@ def update_examples_ref_in_clone_repo(examples_ref):
     """
     print("Set examples_ref {} in clone-repo script".format(examples_ref))
     pattern = re.compile(r'(git checkout.*)')
-    replacement = "git checkout master"
-    if examples_ref != 'master':
+    replacement = "git checkout main"
+    if examples_ref != 'main':
         replacement = "git checkout -b {0} origin/{1}".format(examples_ref, examples_ref)
     update_in_file(CLONE_REPO_SCRIPT, pattern, replacement)
 

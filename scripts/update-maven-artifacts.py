@@ -143,6 +143,7 @@ if __name__ == "__main__":
     print("Retrieve artifacts version: ", artifactsVersion)
 
     # Update Kogito Service modules
+    moduleError = False
     for serviceName, modulePath in Modules.items():
         service = {
             "repo_url": args.repo_url + "{}/{}/{}/".format(KOGITO_ARTIFACT_PATH, serviceName, artifactsVersion),
@@ -158,3 +159,7 @@ if __name__ == "__main__":
             print("Successfully updated the artifacts for: ", serviceName)
         except:
             print("Error updating artifact ", serviceName)
+            moduleError = True
+    
+    if moduleError:
+        raise RuntimeError('Script did not succeed successfully')

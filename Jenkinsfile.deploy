@@ -113,12 +113,17 @@ pipeline {
                     if (getMavenArtifactRepository() != '') {
                         updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()} --ignore-self-signed-cert"
                     }
-                    sh updateArtifactCmd
 
-                    if (isThereAnyChanges()) {
-                        commitChanges('Updated Maven artifacts')
-                    } else {
-                        echo 'No changes to commit'
+                    try {
+                        sh updateArtifactCmd
+                    } catch(err) {
+                        unstable("Error while updating Maven artifacts. Please check logs.")
+                    } finally {
+                        if (isThereAnyChanges()) {
+                            commitChanges('Updated Maven artifacts')
+                        } else {
+                            echo 'No changes to commit'
+                        }
                     }
                 }
             }

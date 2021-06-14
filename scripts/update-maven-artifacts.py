@@ -123,8 +123,8 @@ def update_artifacts(service, modulePath):
 
     with open(modulePath) as module:
         data = common.yaml_loader().load(module)
-        print(service)
-        print(data['artifacts'])
+        # print(service)
+        # print(data['artifacts'])
         # print(filter(lambda x: service['name'] in x['name']))
         artifact = next(filter(lambda x: service['name'] in x['name'], data['artifacts']))
         artifact['url'] = getRunnerURL(service)
@@ -152,6 +152,9 @@ if __name__ == "__main__":
         }
         moduleYamlFile = "modules/{}/module.yaml".format(modulePath)
 
-        update_artifacts(service, moduleYamlFile)
-        print("Successfully updated the artifacts for: ", serviceName)
-
+        print("Update artifact: ", serviceName)
+        try:
+            update_artifacts(service, moduleYamlFile)
+            print("Successfully updated the artifacts for: ", serviceName)
+        except:
+            print("Error updating artifact ", serviceName)

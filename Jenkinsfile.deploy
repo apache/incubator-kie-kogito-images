@@ -278,9 +278,13 @@ pipeline {
                         getBuiltImages().each {
                             prBody += "- ${it}\n"
                         }
-                        prBody += '\nFailed images:\n'
-                        getFailedImages().each {
-                            prBody += "- ${it}\n"
+                        if (getFailedImages()){
+                            prBody += '\nFailed images:\n'
+                            getFailedImages().each {
+                                prBody += "- ${it}\n"
+                            }
+                        } else {
+                            prBody += 'Images were all successfully built but some other problem occured in the pipeline execution...'
                         }
                         prBody += '\nSee build url above for more information'
                     }

@@ -284,7 +284,7 @@ pipeline {
                                 prBody += "- ${it}\n"
                             }
                         } else {
-                            prBody += 'Images were all successfully built but some other problem occured in the pipeline execution...'
+                            prBody += '\nImages were all successfully built but some other problem occured in the pipeline execution...\n'
                         }
                         prBody += '\nSee build url above for more information'
                     }

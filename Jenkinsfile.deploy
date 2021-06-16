@@ -273,8 +273,8 @@ pipeline {
                         commitMsg = "[${getBuildBranch()}] Update project version to ${getProjectVersion()}"
                         prBody += '\nPlease do not merge, it should be merged automatically.'
                     } else if (currentBuild.currentResult != 'SUCCESS') {
-                        commitMsg += " (job status is ${currentBuild.currentResult})"
-                        prBody += '\nSuccessful images:\n'
+                        commitMsg += " (${currentBuild.currentResult})"
+                        prBody += '\n\nSuccessful images:\n'
                         getBuiltImages().each {
                             prBody += "- ${it}\n"
                         }

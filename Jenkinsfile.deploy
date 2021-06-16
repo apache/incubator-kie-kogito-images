@@ -276,11 +276,11 @@ pipeline {
                         commitMsg += " (job status is ${currentBuild.currentResult})"
                         prBody += '\nSuccessful images:\n'
                         getBuiltImages().each {
-                            prBody += "- ${it}\\n"
+                            prBody += "- ${it}\n"
                         }
                         prBody += '\nFailed images:\n'
                         getFailedImages().each {
-                            prBody += "- ${it}\\n"
+                            prBody += "- ${it}\n"
                         }
                         prBody += '\nSee build url above for more information'
                     }

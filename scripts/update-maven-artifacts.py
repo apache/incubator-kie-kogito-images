@@ -157,8 +157,9 @@ if __name__ == "__main__":
         try:
             update_artifacts(service, moduleYamlFile)
             print("Successfully updated the artifacts for: ", serviceName)
-        except:
+        except Exception as e:
             print("Error updating artifact ", serviceName)
+            print(e)
             moduleError = True
     
     if moduleError:

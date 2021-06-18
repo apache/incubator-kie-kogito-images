@@ -1,4 +1,13 @@
-@quay.io/kiegroup/kogito-builder @quay.io/kiegroup/kogito-runtime-jvm @quay.io/kiegroup/kogito-runtime-native @quay.io/kiegroup/kogito-data-index-infinispan @quay.io/kiegroup/kogito-data-index-mongodb @quay.io/kiegroup/kogito-trusty-infinispan @quay.io/kiegroup/kogito-trusty-redis @rhpam-7/rhpam-kogito-runtime-jvm-rhel8 @rhpam-7/rhpam-kogito-builder-rhel8
+@quay.io/kiegroup/kogito-builder
+@quay.io/kiegroup/kogito-runtime-jvm
+@quay.io/kiegroup/kogito-runtime-native
+@quay.io/kiegroup/kogito-data-index-infinispan
+@quay.io/kiegroup/kogito-data-index-mongodb
+@quay.io/kiegroup/kogito-data-index-postgresql
+@quay.io/kiegroup/kogito-trusty-infinispan
+@quay.io/kiegroup/kogito-trusty-redis
+@rhpam-7/rhpam-kogito-runtime-jvm-rhel8
+@rhpam-7/rhpam-kogito-builder-rhel8
 Feature: Common tests for Kogito images
 
   Scenario: Verify if Kogito user is correctly configured

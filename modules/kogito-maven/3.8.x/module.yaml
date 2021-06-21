@@ -69,7 +69,7 @@ envs:
 artifacts:
   - name: apache-maven-3.8.1-bin.tar.gz
     url: https://archive.apache.org/dist/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz
-    md5: f1d40d252a4e09429297567a66324db7
+    md5: 90197f18ed9036a1709ff0e09558c083
 
 execute:
   - script: configure

@@ -563,15 +563,18 @@ Basic usage with Mongodb:
 $ docker run -it --env QUARKUS_MONGODB_CONNECTION_STRING=mongodb://localhost:27017 quay.io/kiegroup/kogito-data-index-mongodb:latest
 ```
 
-Basic usage with Postgresql:
+Basic usage with PostgreSQL:
 ```bash
-$ docker run -it --env QUARKUS_POSTGRESQL_CONNECTION_STRING=postgresql://localhost:5432 quay.io/kiegroup/kogito-data-index-postgresql:latest
+$ docker run -it --env QUARKUS_DATASOURCE_JDBC_URL="jdbc:postgresql://localhost:5432/quarkus"  \
+    --env QUARKUS_DATASOURCE_USERNAME="kogito" \
+    --env QUARKUS_DATASOURCE_PASSWORD="secret" \
+    quay.io/kiegroup/kogito-data-index-postgresql:latest
 ```
 
 To enable debug just use this env while running this image:
 
 ```bash
-docker run -it --env JAVA_OPTIONS="-Dquarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/quarkus -Dquarkus.datasource.username=kogito -Dquarkus.datasource.password=secret" quay.io/kiegroup/kogito-data-index-infinispan:latest
+$ docker run -it --env SCRIPT_DEBUG=true --env QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=my-infinispan-server:11222 quay.io/kiegroup/kogito-data-index-infinispan:latest
 ```
 You should notice a few debug messages present in the system output.
 
@@ -664,7 +667,7 @@ docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-jobs-service-infi
 You should notice a few debug messages being printed in the system output.
 
 The ephemeral image does not have external dependencies like a backend persistence provider, it uses in-memory persistence
-while working with Jobs Services `infinispan`, `mongodb` and `postgresql` variants, it will need to have an Infinispan, MongoDB and Postgresql server,
+while working with Jobs Services `infinispan`, `mongodb` and `postgresql` variants, it will need to have an Infinispan, MongoDB and PostgreSQL server,
 respectively, previously running.
 
 
@@ -702,8 +705,8 @@ to your Kogito infrastructure on a Kubernetes cluster and provide its capabiliti
 
 ### Kogito Task Console Component Image
 
-The Kogito Task Console allows you to have a intuitive way to work with User Tasks in Kogito processes.
-It depends on the Kogito Data Index Service on which the Console will connect to so it can be able to manage it.
+The Kogito Task Console allows you to have an intuitive way to work with User Tasks in Kogito processes.
+It depends on the Kogito Data Index Service on which the Console will connect to, so it can be able to manage it.
 
 To work correctly, the Kogito Task Console needs the Kogito Data Index Service url. If not provided, it will try to connect to the default one (http://localhost:8180).
 
@@ -915,7 +918,7 @@ $ curl -H "Content-Type: application/json" -X POST -d '{"strings":["hello"]}' \
      http://rules-quarkus-helloworld-service-rules-quarkus-helloworld.apps.lab.cloud/hello
 ```
 
-As output you should see the following response:
+As output, you should see the following response:
 
 ```json
 ["hello","world"]

@@ -17,10 +17,12 @@ Feature: Kogito-data-index postgresql feature.
 
   Scenario: verify if of container is correctly started with postgresql parameters
     When container is started with env
-      | variable      | value         |
-      | SCRIPT_DEBUG  | true          |
-      | JAVA_OPTIONS  | -Dquarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/quarkus -Dquarkus.datasource.username=kogito -Dquarkus.datasource.password=secret |
-    Then container log should contain + exec java -XshowSettings:properties -Dquarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/quarkus -Dquarkus.datasource.username=kogito -Dquarkus.datasource.password=secret -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/data-index-service-postgresql-runner.jar
-    And container log should contain Connection to localhost:5432 refuse
-    And container log should not contain Application failed to start
+      | variable                     | value                                    |
+      | SCRIPT_DEBUG                 | true                                     |
+      | QUARKUS_DATASOURCE_JDBC_URL  | jdbc:postgresql://10.1.1.10:5432/quarkus |
+      | QUARKUS_DATASOURCE_USERNAME  | kogito                                   |
+      | QUARKUS_DATASOURCE_PASSWORD  | s3cr3t                                   |
+    Then container log should contain + exec java -XshowSettings:properties -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/data-index-service-postgresql-runner.jar
+     And container log should contain org.postgresql.util.PSQLException: The connection attempt failed
+     And container log should not contain Application failed to start
 

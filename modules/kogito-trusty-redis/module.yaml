@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: trusty-service-redis-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/2.0.0-SNAPSHOT/trusty-service-redis-2.0.0-20210704.052659-88-runner.jar
-    md5: 66abf49a4ad9a6cb4a72b8f93cbe2eba
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/2.0.0-SNAPSHOT/trusty-service-redis-2.0.0-20210706.050925-89-runner.jar
+    md5: 08b3fcae80f245e19ae63ce7e83a77aa
 
 execute:
   - script: configure

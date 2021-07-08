@@ -135,7 +135,7 @@ Feature: kogito-builder image JVM build tests
 #### SpringBoot Scenarios
 
   Scenario: Verify if the s2i build is finished as expected with debug enabled
-      Given s2i build https://github.com/kiegroup/kogito-examples.git from `process-springboot-example using nightly-master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+      Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using nightly-master and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
         | variable     | value        |
         | RUNTIME_TYPE | springboot   |
         | JAVA_OPTIONS | -Ddebug=true |

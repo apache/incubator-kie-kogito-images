@@ -7,27 +7,14 @@ import re
 
 from ruamel.yaml import YAML
 
-# All kogito-image modules that have the kogito version.
-MODULES = {"kogito-data-index-common", "kogito-data-index-mongodb",
-           "kogito-data-index-infinispan", "kogito-data-index-postgresql",
-           "kogito-trusty-common", "kogito-trusty-infinispan",
-           "kogito-trusty-redis", "kogito-explainability",
-           "kogito-image-dependencies", "kogito-jobs-service-common",
-           "kogito-jobs-service-ephemeral", "kogito-jobs-service-infinispan",
-           "kogito-jobs-service-mongodb", "kogito-jobs-service-postgresql",
-           "kogito-trusty-ui", "kogito-jq",
-           "kogito-kubernetes-client", "kogito-launch-scripts",
-           "kogito-logging", "kogito-management-console",
-           "kogito-task-console", "kogito-persistence",
-           "kogito-runtime-native", "kogito-runtime-jvm",
-           "kogito-builder", "kogito-s2i-core",
-           "kogito-system-user", "kogito-jit-runner",
-           "kogito-custom-truststore"}
 MODULE_FILENAME = "module.yaml"
 MODULES_DIR = "modules"
 
+PRODUCT_PREFIX = 'rhpam-'
+
 # imagestream file that contains all images, this file aldo needs to be updated.
 IMAGE_STREAM_FILENAME = "kogito-imagestream.yaml"
+PROD_IMAGE_STREAM_FILENAME = "rhpam-kogito-imagestream.yaml"
 # image.yaml file definition that needs to be updated
 IMAGE_FILENAME = "image.yaml"
 ARTIFACTS_VERSION_ENV_KEY = "KOGITO_VERSION"
@@ -71,12 +58,15 @@ def update_image_version(target_version):
         print("Unexpected error:", err)
 
 
-def update_image_stream(target_version):
+def update_image_stream(target_version, prod=False):
     """
     Update the imagestream file, it will update the tag name, version and image tag.
     :param target_version: version used to update the imagestream file;
     """
-    print("Updating ImageStream images version from file {0} to version {1}".format(IMAGE_STREAM_FILENAME,
+    imageStreamFilename = IMAGE_STREAM_FILENAME
+    if prod:
+        imageStreamFilename = PROD_IMAGE_STREAM_FILENAME
+    print("Updating ImageStream images version from file {0} to version {1}".format(imageStreamFilename,
                                                                                     target_version))
     try:
         with open(IMAGE_STREAM_FILENAME) as imagestream:
@@ -97,7 +87,7 @@ def update_image_stream(target_version):
         raise
 
 
-def get_all_module_dirs():
+def get_all_module_dirs(prefix):
     """
     Retrieve the module directories
     """
@@ -107,22 +97,24 @@ def get_all_module_dirs():
     for r, d, f in os.walk(MODULES_DIR):
         for item in f:
             if MODULE_FILENAME == item:
-                modules.append(os.path.dirname(os.path.join(r, item)))
+                path = os.path.dirname(os.path.join(r, item))
+                if os.path.basename(path).startswith(prefix):
+                    modules.append(path)
 
     return modules
 
 
-def get_kogito_module_dirs():
+def get_community_module_dirs():
     """
     Retrieve the Kogito module directories
     """
-    modules = []
+    return get_all_module_dirs('kogito-')
 
-    for moduleName in MODULES:
-        modules.append(os.path.join(MODULES_DIR, moduleName))
-
-    return modules
-
+def get_prod_module_dirs():
+    """
+    Retrieve the RHPAM module directories
+    """
+    return get_all_module_dirs(PRODUCT_PREFIX)
 
 def get_all_images():
     """
@@ -139,12 +131,18 @@ def get_all_images():
     return images
 
 
-def update_modules_version(target_version):
+def update_modules_version(target_version, prod=False):
     """
     Update every Kogito module.yaml to the given version.
     :param target_version: version used to update all Kogito module.yaml files
     """
-    for module_dir in get_kogito_module_dirs():
+    modules = []
+    if prod:
+        modules = get_prod_module_dirs()
+    else:
+        get_community_module_dirs()
+    
+    for module_dir in modules:
         update_module_version(module_dir, target_version)
 
 
@@ -359,5 +357,9 @@ def update_in_file(file, pattern, replacement):
 
 
 if __name__ == "__main__":
-    for m in get_kogito_module_dirs():
+    print("Community modules:")
+    for m in get_community_module_dirs():
+        print("module {}".format(m))
+    print("\nProd modules:")
+    for m in get_prod_module_dirs():
         print("module {}".format(m))

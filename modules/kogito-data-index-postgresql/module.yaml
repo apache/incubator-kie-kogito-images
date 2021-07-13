@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: data-index-service-postgresql-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-postgresql/2.0.0-SNAPSHOT/data-index-service-postgresql-2.0.0-20210711.044615-23-runner.jar
-    md5: d66fe688fafd0c2afee65886d300bc35
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-postgresql/2.0.0-SNAPSHOT/data-index-service-postgresql-2.0.0-20210713.053958-26-runner.jar
+    md5: e075294928b2bb7624a1379a93a1fab7
 
 execute:
   - script: configure

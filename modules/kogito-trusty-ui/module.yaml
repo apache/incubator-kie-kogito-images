@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.trusty.ui
-version: "1.8.0-snapshot"
+version: "1.8.0"
 
 artifacts:
   - name: trusty-ui-runner.jar

@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.mongodb
-version: "1.8.0-snapshot"
+version: "1.8.0"
 
 artifacts:
   - name: data-index-service-mongodb-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/1.8.0-SNAPSHOT/data-index-service-mongodb-1.8.0-20210628.052923-6-runner.jar
-    md5: 82f6655b7e378d0e751085be3fd6a39c
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/1.8.0.Final/data-index-service-mongodb-1.8.0.Final-runner.jar
+    md5: 61376cfd4092bdc0a1218a48c61d916f
 
 execute:
   - script: configure

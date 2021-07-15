@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.mongodb
-version: "1.8.0-snapshot"
+version: "1.8.0"
 
 artifacts:
   - name: jobs-service-mongodb-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-mongodb/1.8.0-SNAPSHOT/jobs-service-mongodb-1.8.0-20210628.052025-7-runner.jar
-    md5: ab19fb462edc7c4039a5b288596d403f
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-mongodb/1.8.0.Final/jobs-service-mongodb-1.8.0.Final-runner.jar
+    md5: e3b6d32c8037f28d0349a711e3f028c9
 
 execute:
   - script: configure

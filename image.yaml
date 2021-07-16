@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "kogito-image-real-name-on-overrides-file"
-version: "1.5.1-snapshot"
+version: "1.5.0"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 
 labels:
@@ -18,7 +18,7 @@ modules:
 
 envs:
   - name: "KOGITO_VERSION"
-    value: "1.5.1-SNAPSHOT"
+    value: "1.5.0.redhat-00006"
 
 packages:
   manager: microdnf

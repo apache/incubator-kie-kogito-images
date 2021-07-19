@@ -86,10 +86,10 @@ void setupDeployJob(String jobFolder, KogitoJobType jobType) {
             booleanParam('DEPLOY_WITH_LATEST_TAG', false, 'Set to true if you want the deployed images to also be with the `latest` tag')
 
             // Release information
-            stringParam('PROJECT_VERSION', '', 'Optional if not RELEASE. If RELEASE, cannot be empty.')
-            stringParam('KOGITO_ARTIFACTS_VERSION', '', 'Optional. If artifacts\' version is different from PROJECT_VERSION.')
-
             booleanParam('CREATE_PR', false, 'In case of not releasing, you can ask to create a PR with the changes')
+            booleanParam('MERGE_PR_AUTOMATICALLY', false, 'Should the created PR merged automatically ?')
+            stringParam('KOGITO_VERSION', '', 'Optional if not RELEASE. If RELEASE, cannot be empty.')
+            stringParam('KOGITO_ARTIFACTS_VERSION', '', 'Optional. If artifacts\' version is different from KOGITO_VERSION.')
 
             booleanParam('SEND_NOTIFICATION', false, 'In case you want the pipeline to send a notification on CI channel for this run.')
         }
@@ -152,9 +152,9 @@ void setupPromoteJob(String jobFolder, KogitoJobType jobType) {
             booleanParam('DEPLOY_WITH_LATEST_TAG', false, 'Set to true if you want the deployed images to also be with the `latest` tag')
 
             // Release information which can override `deployment.properties`
-            stringParam('PROJECT_VERSION', '', 'Override `deployment.properties`. Optional if not RELEASE. If RELEASE, cannot be empty.')
-            stringParam('KOGITO_ARTIFACTS_VERSION', '', 'Optional. If artifacts\' version is different from PROJECT_VERSION.')
-            stringParam('GIT_TAG', '', 'Git tag to set, if different from PROJECT_VERSION')
+            stringParam('KOGITO_VERSION', '', 'Override `deployment.properties`. Optional if not RELEASE. If RELEASE, cannot be empty.')
+            stringParam('KOGITO_ARTIFACTS_VERSION', '', 'Optional. If artifacts\' version is different from KOGITO_VERSION.')
+            stringParam('GIT_TAG', '', 'Git tag to set, if different from KOGITO_VERSION')
             stringParam('RELEASE_NOTES', '', 'Release notes to be added. If none provided, a default one will be given.')
 
             booleanParam('SEND_NOTIFICATION', false, 'In case you want the pipeline to send a notification on CI channel for this run.')

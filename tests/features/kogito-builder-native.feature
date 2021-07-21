@@ -127,7 +127,7 @@ Feature: kogito-builder image native build tests
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | true           |
       | LIMIT_MEMORY   | 6442450944     |
-      | KOGITO_VERSION | 1.5.0.Final |
+      | KOGITO_VERSION | 1.5.1-SNAPSHOT |  
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner should exist
     And check that page is served
       | property        | value                                                                                            |

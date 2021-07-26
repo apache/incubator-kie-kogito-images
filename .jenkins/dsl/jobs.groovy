@@ -46,6 +46,8 @@ if (!Utils.isMainBranch(this)) {
     setupPromoteJob(releaseBranchFolder, KogitoJobType.RELEASE)
 }
 
+setupProdUpdateVersionJob(KogitoConstants.KOGITO_DSL_TOOLS_FOLDER)
+
 /////////////////////////////////////////////////////////////////
 // Methods
 /////////////////////////////////////////////////////////////////
@@ -183,6 +185,26 @@ void setupPromoteJob(String jobFolder, KogitoJobType jobType) {
 
             env('DEFAULT_STAGING_REPOSITORY', "${MAVEN_NEXUS_STAGING_PROFILE_URL}")
             env('MAVEN_ARTIFACT_REPOSITORY', "${MAVEN_ARTIFACTS_REPOSITORY}")
+        }
+    }
+}
+
+void setupProdUpdateVersionJob(String jobFolder) {
+    KogitoJobTemplate.createPipelineJob(this, getJobParams('kogito-images-update-prod-version', jobFolder, 'Jenkinsfile.update-prod-version', 'Update prod version for Kogito Images')).with {
+        parameters {
+            stringParam('PROD_PROJECT_VERSION', '', 'Which version to set ?')
+
+            stringParam('BUILD_BRANCH_NAME', "${GIT_BRANCH}", 'Set the Git branch to checkout')
+            stringParam('GIT_AUTHOR', "${GIT_AUTHOR_NAME}", 'Which Git author to checkout ?')
+        }
+
+        environmentVariables {
+            env('REPO_NAME', 'kogito-images')
+
+            env('AUTHOR_CREDS_ID', "${GIT_AUTHOR_CREDENTIALS_ID}")
+            env('GITHUB_TOKEN_CREDS_ID', "${GIT_AUTHOR_TOKEN_CREDENTIALS_ID}")
+            env('GIT_AUTHOR_BOT', "${GIT_BOT_AUTHOR_NAME}")
+            env('BOT_CREDENTIALS_ID', "${GIT_BOT_AUTHOR_CREDENTIALS_ID}")
         }
     }
 }

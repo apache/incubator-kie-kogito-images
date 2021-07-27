@@ -288,7 +288,9 @@ pipeline {
                         }
                         prBody += '\nSee build url above for more information'
                     }
-                    String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getBotAuthorCredsID())
+                    String prLink = isRelease() ? 
+                                        githubscm.createPRWithLabels(commitMsg, prBody, getBuildBranch(), [ 'skip-ci' ] as String[], getBotAuthorCredsID()) :
+                                        githubscm.createPR(commitMsg, prBody, getBuildBranch(), getBotAuthorCredsID())
                     deployProperties["${getRepoName()}.pr.link"] = prLink
 
                     if (isCreateChangesPR()) {

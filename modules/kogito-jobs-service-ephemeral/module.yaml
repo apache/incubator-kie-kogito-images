@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.ephemeral
-version: "1.9.0-snapshot"
+version: "1.9.0"
 
 artifacts:
   - name: jobs-service-common-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/1.9.0-SNAPSHOT/jobs-service-common-1.9.0-20210720.035225-6-runner.jar
-    md5: 4c401f9dc4cfcc5687825da343ee506e
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/1.9.0.Final/jobs-service-common-1.9.0.Final-runner.jar
+    md5: 1c337c56eaaedf3222bda3bc0f47013d
 
 execute:
   - script: configure

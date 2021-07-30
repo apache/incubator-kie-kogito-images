@@ -23,8 +23,6 @@ pipeline {
         stage('Initialization') {
             steps {
                 script {
-                    clean()
-
                     assert getProdProjectVersion()
 
                     currentBuild.displayName = getProdProjectVersion()

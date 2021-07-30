@@ -77,11 +77,11 @@ pipeline {
 }
 
 String getRepoName() {
-    return env.REPO_NAME
+    return "${REPO_NAME}"
 }
 
 String getBuildBranch() {
-    return params.BUILD_BRANCH_NAME
+    return "${BUILD_BRANCH_NAME}"
 }
 
 String getGitAuthor() {
@@ -93,13 +93,13 @@ String getBotBranch() {
 }
 
 String getBotAuthor() {
-    return env.GIT_AUTHOR_BOT
+    return "${GIT_AUTHOR_BOT}"
 }
 
 String getBotAuthorCredsID() {
-    return env.BOT_CREDENTIALS_ID
+    return "${BOT_CREDENTIALS_ID}"
 }
 
 String getProdProjectVersion() {
-    return params.PROD_PROJECT_VERSION
+    return "${PROD_PROJECT_VERSION}"
 }

@@ -10,6 +10,7 @@ from ruamel.yaml import YAML
 MODULE_FILENAME = "module.yaml"
 MODULES_DIR = "modules"
 
+COMMUNITY_PREFIX = 'kogito-'
 PRODUCT_PREFIX = 'rhpam-'
 
 # imagestream file that contains all images, this file aldo needs to be updated.
@@ -37,14 +38,31 @@ def yaml_loader():
     return yaml
 
 
-def update_image_version(target_version):
+def update_community_image_version(target_version):
     """
     Update image.yaml version tag.
     :param target_version: version used to update the image.yaml file
     """
-    print("Updating Image main file version from file {0} to version {1}".format(IMAGE_FILENAME, target_version))
+    update_image_version_tag_in_yaml_file(target_version, IMAGE_FILENAME)
+
+def update_prod_image_version(target_version):
+    """
+    Update rhpam-*-overrides.yaml files version tag.
+    :param target_version: version used to update the files
+    """
+    for img in sorted(get_prod_images()):
+        file = "{}-overrides.yaml".format(img)
+        update_image_version_tag_in_yaml_file(target_version, file)
+
+def update_image_version_tag_in_yaml_file(target_version, yaml_file):
+    """
+    Update root version tag in yaml file.
+    :param target_version: version to set
+    :param yaml_file: yaml file to update
+    """
+    print("Updating Image main file version from file {0} to version {1}".format(yaml_file, target_version))
     try:
-        with open(IMAGE_FILENAME) as image:
+        with open(yaml_file) as image:
             data = yaml_loader().load(image)
             if 'version' in data:
                 data['version'] = target_version
@@ -52,11 +70,10 @@ def update_image_version(target_version):
                 print("Field version not found, returning...")
                 return
 
-        with open(IMAGE_FILENAME, 'w') as image:
+        with open(yaml_file, 'w') as image:
             yaml_loader().dump(data, image)
     except TypeError as err:
         print("Unexpected error:", err)
-
 
 def update_image_stream(target_version, prod=False):
     """
@@ -108,7 +125,7 @@ def get_community_module_dirs():
     """
     Retrieve the Kogito module directories
     """
-    return get_all_module_dirs('kogito-')
+    return get_all_module_dirs(COMMUNITY_PREFIX)
 
 def get_prod_module_dirs():
     """
@@ -116,9 +133,9 @@ def get_prod_module_dirs():
     """
     return get_all_module_dirs(PRODUCT_PREFIX)
 
-def get_all_images():
+def get_images(prefix):
     """
-    Retrieve the Kogito images' names
+    Retrieve the Kogito images' files
     """
     images = []
 
@@ -126,10 +143,22 @@ def get_all_images():
     for r, d, f in os.walk("."):
         for item in f:
             if re.compile(r'.*-overrides.yaml').match(item):
-                images.append(item.replace("-overrides.yaml", ''))
+                if item.startswith(prefix):
+                    images.append(item.replace("-overrides.yaml", ''))
 
     return images
 
+def get_community_images():
+    """
+    Retrieve the Community images' names
+    """
+    return get_images(COMMUNITY_PREFIX)
+
+def get_prod_images():
+    """
+    Retrieve the Prod images' names
+    """
+    return get_images(PRODUCT_PREFIX)
 
 def update_modules_version(target_version, prod=False):
     """

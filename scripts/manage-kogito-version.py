@@ -57,10 +57,11 @@ if __name__ == "__main__":
 
             # modules
             if args.prod:
+                common.update_prod_image_version(args.bump_to)
                 common.update_image_stream(args.bump_to, args.prod)
                 common.update_modules_version(args.bump_to, args.prod)
             else:
-                common.update_image_version(args.bump_to)
+                common.update_community_image_version(args.bump_to)
                 common.update_image_stream(args.bump_to)
                 common.update_modules_version(args.bump_to)
                 common.update_artifacts_version_env_in_image(artifacts_version)

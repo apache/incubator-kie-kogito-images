@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.postgresql
-version: "1.9.1-snapshot"
+version: "1.9.1"
 
 artifacts:
   - name: data-index-service-postgresql-runner.jar

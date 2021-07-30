@@ -46,7 +46,7 @@ if (!Utils.isMainBranch(this)) {
     setupPromoteJob(releaseBranchFolder, KogitoJobType.RELEASE)
 }
 
-setupProdUpdateVersionJob("${KogitoConstants.KOGITO_DSL_TOOLS_FOLDER}"/"${JOB_BRANCH_FOLDER}")
+setupProdUpdateVersionJob("${KogitoConstants.KOGITO_DSL_TOOLS_FOLDER}/${JOB_BRANCH_FOLDER}")
 
 /////////////////////////////////////////////////////////////////
 // Methods

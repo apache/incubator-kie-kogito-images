@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.postgresql
-version: "1.9.1-snapshot"
+version: "1.9.1"
 
 artifacts:
   - name: data-index-service-postgresql-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-postgresql/1.9.1-SNAPSHOT/data-index-service-postgresql-1.9.1-20210801.062820-7-runner.jar
-    md5: c6bd577d81b5dda7336cb981859dc436
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-postgresql/1.9.1.Final/data-index-service-postgresql-1.9.1.Final-runner.jar
+    md5: 5ded69a00856d0eb7d5787a8b87709dd
 
 execute:
   - script: configure

@@ -4,7 +4,7 @@ version: "1.9.1"
 
 artifacts:
   - name: data-index-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/kogito-public/org/kie/kogito/data-index-service-infinispan/1.9.1.Final/data-index-service-infinispan-1.9.1.Final-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-infinispan/1.9.1.Final/data-index-service-infinispan-1.9.1.Final-runner.jar
     md5: 38b998b931d6ea5bfc55bfae6d5e6765
 
 execute:

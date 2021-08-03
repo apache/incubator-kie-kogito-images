@@ -24,6 +24,7 @@ pipeline {
             steps {
                 script {
                     assert getProdProjectVersion()
+                    assert getJiraNumber()
 
                     currentBuild.displayName = getProdProjectVersion()
 
@@ -47,20 +48,20 @@ pipeline {
             steps {
                 script {
                     sh "python3 scripts/manage-kogito-version.py --bump-to ${getProdProjectVersion()} --confirm --prod"
-
-                    if (githubscm.isThereAnyChanges()) {
-                        githubscm.commitChanges("Update prod version to ${getProdProjectVersion()}")
-                    } else {
-                        error 'No update version can be done'
-                    }
                 }
             }
         }
         stage('Create PR') {
             steps {
                 script {
+                    String commitMsg = "[${getJiraNumber()}] Update product version to ${getProdProjectVersion()}"
+                    if (githubscm.isThereAnyChanges()) {
+                        githubscm.commitChanges(commitMsg)
+                    } else {
+                        error 'No update version can be done'
+                    }
                     githubscm.pushObject('origin', getBotBranch(), getBotAuthorCredsID())
-                    String prLink = githubscm.createPR("Update prod version to ${getProdProjectVersion()}", 'Please review and merge', getBuildBranch(), getBotAuthorCredsID())
+                    String prLink = githubscm.createPR(commitMsg, 'Please review and merge', getBuildBranch(), getBotAuthorCredsID())
 
                     echo "Created PR ${prLink}"
                 }
@@ -100,4 +101,8 @@ String getBotAuthorCredsID() {
 
 String getProdProjectVersion() {
     return "${PROD_PROJECT_VERSION}"
+}
+
+String getJiraNumber() {
+    return "${JIRA_NUMBER}"
 }

@@ -193,6 +193,7 @@ void setupProdUpdateVersionJob(String jobFolder) {
     KogitoJobTemplate.createPipelineJob(this, getJobParams('kogito-images-update-prod-version', jobFolder, 'Jenkinsfile.update-prod-version', 'Update prod version for Kogito Images')).with {
         parameters {
             stringParam('PROD_PROJECT_VERSION', '', 'Which version to set ?')
+            stringParam('JIRA_NUMBER', '', 'KIECLOUD-XXX or RHPAM-YYYY or else. This will be added to the commit and PR.')
         }
 
         environmentVariables {

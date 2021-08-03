@@ -86,7 +86,7 @@ def update_image_stream(target_version, prod=False):
     print("Updating ImageStream images version from file {0} to version {1}".format(imageStreamFilename,
                                                                                     target_version))
     try:
-        with open(IMAGE_STREAM_FILENAME) as imagestream:
+        with open(imageStreamFilename) as imagestream:
             data = yaml_loader().load(imagestream)
             for item_index, item in enumerate(data['items'], start=0):
                 for tag_index, tag in enumerate(item['spec']['tags'], start=0):
@@ -97,7 +97,7 @@ def update_image_stream(target_version, prod=False):
                     updated_image_name = image_dict[0] + ':' + target_version
                     data['items'][item_index]['spec']['tags'][tag_index]['from']['name'] = updated_image_name
 
-        with open(IMAGE_STREAM_FILENAME, 'w') as imagestream:
+        with open(imageStreamFilename, 'w') as imagestream:
             yaml_loader().dump(data, imagestream)
 
     except TypeError:

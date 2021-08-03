@@ -47,8 +47,10 @@ if __name__ == "__main__":
             if args.artifacts_version:
                 artifacts_version = args.artifacts_version
 
-            print("Images version will be updated to {0}".format(args.bump_to))
-            if not args.prod:
+            if args.prod:
+                print("Product images version will be updated to {0}".format(args.bump_to))
+            else:
+                print("Images version will be updated to {0}".format(args.bump_to))
                 print("Artifacts version will be updated to {0}".format(artifacts_version))
                 print("Examples ref will be updated to {}".format(examples_ref))
 

@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.trusty.infinispan
-version: "2.0.0-snapshot"
+version: "1.10.0-snapshot"
 
 artifacts:
   - name: trusty-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-infinispan/2.0.0-SNAPSHOT/trusty-service-infinispan-2.0.0-20210722.060658-105-runner.jar
-    md5: f4fdbc1d3dde0d0b4875ccc9801ddc8d
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-infinispan/1.10.0-SNAPSHOT/trusty-service-infinispan-1.10.0-20210803.161747-1-runner.jar
+    md5: 149905c84e2832f29b61a7fe942a71e9
 
 execute:
   - script: configure

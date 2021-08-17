@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.explainability
-version: "1.10.0"
+version: "1.10.1-snapshot"
 
 artifacts:
   - name: explainability-service-rest-runner.jar

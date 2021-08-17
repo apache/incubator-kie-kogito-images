@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.ephemeral
-version: "1.10.0"
+version: "1.10.1-snapshot"
 
 artifacts:
   - name: jobs-service-common-runner.jar

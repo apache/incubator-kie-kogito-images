@@ -4,7 +4,7 @@ version: "1.10.0"
 
 artifacts:
   - name: jobs-service-postgresql-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/kogito-public/org/kie/kogito/jobs-service-postgresql/1.10.0.Final/jobs-service-postgresql-1.10.0.Final-runner.jar
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-postgresql/1.10.0.Final/jobs-service-postgresql-1.10.0.Final-runner.jar
     md5: 58ad61fa0dc71d4279e9ba7c878b8e9d
 
 execute:

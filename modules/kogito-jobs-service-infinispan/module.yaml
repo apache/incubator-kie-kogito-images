@@ -1,11 +1,11 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.infinispan
-version: "1.10.0-snapshot"
+version: "1.10.0"
 
 artifacts:
   - name: jobs-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-infinispan/1.10.0-SNAPSHOT/jobs-service-infinispan-1.10.0-20210810.043031-7-runner.jar
-    md5: cd024800b315ae6604a34977d9b01866
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-infinispan/1.10.0.Final/jobs-service-infinispan-1.10.0.Final-runner.jar
+    md5: 428a94c471784d5a28175a971ec4be5b
 
 execute:
   - script: configure

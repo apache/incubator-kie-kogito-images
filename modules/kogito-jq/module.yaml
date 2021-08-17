@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.jq
-version: "1.10.0"
+version: "1.10.1-snapshot"
 
 modules:
   install:

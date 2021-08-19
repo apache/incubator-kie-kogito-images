@@ -49,7 +49,7 @@ packages:
 osbs:
   configuration:
     container_file: container.yaml
-  extra_dir: osbs-extra/rhpam-kogito-runtime-jvm-rhel8
+  extra_dir: osbs-extra/rhpam-kogito-runtime-native-rhel8
   repository:
     name: containers/rhpam-7-kogito-runtime-native
     branch: rhba-7-rhel-8

@@ -50,26 +50,26 @@ pipeline{
                 }
             }
         }
-        stage('Prepare offline kogito-examples'){
-            steps{
-                sh "make clone-repos"
-            }
-        }
         stage('Build Images') {
-            steps{
+            steps {
                 script {
                     getImages().each{ image -> initWorkspace(image) }
                     launchParallelForEachImage("Build", {img -> buildImage(img)})
                 }
             }
         }
-        stage('Test Images') {
-            steps {
-                script {
-                    launchParallelForEachImage("Test", {img -> testImage(img)})
-                }
-            }
-        }
+        // stage('Prepare offline kogito-examples'){
+        //     steps{
+        //         sh "make clone-repos"
+        //     }
+        // }
+        // stage('Test Images') {
+        //     steps {
+        //         script {
+        //             launchParallelForEachImage("Test", {img -> testImage(img)})
+        //         }
+        //     }
+        // }
     }
     post{
         always{
@@ -135,5 +135,9 @@ String getWorkspacePath(String image){
 }
 
 String[] getImages(){
-    return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    String cmd = 'make list'
+    if (env.PROD_BUILD?.toBoolean()) {
+        cmd += ' arg=--prod'
+    }
+    return sh(script: "${cmd} | tr '\\n' ','", returnStdout: true).trim().split(',')
 }

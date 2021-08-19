@@ -1,5 +1,6 @@
 import org.kie.jenkins.jobdsl.templates.KogitoJobTemplate
 import org.kie.jenkins.jobdsl.KogitoConstants
+import org.kie.jenkins.jobdsl.RegexUtils
 import org.kie.jenkins.jobdsl.Utils
 import org.kie.jenkins.jobdsl.KogitoJobType
 
@@ -35,6 +36,9 @@ if (Utils.isMainBranch(this)) {
 }
 
 setupPrJob()
+if (Utils.isLTSBranch(this)) {
+    setupProdPrJob()
+}
 
 // Branch jobs
 setupDeployJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
@@ -56,6 +60,18 @@ void setupPrJob(String branch = "${GIT_BRANCH}") {
     def jobParams = getDefaultJobParams()
     jobParams.job.folder = "${KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER}/${branch}"
     jobParams.pr.run_only_for_branches = [ branch ]
+    KogitoJobTemplate.createPRJob(this, jobParams)
+}
+
+void setupProdPrJob(String branch = "${GIT_BRANCH}") {
+    def jobParams = getDefaultJobParams()
+    jobParams.job.name += '.prod'
+    jobParams.env.PROD_BUILD = true
+    jobParams.job.folder = "${KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER}/${branch}"
+    jobParams.pr.run_only_for_branches = [ branch ]
+    jobParams.pr.commitContext = 'Prod build'
+    jobParams.pr.trigger_phrase = "(${KogitoConstants.KOGITO_DEFAULT_PR_TRIGGER_PHRASE})|(.*${RegexUtils.getRegexFirstLetterCase('jenkins')},?.*(rerun|run) prod.*)"
+    jobParams.pr.trigger_phrase_only = true
     KogitoJobTemplate.createPRJob(this, jobParams)
 }
 

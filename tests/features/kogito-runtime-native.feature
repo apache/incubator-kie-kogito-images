@@ -11,8 +11,3 @@ Feature: Kogito-runtime-native feature.
      And the image should contain label io.k8s.display-name with value Kogito based on Quarkus native image
      And the image should contain label io.openshift.tags with value builder,runtime,kogito,quarkus,native
      And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
-
-  Scenario: verify java cacerts and libsunec are available in the given kogito runtime container.
-    When container is started with command bash
-    Then  file /home/kogito/ssl-libs/libsunec.so should exist
-    And file /home/kogito/cacerts should exist

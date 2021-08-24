@@ -25,13 +25,6 @@ def nightlyBranchFolder = "${KogitoConstants.KOGITO_DSL_NIGHTLY_FOLDER}/${JOB_BR
 def releaseBranchFolder = "${KogitoConstants.KOGITO_DSL_RELEASE_FOLDER}/${JOB_BRANCH_FOLDER}"
 
 if (Utils.isMainBranch(this)) {
-    // Old PR checks.
-    // To be removed once supported release branches (<= 1.9.x) are no more maintained.
-    setupPrJob('1.5.x')
-    setupPrJob('1.8.x')
-    setupPrJob('1.9.x')
-    // End of old PR checks
-
     // For BDD runtimes PR job
     setupDeployJob(bddRuntimesPrFolder, KogitoJobType.PR)
 }
@@ -192,7 +185,7 @@ void setupPromoteJob(String jobFolder, KogitoJobType jobType) {
 }
 
 void setupProdUpdateVersionJob(String jobFolder) {
-    KogitoJobTemplate.createPipelineJob(this, getJobParams('kogito-images-update-prod-version', jobFolder, 'Jenkinsfile.update-prod-version', 'Update prod version for Kogito Images')).with {
+    KogitoJobTemplate.createPipelineJob(this, getJobParams('kogito-images-update-prod-version', jobFolder, "${JENKINSFILE_PATH}/Jenkinsfile.update-prod-version", 'Update prod version for Kogito Images')).with {
         parameters {
             stringParam('JIRA_NUMBER', '', 'KIECLOUD-XXX or RHPAM-YYYY or else. This will be added to the commit and PR.')
             stringParam('PROD_PROJECT_VERSION', '', 'Which version to set ?')

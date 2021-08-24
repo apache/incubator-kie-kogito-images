@@ -14,6 +14,8 @@ if [ -z $NATIVE_BUILD ]; then
     NATIVE_BUILD=true
 fi
 
+echo 'test'
+
 # exit when any command fails
 set -e
 # Setup maven configuration only on CI

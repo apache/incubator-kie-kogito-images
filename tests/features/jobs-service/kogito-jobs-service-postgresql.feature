@@ -20,7 +20,6 @@ Feature: Kogito-jobs-service-postgresql feature.
       | variable                         | value                                    |
       | SCRIPT_DEBUG                     | true                                     |
       | QUARKUS_DATASOURCE_JDBC_URL      | jdbc:postgresql://10.1.1.10:5432/quarkus |
-      | QUARKUS_DATASOURCE_REACTIVE_URL  | postgresql://10.1.1.10:5432/quarkus |
       | QUARKUS_DATASOURCE_USERNAME      | kogito                                   |
       | QUARKUS_DATASOURCE_PASSWORD      | s3cr3t                                   |
     Then container log should contain + exec java -XshowSettings:properties -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/jobs-service-postgresql-runner.jar

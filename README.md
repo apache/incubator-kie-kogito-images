@@ -434,7 +434,7 @@ $ docker run -p 8080:8080 -it process-quarkus-example-non-uberjar
 # On another shell do a simple post request 
 $ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}}' -H "Content-Type: application/json" -X POST http://localhost:8080/orders
 
-# the container logs the following message:
+# notice the container logs the following message:
 Order has been created Order[12345] with assigned approver JOHN
 ```
 **Runtime Image example with springboot**
@@ -466,7 +466,7 @@ $ docker run -it -p 8080:8080 spring-binary-example
 # on another terminal, interact with the kogito service
 $ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}}' -H "Content-Type: application/json" -X POST http://localhost:8080/orders
 
-# the container logs the following message:
+# notice the container logs the following message:
 Order has been created Order[12345] with assigned approver JOHN
 ```
 
@@ -512,7 +512,7 @@ $ docker run -it -p 8080:8080 binary-test-example
 # on another terminal, interact with the kogito service
 $ curl -d '{"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}}' -H "Content-Type: application/json" -X POST http://localhost:8080/orders
 
-# the container logs the following message:
+# notice the container logs the following message:
 Order has been created Order[12345] with assigned approver JOHN
 ```
 

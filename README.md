@@ -301,8 +301,9 @@ sys	0m0.539s
 ```
 
 Here you can see that the build time has again been reduced. 
-If the maven mirror already have all the dependencies there, the build time can be even faster.  
-Also, Maven generates lots of transfer logs for downloading/uploading of maven dependencies. By default, these logs are disabled. To view these logs we need to set env variable **MAVEN_DOWNLOAD_OUTPUT** to true. 
+If the maven mirror already has all the dependencies there, the build time can be even faster.  
+Also, Maven generates lots of transfer logs for downloading/uploading of maven dependencies. By default, these logs are 
+disabled. To view these logs we need to set env variable **MAVEN_DOWNLOAD_OUTPUT** to true. 
 
 If a custom Maven Repository is required, the S2i images also supports it.  
 In case the **MAVEN_REPO_URL** environment variable is provided a new Repository and Plugin Repository will be added to the internal `settings.xml` file.  

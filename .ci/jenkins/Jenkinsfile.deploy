@@ -148,115 +148,115 @@ pipeline {
                 }
             }
         }
-        stage('Setup for testing') {
-            when {
-                expression { return !shouldSkipTests() }
-            }
-            steps {
-                script {
-                    updateTestsCommand = 'python3 scripts/update-tests.py'
-                    if (getMavenArtifactRepository()) {
-                        // Update repo in tests
-                        updateTestsCommand += " --repo-url ${getMavenArtifactRepository()}"
-                    }
+        // stage('Setup for testing') {
+        //     when {
+        //         expression { return !shouldSkipTests() }
+        //     }
+        //     steps {
+        //         script {
+        //             updateTestsCommand = 'python3 scripts/update-tests.py'
+        //             if (getMavenArtifactRepository()) {
+        //                 // Update repo in tests
+        //                 updateTestsCommand += " --repo-url ${getMavenArtifactRepository()}"
+        //             }
 
-                    // Set kogito-examples to bot author/branch if release
-                    if (params.EXAMPLES_REF) {
-                        updateTestsCommand += " --examples-ref ${params.EXAMPLES_REF}"
-                    }
-                    if (params.EXAMPLES_URI) {
-                        updateTestsCommand += " --examples-uri ${params.EXAMPLES_URI}"
-                    }
+        //             // Set kogito-examples to bot author/branch if release
+        //             if (params.EXAMPLES_REF) {
+        //                 updateTestsCommand += " --examples-ref ${params.EXAMPLES_REF}"
+        //             }
+        //             if (params.EXAMPLES_URI) {
+        //                 updateTestsCommand += " --examples-uri ${params.EXAMPLES_URI}"
+        //             }
 
-                    //Ignore self-signed certificates if MAVEN_MIRROR_URL and/or artifact repo is defined
-                    if (env.MAVEN_MIRROR_URL || getMavenArtifactRepository()) {
-                        updateTestsCommand += ' --ignore-self-signed-cert'
-                    }
-                    // Launch update tests
-                    sh updateTestsCommand
+        //             //Ignore self-signed certificates if MAVEN_MIRROR_URL and/or artifact repo is defined
+        //             if (env.MAVEN_MIRROR_URL || getMavenArtifactRepository()) {
+        //                 updateTestsCommand += ' --ignore-self-signed-cert'
+        //             }
+        //             // Launch update tests
+        //             sh updateTestsCommand
 
-                    // Debug purpose in case of issue
-                    sh 'cat tests/test-apps/clone-repo.sh'
-                    sh 'cat tests/features/kogito-builder.feature'
+        //             // Debug purpose in case of issue
+        //             sh 'cat tests/test-apps/clone-repo.sh'
+        //             sh 'cat tests/features/kogito-builder.feature'
 
-                    // Prepare local examples
-                    sh 'make clone-repos'
-                }
-            }
-        }
-        stage('Build Images') {
-            steps {
-                script {
-                    // Init workspaces before build
-                    getImages().each { image -> initWorkspace(image) }
-                    // Build images
-                    launchParallelForEachImage('Build', { img -> buildImage(img) })
-                }
-            }
-            post {
-                always {
-                    script {
-                        cleanWorkspaces()
-                    }
-                }
-            }
-        }
-        stage('Test Images') {
-            when {
-                expression { return !params.SKIP_TESTS }
-            }
-            steps {
-                script {
-                    // Init workspaces before test
-                    getImages().each { image -> initWorkspace(image) }
-                    // Test images
-                    launchParallelForEachImage('Test', { img -> testImage(img) })
-                }
-            }
-            post {
-                always {
-                    script {
-                        cleanWorkspaces()
-                    }
-                }
-            }
-        }
-        stage('Tagging') {
-            steps {
-                script {
-                    tagImages()
-                }
-            }
-        }
-        stage('Pushing') {
-            steps {
-                script {
-                    if (isDeployImageInOpenshiftRegistry()) {
-                        loginOpenshiftRegistry()
-                    } else if (getDeployImageRegistryCredentials()) {
-                        loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
-                    }
-                    pushImages()
+        //             // Prepare local examples
+        //             sh 'make clone-repos'
+        //         }
+        //     }
+        // }
+        // stage('Build Images') {
+        //     steps {
+        //         script {
+        //             // Init workspaces before build
+        //             getImages().each { image -> initWorkspace(image) }
+        //             // Build images
+        //             launchParallelForEachImage('Build', { img -> buildImage(img) })
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             script {
+        //                 cleanWorkspaces()
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Test Images') {
+        //     when {
+        //         expression { return !params.SKIP_TESTS }
+        //     }
+        //     steps {
+        //         script {
+        //             // Init workspaces before test
+        //             getImages().each { image -> initWorkspace(image) }
+        //             // Test images
+        //             launchParallelForEachImage('Test', { img -> testImage(img) })
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             script {
+        //                 cleanWorkspaces()
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Tagging') {
+        //     steps {
+        //         script {
+        //             tagImages()
+        //         }
+        //     }
+        // }
+        // stage('Pushing') {
+        //     steps {
+        //         script {
+        //             if (isDeployImageInOpenshiftRegistry()) {
+        //                 loginOpenshiftRegistry()
+        //             } else if (getDeployImageRegistryCredentials()) {
+        //                 loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
+        //             }
+        //             pushImages()
 
-                    if (isQuayRegistry()) {
-                        makeQuayImagesPublic()
-                    }
-                }
-            }
-            post {
-                always {
-                    script {
-                        // Store image deployment information
-                        String imgPrefix = "${getRepoName()}.image"
-                        setDeployPropertyIfNeeded("${imgPrefix}.registry", getDeployImageRegistry())
-                        setDeployPropertyIfNeeded("${imgPrefix}.namespace", getDeployImageNamespace())
-                        setDeployPropertyIfNeeded("${imgPrefix}.names", getBuiltImages().join(','))
-                        setDeployPropertyIfNeeded("${imgPrefix}.name-suffix", getDeployImageNameSuffix())
-                        setDeployPropertyIfNeeded("${imgPrefix}.tag", getDeployImageTag())
-                    }
-                }
-            }
-        }
+        //             if (isQuayRegistry()) {
+        //                 makeQuayImagesPublic()
+        //             }
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             script {
+        //                 // Store image deployment information
+        //                 String imgPrefix = "${getRepoName()}.image"
+        //                 setDeployPropertyIfNeeded("${imgPrefix}.registry", getDeployImageRegistry())
+        //                 setDeployPropertyIfNeeded("${imgPrefix}.namespace", getDeployImageNamespace())
+        //                 setDeployPropertyIfNeeded("${imgPrefix}.names", getBuiltImages().join(','))
+        //                 setDeployPropertyIfNeeded("${imgPrefix}.name-suffix", getDeployImageNameSuffix())
+        //                 setDeployPropertyIfNeeded("${imgPrefix}.tag", getDeployImageTag())
+        //             }
+        //         }
+        //     }
+        // }
         stage('Create PR') {
             when {
                 expression {

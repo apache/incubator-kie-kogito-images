@@ -42,5 +42,6 @@ modules:
 ## s2i build . quay.io/kiegroup/kogito-builder:latest kogitotest:10.0 -e RUNTIME_TYPE=quarkus -e NATIVE=true --runtime-image quay.io/kiegroup/kogito-runtime-native:latest
 ## where "." is the sources dir, ie: /data/dev/sources/kogito-examples/rules-quarkus-helloworld
 run:
+  user: 1001
   workdir: "/home/kogito"
 

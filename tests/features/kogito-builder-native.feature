@@ -69,18 +69,28 @@ Feature: kogito-builder image native build tests
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
 
-  #ignore until https://issues.redhat.com/browse/KOGITO-3638 is resolved
-  @ignore
-  Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled
+## Begin ##############################################
+  # this tests had to be broken in 2, when container starts to check the file in there, Quarkus app fails to start very quick
+  # thus behave fails when trying to check if the build binary was correctly copied to the runtime image.
+  # Step 1 - build the image and copy the output files to the runtime image
+  Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled - Step 1: build the application and copy to the runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable          | value         |
       | RUNTIME_TYPE      | quarkus       |
       | NATIVE            | true          |
       | LIMIT_MEMORY      | 6442450944    |
       | MAVEN_ARGS_APPEND | -Ppersistence |
+    Then s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
+     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
+
+  # Step 2 - verify if the built binary is at the expected place.
+  Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled - Step 2: check generated binary at the generated runtime image
+    # integ- is appended to the container name when ts2i is called.
+    # container = Container(name + context.config.userdata['IMAGE'], name=context.scenario.name)
+    # it expects the name the prefix (integ- created by s2i) + the target container name quay.io/kiegroup/kogito-builder:2.0.0-snapshot
+    When container integ- is started with command bash
     Then file /home/kogito/bin/process-quarkus-example-runner should exist
-    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
+## End ###############################################
 
   Scenario: Perform a incremental s2i build for native test
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using nightly-main

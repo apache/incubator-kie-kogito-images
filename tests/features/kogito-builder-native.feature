@@ -52,6 +52,18 @@ Feature: kogito-builder image native build tests
     And file /home/kogito/cacerts should exist
     And s2i build log should contain -J-Xmx4g
 
+  #ignore until https://issues.redhat.com/browse/KOGITO-3638 is resolved
+  Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled
+    Given s2i build /tmp/kogito-examples from process-quarkus-example using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
+      | variable          | value         |
+      | RUNTIME_TYPE      | quarkus       |
+      | NATIVE            | true          |
+      | LIMIT_MEMORY      | 6442450944    |
+      | MAVEN_ARGS_APPEND | -Ppersistence |
+    Then file /home/kogito/data/protobufs/persons.proto should exist
+    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
+    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
+
   Scenario: Verify if the s2i build is finished as expected performing a native build and if it is listening on the expected port, test uses custom properties file to test the port configuration.
     Given s2i build /tmp/kogito-examples from rules-quarkus-helloworld using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable     | value      |
@@ -68,19 +80,6 @@ Feature: kogito-builder image native build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
-
-  #ignore until https://issues.redhat.com/browse/KOGITO-3638 is resolved
-  @ignore
-  Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
-      | variable          | value         |
-      | RUNTIME_TYPE      | quarkus       |
-      | NATIVE            | true          |
-      | LIMIT_MEMORY      | 6442450944    |
-      | MAVEN_ARGS_APPEND | -Ppersistence |
-    Then file /home/kogito/bin/process-quarkus-example-runner should exist
-    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
   Scenario: Perform a incremental s2i build for native test
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using nightly-main

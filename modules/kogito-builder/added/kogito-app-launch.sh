@@ -31,7 +31,7 @@ case ${runtime_type} in
     "quarkus")  
         if [ "${NATIVE^^}" == "TRUE" ]; then
             # shellcheck disable=SC2086
-            exec "${KOGITO_HOME}"/bin/*-runner ${DYNAMIC_RESOURCES_OPTS} ${JAVA_OPTIONS} ${KOGITO_QUARKUS_S2I_PROPS} \
+            exec "${KOGITO_HOME}"/bin/*-runner ${JAVA_OPTIONS} ${KOGITO_QUARKUS_S2I_PROPS} \
                 -Dquarkus.http.host=0.0.0.0 -Djava.library.path="${KOGITO_HOME}"/ssl-libs \
                 -Dquarkus.http.port=8080 \
                 -Djavax.net.ssl.trustStore="${KOGITO_HOME}"/cacerts

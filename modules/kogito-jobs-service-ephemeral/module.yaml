@@ -7,6 +7,10 @@ artifacts:
     url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-inmemory/2.0.0-SNAPSHOT/jobs-service-inmemory-2.0.0-20211013.042142-76-runner.jar
     md5: 77d97b15d5b3d24f62e74b5a114d9723
 
+packages:
+  install:
+  - pam.x86_64
+
 execute:
   - script: configure
 

@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: jobs-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-infinispan/1.12.1-SNAPSHOT/jobs-service-infinispan-1.12.1-20211018.041736-4-runner.jar
-    md5: 77f9284133ae8ce4292587d3b5094f97
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-infinispan/1.12.1-SNAPSHOT/jobs-service-infinispan-1.12.1-20211019.025809-5-runner.jar
+    md5: 9b6de5d77851917cb942a260febe7e11
 
 execute:
   - script: configure

@@ -4,11 +4,11 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: explainability-service-rest-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service-rest/1.11.2-SNAPSHOT/explainability-service-rest-1.11.2-20211109.060044-48-runner.jar
-    md5: b76f6f43d6726420a9cf149139d91917
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service-rest/1.11.2-SNAPSHOT/explainability-service-rest-1.11.2-20211110.053302-49-runner.jar
+    md5: ca9967bfef54a97f9f5a81439a5b69e2
   - name: explainability-service-messaging-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service-messaging/1.11.2-SNAPSHOT/explainability-service-messaging-1.11.2-20211109.055916-48-runner.jar
-    md5: c7cfe8a8cf1c877cb25b521f7cd3751c
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/explainability-service-messaging/1.11.2-SNAPSHOT/explainability-service-messaging-1.11.2-20211110.053138-49-runner.jar
+    md5: 7bac3cb46cd103ca55bc89216902c71d
 
 execute:
   - script: configure

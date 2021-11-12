@@ -59,8 +59,6 @@ packages:
     - jq
     - gcc
     - gcc-c++
-    - glibc-devel
-    - zlib-devel
 
 osbs:
   configuration:

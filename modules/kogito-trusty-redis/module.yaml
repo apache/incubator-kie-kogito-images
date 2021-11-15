@@ -4,8 +4,9 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: trusty-service-redis-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/1.11.2-SNAPSHOT/trusty-service-redis-1.11.2-20211111.075225-48-runner.jar
-    md5: 949f9e30e67c95b1bd771ed25a20825a
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-redis/1.11.2-SNAPSHOT/trusty-service-redis-1.11.2-20211113.132731-49-runner.jar
+    md5: "<html>\n  <head>\n    <title>404 - Path /org/kie/kogito/trusty-service-redis/1.11.2-SNAPSHOT/trusty-service-redis-1.11.2-20211114.064508-50-runner.jar.md5 not found in group repository &quot;Public Repository Group&quot; [id=public].</title>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n\n    <link rel=\"icon\" type=\"image/png\" href=\"https://repository.jboss.org/nexus/favicon.png\">\n    <!--[if IE]>\n    <link rel=\"SHORTCUT ICON\" href=\"https://repository.jboss.org/nexus/favicon.ico\"/>\n    <![endif]-->\n\n    <link rel=\"stylesheet\" href=\"https://repository.jboss.org/nexus/static/css/Sonatype-content.css?2.14.20-02\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">\n  </head>\n  <body>\n    <h1>404 - Path /org/kie/kogito/trusty-service-redis/1.11.2-SNAPSHOT/trusty-service-redis-1.11.2-20211114.064508-50-runner.jar.md5 not found in group repository &quot;Public Repository Group&quot; [id=public].</h1>\n    <p>Path /org/kie/kogito/trusty-service-redis/1.11.2-SNAPSHOT/trusty-service-redis-1.11.2-20211114.064508-50-runner.jar.md5\
+      \ not found in group repository &quot;Public Repository Group&quot; [id=public].</p>\n  </body>\n</html>"
 
 execute:
   - script: configure

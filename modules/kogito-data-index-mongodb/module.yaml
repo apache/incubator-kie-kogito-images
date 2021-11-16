@@ -4,8 +4,9 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: data-index-service-mongodb-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/1.11.2-SNAPSHOT/data-index-service-mongodb-1.11.2-20211111.062717-51-runner.jar
-    md5: 57a89630f1c69dc2dc9aff29fb05f905
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-mongodb/1.11.2-SNAPSHOT/data-index-service-mongodb-1.11.2-20211113.123626-52-runner.jar
+    md5: "<html>\n  <head>\n    <title>404 - Path /org/kie/kogito/data-index-service-mongodb/1.11.2-SNAPSHOT/data-index-service-mongodb-1.11.2-20211114.054121-53-runner.jar.md5 not found in group repository &quot;Public Repository Group&quot; [id=public].</title>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n\n    <link rel=\"icon\" type=\"image/png\" href=\"https://repository.jboss.org/nexus/favicon.png\">\n    <!--[if IE]>\n    <link rel=\"SHORTCUT ICON\" href=\"https://repository.jboss.org/nexus/favicon.ico\"/>\n    <![endif]-->\n\n    <link rel=\"stylesheet\" href=\"https://repository.jboss.org/nexus/static/css/Sonatype-content.css?2.14.20-02\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">\n  </head>\n  <body>\n    <h1>404 - Path /org/kie/kogito/data-index-service-mongodb/1.11.2-SNAPSHOT/data-index-service-mongodb-1.11.2-20211114.054121-53-runner.jar.md5 not found in group repository &quot;Public Repository Group&quot; [id=public].</h1>\n    <p>Path\
+      \ /org/kie/kogito/data-index-service-mongodb/1.11.2-SNAPSHOT/data-index-service-mongodb-1.11.2-20211114.054121-53-runner.jar.md5 not found in group repository &quot;Public Repository Group&quot; [id=public].</p>\n  </body>\n</html>"
 
 execute:
   - script: configure

@@ -72,8 +72,8 @@ osbs:
         signing_intent: release
   extra_dir: osbs-extra/rhpam-kogito-builder-rhel8
   repository:
-    name: containers/rhpam-7-kogito-builder
-    branch: rhba-7-openj9-11-rhel-8
+    name: containers/rhpam-7-kogito-builder-openj9-11
+    branch: rhba-7-rhel-8
 
 run:
   workdir: "/home/kogito"

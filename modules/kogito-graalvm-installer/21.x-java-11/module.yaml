@@ -16,10 +16,10 @@ envs:
 artifacts:
 - name: graalvm-ce-java11-linux-amd64-21.3.0.tar.gz
   url: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/graalvm-ce-java11-linux-amd64-21.3.0.tar.gz
-  md5: eac80a467219fc9f3496a7393c2863d2
+  md5: 0813eeb5ccc5b29789f66950360b0b2d
 - name: native-image-installable-svm-java11-linux-amd64-21.3.0.jar
   url: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/native-image-installable-svm-java11-linux-amd64-21.3.0.jar
-  md5: 2e7d52eb8f2066594ada7b6a1f52be96
+  md5: f6283764854911654af182af3e94749c
 
 execute:
 - script: configure

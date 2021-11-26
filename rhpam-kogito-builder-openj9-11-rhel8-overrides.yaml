@@ -46,7 +46,6 @@ modules:
     - name: org.kie.kogito.launch.scripts
     - name: org.kie.kogito.openjdk
       version: "semeru-11-open"
-    - name: org.kie.kogito.dynamic.resources
     - name: org.kie.kogito.maven
       version: "3.8.1"
     - name: org.kie.kogito.s2i.core

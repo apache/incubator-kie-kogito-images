@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: jobs-service-mongodb-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-mongodb/1.11.2-SNAPSHOT/jobs-service-mongodb-1.11.2-20211124.050547-61-runner.jar
-    md5: f97e8c9e5de59e5d0920971ba29e9132
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-mongodb/1.11.2-SNAPSHOT/jobs-service-mongodb-1.11.2-20211128.044712-65-runner.jar
+    md5: f9b8b3abc48c5d57fcd986f12a264f7c
 
 execute:
   - script: configure

@@ -443,7 +443,6 @@ teardown() {
     [ "${result}" = "${expected}" ]
 }
 
-
 @test "test if the Quarkus platform properties are correctly returned for prod version" {
     QUARKUS_VERSION="1.2.3.4"
     JBOSS_IMAGE_NAME="rhpam-7/kogito-builder"
@@ -456,7 +455,6 @@ teardown() {
     echo "expected: $expected"
     [ "${result}" = "${expected}" ]
 }
-
 
 @test "test if the Quarkus platform properties are correctly returned for using custom values" {
     QUARKUS_VERSION="12"

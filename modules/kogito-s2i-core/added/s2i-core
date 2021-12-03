@@ -99,9 +99,8 @@ function build_kogito_app() {
     if [ -f "pom.xml" ]; then
         log_info "---> Building application from source..."
         $MAVEN_HOME/bin/mvn clean package ${MAVEN_ARGS_APPEND} ${KOGITO_OPTS} ${nativeBuild} -s "${KOGITO_HOME}"/.m2/settings.xml \
-	    $(get_quarkus_platform_properties) -DskipTests -Dmaven.test.skip -Dmaven.javadoc.skip=true \
-	    -Dmaven.site.skip=true -Dmaven.source.skip=true -Djacoco.skip=true -Dcheckstyle.skip=true \
-	    -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
+	    -DskipTests -Dmaven.test.skip -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
+	    -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
 
     else
         log_info "---> Generating $RUNTIME_TYPE project structure for $PROJECT_ARTIFACT_ID..."

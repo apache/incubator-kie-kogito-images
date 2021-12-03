@@ -409,3 +409,42 @@ teardown() {
     [ "${lines[0]}" = "---> Generating quarkus project structure for project..." ]
 }
 
+
+@test "test if the Quarkus platform properties are correctly returned for community version" {
+    QUARKUS_VERSION=1.2.3.4
+
+    result=$(get_quarkus_platform_properties)
+
+    expected=" -DplatformGroupId=io.quarkus.platform -DplatformArtifactId=quarkus-bom -DplatformVersion=1.2.3.4"
+
+    echo "result  : $result  `env | grep QUARKUS`"
+    echo "expected: $expected"
+    [ "${result}" = "${expected}" ]
+}
+
+@test "test if the Quarkus platform properties are correctly returned for prod version" {
+    QUARKUS_VERSION="1.2.3.4"
+    JBOSS_IMAGE_NAME="rhpam-7/kogito-builder"
+
+    result=$(get_quarkus_platform_properties)
+
+    expected=" -DplatformGroupId=com.redhat.quarkus.platform -DplatformArtifactId=quarkus-bom -DplatformVersion=1.2.3.4"
+
+    echo "result  : $result"
+    echo "expected: $expected"
+    [ "${result}" = "${expected}" ]
+}
+
+@test "test if the Quarkus platform properties are correctly returned for using custom values" {
+    QUARKUS_VERSION="12"
+    QUARKUS_PLATFORM_GROUP_ID="groupId-1"
+    QUARKUS_PLATFORM_ARTIFACT_ID="artifactId-2"
+
+    result=$(get_quarkus_platform_properties)
+
+    expected=" -DplatformGroupId=groupId-1 -DplatformArtifactId=artifactId-2 -DplatformVersion=12"
+
+    echo "result  : $result"
+    echo "expected: $expected"
+    [ "${result}" = "${expected}" ]
+}

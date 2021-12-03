@@ -264,5 +264,6 @@ function get_quarkus_version() {
             exit 1
         fi
     fi
+    log_info "----> Got Quarkus version ${quarkus_version}"
     echo $quarkus_version
 }

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 
 # imports
 source "${KOGITO_HOME}"/launch/logging.sh
@@ -263,8 +262,7 @@ function get_quarkus_version() {
             log_error "----> Impossible to get Quarkus version from the generated Maven project (output: '$ver'), failing build"
             exit 1
         fi
-	quarkus_version=$ver
+	    quarkus_version=$ver
     fi
-    log_info "----> Got Quarkus version ${quarkus_version}"
     echo $quarkus_version
 }

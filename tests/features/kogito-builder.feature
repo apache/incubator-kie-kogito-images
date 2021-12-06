@@ -46,7 +46,7 @@ Feature: kogito-builder image tests
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
-      | KOGITO_VERSION | 1.14.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.14.1-SNAPSHOT |  
     Then file /home/kogito/bin/quarkus-run.jar should exist
     And s2i build log should contain Generating quarkus project structure for project...
     And check that page is served
@@ -73,7 +73,7 @@ Feature: kogito-builder image tests
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |
-      | KOGITO_VERSION | 1.14.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.14.1-SNAPSHOT |  
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |
@@ -94,7 +94,7 @@ Feature: kogito-builder image tests
       | variable            | value                 |
       | RUNTIME_TYPE        | quarkus               |
       | NATIVE              | false                 |
-      | KOGITO_VERSION | 1.14.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.14.1-SNAPSHOT |  
       | PROJECT_GROUP_ID    | com.mycompany         |
       | PROJECT_ARTIFACT_ID | myproject             |
       | PROJECT_VERSION     | 2.0-SNAPSHOT          |
@@ -117,7 +117,7 @@ Feature: kogito-builder image tests
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
     Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.14.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable       | value          |
-      | KOGITO_VERSION | 1.14.0-SNAPSHOT | 
+      | KOGITO_VERSION | 1.14.1-SNAPSHOT |  
       | RUNTIME_TYPE   | springboot     |
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
     And s2i build log should contain Generating springboot project structure for project...

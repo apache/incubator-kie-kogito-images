@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: management-console-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/management-console/1.11.2-SNAPSHOT/management-console-1.11.2-20211210.050332-74-runner.jar
-    md5: 47d28074e964b3703f601be26c79dd01
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/management-console/1.11.2-SNAPSHOT/management-console-1.11.2-20211213.070920-77-runner.jar
+    md5: b8c5f549954a925b3b7ac23cd63d1f7d
 
 execute:
   - script: configure

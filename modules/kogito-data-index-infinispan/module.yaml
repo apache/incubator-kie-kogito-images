@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: data-index-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-infinispan/2.0.0-SNAPSHOT/data-index-service-infinispan-2.0.0-20211215.044846-332-runner.jar
-    md5: 4c7c61854bbf54cb3511b68351ef613b
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-infinispan/2.0.0-SNAPSHOT/data-index-service-infinispan-2.0.0-20211231.051332-345-runner.jar
+    md5: 1cdbcebdf5a02d04a007338fc7c03d13
 
 execute:
   - script: configure

@@ -49,5 +49,4 @@ if __name__ == "__main__":
         common.update_runtime_image_in_behave_tests(args.runtime_image_native, 'native')
     
     if args.archetype_maven_mirror_url:
-        common.update_maven_mirror_url_in_archetype_behave_tests(args.archetype_maven_mirror_url)
-        common.ignore_maven_self_signed_certificate_in_archetype_behave_tests()
+        common.update_maven_mirror_url_in_quarkus_plugin_behave_tests(args.archetype_maven_mirror_url)

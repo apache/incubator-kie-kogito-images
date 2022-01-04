@@ -299,6 +299,15 @@ def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
                                                                                                            repo_url)
     update_in_behave_tests(pattern, replacement)
 
+def update_maven_mirror_url_in_archetype_behave_tests(repo_url):
+    """
+    Update maven repository into behave tests
+    :param repo_url: Maven repository url
+    """
+    print("Set maven repo {} in archetype behave tests".format(repo_url))
+    pattern = re.compile('(Kogito Maven archetype.*\r?\n\s*Given.*\r?\n\s*)\|\s*variable[\s]*\|[\s]*value[\s]*\|')
+    replacement = "\g<1>| variable | value |\n      | {} | {} |".format("MAVEN_MIRROR_URL", repo_url)
+    update_in_behave_tests(pattern, replacement)
 
 def ignore_maven_self_signed_certificate_in_behave_tests():
     """
@@ -308,6 +317,15 @@ def ignore_maven_self_signed_certificate_in_behave_tests():
     pattern = re.compile('\|\s*variable[\s]*\|[\s]*value[\s]*\|')
     replacement = "| variable | value |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |"
     update_in_behave_tests(pattern, replacement)
+
+def ignore_maven_self_signed_certificate_in_archetype_behave_tests():
+    """
+    Sets the environment variable to ignore the self-signed certificates in maven
+    """
+    print("Setting MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE env in behave tests")
+    pattern = re.compile('(Kogito Maven archetype.*\r?\n\s*Given.*\r?\n\s*)\|\s*variable[\s]*\|[\s]*value[\s]*\|')
+    replacement = "\g<1>| variable | value |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |"
+    update_in_behave_tests(pattern, replacement)   
 
 
 def update_in_behave_tests(pattern, replacement):

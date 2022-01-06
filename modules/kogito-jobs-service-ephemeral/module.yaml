@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: jobs-service-common-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/1.11.2-SNAPSHOT/jobs-service-common-1.11.2-20211229.043414-89-runner.jar
-    md5: efe7af37bb81c043b36a916b5399c0e5
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-common/1.11.2-SNAPSHOT/jobs-service-common-1.11.2-20220106.062259-97-runner.jar
+    md5: 8a96bddcf5bf48ca67b72d1e5e1b5fbc
 
 execute:
   - script: configure

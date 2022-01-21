@@ -582,7 +582,7 @@ The Persistence service can be switched by using its corresponding image
   [image.yaml](kogito-data-index-ephemeral-overrides.yaml)
 - Mongodb: quay.io/kiegroup/kogito-data-index-mongodb 
   [image.yaml](kogito-data-index-mongodb-overrides.yaml)
-- Oracle: quay.io/kiegroup/kogito-data-index-Oracle
+- Oracle: quay.io/kiegroup/kogito-data-index-oracle
   [image.yaml](kogito-data-index-oracle-overrides.yaml)
 - PostgreSQL: quay.io/kiegroup/kogito-data-index-postgresql
   [image.yaml](kogito-data-index-postgresql-overrides.yaml)

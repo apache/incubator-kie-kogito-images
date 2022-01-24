@@ -238,7 +238,7 @@ def update_examples_ref_in_behave_tests(examples_ref):
     :param examples_ref: kogito-examples reference
     """
     print("Set examples_ref {} in behave tests".format(examples_ref))
-    # this pattern will look for any occurrences of using master or using x.x.x
+    # this pattern will look for any occurrences of using nightly-main or using nightly-x.x.x or using x.x.x
     pattern = re.compile(r'(using nightly-main)|(using nightly-\s*([\d.]+.x))|(using \s*([\d.]+[.x]?))')
     replacement = 'using {}'.format(examples_ref)
     update_in_behave_tests(pattern, replacement)
@@ -299,6 +299,15 @@ def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
                                                                                                            repo_url)
     update_in_behave_tests(pattern, replacement)
 
+def update_maven_mirror_url_in_quarkus_plugin_behave_tests(repo_url):
+    """
+    Update maven repository into behave tests
+    :param repo_url: Maven repository url
+    """
+    print("Set maven repo {} in quarkus plugin behave tests".format(repo_url))
+    pattern = re.compile('(Kogito Maven archetype.*(?<!springboot)\r?\n\s*Given.*\r?\n\s*)\|\s*variable[\s]*\|[\s]*value[\s]*\|')
+    replacement = "\g<1>| variable | value |\n      | {} | {} |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |\n      | DEBUG | true |".format("MAVEN_MIRROR_URL", repo_url)
+    update_in_behave_tests(pattern, replacement)
 
 def ignore_maven_self_signed_certificate_in_behave_tests():
     """

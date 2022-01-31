@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: jobs-service-inmemory-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-inmemory/1.16.1-SNAPSHOT/jobs-service-inmemory-1.16.1-20220126.053429-4-runner.jar
-    md5: b3e1c698f0947586c1bd8dfa9058c74e
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/jobs-service-inmemory/1.16.1-SNAPSHOT/jobs-service-inmemory-1.16.1-20220131.052429-9-runner.jar
+    md5: fb25836181e3dabe330fc42e890c5a9c
 
 packages:
   install:

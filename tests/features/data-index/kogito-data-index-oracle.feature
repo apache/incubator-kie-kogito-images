@@ -19,7 +19,7 @@ Feature: Kogito-data-index oracle feature.
     When container is started with env
       | variable                     | value                                     |
       | SCRIPT_DEBUG                 | true                                      |
-      | QUARKUS_DATASOURCE_JDBC_URL  | jdbc:oracle:thin://10.1.1.10:5432/quarkus |
+      | QUARKUS_DATASOURCE_JDBC_URL  | jdbc:oracle:thin:@//10.1.1.53:1521/quarkus |
       | QUARKUS_DATASOURCE_USERNAME  | kogito                                    |
       | QUARKUS_DATASOURCE_PASSWORD  | s3cr3t                                    |
     Then container log should contain -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/data-index-service-oracle-runner.jar

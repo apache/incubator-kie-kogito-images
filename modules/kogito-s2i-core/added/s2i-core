@@ -273,7 +273,6 @@ function get_quarkus_version() {
     if [ "${QUARKUS_VERSION}x" = "x" ]; then
         log_info "----> Trying to retrieve Quarkus version from org.kie.kogito:kogito-build-parent:${KOGITO_VERSION}"
         ver=$($MAVEN_HOME/bin/mvn ${MAVEN_ARGS_APPEND} -s "${KOGITO_HOME}"/.m2/settings.xml help:evaluate -q \
-            -Dartifact=org.kie.kogito:kogito-build-parent:"${KOGITO_VERSION}" \
             -Dexpression=version.io.quarkus \
             -DforceStdout)
 

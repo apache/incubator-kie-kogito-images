@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: data-index-service-oracle-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-oracle/2.0.0-SNAPSHOT/data-index-service-oracle-2.0.0-20220225.025325-43-runner.jar
-    md5: 7a5692d0dff06d04674044d6c88602fe
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-oracle/2.0.0-SNAPSHOT/data-index-service-oracle-2.0.0-20220228.025924-47-runner.jar
+    md5: a737d1dfd079999c18c8bb5bc1c8a3b2
 
 execute:
   - script: configure

@@ -12,7 +12,7 @@ Feature: kogito-builder image native build tests
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.8.1
     And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
     And run sh -c 'echo $GRAALVM_HOME' in container and immediately check its output for /usr/share/graalvm
-    And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 21.1.0
+    And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 21.3.1
 
   Scenario: Verify if the s2i build is finished as expected using native build and runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
@@ -70,18 +70,18 @@ Feature: kogito-builder image native build tests
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
     And s2i build log should contain -J-Xmx5153960755
 
-  Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled - Step 1: build the application and copy to the runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
-      | variable          | value         |
-      | RUNTIME_TYPE      | quarkus       |
-      | NATIVE            | true          |
-      | LIMIT_MEMORY      | 6442450944    |
-      | MAVEN_ARGS_APPEND | -Ppersistence |
-    When container integ- is started with command bash
-    Then file /home/kogito/bin/process-quarkus-example-runner should exist
-     And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
-     And s2i build log should contain -J-Xmx5153960755
+#   Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled - Step 1: build the application and copy to the runtime image
+#     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
+#       | variable          | value         |
+#       | RUNTIME_TYPE      | quarkus       |
+#       | NATIVE            | true          |
+#       | LIMIT_MEMORY      | 6442450944    |
+#       | MAVEN_ARGS_APPEND | -Ppersistence |
+#     When container integ- is started with command bash
+#     Then file /home/kogito/bin/process-quarkus-example-runner should exist
+#      And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
+#      And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
+#      And s2i build log should contain -J-Xmx5153960755
 
   Scenario: Perform a incremental s2i build for native test
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x

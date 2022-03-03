@@ -107,29 +107,29 @@ pipeline {
                 }
             }
         }
-        stage('Update Maven information') {
-            steps {
-                script {
-                    // Update artifacts
-                    updateArtifactCmd = 'python3 scripts/update-maven-artifacts.py'
-                    if (getMavenArtifactRepository() != '') {
-                        updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()} --ignore-self-signed-cert"
-                    }
+        // stage('Update Maven information') {
+        //     steps {
+        //         script {
+        //             // Update artifacts
+        //             updateArtifactCmd = 'python3 scripts/update-maven-artifacts.py'
+        //             if (getMavenArtifactRepository() != '') {
+        //                 updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()} --ignore-self-signed-cert"
+        //             }
 
-                    try {
-                        sh updateArtifactCmd
-                    } catch (err) {
-                        unstable('Error while updating Maven artifacts. Please check logs.')
-                    } finally {
-                        if (isThereAnyChanges()) {
-                            commitChanges('Updated Maven artifacts')
-                        } else {
-                            echo 'No changes to commit'
-                        }
-                    }
-                }
-            }
-        }
+        //             try {
+        //                 sh updateArtifactCmd
+        //             } catch (err) {
+        //                 unstable('Error while updating Maven artifacts. Please check logs.')
+        //             } finally {
+        //                 if (isThereAnyChanges()) {
+        //                     commitChanges('Updated Maven artifacts')
+        //                 } else {
+        //                     echo 'No changes to commit'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         stage('Validate CeKit Image and Modules descriptors') {
             steps {
                 script {
@@ -642,7 +642,8 @@ void setDeployPropertyIfNeeded(String key, def value) {
 }
 
 String[] getImages() {
-    return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]
+    // return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
 }
 
 boolean isThereAnyChanges() {

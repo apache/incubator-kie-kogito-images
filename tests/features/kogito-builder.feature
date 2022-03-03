@@ -22,24 +22,24 @@ Feature: kogito-builder image tests
     And file /home/kogito/.m2/settings.xml should not contain <id>redhat-techpreview-repository</id>
     And file /home/kogito/.m2/settings.xml should not contain <url>https://maven.repository.redhat.com/techpreview/all</url>
 
-  Scenario: Verify if the s2i build is finished as expected performing a non native build with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
-      | variable          | value         |
-      | NATIVE            | false         |
-      | RUNTIME_TYPE      | quarkus       |
-      | MAVEN_ARGS_APPEND | -Ppersistence |
-    Then file /home/kogito/bin/quarkus-run.jar should exist
-    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
+#   Scenario: Verify if the s2i build is finished as expected performing a non native build with persistence enabled
+#     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-quarkus-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+#       | variable          | value         |
+#       | NATIVE            | false         |
+#       | RUNTIME_TYPE      | quarkus       |
+#       | MAVEN_ARGS_APPEND | -Ppersistence |
+#     Then file /home/kogito/bin/quarkus-run.jar should exist
+#     And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
+#     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
-  Scenario: Verify if the s2i build is finished as expected with persistence enabled
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
-      | variable          | value         |
-      | MAVEN_ARGS_APPEND | -Ppersistence |
-      | RUNTIME_TYPE      | springboot    |
-    Then file /home/kogito/bin/process-springboot-example.jar should exist
-    And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
-    And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
+#   Scenario: Verify if the s2i build is finished as expected with persistence enabled
+#     Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
+#       | variable          | value         |
+#       | MAVEN_ARGS_APPEND | -Ppersistence |
+#       | RUNTIME_TYPE      | springboot    |
+#     Then file /home/kogito/bin/process-springboot-example.jar should exist
+#     And s2i build log should contain '/home/kogito/bin/demo.orders.proto' -> '/home/kogito/data/protobufs/demo.orders.proto'
+#     And s2i build log should contain '/home/kogito/bin/persons.proto' -> '/home/kogito/data/protobufs/persons.proto'
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
     Given s2i build /tmp/kogito-examples from dmn-example using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest

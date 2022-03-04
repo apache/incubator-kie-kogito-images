@@ -1,4 +1,5 @@
 @quay.io/kiegroup/kogito-builder
+@ignore
 Feature: kogito-builder image native build tests
 
   Scenario: verify java cacerts and libsunec are available in the given kogito builder container.

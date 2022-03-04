@@ -184,6 +184,6 @@ String getWorkspacePath(String image) {
 }
 
 String[] getImages() {
-    return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]
+    return [ 'kogito-builder', 'kogito-runtime-jvm' ]
     // return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
 }

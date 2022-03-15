@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: trusty-service-infinispan-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-infinispan/2.0.0-SNAPSHOT/trusty-service-infinispan-2.0.0-20220314.034020-343-runner.jar
-    md5: 74966e6576965c0119a771b74056a2ea
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-infinispan/2.0.0-SNAPSHOT/trusty-service-infinispan-2.0.0-20220315.033017-344-runner.jar
+    md5: 6a352fbaa4ef3880a5966d7a253332dd
 
 execute:
   - script: configure

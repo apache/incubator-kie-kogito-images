@@ -107,34 +107,34 @@ pipeline {
                 }
             }
         }
-        stage('Update Maven information') {
-            steps {
-                script {
-                    // Update artifacts
-                    updateArtifactCmd = 'python3 scripts/update-maven-artifacts.py'
-                    if (getMavenArtifactRepository() != '') {
-                        updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()} --ignore-self-signed-cert"
-                    }
-
-                    try {
-                        sh updateArtifactCmd
-                    } catch (err) {
-                        unstable('Error while updating Maven artifacts. Please check logs.')
-                    } finally {
-                        if (isThereAnyChanges()) {
-                            commitChanges('Updated Maven artifacts')
-                        } else {
-                            echo 'No changes to commit'
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Update Maven information') {
+        //     steps {
+        //         script {
+        //             // Update artifacts
+        //             updateArtifactCmd = 'python3 scripts/update-maven-artifacts.py'
+        //             if (getMavenArtifactRepository() != '') {
+        //                 updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()} --ignore-self-signed-cert"
+        //             }
+        //
+        //             try {
+        //                 sh updateArtifactCmd
+        //             } catch (err) {
+        //                 unstable('Error while updating Maven artifacts. Please check logs.')
+        //             } finally {
+        //                 if (isThereAnyChanges()) {
+        //                     commitChanges('Updated Maven artifacts')
+        //                 } else {
+        //                     echo 'No changes to commit'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         stage('Validate CeKit Image and Modules descriptors') {
             steps {
                 script {
                     sh '''
-                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.2/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.1/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
                         tar -xzvf cekit-image-validator-runner.tgz
                         chmod +x cekit-image-validator-runner
                     '''

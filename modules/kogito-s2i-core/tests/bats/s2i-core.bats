@@ -434,7 +434,7 @@ teardown() {
 
     result=$(get_quarkus_platform_properties)
 
-    expected=" -DplatformGroupId=io.quarkus -DplatformArtifactId=quarkus-bom -DplatformVersion=1.2.3.4"
+    expected=" -DplatformGroupId=io.quarkus.platform -DplatformArtifactId=quarkus-bom -DplatformVersion=1.2.3.4"
 
     echo "result  : $result  `env | grep QUARKUS`"
     echo "expected: $expected"

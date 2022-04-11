@@ -47,7 +47,7 @@ envs:
     example: "2.23.0.Final"
 
   - name: QUARKUS_PLATFORM_GROUP_ID
-    description: ^ Defines the Quarkus platform group id, defaults to io.quarkus.platform for community and com.redhat.quarkus.platform for product.
+    description: ^ Defines the Quarkus platform group id, defaults to io.quarkus for community and com.redhat.quarkus for product.
     example: "io.quarkus.custom"
 
   - name: QUARKUS_PLATFORM_ARTIFACT_ID

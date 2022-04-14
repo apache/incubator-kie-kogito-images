@@ -15,18 +15,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for Kogito based on Quarkus native image
             iconClass: icon-jbpm
             tags: runtime,kogito,quarkus
             supports: quarkus
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-runtime-native:1.20.0
+            name: quay.io/kiegroup/kogito-runtime-native:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -36,18 +36,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for Kogito based on Quarkus or Springboot JVM image
             iconClass: icon-jbpm
             tags: runtime,kogito,quarkus,springboot,jvm
             supports: quarkus
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-runtime-jvm:1.20.0
+            name: quay.io/kiegroup/kogito-runtime-jvm:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -57,18 +57,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Platform for building Kogito based on Quarkus or Springboot
             iconClass: icon-jbpm
             tags: builder,kogito,quarkus,springboot
             supports: quarkus
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-builder:1.20.0
+            name: quay.io/kiegroup/kogito-builder:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -78,18 +78,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Data Index Service with Infinispan
             iconClass: icon-jbpm
             tags: kogito,data-index,data-index-infinispan
             supports: persistence backed by Infinispan Server
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-data-index-infinispan:1.20.0
+            name: quay.io/kiegroup/kogito-data-index-infinispan:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -99,18 +99,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Data Index Service with ephemeral PostgreSQL
             iconClass: icon-jbpm
             tags: kogito,data-index,data-index-ephemeral
             supports: persistence backed by ephemeral PostgreSQL Server
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-data-index-ephemeral:1.20.0
+            name: quay.io/kiegroup/kogito-data-index-ephemeral:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -120,18 +120,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Data Index Service with Mongodb
             iconClass: icon-jbpm
             tags: kogito,data-index,data-index-mongodb
             supports: persistence backed by Mongodb server
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-data-index-mongodb:1.20.0
+            name: quay.io/kiegroup/kogito-data-index-mongodb:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -141,18 +141,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Data Index Service with PostgreSQL
             iconClass: icon-jbpm
             tags: kogito,data-index,data-index-postgresql
             supports: persistence backed by PostgreSQL server
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-data-index-postgresql:1.20.0
+            name: quay.io/kiegroup/kogito-data-index-postgresql:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -162,18 +162,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Trusty Service with Infinispan
             iconClass: icon-jbpm
             tags: kogito,trusty,trusty-infinispan
             supports: persistence backed by Infinispan server
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-trusty-infinispan:1.20.0
+            name: quay.io/kiegroup/kogito-trusty-infinispan:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -183,18 +183,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Trusty Service with Redis
             iconClass: icon-jbpm
             tags: kogito,trusty,trusty-redis
             supports: persistence backed by Redis server
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-trusty-redis:1.20.0
+            name: quay.io/kiegroup/kogito-trusty-redis:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -204,18 +204,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Trusty Service with PostgreSQL
             iconClass: icon-jbpm
             tags: kogito,trusty,trusty-postgresql
             supports: persistence backed by PostgreSQL RDBMS
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-trusty-postgresql:1.20.0
+            name: quay.io/kiegroup/kogito-trusty-postgresql:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -225,18 +225,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Trusty UI Service
             iconClass: icon-jbpm
             tags: kogito,trusty-ui
             supports: Audit UI
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-trusty-ui:1.20.0
+            name: quay.io/kiegroup/kogito-trusty-ui:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -246,18 +246,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito JIT Runner
             iconClass: icon-jbpm
             tags: kogito,jit-runner
             supports: JIT Runner
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-jit-runner:1.20.0
+            name: quay.io/kiegroup/kogito-jit-runner:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -267,18 +267,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Explainability Service
             iconClass: icon-jbpm
             tags: kogito,explainability
             supports: explainability for decisions
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-explainability:1.20.0
+            name: quay.io/kiegroup/kogito-explainability:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -288,18 +288,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for Kogito in memory Jobs Service
             iconClass: icon-jbpm
             tags: kogito,jobs-service
             supports: out-of-box process timers
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-jobs-service-ephemeral:1.20.0
+            name: quay.io/kiegroup/kogito-jobs-service-ephemeral:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -309,18 +309,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for Kogito Jobs Service based on Infinispan
             iconClass: icon-jbpm
             tags: kogito,jobs-service
             supports: out-of-box process timers
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-jobs-service-infinispan:1.20.0
+            name: quay.io/kiegroup/kogito-jobs-service-infinispan:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -330,18 +330,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for Kogito Jobs Service based on Mongodb
             iconClass: icon-jbpm
             tags: kogito,jobs-service
             supports: out-of-box process timers
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-jobs-service-mongodb:1.20.0
+            name: quay.io/kiegroup/kogito-jobs-service-mongodb:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -351,18 +351,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for Kogito Jobs Service based on Postgresql
             iconClass: icon-jbpm
             tags: kogito,jobs-service
             supports: out-of-box process timers
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-jobs-service-postgresql:1.20.0
+            name: quay.io/kiegroup/kogito-jobs-service-postgresql:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -372,18 +372,18 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Management Console
             iconClass: icon-jbpm
             tags: kogito,management-console
             supports: business process management
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-management-console:1.20.0
+            name: quay.io/kiegroup/kogito-management-console:1.20.1-snapshot
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -393,15 +393,15 @@ items:
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '1.20.0'
+        - name: '1.20.1-snapshot'
           annotations:
             description: Runtime image for the Kogito Task Console
             iconClass: icon-jbpm
             tags: kogito,task-console
             supports: business process management
-            version: '1.20.0'
+            version: '1.20.1-snapshot'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: quay.io/kiegroup/kogito-task-console:1.20.0
+            name: quay.io/kiegroup/kogito-task-console:1.20.1-snapshot

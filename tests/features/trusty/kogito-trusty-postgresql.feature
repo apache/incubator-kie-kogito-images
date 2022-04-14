@@ -19,5 +19,4 @@ Feature: Kogito-trusty postgresql feature.
       | QUARKUS_DATASOURCE_USERNAME  | kogito                                   |
       | QUARKUS_DATASOURCE_PASSWORD  | s3cr3t                                   |
     Then container log should contain -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/quarkus-app/quarkus-run.jar
-    And container log should contain org.postgresql.util.PSQLException: The connection attempt failed
-    And container log should not contain Application failed to start
+    And container log should contain HHH000342: Could not obtain connection to query metadata

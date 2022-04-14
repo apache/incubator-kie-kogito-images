@@ -8,8 +8,8 @@ NATIVE := true
 clone-repos:
 # if the NO_TEST env defined, proceed with the tests, as first step prepare the repo to be used
 ifneq ($(ignore_test),true)
-	cd tests/test-apps && sh clone-repo.sh $(NATIVE)
-	cd ../..
+	#cd tests/test-apps && sh clone-repo.sh $(NATIVE)
+	#cd ../..
 endif
 ifneq ($(ignore_build),true)
 	sh scripts/build-kogito-apps-components.sh ${IMAGE_VERSION} ${image_name}

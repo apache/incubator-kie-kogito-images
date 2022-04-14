@@ -65,48 +65,29 @@ case ${imageName} in
 esac
 
 KOGITO_APPS_REPO_NAME="kogito-apps"
-KOGITO_APPS_ORG="kiegroup"
-TMPDIR="/tmp/build"
-
-branchTag="${1:main}"
-if [ "${branchTag^^}" == "2.0.0-SNAPSHOT" ]; then
-    branchTag="main"
-fi
-mkdir -vp ${TMPDIR} && cd ${TMPDIR}
-
-echo "Using branch/tag ${branchTag}, checking out."
-
-if [ ! -d "${TMPDIR}/${KOGITO_APPS_REPO_NAME}" ]; then
-    git clone https://github.com/kiegroup/${KOGITO_APPS_REPO_NAME}.git
-fi
-cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
-
-
-# On CI images are built concurrently, race conditions can make the checkout to fail with this error:
-# error: pathspec 'main' did not match any file(s) known to git
-counter=1
-while [ $counter -le 10 ]
-do
-    git checkout ${branchTag}
-    if [ $? != 0 ]; then
-        counter=$(expr $counter + 1)
-    else
-        break
-    fi
-    echo $counter
-    sleep 5
-done
-if [ $counter -eq 10 ]; then
-    echo "Branch or tag ${branchTag} does not exist, aborting."
-    exit 1
-fi
-
-echo "on branch/tag ${branchTag}, repo is ready to be built."
-echo "Building component ${contextDir}"
 
 for ctx in ${contextDir}; do
-    mvn -f ${ctx} package -DskipTests -Dquarkus.package.type=fast-jar -Dquarkus.container-image.build=false
+    target_tmp_dir="/tmp/build/$(basename ${ctx})"
+    build_target_dir="/tmp/$(basename ${ctx})"
+    rm -rf ${target_tmp_dir} && mkdir -p ${target_tmp_dir}
+    rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}
+    cd ${build_target_dir}
+
+    branchTag="${1:main}"
+    if [ "${branchTag^^}" == "2.0.0-SNAPSHOT" ]; then
+        branchTag="main"
+    fi
+
+    echo "Using branch/tag ${branchTag}, checking out. Temporary build dir is ${build_target_dir} and target dis is ${target_tmp_dir}"
+
+    if [ ! -d "${build_target_dir}/${KOGITO_APPS_REPO_NAME}" ]; then
+        git clone https://github.com/kiegroup/${KOGITO_APPS_REPO_NAME}.git
+    fi
+    cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
+    echo "Building component(s) ${contextDir}"
+    mvn -am -pl ${ctx} package -DskipTests -Dquarkus.package.type=fast-jar -Dquarkus.container-image.build=false
     cd ${ctx}/target/
     zip -r $(basename ${ctx})-quarkus-app.zip quarkus-app
+    cp -v $(basename ${ctx})-quarkus-app.zip ${target_tmp_dir}/
     cd -
 done

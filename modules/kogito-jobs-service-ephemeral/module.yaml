@@ -5,7 +5,7 @@ version: "2.0.0-snapshot"
 # see build-kogito-apps-components.sh script, responsible for build it.
 # called by the Makefile before builds
 artifacts:
-- path: /tmp/build/kogito-apps/jobs-service/jobs-service-inmemory/target/jobs-service-inmemory-quarkus-app.zip
+- path: /tmp/build/jobs-service-inmemory/jobs-service-inmemory-quarkus-app.zip
   name: jobs-service-inmemory-quarkus-app.zip
 
 packages:

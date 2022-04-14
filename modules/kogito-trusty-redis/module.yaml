@@ -5,7 +5,7 @@ version: "2.0.0-snapshot"
 # see build-kogito-apps-components.sh script, responsible for build it.
 # called by the Makefile before builds
 artifacts:
-- path: /tmp/build/kogito-apps/trusty/trusty-service/trusty-service-redis/target/trusty-service-redis-quarkus-app.zip
+- path: /tmp/build/trusty-service-redis/trusty-service-redis-quarkus-app.zip
   name: trusty-service-redis-quarkus-app.zip
 
 execute:

@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: trusty-service-postgresql-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-postgresql/2.0.0-SNAPSHOT/trusty-service-postgresql-2.0.0-20220404.034510-192-runner.jar
-    md5: 853ef345959340b543bdf29997aff016
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/trusty-service-postgresql/2.0.0-SNAPSHOT/trusty-service-postgresql-2.0.0-20220418.034534-207-runner.jar
+    md5: 358495f5bfc0426f10c9a1d5bfaf0e53
 
 execute:
   - script: configure

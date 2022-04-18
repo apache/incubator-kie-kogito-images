@@ -1,5 +1,6 @@
 IMAGE_VERSION := $(shell cat image.yaml | egrep ^version  | cut -d"\"" -f2)
 SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"."$$2}')
+KOGITO_APPS_TARGET_BRANCH ?= main
 BUILD_ENGINE := docker
 .DEFAULT_GOAL := build
 CEKIT_CMD := cekit -v ${cekit_option}
@@ -8,11 +9,11 @@ NATIVE := true
 clone-repos:
 # if the NO_TEST env defined, proceed with the tests, as first step prepare the repo to be used
 ifneq ($(ignore_test),true)
-	#cd tests/test-apps && sh clone-repo.sh $(NATIVE)
-	#cd ../..
+	cd tests/test-apps && sh clone-repo.sh $(NATIVE)
+	cd ../..
 endif
 ifneq ($(ignore_build),true)
-	sh scripts/build-kogito-apps-components.sh ${IMAGE_VERSION} ${image_name}
+	sh scripts/build-kogito-apps-components.sh ${KOGITO_APPS_TARGET_BRANCH} ${image_name}
 endif
 
 .PHONY: list

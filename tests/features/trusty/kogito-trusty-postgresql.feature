@@ -11,12 +11,3 @@ Feature: Kogito-trusty postgresql feature.
       And the image should contain label io.k8s.display-name with value Kogito Trusty Service - PostgreSQL
       And the image should contain label io.openshift.tags with value kogito,trusty,trusty-postgresql
 
-  Scenario: verify if all parameters are correctly set
-    When container is started with env
-      | variable                     | value                                    |
-      | SCRIPT_DEBUG                 | true                                     |
-      | QUARKUS_DATASOURCE_JDBC_URL  | jdbc:postgresql://10.1.1.10:5432/quarkus |
-      | QUARKUS_DATASOURCE_USERNAME  | kogito                                   |
-      | QUARKUS_DATASOURCE_PASSWORD  | s3cr3t                                   |
-    Then container log should contain -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/quarkus-app/quarkus-run.jar
-    And container log should contain HHH000342: Could not obtain connection to query metadata

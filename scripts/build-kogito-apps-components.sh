@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-# exit codes:
-#   1  - git branch or tag not found
-# Clone the kogito-apps to perform fast-jar builds from sources.apps
+# Parameters:
+#   1 - git target branch - defaults to main
+#   2 - image name - can't  be empty.
 
+# fast fail
+set -e
+set -o pipefail
+
+. `pwd`/scripts/setup-maven.sh
+MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
+
+branchTag="${1:main}"
 imageName="${2}"
 contextDir=""
 
@@ -73,19 +81,16 @@ for ctx in ${contextDir}; do
     rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}
     cd ${build_target_dir}
 
-    branchTag="${1:main}"
-    if [ "${branchTag^^}" == "2.0.0-SNAPSHOT" ]; then
-        branchTag="main"
-    fi
-
     echo "Using branch/tag ${branchTag}, checking out. Temporary build dir is ${build_target_dir} and target dis is ${target_tmp_dir}"
 
     if [ ! -d "${build_target_dir}/${KOGITO_APPS_REPO_NAME}" ]; then
-        git clone https://github.com/kiegroup/${KOGITO_APPS_REPO_NAME}.git
+        git_command="git clone --single-branch --branch ${branchTag} --depth 1 https://github.com/kiegroup/${KOGITO_APPS_REPO_NAME}.git"
+        echo "cloning ${KOGITO_APPS_REPO_NAME} with the following git command: ${git_command}"
+        eval ${git_command}
     fi
     cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
     echo "Building component(s) ${contextDir}"
-    mvn -am -pl ${ctx} package -DskipTests -Dquarkus.package.type=fast-jar -Dquarkus.container-image.build=false
+    mvn -am -pl ${ctx} package ${MAVEN_OPTIONS}
     cd ${ctx}/target/
     zip -r $(basename ${ctx})-quarkus-app.zip quarkus-app
     cp -v $(basename ${ctx})-quarkus-app.zip ${target_tmp_dir}/

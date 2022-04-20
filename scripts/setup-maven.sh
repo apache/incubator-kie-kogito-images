@@ -3,19 +3,8 @@
 # Usage: . setup-maven.sh
 
 MAVEN_VERSION="3.8.x"
-SCRIPT_DIR=""
-IFS='/' read -ra ADDR <<< `pwd`
-for d in "${ADDR[@]}"; do
-    if [ "${d}" != "" ]; then
-        current=$current/$d
-    fi
-    if [ "${d}" == "kogito-images" ]; then
-        SCRIPT_DIR="${current}"
-        break
-    fi
-done
 
-MVN_MODULE="${SCRIPT_DIR}/modules/kogito-maven/${MAVEN_VERSION}"
+MVN_MODULE="$(dirname "${BASH_SOURCE[0]}")/../modules/kogito-maven/${MAVEN_VERSION}"
 MAVEN_OPTIONS="-DskipTests"
 
 if [ "${CI}" ]; then
@@ -32,5 +21,4 @@ fi
 if [ "${MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE}" = "true" ]; then
     MAVEN_OPTIONS="${MAVEN_OPTIONS} -Denforcer.skip"
 fi
-
 

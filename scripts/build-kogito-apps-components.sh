@@ -7,7 +7,7 @@
 set -e
 set -o pipefail
 
-. `pwd`/scripts/setup-maven.sh
+. $(dirname "${BASH_SOURCE[0]}")/setup-maven.sh
 MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
 
 branchTag="${1:main}"
@@ -89,8 +89,9 @@ for ctx in ${contextDir}; do
         eval ${git_command}
     fi
     cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
-    echo "Building component(s) ${contextDir}"
-    mvn -am -pl ${ctx} package ${MAVEN_OPTIONS}
+    mvn_command="mvn -am -pl ${ctx} package ${MAVEN_OPTIONS} -Dmaven.repo.local=/tmp/temp_maven/${ctx}"
+    echo "Building component(s) ${contextDir} with the following maven command [${mvn_command}]"
+    eval ${mvn_command}
     cd ${ctx}/target/
     zip -r $(basename ${ctx})-quarkus-app.zip quarkus-app
     cp -v $(basename ${ctx})-quarkus-app.zip ${target_tmp_dir}/

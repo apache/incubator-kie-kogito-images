@@ -15,6 +15,24 @@ if [ "${CI}" ]; then
     source "${MVN_MODULE}"/added/configure-maven.sh
     configure
 
+    # Add NPM registry if needed
+    if [ ! -z "${NPM_REGISTRY_URL}" ]; then
+        echo "enabling npm repository: ${NPM_REGISTRY_URL}"
+        npm_profile="\
+<profile>\
+  <id>internal-npm-registry</id>\
+  <properties>\
+  <npmRegistryURL>${NPM_REGISTRY_URL}</npmRegistryURL>\
+  <yarnDownloadRoot>http://download.devel.redhat.com/rcm-guest/staging/rhba/dist/yarn/</yarnDownloadRoot>\
+  <nodeDownloadRoot>http://download.devel.redhat.com/rcm-guest/staging/rhba/dist/node/</nodeDownloadRoot>\
+  <npmDownloadRoot>http://download.devel.redhat.com/rcm-guest/staging/rhba/dist/npm/</npmDownloadRoot>\
+  </properties>\
+</profile>\
+"   
+        sed -i -E "s|(<!-- ### extra maven repositories ### -->)|\1\n${npm_profile}|" "${HOME}"/.m2/settings.xml
+        sed -i -E "s|(<!-- ### extra maven profile ### -->)|\1\n<activeProfile>internal-npm-registry</activeProfile>|" "${HOME}"/.m2/settings.xml
+    fi
+
     cat "${HOME}"/.m2/settings.xml
 fi
 

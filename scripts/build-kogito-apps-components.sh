@@ -7,12 +7,14 @@
 set -e
 set -o pipefail
 
-. $(dirname "${BASH_SOURCE[0]}")/setup-maven.sh
-MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
-
+# Read entries before sourcing
 branchTag="${1:main}"
 imageName="${2}"
 contextDir=""
+shift $#
+
+. $(dirname "${BASH_SOURCE[0]}")/setup-maven.sh
+MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
 
 case ${imageName} in
     "kogito-management-console")
@@ -91,6 +93,7 @@ for ctx in ${contextDir}; do
     cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
     mvn_command="mvn -am -pl ${ctx} package ${MAVEN_OPTIONS} -Dmaven.repo.local=/tmp/temp_maven/${ctx}"
     echo "Building component(s) ${contextDir} with the following maven command [${mvn_command}]"
+    export YARN_CACHE_FOLDER=/tmp/cache/${ctx} # Fix for building yarn apps in parallel
     eval ${mvn_command}
     cd ${ctx}/target/
     zip -r $(basename ${ctx})-quarkus-app.zip quarkus-app

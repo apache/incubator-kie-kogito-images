@@ -66,25 +66,29 @@ pipeline {
                         String workspacePath = getWorkspacePath(image)
                         parallelStages["Build&Test ${image}"] = {
                             stage("Build ${image}") {
-                                try {
-                                    dir(workspacePath) {
-                                        buildImage(image)
+                                catchError {
+                                    try {
+                                        dir(workspacePath) {
+                                            buildImage(image)
+                                        }
+                                    } catch (err) {
+                                        registerBuildFailedImage(image)
+                                        util.archiveConsoleLog(image)
+                                        throw err
                                     }
-                                } catch (err) {
-                                    registerBuildFailedImage(image)
-                                    util.archiveConsoleLog(image)
-                                    throw err
                                 }
                             }
-                            stage("Test ${image}") {
-                                dir(workspacePath) {
-                                    try {
-                                        testImage(image)
-                                    } catch (err) {
-                                        echo "Testing error(s) for image ${image}"
-                                    } finally {
-                                        junit testResults: 'target/test/results/*.xml', allowEmptyResults: true
-                                        archiveArtifacts artifacts: 'target/test/results/*.xml', allowEmptyArchive: true
+                            if(!isBuildFailedImage(image)) {
+                                stage("Test ${image}") {
+                                    dir(workspacePath) {
+                                        try {
+                                            testImage(image)
+                                        } catch (err) {
+                                            echo "Testing error(s) for image ${image}"
+                                        } finally {
+                                            junit testResults: 'target/test/results/*.xml', allowEmptyResults: true
+                                            archiveArtifacts artifacts: 'target/test/results/*.xml', allowEmptyArchive: true
+                                        }
                                     }
                                 }
                             }
@@ -164,6 +168,10 @@ void registerBuildFailedImage(String imageName) {
 
 List getBuildFailedImages() {
     return BUILD_FAILED_IMAGES
+}
+
+boolean isBuildFailedImage(String imageName) {
+    return BUILD_FAILED_IMAGES.contains(imageName)
 }
 
 void initWorkspace(String image) {

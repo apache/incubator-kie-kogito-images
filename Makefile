@@ -12,9 +12,6 @@ ifneq ($(ignore_test),true)
 	cd tests/test-apps && sh clone-repo.sh $(NATIVE)
 	cd ../..
 endif
-ifneq ($(ignore_build),true)
-	sh scripts/build-kogito-apps-components.sh ${KOGITO_APPS_TARGET_BRANCH} ${image_name}
-endif
 
 .PHONY: list
 list:
@@ -26,13 +23,14 @@ list:
 build: clone-repos _build
 
 _build:
-	@for f in $(shell make list); do sh scripts/build-kogito-apps-components.sh ${IMAGE_VERSION} ${iname}; make build-image image_name=$${f}; done
+	@for f in $(shell make list); do make build-image image_name=$${iname}; done
 
 
 .PHONY: build-image
 image_name=
-build-image: clone-repos
+build-image:
 ifneq ($(ignore_build),true)
+	scripts/build-kogito-apps-components.sh ${KOGITO_APPS_TARGET_BRANCH} ${image_name};
 	${CEKIT_CMD} build --overrides-file ${image_name}-overrides.yaml ${BUILD_ENGINE}
 endif
 # if ignore_test is set to true, ignore the tests
@@ -47,14 +45,15 @@ endif
 # Build all images
 .PHONY: build-prod
 # start to build the images
-build-prod: clone-repos
-	@for iname in $(shell make list arg=--prod); do sh scripts/build-kogito-apps-components.sh ${IMAGE_VERSION} ${iname}; make build-prod-image image_name=$${iname}; done
+build-prod:
+	@for iname in $(shell make list arg=--prod); do make build-prod-image image_name=$${iname}; done
 
 
 .PHONY: build-prod-image
 image_name=
 build-prod-image: clone-repos
 ifneq ($(ignore_build),true)
+	scripts/build-kogito-apps-components.sh ${KOGITO_APPS_TARGET_BRANCH} ${image_name};
 	scripts/build-product-image.sh "build" $(image_name) ${BUILD_ENGINE}
 endif
 # if ignore_test is set to true, ignore the tests

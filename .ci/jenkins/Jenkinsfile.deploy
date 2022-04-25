@@ -193,7 +193,7 @@ pipeline {
                         initWorkspace(image)
                         String workspacePath = getWorkspacePath(image)
                         parallelStages["Build&Test ${image}"] = { 
-                            stage("Build ${image}") {
+                            catchError {
                                 try {
                                     dir(workspacePath) {
                                         buildImage(image)
@@ -205,17 +205,15 @@ pipeline {
                                     throw err
                                 }
                             }
-                            stage("Test ${image}") {
-                                if(!shouldSkipTests()) {
-                                    dir(workspacePath) {
-                                        try {
-                                            testImage(image)
-                                        } catch (err) {
-                                            registerTestFailedImage(image)
-                                        } finally {
-                                            junit testResults: "target/test/results/*.xml", allowEmptyResults: true
-                                            archiveArtifacts artifacts: "target/test/results/*.xml", allowEmptyArchive: true
-                                        }
+                            if(!isBuildFailedImage(image) && !shouldSkipTests()) {
+                                dir(workspacePath) {
+                                    try {
+                                        testImage(image)
+                                    } catch (err) {
+                                        registerTestFailedImage(image)
+                                    } finally {
+                                        junit testResults: 'target/test/results/*.xml', allowEmptyResults: true
+                                        archiveArtifacts artifacts: 'target/test/results/*.xml', allowEmptyArchive: true
                                     }
                                 }
                             }
@@ -423,6 +421,10 @@ List getBuiltImages() {
 
 List getBuildFailedImages() {
     return BUILD_FAILED_IMAGES
+}
+
+boolean isBuildFailedImage(String imageName) {
+    return BUILD_FAILED_IMAGES.contains(imageName)
 }
 
 List getTestFailedImages() {

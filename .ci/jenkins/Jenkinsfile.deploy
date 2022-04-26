@@ -193,27 +193,25 @@ pipeline {
                         initWorkspace(image)
                         String workspacePath = getWorkspacePath(image)
                         parallelStages["Build&Test ${image}"] = { 
-                            catchError {
-                                try {
-                                    dir(workspacePath) {
-                                        buildImage(image)
-                                    }
-                                    registerBuiltImage(image)
-                                } catch (err) {
-                                    registerBuildFailedImage(image)
-                                    util.archiveConsoleLog(image)
-                                    throw err
-                                }
-                            }
-                            if(!isBuildFailedImage(image) && !shouldSkipTests()) {
+                            stage("Build/Test ${image}") {
                                 dir(workspacePath) {
                                     try {
-                                        testImage(image)
+                                        buildImage(image)
+                                        registerBuiltImage(image)
                                     } catch (err) {
-                                        registerTestFailedImage(image)
-                                    } finally {
-                                        junit testResults: 'target/test/results/*.xml', allowEmptyResults: true
-                                        archiveArtifacts artifacts: 'target/test/results/*.xml', allowEmptyArchive: true
+                                        registerBuildFailedImage(image)
+                                        util.archiveConsoleLog(image, 400)
+                                        throw err
+                                    }
+                                    if(!shouldSkipTests()) {
+                                        try {
+                                            testImage(image)
+                                        } catch (err) {
+                                            registerTestFailedImage(image)
+                                        } finally {
+                                            junit testResults: 'target/test/results/*.xml', allowEmptyResults: true
+                                            archiveArtifacts artifacts: 'target/test/results/*.xml', allowEmptyArchive: true
+                                        }
                                     }
                                 }
                             }

@@ -190,6 +190,7 @@ Feature: kogito-builder image JVM build tests
   Scenario: Verify if the s2i build is finished as expected using multi-module build with debug enabled
     Given s2i build https://github.com/kiegroup/kogito-examples.git from . using 1.13.x and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value |
+      | SCRIPT_DEBUG      | true                                 |
       | JAVA_OPTIONS      | -Ddebug=true                         |
       | RUNTIME_TYPE      | springboot                           |
       | ARTIFACT_DIR      | ruleunit-springboot-example/target   |

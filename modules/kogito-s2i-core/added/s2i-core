@@ -93,8 +93,9 @@ function build_kogito_app() {
     fi
 
     if [ "${SCRIPT_DEBUG}" != "true" ]; then
-        set -x
         export MAVEN_ARGS_APPEND="${MAVEN_ARGS_APPEND} --batch-mode"
+    else 
+        set -x
     fi
 
     if [ -f "pom.xml" ]; then

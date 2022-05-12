@@ -45,7 +45,7 @@ cp -rv  /tmp/kogito-examples/rules-quarkus-helloworld/ /tmp/kogito-examples/rule
 
 # generating the app binaries to test the binary build
 mvn -f rules-quarkus-helloworld clean package ${MAVEN_OPTIONS}
-mvn -f process-springboot-example clean package ${MAVEN_OPTIONS}
+mvn -f ruleunit-springboot-example clean package ${MAVEN_OPTIONS}
 
 if [ "$NATIVE_BUILD" = 'true' ]; then
     mvn -f rules-quarkus-helloworld-native -Pnative clean package ${MAVEN_OPTIONS} ${MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS}
@@ -59,7 +59,7 @@ cp /tmp/kogito-examples/dmn-quarkus-example/src/main/resources/* /tmp/kogito-exa
 # port 10000, the purpose of this tests is make sure that the images
 # will ensure the use of the port 8080.
 cp "${SCRIPT_DIR}"/application.properties /tmp/kogito-examples/rules-quarkus-helloworld/src/main/resources/META-INF/
-(echo ""; echo "server.port=10000") >> /tmp/kogito-examples/process-springboot-example/src/main/resources/application.properties
+(echo ""; echo "server.port=10000") >> /tmp/kogito-examples/ruleunit-springboot-example/src/main/resources/application.properties
 
 git add --all  :/
 git commit -am "test"

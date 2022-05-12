@@ -30,6 +30,10 @@ function configure() {
     ignore_maven_self_signed_certificates
     set_kogito_maven_repo
     add_maven_repo
+
+    if [ "${SCRIPT_DEBUG}" = "true" ] ; then
+        cat "${HOME}"/.m2/settings.xml
+    fi
 }
 
 # insert settings for HTTP proxy into maven settings.xml if supplied

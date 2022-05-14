@@ -4,8 +4,8 @@ version: "2.0.0-snapshot"
 
 artifacts:
   - name: data-index-service-inmemory-runner.jar
-    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-inmemory/1.21.0.Final/data-index-service-inmemory-1.21.0.Final-runner.jar
-    md5: a6ba3f035896d77de5f447dcad146c0c
+    url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-inmemory/1.21.1-SNAPSHOT/data-index-service-inmemory-1.21.1-20220514.042213-4-runner.jar
+    md5: 0fc405f99b8f13532c2af37a23106053
 
 execute:
   - script: configure

@@ -6,9 +6,12 @@ MAVEN_VERSION="3.8.x"
 
 MVN_MODULE="$(dirname "${BASH_SOURCE[0]}")/../modules/kogito-maven/${MAVEN_VERSION}"
 MAVEN_OPTIONS="-DskipTests"
+# Do not remove below, this can be updated by the python scripts
+MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE=true
 
 if [ "${CI}" ]; then
     # setup maven env
+    # Do not remove below, this can be updated by the python scripts
     export JBOSS_MAVEN_REPO_URL="https://repository.jboss.org/nexus/content/groups/public/"
     # export MAVEN_REPO_URL=
     cp "${MVN_MODULE}"/maven/settings.xml "${HOME}"/.m2/settings.xml
@@ -38,5 +41,6 @@ fi
 
 if [ "${MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE}" = "true" ]; then
     MAVEN_OPTIONS="${MAVEN_OPTIONS} -Denforcer.skip"
+    export MAVEN_OPTIONS
 fi
 

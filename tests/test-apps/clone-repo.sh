@@ -17,6 +17,8 @@ if [ -z $NATIVE_BUILD ]; then
     NATIVE_BUILD=true
 fi
 
+set -e
+
 # Clone examples
 cd /tmp
 rm -rf kogito-examples/

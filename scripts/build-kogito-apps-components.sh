@@ -13,7 +13,6 @@ imageName="${2}"
 contextDir=""
 shift $#
 
-. $(dirname "${BASH_SOURCE[0]}")/setup-maven.sh
 MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
 
 case ${imageName} in
@@ -81,8 +80,10 @@ for ctx in ${contextDir}; do
     build_target_dir="/tmp/$(basename ${ctx})"
     rm -rf ${target_tmp_dir} && mkdir -p ${target_tmp_dir}
     rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}
-    cd ${build_target_dir}
 
+    . $(dirname "${BASH_SOURCE[0]}")/setup-maven.sh "${build_target_dir}"/settings.xml
+
+    cd ${build_target_dir}
     echo "Using branch/tag ${branchTag}, checking out. Temporary build dir is ${build_target_dir} and target dis is ${target_tmp_dir}"
 
     if [ ! -d "${build_target_dir}/${KOGITO_APPS_REPO_NAME}" ]; then

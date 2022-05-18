@@ -5,7 +5,7 @@
 set -e
 base_dir=`dirname $(realpath -s $0)`
 
-. ${base_dir}/../../scripts/setup-maven.sh
+. ${base_dir}/../../scripts/setup-maven.sh "$(mktemp)"
 
 MAVEN_OPTIONS="-U ${MAVEN_OPTIONS}"
 
@@ -30,6 +30,8 @@ git checkout nightly-main
 # make a new copy of rules-quarkus-helloworld for native tests
 cp -rv  /tmp/kogito-examples/kogito-quarkus-examples/rules-quarkus-helloworld/ /tmp/kogito-examples/kogito-quarkus-examples/rules-quarkus-helloworld-native/
 
+set -x
+
 # generating the app binaries to test the binary build
 mvn -f kogito-quarkus-examples/rules-quarkus-helloworld clean package ${MAVEN_OPTIONS}
 mvn -f kogito-springboot-examples/process-springboot-example clean package ${MAVEN_OPTIONS}
@@ -50,9 +52,7 @@ cp /tmp/kogito-examples/kogito-quarkus-examples/dmn-quarkus-example/src/main/res
 cp ${base_dir}/application.properties /tmp/kogito-examples/kogito-quarkus-examples/rules-quarkus-helloworld/src/main/resources/META-INF/
 (echo ""; echo "server.port=10000") >> /tmp/kogito-examples/kogito-springboot-examples/process-springboot-example/src/main/resources/application.properties
 
+set +x
+
 git add --all  :/
 git commit -am "test"
-
-if [ "${CI}" ]; then
-    rm "${HOME}"/.m2/settings.xml
-fi

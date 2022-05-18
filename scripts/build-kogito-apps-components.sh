@@ -13,6 +13,8 @@ imageName="${2}"
 contextDir=""
 shift $#
 
+script_dir_path=$(cd `dirname "${BASH_SOURCE[0]}"`; pwd -P)
+
 MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
 
 case ${imageName} in
@@ -81,7 +83,7 @@ for ctx in ${contextDir}; do
     rm -rf ${target_tmp_dir} && mkdir -p ${target_tmp_dir}
     rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}
 
-    . $(dirname "${BASH_SOURCE[0]}")/setup-maven.sh "${build_target_dir}"/settings.xml
+    . ${script_dir_path}/setup-maven.sh "${build_target_dir}"/settings.xml
 
     cd ${build_target_dir}
     echo "Using branch/tag ${branchTag}, checking out. Temporary build dir is ${build_target_dir} and target dis is ${target_tmp_dir}"

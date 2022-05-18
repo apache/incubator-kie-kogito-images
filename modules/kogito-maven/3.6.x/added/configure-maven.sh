@@ -32,7 +32,7 @@ function configure() {
     add_maven_repo
 
     if [ "${SCRIPT_DEBUG}" = "true" ] ; then
-        cat "${HOME}"/.m2/settings.xml
+        cat "${MAVEN_SETTINGS_PATH}"
     fi
 }
 

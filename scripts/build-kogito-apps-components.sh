@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
 # Parameters:
-#   1 - git target branch - defaults to main
-#   2 - image name - can't  be empty.
+#   1 - image name - can't  be empty.
+#   2 - git target branch - defaults to main
+#   3 - git target uri - defaults to https://github.com/kiegroup/kogito-apps.git
 
 # fast fail
 set -e
 set -o pipefail
 
+KOGITO_APPS_REPO_NAME="kogito-apps"
+
 # Read entries before sourcing
-branchTag="${1:main}"
-imageName="${2}"
+imageName="${1}"
+gitBranch="${2:-main}"
+gitUri="${3:-https://github.com/kiegroup/kogito-apps.git}"
 contextDir=""
 shift $#
+
+echo ${imageName}
+echo ${gitBranch}
+echo ${gitUri}
 
 script_dir_path=$(cd `dirname "${BASH_SOURCE[0]}"`; pwd -P)
 
@@ -75,8 +83,6 @@ case ${imageName} in
         ;;
 esac
 
-KOGITO_APPS_REPO_NAME="kogito-apps"
-
 for ctx in ${contextDir}; do
     target_tmp_dir="/tmp/build/$(basename ${ctx})"
     build_target_dir="/tmp/$(basename ${ctx})"
@@ -86,10 +92,10 @@ for ctx in ${contextDir}; do
     . ${script_dir_path}/setup-maven.sh "${build_target_dir}"/settings.xml
 
     cd ${build_target_dir}
-    echo "Using branch/tag ${branchTag}, checking out. Temporary build dir is ${build_target_dir} and target dis is ${target_tmp_dir}"
+    echo "Using branch/tag ${gitBranch}, checking out. Temporary build dir is ${build_target_dir} and target dis is ${target_tmp_dir}"
 
     if [ ! -d "${build_target_dir}/${KOGITO_APPS_REPO_NAME}" ]; then
-        git_command="git clone --single-branch --branch ${branchTag} --depth 1 https://github.com/kiegroup/${KOGITO_APPS_REPO_NAME}.git"
+        git_command="git clone --single-branch --branch ${gitBranch} --depth 1 ${gitUri}"
         echo "cloning ${KOGITO_APPS_REPO_NAME} with the following git command: ${git_command}"
         eval ${git_command}
     fi

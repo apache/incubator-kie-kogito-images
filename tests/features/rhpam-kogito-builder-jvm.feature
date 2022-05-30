@@ -76,9 +76,10 @@ Feature: rhpam-kogito-builder-rhel8 feature.
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
     Given s2i build /tmp/kogito-examples from dmn-example using 1.13.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
-      | variable       | value          |
-      | KOGITO_VERSION | 1.13.1-SNAPSHOT |   
-      | RUNTIME_TYPE   | springboot     |
+      | variable            | value                |
+      | KOGITO_VERSION      | 1.13.1-SNAPSHOT      |   
+      | RUNTIME_TYPE        | springboot           |
+      | MAVEN_ARGS_APPEND   | -Dstarters=decisions |
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
     And s2i build log should contain Generating springboot project structure for project...
     And check that page is served

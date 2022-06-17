@@ -20,6 +20,7 @@
 @rhpam-7/rhpam-kogito-runtime-jvm-rhel8
 @rhpam-7/rhpam-kogito-builder-rhel8
 @rhpam-7/rhpam-kogito-runtime-native-rhel8
+@rhpam-7/rhpam-kogito-data-index-ephemeral
 Feature: Common tests for Kogito images
 
   Scenario: Verify if Kogito user is correctly configured

@@ -1,17 +1,18 @@
 schema_version: 1
 
-name: "quay.io/kiegroup/kogito-data-index-ephemeral"
-description: "Runtime image for Kogito Data Index Service for ephemeral PostgreSQL persistence provider"
+name: "rhpam-7/rhpam-kogito-data-index-ephemeral"
+version: "7.13.0"
+description: "RHPAM Runtime image for Kogito Data Index Service for ephemeral PostgreSQL persistence provider"
 
 labels:
-- name: "maintainer"
-  value: "kogito <bsig-cloud@redhat.com>"
+- name: "com.redhat.component"
+  value: "rhpam-7-kogito-data-index-ephemeral-container"
 - name: "io.k8s.description"
-  value: "Runtime image for Kogito Data Index Service for ephemeral PostgreSQL persistence provider"
+  value: "Red Hat build of Runtime image for Kogito Data Index Service for ephemeral PostgreSQL persistence provider"
 - name: "io.k8s.display-name"
-  value: "Kogito Data Index Service - ephemeral PostgreSQL"
+  value: "Red Hat build of Kogito Data Index Service - ephemeral PostgreSQL"
 - name: "io.openshift.tags"
-  value: "kogito,data-index,data-index-ephemeral"
+  value: "rhpam-kogito,kogito,data-index,data-index-ephemeral"
 - name: "io.openshift.expose-services"
   value: "8080:http"
 
@@ -32,9 +33,26 @@ modules:
   - name: org.kie.kogito.dynamic.resources
   - name: org.kie.kogito.launch.scripts
   - name: org.kie.kogito.dataindex.ephemeral
-    version: "2.0.0-snapshot"
+    version: "2.0.0-snapshot-prod"
   - name: org.kie.kogito.dataindex.common
   - name: org.kie.kogito.security.custom.truststores
+
+packages:
+  content_sets_file: content_sets.yaml
+
+osbs:
+  configuration:
+    container:
+      platforms:
+        only:
+        - x86_64
+        - ppc64le
+      compose:
+        pulp_repos: true
+  extra_dir: osbs-extra/rhpam-kogito-data-index-ephemeral
+  repository:
+    name: containers/openshift-serverless-logic-data-index-ephemeral
+    branch: openshift-serverless-1-rhel-8
 
 run:
   workdir: "/home/kogito"

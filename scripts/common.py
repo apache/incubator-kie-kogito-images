@@ -26,6 +26,16 @@ BEHAVE_BASE_DIR = 'tests/features'
 CLONE_REPO_SCRIPT = 'tests/test-apps/clone-repo.sh'
 SETUP_MAVEN_SCRIPT = 'scripts/setup-maven.sh'
 
+SUPPORTING_SERVICES_IMAGES = {"rhpam-kogito-data-index-ephemeral", "kogito-data-index-ephemeral",
+                              "kogito-data-index-infinispan", "kogito-data-index-mongodb",
+                              "kogito-data-index-oracle", "kogito-data-index-postgresql",
+                              "kogito-explainability", "kogito-jit-runner",
+                              "kogito-jobs-service-ephemeral", "kogito-jobs-service-infinispan",
+                              "kogito-jobs-service-mongodb", "kogito-jobs-service-postgresql",
+                              "kogito-management-console", "kogito-task-console",
+                              "kogito-trusty-infinispan", "kogito-trusty-postgresql",
+                              "kogito-trusty-redis", "kogito-trusty-ui"}
+
 
 def yaml_loader():
     """
@@ -46,6 +56,7 @@ def update_community_image_version(target_version):
     """
     update_image_version_tag_in_yaml_file(target_version, IMAGE_FILENAME)
 
+
 def update_prod_image_version(target_version):
     """
     Update rhpam-*-overrides.yaml files version tag.
@@ -54,6 +65,7 @@ def update_prod_image_version(target_version):
     for img in sorted(get_prod_images()):
         file = "{}-overrides.yaml".format(img)
         update_image_version_tag_in_yaml_file(target_version, file)
+
 
 def update_image_version_tag_in_yaml_file(target_version, yaml_file):
     """
@@ -75,6 +87,7 @@ def update_image_version_tag_in_yaml_file(target_version, yaml_file):
             yaml_loader().dump(data, image)
     except TypeError as err:
         print("Unexpected error:", err)
+
 
 def update_image_stream(target_version, prod=False):
     """
@@ -128,11 +141,13 @@ def get_community_module_dirs():
     """
     return get_all_module_dirs(COMMUNITY_PREFIX)
 
+
 def get_prod_module_dirs():
     """
     Retrieve the RHPAM module directories
     """
     return get_all_module_dirs(PRODUCT_PREFIX)
+
 
 def get_images(prefix):
     """
@@ -149,17 +164,34 @@ def get_images(prefix):
 
     return images
 
+
 def get_community_images():
     """
     Retrieve the Community images' names
     """
     return get_images(COMMUNITY_PREFIX)
 
+
 def get_prod_images():
     """
     Retrieve the Prod images' names
     """
     return get_images(PRODUCT_PREFIX)
+
+
+def get_supporting_services_images():
+    """
+    Retrieve the Supporting Services images' names
+    """
+    return SUPPORTING_SERVICES_IMAGES
+
+
+def is_supporting_services_image(image_name):
+    """
+    Retrieve the Supporting Services images' names
+    """
+    return image_name in SUPPORTING_SERVICES_IMAGES
+
 
 def update_modules_version(target_version, prod=False):
     """
@@ -171,7 +203,7 @@ def update_modules_version(target_version, prod=False):
         modules = get_prod_module_dirs()
     else:
         get_community_module_dirs()
-    
+
     for module_dir in modules:
         update_module_version(module_dir, target_version)
 
@@ -264,9 +296,11 @@ def update_artifacts_version_in_behave_tests(artifacts_version):
     """
     print("Set artifacts_version {} in behave tests".format(artifacts_version))
     # pattern to change the KOGITO_VERSION
-    pattern = re.compile('\|[\s]*KOGITO_VERSION[\s]*\|[\s]*(([\d.]+.x)|([\d.]+)[\s]*|([\d.]+-SNAPSHOT)|([\d.]+.Final)|([\d.]+\.redhat-[\d]+))[\s]*\|')
+    pattern = re.compile(
+        '\|[\s]*KOGITO_VERSION[\s]*\|[\s]*(([\d.]+.x)|([\d.]+)[\s]*|([\d.]+-SNAPSHOT)|([\d.]+.Final)|([\d.]+\.redhat-[\d]+))[\s]*\|')
     replacement = '| KOGITO_VERSION | {} | '.format(artifacts_version)
     update_in_behave_tests(pattern, replacement)
+
 
 def update_runtime_image_in_behave_tests(runtime_image_name, image_suffix):
     """
@@ -300,15 +334,19 @@ def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
                                                                                                            repo_url)
     update_in_behave_tests(pattern, replacement)
 
+
 def update_maven_mirror_url_in_quarkus_plugin_behave_tests(repo_url):
     """
     Update maven repository into behave tests
     :param repo_url: Maven repository url
     """
     print("Set maven repo {} in quarkus plugin behave tests".format(repo_url))
-    pattern = re.compile('(Kogito Maven archetype.*(?<!springboot)\r?\n\s*Given.*\r?\n\s*)\|\s*variable[\s]*\|[\s]*value[\s]*\|')
-    replacement = "\g<1>| variable | value |\n      | {} | {} |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |\n      | DEBUG | true |".format("MAVEN_MIRROR_URL", repo_url)
+    pattern = re.compile(
+        '(Kogito Maven archetype.*(?<!springboot)\r?\n\s*Given.*\r?\n\s*)\|\s*variable[\s]*\|[\s]*value[\s]*\|')
+    replacement = "\g<1>| variable | value |\n      | {} | {} |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |\n      | DEBUG | true |".format(
+        "MAVEN_MIRROR_URL", repo_url)
     update_in_behave_tests(pattern, replacement)
+
 
 def ignore_maven_self_signed_certificate_in_behave_tests():
     """
@@ -371,6 +409,7 @@ def update_maven_repo_in_setup_maven(repo_url, replace_jboss_repository):
         pattern = re.compile(r'(# export MAVEN_REPO_URL=.*)')
         replacement = 'export MAVEN_REPO_URL="{}"'.format(repo_url)
     update_in_file(SETUP_MAVEN_SCRIPT, pattern, replacement)
+
 
 def ignore_maven_self_signed_certificate_in_setup_maven():
     """

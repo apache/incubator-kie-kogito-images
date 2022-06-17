@@ -2,9 +2,18 @@
 #
 # Clone the kogito-examples and edit the rules-quarkus-helloworld and dmn-quarkus-example for testing purposes
 
+# if image name is supporting services, don't build it
+IMAGE_NAME="$2"
+if [ ! -z $IMAGE_NAME ]; then
+    result=$(python3 ../../scripts/list-images.py -s -is ${IMAGE_NAME})
+    if [ ${result} = "True" ]; then
+        echo "Target image is supporting services, skipping examples build"
+        exit 0
+    fi
+fi
+
 set -e
 base_dir=`dirname $(realpath -s $0)`
-
 . ${base_dir}/../../scripts/setup-maven.sh "$(mktemp)"
 
 MAVEN_OPTIONS="-U ${MAVEN_OPTIONS}"

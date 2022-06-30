@@ -1,7 +1,7 @@
 kind: ImageStreamList
 apiVersion: v1
 metadata:
-  name: rhpam-kogito-image-streams
+  name: ibm-bamoe-kogito-image-streams
   annotations:
     description: ImageStream definitions for Red Hat build of Kogito images
     openshift.io/provider-display-name: Kie Group.
@@ -11,61 +11,61 @@ items:
     metadata:
       name: rhpam-kogito-runtime-jvm-rhel8
       annotations:
-        openshift.io/display-name: RHPAM Runtime image for Kogito based on Quarkus or SpringBoot JVM image
+        openshift.io/display-name: IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '7.11.0'
+        - name: '7.13.0'
           annotations:
-            description: RHPAM Runtime image for Kogito based on Quarkus or SpringBoot JVM image
+            description: IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image
             iconClass: icon-jbpm
-            tags: rhpam-kogito,runtime,kogito,quarkus,springboot,jvm
+            tags: rhpam-kogito,runtime,kogito,quarkus,springboot,jvm,ibm-bamoe-kogito
             supports: quarkus
-            version: '7.11.0'
+            version: '7.13.0'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: registry.redhat.io/rhpam-7/rhpam-kogito-runtime-jvm-rhel8:7.11.0
+            name: registry.redhat.io/rhpam-7/rhpam-kogito-runtime-jvm-rhel8:7.13.0
   - kind: ImageStream
     apiVersion: v1
     metadata:
       name: rhpam-kogito-runtime-native-rhel8
       annotations:
-        openshift.io/display-name: RHPAM Runtime image for Kogito based on Quarkus native image
+        openshift.io/display-name: IBM BAMOE Runtime image for Kogito based on Quarkus native image
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '7.11.0'
+        - name: '7.13.0'
           annotations:
-            description: RHPAM Runtime image for Kogito based on Quarkus native image
+            description: IBM BAMOE Runtime image for Kogito based on Quarkus native image
             iconClass: icon-jbpm
-            tags: rhpam-kogito,runtime,kogito,quarkus,native
+            tags: rhpam-kogito,runtime,kogito,quarkus,native,ibm-bamoe-kogito
             supports: quarkus
-            version: '7.11.0'
+            version: '7.13.0'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: registry.redhat.io/rhpam-7/rhpam-kogito-runtime-native-rhel8:7.11.0
+            name: registry.redhat.io/rhpam-7/rhpam-kogito-runtime-native-rhel8:7.13.0
   - kind: ImageStream
     apiVersion: v1
     metadata:
       name: rhpam-kogito-builder-rhel8
       annotations:
-        openshift.io/display-name: RHPAM Platform for building Kogito based on Quarkus or SpringBoot
+        openshift.io/display-name: IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot
         openshift.io/provider-display-name: Kie Group.
     spec:
       tags:
-        - name: '7.11.0'
+        - name: '7.13.0'
           annotations:
-            description: RHPAM Platform for building Kogito based on Quarkus or SpringBoot
+            description: IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot
             iconClass: icon-jbpm
-            tags: rhpam-kogito,builder,kogito,quarkus,springboot
+            tags: rhpam-kogito,builder,kogito,quarkus,springboot,ibm-bamoe-kogito
             supports: quarkus
-            version: '7.11.0'
+            version: '7.13.0'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: registry.redhat.io/rhpam-7/rhpam-kogito-builder-rhel8:7.11.0
+            name: registry.redhat.io/rhpam-7/rhpam-kogito-builder-rhel8:7.13.0

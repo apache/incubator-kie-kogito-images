@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: ibm-bamoe-kogito-image-streams
   annotations:
-    description: ImageStream definitions for Red Hat build of Kogito images
+    description: ImageStream definitions for IBM build of Kogito images
     openshift.io/provider-display-name: Kie Group.
 items:
   - kind: ImageStream
@@ -19,7 +19,7 @@ items:
           annotations:
             description: IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image
             iconClass: icon-jbpm
-            tags: rhpam-kogito,runtime,kogito,quarkus,springboot,jvm,ibm-bamoe-kogito
+            tags: ibm-bamoe-kogito,runtime,kogito,quarkus,springboot,jvm
             supports: quarkus
             version: '7.13.0'
           referencePolicy:
@@ -40,7 +40,7 @@ items:
           annotations:
             description: IBM BAMOE Runtime image for Kogito based on Quarkus native image
             iconClass: icon-jbpm
-            tags: rhpam-kogito,runtime,kogito,quarkus,native,ibm-bamoe-kogito
+            tags: ibm-bamoe-kogito,runtime,kogito,quarkus,native
             supports: quarkus
             version: '7.13.0'
           referencePolicy:
@@ -61,7 +61,7 @@ items:
           annotations:
             description: IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot
             iconClass: icon-jbpm
-            tags: rhpam-kogito,builder,kogito,quarkus,springboot,ibm-bamoe-kogito
+            tags: ibm-bamoe-kogito,builder,kogito,quarkus,springboot
             supports: quarkus
             version: '7.13.0'
           referencePolicy:

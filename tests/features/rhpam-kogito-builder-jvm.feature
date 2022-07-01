@@ -8,8 +8,8 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And the image should contain label io.openshift.s2i.destination with value /tmp
     And the image should contain label io.openshift.expose-services with value 8080:http
     And the image should contain label io.k8s.description with value IBM BAMOE Platform for building Kogito based on Quarkus or Spring Boot
-    And the image should contain label io.k8s.display-name with value Red Hat build of Kogito builder based on Quarkus or SpringBoot
-    And the image should contain label io.openshift.tags with value rhpam-kogito,builder,kogito,quarkus,springboot
+    And the image should contain label io.k8s.display-name with value IBM build of Kogito builder based on Quarkus or SpringBoot
+    And the image should contain label io.openshift.tags with value ibm-bamoe-kogito,builder,kogito,quarkus,springboot
     And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
     And the image should contain label com.redhat.component with value rhpam-7-kogito-builder-rhel8-container
 

@@ -7,13 +7,13 @@ description: "IBM BAMOE Platform for building Kogito based on Quarkus or SpringB
 
 labels:
   - name: "com.redhat.component"
-    value: "rhpam-7-kogito-builder-rhel8-container"
+    value: "ibm-bamoe-7-kogito-builder-rhel8-container"
   - name: "io.k8s.description"
     value: "IBM BAMOE Platform for building Kogito based on Quarkus or Spring Boot"
   - name: "io.k8s.display-name"
-    value: "Red Hat build of Kogito builder based on Quarkus or SpringBoot"
+    value: "IBM build of Kogito builder based on Quarkus or SpringBoot"
   - name: "io.openshift.tags"
-    value: "rhpam-kogito,builder,kogito,quarkus,springboot,ibm-bamoe-kogito"
+    value: "ibm-bamoe-kogito,builder,kogito,quarkus,springboot"
   - name: "io.openshift.s2i.assemble-input-files"
     value: "/home/kogito/bin"
 

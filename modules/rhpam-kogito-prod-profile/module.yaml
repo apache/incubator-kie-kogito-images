@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.rhpam.prod.profile
-version: '7.13.0'
+version: '"ibm-bamoe-7.0'
 description: Holds custom configurations for productized Kogito images. Add as first module to be installed.
 
 envs:

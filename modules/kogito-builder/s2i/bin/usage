@@ -11,9 +11,9 @@ Example:
 
 $ s2i build -c /Development/project/ ${IMAGE_NAME} <application image> --env RUNTIME_TYPE=quarkus --runtime-image quay.io/kiegroup/kogito-runtime-native --env NATIVE=true"
 
-if [[ "${JBOSS_IMAGE_NAME}" =~ "rhpam-7" ]]; then
-    IMAGE_NAME="registry.redhat.io/rhpam-7/rhpam-kogito-builder-rhel8"
-    RUNTIME_JVM_IMAGE_NAME="registry.redhat.io/rhpam-7/rhpam-kogito-runtime-jvm-rhel8"
+if [[ "${JBOSS_IMAGE_NAME}" =~ "bamoe" ]]; then
+    IMAGE_NAME="registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-builder-rhel8"
+    RUNTIME_JVM_IMAGE_NAME="registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8"
     NATIVE_COMMANDS=""
 fi
 

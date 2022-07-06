@@ -1,4 +1,5 @@
-@quay.io/kiegroup/kogito-builder @rhpam-7/rhpam-kogito-builder-rhel8
+@quay.io/kiegroup/kogito-builder
+@ibm-bamoe/bamoe-kogito-builder-rhel8
 Feature: kogito-builder image JVM build tests
 
   Scenario: verify if the maven and java installation are correct

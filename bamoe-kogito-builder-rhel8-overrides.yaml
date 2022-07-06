@@ -1,13 +1,13 @@
 schema_version: 1
 
-name: "rhpam-7/rhpam-kogito-builder-rhel8"
-version: ""ibm-bamoe-7.0"
+name: "ibm-bamoe/bamoe-kogito-builder-rhel8"
+version: "8.0.0"
 from: "registry.redhat.io/ubi8/ubi-minimal:latest"
 description: "IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot"
 
 labels:
   - name: "com.redhat.component"
-    value: "ibm-bamoe-7-kogito-builder-rhel8-container"
+    value: "rhpam-7-kogito-builder-rhel8-container"
   - name: "io.k8s.description"
     value: "IBM BAMOE Platform for building Kogito based on Quarkus or Spring Boot"
   - name: "io.k8s.display-name"

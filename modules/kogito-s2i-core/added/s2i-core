@@ -262,7 +262,7 @@ function get_runtime_type() {
 function get_quarkus_platform_properties() {
     local quarkus_platform_group_id="${QUARKUS_PLATFORM_GROUP_ID:-io.quarkus.platform}"
     local quarkus_platform_artifact_id="${QUARKUS_PLATFORM_ARTIFACT_ID:-quarkus-bom}"
-    if [[ "${JBOSS_IMAGE_NAME}" =~ "rhpam-7" ]]; then
+    if [[ "${JBOSS_IMAGE_NAME}" =~ "bamoe" ]]; then
         quarkus_platform_group_id="${QUARKUS_PLATFORM_GROUP_ID:-com.redhat.quarkus.platform}"
         quarkus_platform_artifact_id="${QUARKUS_PLATFORM_ARTIFACT_ID:-quarkus-bom}"
     fi

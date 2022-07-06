@@ -11,7 +11,7 @@ MODULE_FILENAME = "module.yaml"
 MODULES_DIR = "modules"
 
 COMMUNITY_PREFIX = 'kogito-'
-PRODUCT_PREFIX = 'rhpam-'
+PRODUCT_PREFIX = 'bamoe-'
 
 # imagestream file that contains all images, this file aldo needs to be updated.
 IMAGE_STREAM_FILENAME = "kogito-imagestream.yaml"
@@ -47,7 +47,7 @@ def update_community_image_version(target_version):
 
 def update_prod_image_version(target_version):
     """
-    Update rhpam-*-overrides.yaml files version tag.
+    Update bamoe-*-overrides.yaml files version tag.
     :param target_version: version used to update the files
     """
     for img in sorted(get_prod_images()):
@@ -279,7 +279,7 @@ def update_runtime_image_in_behave_tests(runtime_image_name, image_suffix):
     replacement = 'runtime-image {}'.format(runtime_image_name)
     update_in_behave_tests(pattern, replacement)
 
-    pattern = re.compile(r'(runtime-image rhpam-7/rhpam-kogito-runtime-{}-rhel8:latest)'.format(image_suffix))
+    pattern = re.compile(r'(runtime-image ibm-bamoe/bamoe-kogito-runtime-{}-rhel8:latest)'.format(image_suffix))
     replacement = 'runtime-image {}'.format(runtime_image_name)
     update_in_behave_tests(pattern, replacement)
 

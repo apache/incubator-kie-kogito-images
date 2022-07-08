@@ -189,8 +189,11 @@ def get_supporting_services_images():
 def is_supporting_services_image(image_name):
     """
     Retrieve the Supporting Services images' names
+    return 0 for found image name or 10 if not found
     """
-    return image_name in SUPPORTING_SERVICES_IMAGES
+    if image_name in SUPPORTING_SERVICES_IMAGES:
+        return 0
+    return 10
 
 
 def update_modules_version(target_version, prod=False):

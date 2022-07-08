@@ -17,10 +17,6 @@ gitUri="${3:-https://github.com/kiegroup/kogito-apps.git}"
 contextDir=""
 shift $#
 
-echo ${imageName}
-echo ${gitBranch}
-echo ${gitUri}
-
 script_dir_path=$(cd `dirname "${BASH_SOURCE[0]}"`; pwd -P)
 
 MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"

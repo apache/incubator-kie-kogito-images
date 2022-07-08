@@ -4,9 +4,9 @@
 
 # if image name is supporting services, don't build it
 IMAGE_NAME="$2"
-if [ ! -z $IMAGE_NAME ]; then
-    result=$(python3 ../../scripts/list-images.py -s -is ${IMAGE_NAME})
-    if [ ${result} = "True" ]; then
+if [ -n "${IMAGE_NAME}" ]; then
+    python3 ../../scripts/list-images.py -s -is ${IMAGE_NAME}
+    if [ $? = 0 ]; then
         echo "Target image is supporting services, skipping examples build"
         exit 0
     fi

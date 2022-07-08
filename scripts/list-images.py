@@ -14,10 +14,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Kogito Version Manager - List Images by Community and Product version')
     parser.add_argument('--prod', default=False, action='store_true', help='List product images')
-    parser.add_argument('-s','--supporting-services', default=False, action='store_true',
+    parser.add_argument('-s', '--supporting-services', default=False, action='store_true',
                         help='List Supporting Services images')
     parser.add_argument('-is', '--is-supporting-services', default=False, type=str,
-                        help='List Supporting Services images')
+                        help='Query the given image, if found exit 0, otherwise exit 10.')
 
     args = parser.parse_args()
 
@@ -26,8 +26,7 @@ if __name__ == "__main__":
         images = common.get_prod_images()
     elif args.supporting_services:
         if args.is_supporting_services:
-            print(common.is_supporting_services_image(args.is_supporting_services))
-            exit
+            exit(common.is_supporting_services_image(args.is_supporting_services))
         else:
             images = common.get_supporting_services_images()
     else:

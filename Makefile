@@ -29,7 +29,7 @@ _build:
 
 .PHONY: build-image
 image_name=
-build-image:
+build-image: clone-repos
 ifneq ($(ignore_build),true)
 	scripts/build-kogito-apps-components.sh ${image_name} ${KOGITO_APPS_TARGET_BRANCH} ${KOGITO_APPS_TARGET_URI};
 	${CEKIT_CMD} build --overrides-file ${image_name}-overrides.yaml ${BUILD_ENGINE}

@@ -72,7 +72,7 @@ items:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: rhpam-kogito-builder-rhel8
+      name: rhpam-kogito-data-index-ephemeral
       annotations:
         openshift.io/display-name: RHPAM Platform for building Kogito based on Quarkus or SpringBoot
         openshift.io/provider-display-name: Kie Group.

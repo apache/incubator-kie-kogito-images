@@ -445,7 +445,7 @@ teardown() {
 
 @test "test if the Quarkus platform properties are correctly returned for prod version" {
     QUARKUS_VERSION="1.2.3.4"
-    JBOSS_IMAGE_NAME="rhpam-7/kogito-builder"
+    JBOSS_IMAGE_NAME="ibm-bamoe/kogito-builder"
 
     result=$(get_quarkus_platform_properties)
 

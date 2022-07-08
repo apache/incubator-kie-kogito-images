@@ -1,19 +1,19 @@
 schema_version: 1
 
-name: "rhpam-7/rhpam-kogito-builder-rhel8"
-version: "7.11.0"
+name: "ibm-bamoe/bamoe-kogito-builder-rhel8"
+version: "8.0.0"
 from: "registry.redhat.io/ubi8/ubi-minimal:latest"
-description: "RHPAM Platform for building Kogito based on Quarkus or SpringBoot"
+description: "IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot"
 
 labels:
   - name: "com.redhat.component"
     value: "rhpam-7-kogito-builder-rhel8-container"
   - name: "io.k8s.description"
-    value: "RHPAM Platform for building Kogito based on Quarkus or Spring Boot"
+    value: "IBM BAMOE Platform for building Kogito based on Quarkus or Spring Boot"
   - name: "io.k8s.display-name"
-    value: "Red Hat build of Kogito builder based on Quarkus or SpringBoot"
+    value: "IBM build of Kogito builder based on Quarkus or SpringBoot"
   - name: "io.openshift.tags"
-    value: "rhpam-kogito,builder,kogito,quarkus,springboot"
+    value: "ibm-bamoe-kogito,builder,kogito,quarkus,springboot"
   - name: "io.openshift.s2i.assemble-input-files"
     value: "/home/kogito/bin"
 

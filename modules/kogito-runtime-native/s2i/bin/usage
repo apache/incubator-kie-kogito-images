@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 IMAGE_NAME="quay.io/kiegroup/kogito-runtime-native"
-if [[ "${JBOSS_IMAGE_NAME}" =~ "rhpam-7" ]]; then
-    IMAGE_NAME="registry.redhat.io/rhpam-7/rhpam-kogito-runtime-native-rhel8"
+if [[ "${JBOSS_IMAGE_NAME}" =~ "bamoe" ]]; then
+    IMAGE_NAME="registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-native-rhel8"
 fi
 
 cat <<EOF

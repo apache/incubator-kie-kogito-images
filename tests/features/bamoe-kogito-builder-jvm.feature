@@ -1,4 +1,4 @@
-@rhpam-7/rhpam-kogito-builder-rhel8
+@ibm-bamoe/bamoe-kogito-builder-rhel8
 Feature: rhpam-kogito-builder-rhel8 feature.
 
   Scenario: verify if all labels are correctly set on rhpam-kogito-builder-rhel8 image
@@ -7,11 +7,11 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     Then the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
     And the image should contain label io.openshift.s2i.destination with value /tmp
     And the image should contain label io.openshift.expose-services with value 8080:http
-    And the image should contain label io.k8s.description with value RHPAM Platform for building Kogito based on Quarkus or Spring Boot
-    And the image should contain label io.k8s.display-name with value Red Hat build of Kogito builder based on Quarkus or SpringBoot
-    And the image should contain label io.openshift.tags with value rhpam-kogito,builder,kogito,quarkus,springboot
+    And the image should contain label io.k8s.description with value IBM BAMOE Platform for building Kogito based on Quarkus or Spring Boot
+    And the image should contain label io.k8s.display-name with value IBM build of Kogito builder based on Quarkus or SpringBoot
+    And the image should contain label io.openshift.tags with value ibm-bamoe-kogito,builder,kogito,quarkus,springboot
     And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
-    And the image should contain label com.redhat.component with value rhpam-7-kogito-builder-rhel8-container
+    And the image should contain label com.ibm.component with value ibm-bamoe-8-builder-rhel8-container
 
 
   Scenario: verify if prod builder image contains the red hat maven repositories
@@ -26,7 +26,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And file /home/kogito/.m2/settings.xml should contain <url>https://maven.repository.redhat.com/techpreview/all</url>
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:latest
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
@@ -52,7 +52,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
       | request_body    | {"status": "UP", "checks": []}  |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id, archetype & version
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:latest
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |
@@ -75,7 +75,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
 #### SpringBoot Scenarios
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:latest
       | variable            | value                |
       | KOGITO_VERSION | 1.13.2-SNAPSHOT |    
       | RUNTIME_TYPE        | springboot           |

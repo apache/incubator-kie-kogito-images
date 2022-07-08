@@ -1,0 +1,71 @@
+kind: ImageStreamList
+apiVersion: v1
+metadata:
+  name: ibm-bamoe-kogito-image-streams
+  annotations:
+    description: ImageStream definitions for IBM build of Kogito images
+    openshift.io/provider-display-name: IBM, Inc.
+items:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: bamoe-kogito-runtime-jvm-rhel8
+      annotations:
+        openshift.io/display-name: IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image
+        openshift.io/provider-display-name: IBM, Inc.
+    spec:
+      tags:
+        - name: '8.0.0'
+          annotations:
+            description: IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image
+            iconClass: icon-jbpm
+            tags: ibm-bamoe-kogito,runtime,kogito,quarkus,springboot,jvm
+            supports: quarkus
+            version: '8.0.0'
+          referencePolicy:
+            type: Local
+          from:
+            kind: DockerImage
+            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:8.0.0
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: bamoe-kogito-runtime-native-rhel8
+      annotations:
+        openshift.io/display-name: IBM BAMOE Runtime image for Kogito based on Quarkus native image
+        openshift.io/provider-display-name: IBM, Inc.
+    spec:
+      tags:
+        - name: '8.0.0'
+          annotations:
+            description: IBM BAMOE Runtime image for Kogito based on Quarkus native image
+            iconClass: icon-jbpm
+            tags: ibm-bamoe-kogito,runtime,kogito,quarkus,native
+            supports: quarkus
+            version: '8.0.0'
+          referencePolicy:
+            type: Local
+          from:
+            kind: DockerImage
+            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-native-rhel8:8.0.0
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: bamoe-kogito-builder-rhel8
+      annotations:
+        openshift.io/display-name: IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot
+        openshift.io/provider-display-name: IBM, Inc.
+    spec:
+      tags:
+        - name: '8.0.0'
+          annotations:
+            description: IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot
+            iconClass: icon-jbpm
+            tags: ibm-bamoe-kogito,builder,kogito,quarkus,springboot
+            supports: quarkus
+            version: '8.0.0'
+          referencePolicy:
+            type: Local
+          from:
+            kind: DockerImage
+            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-builder-rhel8:8.0.0

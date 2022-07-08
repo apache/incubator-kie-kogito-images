@@ -14,7 +14,7 @@
 @quay.io/kiegroup/kogito-trusty-infinispan
 @quay.io/kiegroup/kogito-trusty-redis
 @quay.io/kiegroup/kogito-trusty-postgresql
-@rhpam-7/rhpam-kogito-runtime-jvm-rhel8
+@ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8
 Feature: Common tests for Custom TrustStore configuration
   Scenario: Verify if a custom certificate is correctly handled
     When container is started with command /home/kogito/kogito-app-launch.sh

@@ -11,6 +11,6 @@ Feature: rhpam-kogito-runtime-jvm feature.
     And the image should contain label io.k8s.display-name with value IBM build of Kogito runtime based on Quarkus or SpringBoot JVM image
     And the image should contain label io.openshift.tags with value ibm-bamoe-kogito,runtime,kogito,quarkus,springboot,jvm
     And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
-    And the image should contain label com.redhat.component with value rhpam-7-runtime-jvm-rhel8-container
+    And the image should contain label com.redhat.component with value rhpam-7-kogito-runtime-jvm-rhel8-container
 
 

@@ -36,12 +36,12 @@ The build works in the follow CEKit build hierarchy:
 Example: 
 
 ```bash 
-cekit --verbose --redhat build --overrides-file kogito-runtime-jvm-overrides.yaml --overrides-file rhpam-kogito-runtime-jvm-rhel8-overrides.yaml docker
+cekit --verbose --redhat build --overrides-file kogito-runtime-jvm-overrides.yaml --overrides-file bamoe-kogito-runtime-jvm-rhel8-overrides.yaml docker
 ```
 
 The product image name must respect the community image name:
 
- - rhpam-$(kogito_image_name)-rhel8
+ - bamoe-$(kogito_image_name)-rhel8
 
 
 ### Common script

@@ -15,7 +15,7 @@ PRODUCT_PREFIX = 'bamoe-'
 
 # imagestream file that contains all images, this file aldo needs to be updated.
 IMAGE_STREAM_FILENAME = "kogito-imagestream.yaml"
-PROD_IMAGE_STREAM_FILENAME = "rhpam-kogito-imagestream.yaml"
+PROD_IMAGE_STREAM_FILENAME = "bamoe-kogito-imagestream.yaml"
 # image.yaml file definition that needs to be updated
 IMAGE_FILENAME = "image.yaml"
 ARTIFACTS_VERSION_ENV_KEY = "KOGITO_VERSION"

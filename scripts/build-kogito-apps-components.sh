@@ -74,7 +74,7 @@ case ${imageName} in
         contextDir="jitexecutor/jitexecutor-runner"
         ;;
     *)
-        echo "${imageName} is not a supporting service image, exiting..."
+        echo "${imageName} is not a supporting service image or can't be built from sources, exiting..."
         exit 0
         ;;
 esac

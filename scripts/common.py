@@ -26,15 +26,17 @@ BEHAVE_BASE_DIR = 'tests/features'
 CLONE_REPO_SCRIPT = 'tests/test-apps/clone-repo.sh'
 SETUP_MAVEN_SCRIPT = 'scripts/setup-maven.sh'
 
-SUPPORTING_SERVICES_IMAGES = {"rhpam-kogito-data-index-ephemeral", "kogito-data-index-ephemeral",
-                              "kogito-data-index-infinispan", "kogito-data-index-mongodb",
-                              "kogito-data-index-oracle", "kogito-data-index-postgresql",
-                              "kogito-explainability", "kogito-jit-runner",
-                              "kogito-jobs-service-ephemeral", "kogito-jobs-service-infinispan",
-                              "kogito-jobs-service-mongodb", "kogito-jobs-service-postgresql",
-                              "kogito-management-console", "kogito-task-console",
-                              "kogito-trusty-infinispan", "kogito-trusty-postgresql",
-                              "kogito-trusty-redis", "kogito-trusty-ui"}
+SUPPORTING_SERVICES_IMAGES = {"kogito-data-index-ephemeral", "kogito-data-index-infinispan",
+                              "kogito-data-index-mongodb", "kogito-data-index-oracle",
+                              "kogito-data-index-postgresql", "kogito-explainability",
+                              "kogito-jit-runner", "kogito-jobs-service-ephemeral",
+                              "kogito-jobs-service-infinispan", "kogito-jobs-service-mongodb",
+                              "kogito-jobs-service-postgresql", "kogito-management-console",
+                              "kogito-task-console", "kogito-trusty-infinispan",
+                              "kogito-trusty-postgresql", "kogito-trusty-redis",
+                              "kogito-trusty-ui"}
+
+PROD_SUPPORTING_SERVICES_IMAGES = {"rhpam-kogito-data-index-ephemeral"}
 
 
 def yaml_loader():
@@ -92,15 +94,16 @@ def update_image_version_tag_in_yaml_file(target_version, yaml_file):
 def update_image_stream(target_version, prod=False):
     """
     Update the imagestream file, it will update the tag name, version and image tag.
+    :param prod: if the imagestream is the prod version
     :param target_version: version used to update the imagestream file;
     """
-    imageStreamFilename = IMAGE_STREAM_FILENAME
+    image_stream_filename = IMAGE_STREAM_FILENAME
     if prod:
-        imageStreamFilename = PROD_IMAGE_STREAM_FILENAME
-    print("Updating ImageStream images version from file {0} to version {1}".format(imageStreamFilename,
+        image_stream_filename = PROD_IMAGE_STREAM_FILENAME
+    print("Updating ImageStream images version from file {0} to version {1}".format(image_stream_filename,
                                                                                     target_version))
     try:
-        with open(imageStreamFilename) as imagestream:
+        with open(image_stream_filename) as imagestream:
             data = yaml_loader().load(imagestream)
             for item_index, item in enumerate(data['items'], start=0):
                 for tag_index, tag in enumerate(item['spec']['tags'], start=0):
@@ -111,7 +114,7 @@ def update_image_stream(target_version, prod=False):
                     updated_image_name = image_dict[0] + ':' + target_version
                     data['items'][item_index]['spec']['tags'][tag_index]['from']['name'] = updated_image_name
 
-        with open(imageStreamFilename, 'w') as imagestream:
+        with open(image_stream_filename, 'w') as imagestream:
             yaml_loader().dump(data, imagestream)
 
     except TypeError:
@@ -179,26 +182,28 @@ def get_prod_images():
     return get_images(PRODUCT_PREFIX)
 
 
-def get_supporting_services_images():
+def get_supporting_services_images(is_prod_image):
     """
     Retrieve the Supporting Services images' names
     """
+    if is_prod_image:
+        return PROD_SUPPORTING_SERVICES_IMAGES
     return SUPPORTING_SERVICES_IMAGES
 
 
 def is_supporting_services_image(image_name):
     """
-    Retrieve the Supporting Services images' names
-    return 0 for found image name or 10 if not found
+    Raise an error if the given image is not a supporting service
     """
-    if image_name in SUPPORTING_SERVICES_IMAGES:
-        return 0
-    return 10
+    all_supporting_services_images = SUPPORTING_SERVICES_IMAGES.union(PROD_SUPPORTING_SERVICES_IMAGES)
+    if image_name not in all_supporting_services_images:
+        raise RuntimeError('{} is not a supporting service'.format(image_name))
 
 
 def update_modules_version(target_version, prod=False):
     """
     Update every Kogito module.yaml to the given version.
+    :param prod: if the module to be updated is prod version.
     :param target_version: version used to update all Kogito module.yaml files
     """
     modules = []
@@ -322,16 +327,16 @@ def update_runtime_image_in_behave_tests(runtime_image_name, image_suffix):
     update_in_behave_tests(pattern, replacement)
 
 
-def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
+def update_maven_repo_in_behave_tests(repo_url, replace_jboss_repository):
     """
     Update maven repository into behave tests
     :param repo_url: Maven repository url
-    :param replaceJbossRepository: Set to true if default Jboss repository needs to be overriden
+    :param replace_jboss_repository: Set to true if default Jboss repository needs to be overriden
     """
     print("Set maven repo {} in behave tests".format(repo_url))
     pattern = re.compile('\|\s*variable[\s]*\|[\s]*value[\s]*\|')
     env_var_key = "MAVEN_REPO_URL"
-    if replaceJbossRepository:
+    if replace_jboss_repository:
         env_var_key = "JBOSS_MAVEN_REPO_URL"
     replacement = "| variable | value |\n      | {} | {} |\n      | MAVEN_DOWNLOAD_OUTPUT | true |".format(env_var_key,
                                                                                                            repo_url)

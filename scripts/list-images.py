@@ -8,6 +8,7 @@ import sys
 
 import common
 
+sys.tracebacklimit = 0
 sys.dont_write_bytecode = True
 
 if __name__ == "__main__":
@@ -22,13 +23,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     images = []
-    if args.prod:
-        images = common.get_prod_images()
+    if args.is_supporting_services:
+        common.is_supporting_services_image(args.is_supporting_services)
     elif args.supporting_services:
-        if args.is_supporting_services:
-            exit(common.is_supporting_services_image(args.is_supporting_services))
-        else:
-            images = common.get_supporting_services_images()
+        images = common.get_supporting_services_images(args.prod)
+    elif args.prod:
+        images = common.get_prod_images()
     else:
         images = common.get_community_images()
 

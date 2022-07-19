@@ -58,7 +58,7 @@ osbs:
           - ppc64le
       compose:
         pulp_repos: true
-  extra_dir: osbs-extra/ibm-bamoe-kogito-runtime-jvm-rhel8
+  extra_dir: osbs-extra/rhpam-kogito-runtime-jvm-rhel8
   repository:
     name: containers/ibm-bamoe-kogito-runtime-jvm
     branch: ibm-bamoe-rhel-8

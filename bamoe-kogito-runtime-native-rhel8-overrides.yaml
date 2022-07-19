@@ -49,7 +49,7 @@ packages:
 osbs:
   configuration:
     container_file: container.yaml
-  extra_dir: osbs-extra/ibm-bamoe-kogito-runtime-native-rhel8
+  extra_dir: osbs-extra/rhpam-kogito-runtime-native-rhel8
   repository:
     name: containers/ibm-bamoe-kogito-runtime-native
     branch: ibm-bamoe-rhel-8

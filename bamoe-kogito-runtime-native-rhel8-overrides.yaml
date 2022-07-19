@@ -7,7 +7,7 @@ description: "IBM BAMOE Runtime image for Kogito based on Quarkus native image"
 
 labels:
   - name: "com.redhat.component"
-    value: "rhpam-7-kogito-runtime-native-rhel8-container"
+    value: "ibm-bamoe-kogito-runtime-native-rhel8-container"
   - name: "io.k8s.description"
     value: "IBM BAMOE Runtime image for Kogito based on Quarkus native image"
   - name: "io.k8s.display-name"
@@ -49,10 +49,10 @@ packages:
 osbs:
   configuration:
     container_file: container.yaml
-  extra_dir: osbs-extra/rhpam-kogito-runtime-native-rhel8
+  extra_dir: osbs-extra/ibm-bamoe-kogito-runtime-native-rhel8
   repository:
-    name: containers/rhpam-7-kogito-runtime-native
-    branch: rhba-7-rhel-8
+    name: containers/ibm-bamoe-kogito-runtime-native
+    branch: ibm-bamoe-rhel-8
 
 ## s2i build . -e BINARY=true registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-native-rhel8:latest
 ## where "." is the sources dir, ie: /data/dev/sources/kogito-examples/rules-quarkus-helloworld

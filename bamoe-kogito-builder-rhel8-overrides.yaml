@@ -77,7 +77,7 @@ osbs:
           - ppc64le
       compose:
         pulp_repos: true
-  extra_dir: osbs-extra/ibm-bamoe-kogito-builder-rhel8
+  extra_dir: osbs-extra/rhpam-kogito-builder-rhel8
   repository:
     name: containers/ibm-bamoe-kogito-builder
     branch: ibm-bamoe-rhel-8

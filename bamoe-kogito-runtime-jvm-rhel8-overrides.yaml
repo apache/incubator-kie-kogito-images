@@ -7,7 +7,7 @@ description: "IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot 
 
 labels:
   - name: "com.redhat.component"
-    value: "rhpam-7-kogito-runtime-jvm-rhel8-container"
+    value: "ibm-bamoe-kogito-runtime-jvm-rhel8-container"
   - name: "io.k8s.description"
     value: "IBM BAMOE Runtime image for Kogito based on Quarkus or Spring Boot JVM image"
   - name: "io.k8s.display-name"
@@ -58,10 +58,10 @@ osbs:
           - ppc64le
       compose:
         pulp_repos: true
-  extra_dir: osbs-extra/rhpam-kogito-runtime-jvm-rhel8
+  extra_dir: osbs-extra/ibm-bamoe-kogito-runtime-jvm-rhel8
   repository:
-    name: containers/rhpam-7-kogito-runtime-jvm
-    branch: rhba-7-rhel-8
+    name: containers/ibm-bamoe-kogito-runtime-jvm
+    branch: ibm-bamoe-rhel-8
 
 run:
   workdir: "/home/kogito"

@@ -4,7 +4,6 @@ version: "2.0.0-snapshot-prod"
 
 artifacts:
 - name: data-index-service-inmemory-runner.jar
-  url: https://repository.jboss.org/nexus/content/groups/public/org/kie/kogito/data-index-service-inmemory/1.24.0.Final/data-index-service-inmemory-1.24.0.Final-runner.jar
   md5: a437d7f65a72e906c15da0300c583c7e
 
 execute:

@@ -5,11 +5,10 @@
 # if image name is supporting services, don't build it
 IMAGE_NAME="$2"
 prod=""
-if [[ ${IMAGE_NAME} =~ rhpam* ]]; then
-  prod="--prod"
-fi
-  
 if [ -n "${IMAGE_NAME}" ]; then
+    if [[ ${IMAGE_NAME} =~ rhpam* ]]; then
+        prod="--prod"
+    fi
     python3 ../../scripts/list-images.py ${prod} -is ${IMAGE_NAME}
     if [ $? = 0 ]; then
         echo "Target image is supporting services, skipping examples build"

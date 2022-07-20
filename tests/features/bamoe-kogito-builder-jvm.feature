@@ -11,7 +11,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And the image should contain label io.k8s.display-name with value IBM build of Kogito builder based on Quarkus or SpringBoot
     And the image should contain label io.openshift.tags with value ibm-bamoe-kogito,builder,kogito,quarkus,springboot
     And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
-    And the image should contain label com.redhat.component with value rhpam-7-kogito-builder-rhel8-container
+    And the image should contain label com.redhat.component with value ibm-bamoe-kogito-builder-rhel8-container
 
 
   Scenario: verify if prod builder image contains the red hat maven repositories

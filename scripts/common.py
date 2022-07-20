@@ -191,13 +191,17 @@ def get_supporting_services_images(is_prod_image):
     return SUPPORTING_SERVICES_IMAGES
 
 
-def is_supporting_services_image(image_name):
+def is_supporting_services_image(image_name, prod=False):
     """
     Raise an error if the given image is not a supporting service
     """
-    all_supporting_services_images = SUPPORTING_SERVICES_IMAGES.union(PROD_SUPPORTING_SERVICES_IMAGES)
-    if image_name not in all_supporting_services_images:
-        raise RuntimeError('{} is not a supporting service'.format(image_name))
+    found = False
+    if prod:
+        if image_name not in PROD_SUPPORTING_SERVICES_IMAGES:
+            raise RuntimeError('{} is not a productized supporting service'.format(image_name))
+    else:
+        if image_name not in SUPPORTING_SERVICES_IMAGES:
+            raise RuntimeError('{} is not a supporting service'.format(image_name))
 
 
 def update_modules_version(target_version, prod=False):

@@ -3,8 +3,8 @@ name: org.kie.kogito.dataindex.ephemeral
 version: "2.0.0-snapshot-prod"
 
 artifacts:
-- name: data-index-service-inmemory-runner.jar
-  md5: a437d7f65a72e906c15da0300c583c7e
+- name: data-index-service-inmemory-image-build.zip
+  md5: 89dc6b629603e4c9b561816c38388953
 
 execute:
   - script: configure

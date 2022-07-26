@@ -3,7 +3,7 @@ SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"
 BUILD_ENGINE := docker
 .DEFAULT_GOAL := build
 CEKIT_CMD := cekit -v ${cekit_option}
-NATIVE := false
+NATIVE := true
 
 clone-repos:
 # if the NO_TEST env defined, proceed with the tests, as first step prepare the repo to be used

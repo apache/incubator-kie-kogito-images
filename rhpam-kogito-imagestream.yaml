@@ -69,24 +69,4 @@ items:
           from:
             kind: DockerImage
             name: registry.redhat.io/rhpam-7/rhpam-kogito-builder-rhel8:7.11.0
-  - kind: ImageStream
-    apiVersion: v1
-    metadata:
-      name: rhpam-kogito-data-index-ephemeral
-      annotations:
-        openshift.io/display-name: RHPAM Platform for building Kogito based on Quarkus or SpringBoot
-        openshift.io/provider-display-name: Kie Group.
-    spec:
-      tags:
-      - name: '7.13.0'
-        annotations:
-          description: Red Hat build of Kogito Data Index Service - ephemeral PostgreSQL
-          iconClass: icon-jbpm
-          tags: rhpam-kogito,kogito,data-index,data-index-ephemeral
-          supports: quarkus
-          version: '7.13.0'
-        referencePolicy:
-          type: Local
-        from:
-          kind: DockerImage
-          name: registry.redhat.io/rhpam-7/rhpam-kogito-data-index-ephemeral:7.13.0
+

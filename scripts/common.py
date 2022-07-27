@@ -36,7 +36,7 @@ SUPPORTING_SERVICES_IMAGES = {"kogito-data-index-ephemeral", "kogito-data-index-
                               "kogito-trusty-postgresql", "kogito-trusty-redis",
                               "kogito-trusty-ui"}
 
-PROD_SUPPORTING_SERVICES_IMAGES = {"rhpam-kogito-data-index-ephemeral"}
+PROD_SUPPORTING_SERVICES_IMAGES = {"logic-data-index-ephemeral-rhel8"}
 
 
 def yaml_loader():

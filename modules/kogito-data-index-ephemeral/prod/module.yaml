@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.ephemeral
-version: "2.0.0-snapshot-prod"
+version: "1.24.0"
 
 artifacts:
   # openshift-serverless-logic-1.24.0.DR1-data-index-service-inmemory-image-build.zip

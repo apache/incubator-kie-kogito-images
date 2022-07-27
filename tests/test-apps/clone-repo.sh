@@ -6,7 +6,7 @@
 IMAGE_NAME="$2"
 prod=""
 if [ -n "${IMAGE_NAME}" ]; then
-    if [[ ${IMAGE_NAME} =~ rhpam* ]]; then
+    if [[ ${IMAGE_NAME} =~ rhpam|logic* ]]; then
         prod="--prod"
     fi
     python3 ../../scripts/list-images.py ${prod} -is ${IMAGE_NAME}

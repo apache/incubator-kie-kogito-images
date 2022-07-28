@@ -10,10 +10,10 @@ NATIVE := true
 clone-repos:
 # if the ignore_test env is not defined or false, proceed with the tests, as first step prepare the examples to be used
 ifneq ($(ignore_test),true)
-	ifneq ($(ignore_test_prepare),true)
-		cd tests/test-apps && sh clone-repo.sh $(NATIVE) $(image_name)
-		cd ../..
-	endif
+ifneq ($(ignore_test_prepare),true)
+	cd tests/test-apps && sh clone-repo.sh $(NATIVE) $(image_name)
+	cd ../..
+endif
 endif
 
 .PHONY: list

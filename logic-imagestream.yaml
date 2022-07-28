@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: openshift-serverless-kogito-image-streams
   annotations:
-    description: ImageStream definitions for Red Hat build of OpenShift Kogito Serverless images
+    description: ImageStream definitions for Red Hat OpenShift Serverless Logic images
     openshift.io/provider-display-name: Kie Group
 items:
   - kind: ImageStream

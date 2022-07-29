@@ -27,14 +27,20 @@ pipeline {
                     if (env.MAVEN_MIRROR_REPOSITORY != null
                             && env.MAVEN_MIRROR_REPOSITORY != '') {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
-                            }
+                    }
 
                     githubscm.checkoutIfExists('kogito-images', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
 
-                    //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
+                    // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
                     if (env.MAVEN_MIRROR_URL != '') {
+                        echo "Maven mirror is ${env.MAVEN_MIRROR_URL}"
                         sh 'python3 scripts/update-tests.py --ignore-self-signed-cert'
                     }
+
+                    env.MAVEN_DOWNLOAD_OUTPUT='true'
+                    env.MAVEN_MIRROR_URL = ''
+
+                    sh 'printenv'
                 }
             }
         }
@@ -149,7 +155,7 @@ void buildImage(String imageName) {
 }
 
 void testImage(String imageName) {
-    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true"
+    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true test_options=--wip"
 }
 
 String getMakeBuildImageArgs() {
@@ -186,5 +192,6 @@ String getWorkspacePath(String image) {
 }
 
 String[] getImages() {
-    return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    // return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    return [ 'kogito-builder' ]
 }

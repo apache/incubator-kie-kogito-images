@@ -5,7 +5,7 @@ KOGITO_APPS_TARGET_URI ?= https://github.com/kiegroup/kogito-apps.git
 BUILD_ENGINE := docker
 .DEFAULT_GOAL := build
 CEKIT_CMD := cekit -v ${cekit_option}
-NATIVE := true
+NATIVE := false
 
 clone-repos:
 # if the ignore_test env is not defined or false, proceed with the tests, as first step prepare the examples to be used

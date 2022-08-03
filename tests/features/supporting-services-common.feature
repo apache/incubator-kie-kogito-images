@@ -16,6 +16,6 @@
 @quay.io/kiegroup/kogito-jit-runner
 Feature: kogito supporting services common feature
 
-Scenario: verify if the management console jar is available on /home/kogito
+Scenario: Verify if the application jar exists
   When container is started with command bash
   Then run sh -c 'ls /home/kogito/bin/quarkus-app/quarkus-run.jar' in container and immediately check its output for /home/kogito/bin/quarkus-app/quarkus-run.jar

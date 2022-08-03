@@ -14,6 +14,7 @@
 @quay.io/kiegroup/kogito-trusty-redis
 @quay.io/kiegroup/kogito-trusty-ui
 @quay.io/kiegroup/kogito-jit-runner
+@openshift-serverless-1/logic-data-index-ephemeral-rhel8
 Feature: kogito supporting services common feature
 
 Scenario: Verify if the application jar exists

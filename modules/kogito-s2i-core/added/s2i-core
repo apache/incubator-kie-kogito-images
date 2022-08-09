@@ -110,7 +110,7 @@ function build_kogito_app() {
         if [ "${RUNTIME_TYPE}" == "${QUARKUS_RUNTIME_TYPE}" ]; then
 
             local quarkus_plugin="${QUARKUS_PLUGIN:-io.quarkus:quarkus-maven-plugin}"
-            if [[ "${JBOSS_IMAGE_NAME}" =~ "rhpam-7" ]]; then
+            if [[ "${JBOSS_IMAGE_NAME}" =~ "bamoe" ]]; then
                 quarkus_plugin="${QUARKUS_PLUGIN:-com.redhat.quarkus.platform:quarkus-maven-plugin}"
             fi
 
@@ -124,7 +124,7 @@ function build_kogito_app() {
                 fi
             done
 
-            log_info "----> Using Quarkus version ${quarkus_version} to bootstrap the application."
+            log_info "----> Using Quarkus ${quarkus_plugin}:${quarkus_version} to bootstrap the application."
 
             $MAVEN_HOME/bin/mvn -U -B ${MAVEN_ARGS_APPEND} -s "${KOGITO_HOME}"/.m2/settings.xml $(get_quarkus_platform_properties) \
                 "${quarkus_plugin}":"${quarkus_version}":create  \

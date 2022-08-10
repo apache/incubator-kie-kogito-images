@@ -5,7 +5,7 @@ version: "1.24.0"
 artifacts:
   # data-index-service-inmemory-1.24.0.Final-redhat-00011-image-build.zip
 - name: data-index-service-inmemory-image-build.zip
-  md5: bb1bc00e69b69eed52e876d0576223af9687891e
+  md5: 439ecd6255b9c204e3808e5a35a58463
 
 execute:
   - script: configure

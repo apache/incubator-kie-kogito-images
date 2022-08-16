@@ -1,7 +1,7 @@
 @ibm-bamoe/bamoe-kogito-builder-rhel8
 Feature: rhpam-kogito-builder-rhel8 feature.
 
-  Scenario: verify if all labels are correctly set on rhpam-kogito-builder-rhel8 image
+  Scenario: verify if all labels are correctly set on bamoe-kogito-builder-rhel8 image
     Given image is built
     # Then the image should not contain label maintainer TODO add support to this sentence on cekit behave steps
     Then the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
@@ -12,7 +12,6 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And the image should contain label io.openshift.tags with value ibm-bamoe-kogito,builder,kogito,quarkus,springboot
     And the image should contain label io.openshift.s2i.assemble-input-files with value /home/kogito/bin
     And the image should contain label com.redhat.component with value ibm-bamoe-kogito-builder-rhel8-container
-
 
   Scenario: verify if prod builder image contains the red hat maven repositories
     When container is started with command bash

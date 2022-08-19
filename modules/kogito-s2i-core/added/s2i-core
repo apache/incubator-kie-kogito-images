@@ -184,7 +184,7 @@ function build_kogito_app() {
 
             $MAVEN_HOME/bin/mvn ${MAVEN_ARGS_APPEND} -s "${MAVEN_SETTINGS_PATH}" $(get_quarkus_platform_properties) \
                 "${quarkus_plugin}":"${quarkus_version}":add-extension \
-                -Dextensions="org.kie.kogito:kogito-quarkus-serverless-workflow"
+                -Dextensions="org.kie.kogito:kogito-quarkus-serverless-workflow,org.kie.kogito:kogito-addons-quarkus-knative-eventing"
         fi
 
         $MAVEN_HOME/bin/mvn clean package ${MAVEN_ARGS_APPEND} ${KOGITO_OPTS} ${nativeBuild} -s "${MAVEN_SETTINGS_PATH}" \

@@ -55,7 +55,7 @@ envs:
     example: "quarkus-bom-custom"
 
   - name: QUARKUS_EXTRA_EXTENSIONS
-    description: ^ Defines the Quarkus' extra extensions to be added when performing build from assets.
+    description: ^ Defines the Quarkus' extra extensions (as comma-separated list) to be added when performing build from assets.
     example: "org.kie.kogito:kogito-addons-quarkus-knative-eventing,quarkus-kubernetes"
 
 modules:

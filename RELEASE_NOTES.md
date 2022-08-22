@@ -3,7 +3,7 @@
 [KOGITO-7700](https://issues.redhat.com/browse/KOGITO-7700) - Allow adding quarkus extensions when building from assets
 
 ## Bug Fixes
-[KOGITO-77910](https://issues.redhat.com/browse/KOGITO-7791) - [TEST] - Serverless Workflow Extension is building the service properly is failing
+[KOGITO-7791](https://issues.redhat.com/browse/KOGITO-7791) - [TEST] - Serverless Workflow Extension is building the service properly is failing
 
 ## Known Issues
 

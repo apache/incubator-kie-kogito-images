@@ -1,0 +1,7 @@
+schema_version: 1
+name: org.kie.kogito.quarkus.project
+version: "2.0.0-snapshot"
+description: "Module that generates a Quarkus project with required extensions"
+
+execute:
+  - script: configure

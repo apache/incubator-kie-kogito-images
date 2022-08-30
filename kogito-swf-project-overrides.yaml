@@ -1,0 +1,55 @@
+schema_version: 1
+
+name: "quay.io/kiegroup/kogito-sw-project"
+description: "Kogito Serverless Workflow base"
+
+labels:
+  - name: "QUARKUS_PROJECT_NAME"
+    value: "kogito-swf-base"
+  - name: "org.quarkus.version"
+    value: "2.11.2.Final"
+
+# QUARKUS_VERSION must be aligned with Kogito
+envs:
+  - name: QUARKUS_VERSION
+    value: 2.11.2.Final
+  - name: QUARKUS_PROJECT_NAME
+    value: kogito-swf-base
+    example: acme-test
+  - name: QUARKUS_EXTENSIONS
+    value: "kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,quarkus-kubernetes"
+  - name: JAVA_OPTIONS
+    example: "-Dquarkus.log.level=DEBUG"
+    description: JVM options passed to the Java command.
+  - name: MAVEN_ARGS_APPEND
+    example: "-pl mymodule -am"
+  - name: MAVEN_SETTINGS_PATH
+    example: "my-settings.xml"  
+  - name: "KOGITO_HOME"
+    value: "/home/kogito"
+  - name: "USER"
+    value: "kogito"
+
+ports:
+  - value: 8080
+
+modules:
+  install:
+    - name: org.kie.kogito.image.dependencies
+    - name: org.kie.kogito.system.user
+    - name: org.kie.kogito.logging
+    - name: org.kie.kogito.launch.scripts
+    - name: org.kie.kogito.openjdk
+      version: "11"
+    - name: org.kie.kogito.dynamic.resources
+    - name: org.kie.kogito.maven
+      version: "3.8.6"
+
+run:
+  user: 185
+  cmd:
+    - "/usr/bin/java"
+    - "-jar"
+    - "/deployments/quarkus-run.jar"
+    - "-Dquarkus.http.host=0.0.0.0"
+    - "-Dquarkus.http.port=8080"

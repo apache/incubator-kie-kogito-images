@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+  
+  # Requires maven, jdk, and user modules
+  # Generates a new Quarkus project in /home/kogito
+  
+  # [in] QUARKUS_VERSION
+  # [in] QUARKUS_PROJECT_NAME
+  # [in] QUARKUS_EXTENSIONS (comma separated)
+  # [behave] check java
+  # [behave] check maven
+  # [ ] TODO: check directory
+  
+  # For downstream, a Quarkus registry can be used. In this case, the Maven settings also should be configured with Red Hat's repo.
+
+SCRIPT_DIR=$(dirname "${0}")
+ADDED_DIR="${SCRIPT_DIR}"/added
+
+cd "${KOGITO_HOME}"
+
+"${MAVEN_HOME}"/bin/mvn -U -B "${MAVEN_ARGS_APPEND}" -s "${MAVEN_SETTINGS_PATH:-settings.xml}" \
+io.quarkus.platform:quarkus-maven-plugin:"${QUARKUS_VERSION}":create \
+-DprojectGroupId=org.acme \
+-DprojectArtifactId="${QUARKUS_PROJECT_NAME}" \
+-DplatformVersion="${QUARKUS_VERSION}" \
+-Dextensions="${QUARKUS_EXTENSIONS}"
+
+cd "${QUARKUS_PROJECT_NAME}"
+
+"${MAVEN_HOME}"/bin/mvn -U -B clean install -DskipTests -Dquarkus.container-image.build=false
+
+mv /root/.m2/repository "${KOGITO_HOME}"/.m2/
+
+chown -R 1001:0 "${KOGITO_HOME}"
+chmod -R ug+rwX "${KOGITO_HOME}"
+
+# TODO: add a script saying that this image is not meant to run

@@ -37,9 +37,7 @@ if (!Utils.isMainBranch(this)) {
     setupPromoteJob(FolderUtils.getReleaseFolder(this), KogitoJobType.RELEASE)
 }
 
-if (Utils.isLTSBranch(this)) {
-    setupProdUpdateVersionJob()
-}
+setupProdUpdateVersionJob()
 
 /////////////////////////////////////////////////////////////////
 // Methods

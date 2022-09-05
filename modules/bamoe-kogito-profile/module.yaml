@@ -1,6 +1,6 @@
 schema_version: 1
 name: bamoe.prod.profile
-version: '8.0.0'
+version: '8.0.1'
 description: Holds custom configurations for BAMOE Kogito images. Add as the last module as it can depend on other modules.
 
 envs:

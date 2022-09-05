@@ -206,7 +206,7 @@ $ docker run -it -p 8080:8080 rules-example:1.0
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
  -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
-2020-04-08 18:59:57,753 INFO  [io.quarkus] (main) rules-quarkus-helloworld 8.0.0-SNAPSHOT (powered by Quarkus 1.3.0.Final) started in 0.839s. Listening on: http://0.0.0.0:8080
+2020-04-08 18:59:57,753 INFO  [io.quarkus] (main) rules-quarkus-helloworld 8.0.1-SNAPSHOT (powered by Quarkus 1.3.0.Final) started in 0.839s. Listening on: http://0.0.0.0:8080
 2020-04-08 18:59:57,755 INFO  [io.quarkus] (main) Profile prod activated. 
 2020-04-08 18:59:57,756 INFO  [io.quarkus] (main) Installed features: [cdi, kogito, resteasy, resteasy-jackson, resteasy-jsonb]
 ```

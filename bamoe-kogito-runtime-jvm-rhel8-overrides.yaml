@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8"
-version: "8.0.0"
+version: "8.0.1"
 from: "registry.redhat.io/ubi8/ubi-minimal:latest"
 description: "IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image"
 

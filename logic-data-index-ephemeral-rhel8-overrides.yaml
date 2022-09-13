@@ -52,7 +52,7 @@ osbs:
   extra_dir: osbs-extra/logic-data-index-ephemeral-rhel8
   repository:
     name: containers/openshift-serverless-1-logic-data-index-ephemeral
-    branch: openshift-serverless-1.24-rhel-8
+    branch: openshift-serverless-1.25-rhel-8
 
 run:
   workdir: "/home/kogito"

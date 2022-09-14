@@ -1,0 +1,21 @@
+schema_version: 1
+name: org.kie.kogito.swf.builder
+version: "2.0.0-snapshot"
+description: "Kogito Serverless Workflow builder with required extensions"
+
+envs:
+  - name: QUARKUS_PROJECT_NAME
+    value: "kogito-base"
+  - name: QUARKUS_VERSION
+    value: "2.13.0.Final"
+  - name: QUARKUS_EXTENSIONS
+    example: "kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,quarkus-kubernetes"
+  - name: GROUP_ID
+    example: "org.acme"
+  - name: ARTIFACT_ID
+    example: "kogito-swf-base"
+  - name: VERSION_ID
+    example: "1.0.0-snapshot"
+
+execute:
+  - script: configure

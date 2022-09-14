@@ -1,0 +1,1 @@
+docker build . -t quay.io/kiegroup/swf-test:latest

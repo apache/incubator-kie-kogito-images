@@ -11,7 +11,7 @@ Feature: Kogito-jobs-service-mongodb feature.
     And the image should contain label io.k8s.display-name with value Kogito Jobs Service based on MongoDB
     And the image should contain label io.openshift.tags with value kogito,jobs-service-mongodb
 
-  Scenario: verify if of container is correctly started with mongo parameters
+  Scenario: verify if the container is correctly started with mongo parameters
     When container is started with env
       | variable                          | value                                          |
       | SCRIPT_DEBUG                      | true                                           |

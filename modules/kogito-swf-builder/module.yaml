@@ -4,18 +4,20 @@ version: "2.0.0-snapshot"
 description: "Kogito Serverless Workflow builder with required extensions"
 
 envs:
-  - name: QUARKUS_PROJECT_NAME
-    value: "kogito-base"
+  - name: PROJECT_GROUP_ID
+    value: "org.acme"
+  - name: PROJECT_ARTIFACT_ID
+    value: "serverless-workflow-project"
+  - name: PROJECT_VERSION
+    value: "1.0.0-SNAPSHOT"
   - name: QUARKUS_VERSION
     value: "2.13.0.Final"
   - name: QUARKUS_EXTENSIONS
-    example: "kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,quarkus-kubernetes"
-  - name: GROUP_ID
-    example: "org.acme"
-  - name: ARTIFACT_ID
-    example: "kogito-swf-base"
-  - name: VERSION_ID
-    example: "1.0.0-snapshot"
+    value: 'quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing'
+  - name: QUARKUS_CREATE_ARGS
+    example: '-DnoCode'
 
 execute:
-  - script: configure
+  - script: configure.sh
+  - script: install.sh
+    user: kogito

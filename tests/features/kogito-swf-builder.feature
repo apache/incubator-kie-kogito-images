@@ -5,7 +5,7 @@ Feature: SWF and Quarkus installation
     When container is started with command bash
     Then file /home/kogito/.m2/repository/org/acme/serverless-workflow-project/1.0.0-SNAPSHOT/serverless-workflow-project-1.0.0-SNAPSHOT.jar should exist
       And file /home/kogito/.m2/repository/io/quarkus/platform/quarkus-bom/2.13.0.Final/quarkus-bom-2.13.0.Final.pom should exist
-      # And file /home/kogito/.m2/repository/org/kie/kogito/kogito-quarkus-serverless-workflow/1.27.0.Final/kogito-quarkus-serverless-workflow-1.27.0.Final-codestarts.jar should exist
+      And file /home/kogito/.m2/repository/org/kie/kogito/kogito-quarkus-serverless-workflow/ should exist and be a directory
 
 
   Scenario: Verify if a build run correctly

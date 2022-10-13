@@ -86,16 +86,18 @@ case ${imageName} in
 esac
 
 for ctx in ${contextDir}; do
-    target_tmp_dir="/data/tmp/build/$(basename ${ctx})"
-    build_target_dir="/data/tmp/$(basename ${ctx})"
-    mvn_local_repo="/data/tmp/temp_maven/$(basename ${ctx})"
+    randomNb=$(echo "$RANDOM")
+    target_tmp_dir="/tmp/build/$(basename ${ctx})"
+    build_target_dir="/tmp/$(basename ${ctx})-${randomNb}"
+    mvn_local_repo="/tmp/temp_maven/$(basename ${ctx})-${randomNb}"
+
     rm -rf ${target_tmp_dir} && mkdir -p ${target_tmp_dir}
     rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}
-    rm -rf ${mvn_local_repo} && mkdir -p ${mvn_local_repo}
+    mkdir -p ${mvn_local_repo}
 
     . ${script_dir_path}/setup-maven.sh "${build_target_dir}"/settings.xml
 
-    echo "Copy current maven repo to maven context local repo"
+    echo "Copy current maven repo to maven context local repo ${mvn_local_repo}"
     cp -r ${HOME}/.m2/repository/* "${mvn_local_repo}"
 
     cd ${build_target_dir}

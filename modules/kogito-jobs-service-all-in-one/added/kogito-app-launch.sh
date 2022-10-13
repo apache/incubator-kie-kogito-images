@@ -13,12 +13,12 @@ fi
 
 allowed_jobs_service_flavors=("ephemeral" "mongodb" "infinispan" "postgresql")
 jobs_service_flavor="ephemeral"
-if [[ ! "${allowed_jobs_service_flavors[*]}" =~ ${JOBS_SERVICE_FLAVOR,,} ]]; then
-  log_warning "${JOBS_SERVICE_FLAVOR,,} is not supported, the allowed flavors are [${allowed_jobs_service_flavors[*]}], defaulting to ${jobs_service_flavor}"
-  unset JOBS_SERVICE_FLAVOR
+if [[ ! "${allowed_jobs_service_flavors[*]}" =~ ${JOBS_SERVICE_PERSISTENCE,,} ]]; then
+  log_warning "${JOBS_SERVICE_PERSISTENCE,,} is not supported, the allowed flavors are [${allowed_jobs_service_flavors[*]}], defaulting to ${jobs_service_flavor}"
+  unset JOBS_SERVICE_PERSISTENCE
 
-elif [ "x${JOBS_SERVICE_FLAVOR}" != "x" ]; then
-  jobs_service_flavor=${JOBS_SERVICE_FLAVOR,,}
+elif [ "x${JOBS_SERVICE_PERSISTENCE}" != "x" ]; then
+  jobs_service_flavor=${JOBS_SERVICE_PERSISTENCE,,}
 fi
 
 # Configuration scripts

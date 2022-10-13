@@ -30,7 +30,7 @@ Feature: Kogito-jobs-service-all-in-one feature.
     When container is started with env
       | variable                                  | value             |
       | SCRIPT_DEBUG                              | true              |
-      | JOBS_SERVICE_FLAVOR                       | infinispan        |
+      | JOBS_SERVICE_PERSISTENCE                  | infinispan        |
       | QUARKUS_INFINISPAN_CLIENT_SERVER_LIST     | 172.18.0.1:11222  |
       | QUARKUS_INFINISPAN_CLIENT_USE_AUTH        | true              |
       | QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME   | IamNotExist       |
@@ -50,7 +50,7 @@ Feature: Kogito-jobs-service-all-in-one feature.
     When container is started with env
       | variable                          | value                                          |
       | SCRIPT_DEBUG                      | true                                           |
-      | JOBS_SERVICE_FLAVOR               | mongodb                                        |
+      | JOBS_SERVICE_PERSISTENCE          | mongodb                                        |
       | QUARKUS_MONGODB_CONNECTION_STRING | mongodb://user:password@localhost:27017/admin  |
       | QUARKUS_MONGODB_DATABASE          | kogito                                         |
     Then container log should contain -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/mongodb/quarkus-app/quarkus-run.jar
@@ -60,6 +60,23 @@ Feature: Kogito-jobs-service-all-in-one feature.
     When container is started with env
       | variable                          | value      |
       | SCRIPT_DEBUG                      | true       |
-      | JOBS_SERVICE_FLAVOR               | something  |
+      | JOBS_SERVICE_PERSISTENCE          | something  |
     Then container log should contain -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/ephemeral/quarkus-app/quarkus-run.jar
     And container log should contain something is not supported, the allowed flavors are [ephemeral mongodb infinispan postgresql], defaulting to ephemeral
+
+  Scenario: verify if container starts as expected
+    When container is started with env
+      | variable                    | value                                                 |
+      | SCRIPT_DEBUG                | true                                                  |
+      | QUARKUS_LOG_LEVEL           | DEBUG                                                 |
+      | JOBS_SERVICE_PERSISTENCE    | postgresql                                            |
+      | QUARKUS_DATASOURCE_DB_KIND  | postgresql                                            |
+      | QUARKUS_DATASOURCE_USERNAME | test                                                  |
+      | QUARKUS_DATASOURCE_PASSWORD | 123456                                                |
+      | QUARKUS_DATASOURCE_JDBC_URL | jdbc:postgresql://10.11.12.13:5432/hibernate_orm_test |
+    Then container log should contain -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/postgresql/quarkus-app/quarkus-run.jar
+    And container log should contain QUARKUS_DATASOURCE_DB_KIND=postgresql
+    And container log should contain QUARKUS_DATASOURCE_USERNAME=test
+    And container log should contain QUARKUS_DATASOURCE_PASSWORD=123456
+    And container log should contain QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://10.11.12.13:5432/hibernate_orm_test
+    And container log should contain  Trying to establish a protocol version 3 connection to 10.11.12.13:5432

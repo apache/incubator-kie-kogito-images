@@ -13,9 +13,7 @@ envs:
   - name: QUARKUS_VERSION
     value: "2.13.0.Final"
   - name: QUARKUS_EXTENSIONS
-    value: 'quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing'
-  - name: QUARKUS_CREATE_ARGS
-    example: '-DnoCode'
+    example: 'quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing'
 
 execute:
   - script: configure.sh

@@ -9,6 +9,8 @@ cd "${KOGITO_HOME}"
 source "${KOGITO_HOME}"/launch/configure-maven.sh
 configure
 
+source "${KOGITO_HOME}"/launch/logging.sh
+
 if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     set -x
     log_info "Script debugging is enabled, allowing bash commands and their arguments to be printed as they are executed"

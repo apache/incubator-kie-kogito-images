@@ -8,8 +8,10 @@ if [ ! -z "${resources_path}" ]; then
 fi
 
 # Call the configure-maven here
-source "${script_dir_path}/configure-maven.sh"
+source "${KOGITO_HOME}"/launch/configure-maven.sh
 configure
+
+source "${KOGITO_HOME}"/launch/logging.sh
 
 if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     set -x

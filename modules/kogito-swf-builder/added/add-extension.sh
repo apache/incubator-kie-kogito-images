@@ -5,8 +5,10 @@ script_dir_path="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 extensions="$1"
 
 # Call the configure-maven here
-source "${script_dir_path}/configure-maven.sh"
+source "${KOGITO_HOME}"/launch/configure-maven.sh
 configure
+
+source "${KOGITO_HOME}"/launch/logging.sh
 
 if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     set -x

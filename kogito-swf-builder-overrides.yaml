@@ -3,16 +3,6 @@ schema_version: 1
 name: "quay.io/kiegroup/kogito-swf-builder"
 description: "Kogito Serverless Workflow base builder with Quarkus extensions libraries preinstalled"
 
-envs:
-  - name: QUARKUS_EXTENSIONS
-    value: "kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,quarkus-kubernetes"
-  - name: GROUP_ID
-    example: "org.acme"
-  - name: ARTIFACT_ID
-    example: "kogito-swf-base"
-  - name: VERSION_ID
-    example: "1.0.0-snapshot"
-
 labels:
   - name: "org.quarkus.version"
     value: "2.13.0.Final"

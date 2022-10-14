@@ -3,9 +3,7 @@ set -e
 
 script_dir_path="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 resources_path="$1"
-quarkus_create_args=${QUARKUS_CREATE_ARGS}
 if [ ! -z "${resources_path}" ]; then
-  # quarkus_create_args="${quarkus_create_args} -DnoCode" # Not sure if we want to force the `noCode`
   resources_path="$(realpath "${resources_path}")"
 fi
 
@@ -13,18 +11,13 @@ fi
 source "${script_dir_path}/configure-maven.sh"
 configure
 
-cd "${KOGITO_HOME}"
-
 set -x
-"${MAVEN_HOME}"/bin/mvn -U -B -s "${MAVEN_SETTINGS_PATH}" \
-io.quarkus.platform:quarkus-maven-plugin:"${QUARKUS_VERSION}":create ${quarkus_create_args} \
--DprojectGroupId="${PROJECT_GROUP_ID}" \
--DprojectArtifactId="${PROJECT_ARTIFACT_ID}" \
--DprojectVersionId="${PROJECT_VERSION}" \
--DplatformVersion="${QUARKUS_VERSION}" \
--Dextensions="${QUARKUS_EXTENSIONS}"
 
-cd "${PROJECT_ARTIFACT_ID}"
+cd "${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
+
+if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
+  ${script_dir_path}/add-extension.sh "${QUARKUS_EXTENSIONS}"
+fi
 
 # Copy resources if exists
 if [ ! -z "${resources_path}" ]; then

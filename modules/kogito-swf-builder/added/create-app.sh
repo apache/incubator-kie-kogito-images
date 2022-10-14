@@ -9,7 +9,12 @@ cd "${KOGITO_HOME}"
 source "${KOGITO_HOME}"/launch/configure-maven.sh
 configure
 
-set -x
+if [ "${SCRIPT_DEBUG}" = "true" ] ; then
+    set -x
+    log_info "Script debugging is enabled, allowing bash commands and their arguments to be printed as they are executed"
+    printenv
+fi
+
 "${MAVEN_HOME}"/bin/mvn -U -B -s "${MAVEN_SETTINGS_PATH}" \
 io.quarkus.platform:quarkus-maven-plugin:"${QUARKUS_VERSION}":create ${QUARKUS_CREATE_ARGS} \
 -DprojectGroupId="${PROJECT_GROUP_ID}" \
@@ -21,4 +26,3 @@ io.quarkus.platform:quarkus-maven-plugin:"${QUARKUS_VERSION}":create ${QUARKUS_C
 cd "${PROJECT_ARTIFACT_ID}"
 
 "${MAVEN_HOME}"/bin/mvn ${MAVEN_ARGS_APPEND} -U -B clean install -DskipTests -s "${MAVEN_SETTINGS_PATH}" -Dquarkus.container-image.build=false
-set +x

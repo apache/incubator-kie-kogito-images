@@ -11,7 +11,11 @@ fi
 source "${script_dir_path}/configure-maven.sh"
 configure
 
-set -x
+if [ "${SCRIPT_DEBUG}" = "true" ] ; then
+    set -x
+    log_info "Script debugging is enabled, allowing bash commands and their arguments to be printed as they are executed"
+    printenv
+fi
 
 cd "${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
 
@@ -29,4 +33,3 @@ if [ ! -z "${resources_path}" ]; then
 fi
 
 "${MAVEN_HOME}"/bin/mvn ${MAVEN_ARGS_APPEND} -U -B clean install -DskipTests -s "${MAVEN_SETTINGS_PATH}" -Dquarkus.container-image.build=false
-set +x

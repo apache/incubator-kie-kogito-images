@@ -8,7 +8,11 @@ extensions="$1"
 source "${script_dir_path}/configure-maven.sh"
 configure
 
-set -x
+if [ "${SCRIPT_DEBUG}" = "true" ] ; then
+    set -x
+    log_info "Script debugging is enabled, allowing bash commands and their arguments to be printed as they are executed"
+    printenv
+fi
 
 cd "${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
 
@@ -16,5 +20,3 @@ cd "${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
 io.quarkus.platform:quarkus-maven-plugin:"${QUARKUS_VERSION}":add-extension ${QUARKUS_ADD_EXTENSION_ARGS}\
 -DplatformVersion="${QUARKUS_VERSION}" \
 -Dextensions="${extensions}"
-
-set +x

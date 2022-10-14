@@ -10,8 +10,7 @@ Feature: SWF and Quarkus installation
 
   Scenario: Verify if a build run correctly
     When container is started with command bash
-    Then run /home/kogito/launch/build-app.sh in container and check its output for [INFO] BUILD SUCCESS
-    And file /home/kogito/serverless-workflow-project/target/quarkus-app/quarkus-run.jar should exist
-    And file /home/kogito/serverless-workflow-project/target/classes/greet.sw.json should exist
+    Then file /home/kogito/serverless-workflow-project/target/quarkus-app/quarkus-run.jar should exist
+      And file /home/kogito/serverless-workflow-project/target/classes/greet.sw.json should exist
 
 

@@ -178,16 +178,16 @@ For more information about what is installed on this image, take a look [here](k
 The main purpose is the use in the Kogito Serverless operator as a builder
 
 ```bash
-FROM quay.io/kiegroup/kogito-swf-builder:latest AS builder
+FROM quay.io/kiegroup/kogito-swf-builder:2.0 AS builder
 
-# Kogito User
-USER 1001
+# Copy from build context to resources directory
+COPY * ./resources/
 
-# User home from base image
-WORKDIR /home/kogito/kogito-base
-
-# Copy from build context to skeleton resources project
-COPY * ./src/main/resources/
+# Build app with given resources
+RUN "${KOGITO_HOME}"/launch/build-app.sh './resources'
+#=============================
+# Runtime Run
+#=============================
 ...
 ```
 but obvioulsy can be used to create other swf "flavours" images installing the org.kie.kogito.swf.builder and 

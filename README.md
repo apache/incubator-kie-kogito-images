@@ -178,7 +178,7 @@ For more information about what is installed on this image, take a look [here](k
 The main purpose is the use in the Kogito Serverless operator as a builder
 
 ```bash
-FROM quay.io/mdessi/kogito-swf-builder:latest AS builder
+FROM quay.io/kiegroup/kogito-swf-builder:latest AS builder
 
 # Kogito User
 USER 1001

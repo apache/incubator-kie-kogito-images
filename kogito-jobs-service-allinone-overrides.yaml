@@ -38,10 +38,6 @@ modules:
     version: "11-headless"
   - name: org.kie.kogito.dynamic.resources
   - name: org.kie.kogito.launch.scripts
-  - name: org.kie.kogito.jobs.service.ephemeral
-  - name: org.kie.kogito.jobs.service.infinispan
-  - name: org.kie.kogito.jobs.service.postgresql
-  - name: org.kie.kogito.jobs.service.mongodb
   - name: org.kie.kogito.jobs.service.allinone
   - name: org.kie.kogito.security.custom.truststores
   - name: org.kie.kogito.jobs.service.common

@@ -20,6 +20,8 @@ shift $#
 script_dir_path=$(cd `dirname "${BASH_SOURCE[0]}"`; pwd -P)
 
 MAVEN_OPTIONS="${MAVEN_OPTIONS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
+# used for all-in-one image
+extended_context=""
 
 case ${imageName} in
     "kogito-management-console")
@@ -56,6 +58,7 @@ case ${imageName} in
         contextDir="jobs-service/jobs-service-postgresql"
         ;;
     "kogito-jobs-service-allinone")
+        extended_context="-all-in-one"
         contextDir="jobs-service/jobs-service-inmemory"
         contextDir="${contextDir} jobs-service/jobs-service-infinispan"
         contextDir="${contextDir} jobs-service/jobs-service-postgresql"
@@ -87,7 +90,7 @@ esac
 
 for ctx in ${contextDir}; do
     randomNb=$(echo "$RANDOM")
-    target_tmp_dir="/tmp/build/$(basename ${ctx})"
+    target_tmp_dir="/tmp/build/$(basename ${ctx})${extended_context}"
     build_target_dir="/tmp/$(basename ${ctx})-${randomNb}"
     mvn_local_repo="/tmp/temp_maven/$(basename ${ctx})-${randomNb}"
 

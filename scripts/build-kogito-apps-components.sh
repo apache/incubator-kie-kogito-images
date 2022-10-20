@@ -89,10 +89,9 @@ case ${imageName} in
 esac
 
 for ctx in ${contextDir}; do
-    randomNb=$(echo "$RANDOM")
     target_tmp_dir="/tmp/build/$(basename ${ctx})${extended_context}"
-    build_target_dir="/tmp/$(basename ${ctx})-${randomNb}"
-    mvn_local_repo="/tmp/temp_maven/$(basename ${ctx})-${randomNb}"
+    build_target_dir="/tmp/$(basename ${ctx})${extended_context}"
+    mvn_local_repo="/tmp/temp_maven/$(basename ${ctx})${extended_context}"
 
     rm -rf ${target_tmp_dir} && mkdir -p ${target_tmp_dir}
     rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}

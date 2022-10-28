@@ -92,7 +92,7 @@ pipeline {
                     dir('quarkus') {
                         deleteDir()
 
-                        checkout(githubscm.resolveRepository('quarkus-platform', 'quarkusio', '2.13.3.Final', false))
+                        checkout(githubscm.resolveRepository('quarkus-platform', 'quarkusio', quarkusVersion, false))
 
                         String settingsStr = """
 <settings>
@@ -111,8 +111,7 @@ pipeline {
                             .skipTests()
                             .withProperty('altDeploymentRepository', "quarkus-platform::default::${repoUrl}")
                             .withProperty('enforcer.skip', true)
-                            // .run('clean install')
-                            .run('clean deploy')
+                            .run('deploy')
                     }
 
                     sh "python3 scripts/update-tests.py --repo-url ${repoUrl}"

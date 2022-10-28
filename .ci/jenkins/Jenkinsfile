@@ -77,8 +77,8 @@ pipeline {
                         sh 'docker logs nexus'
                         error 'Cannot retrieve the admin password. Is Nexus running correctly ?'
                     }
+                    echo "Retrieve adminPwd ${adminPwd}"
 
-                    echo "Retrieve password ${adminPwd}"
                     String repoUrl = 'http://localhost:8081/repository/maven-releases/'
 
                     // Read quarkus verison to checkout the correct tag
@@ -88,6 +88,7 @@ pipeline {
                         sh 'cat modules/kogito-swf-builder/module.yaml' 
                         error 'Cannot retrieve the `QUARKUS_VERSION` env value. Is it defined correctly into the module file ?'
                     }
+                    echo "Retrieve quarkusVersion ${quarkusVersion}"
 
                     dir('quarkus') {
                         deleteDir()

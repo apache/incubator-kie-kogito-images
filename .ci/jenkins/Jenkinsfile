@@ -1,5 +1,7 @@
 @Library('jenkins-pipeline-shared-libraries')_
 
+import org.kie.jenkins.MavenCommand
+
 changeAuthor = env.ghprbAuthorRepoGitUrl ? util.getGroup(env.ghprbAuthorRepoGitUrl) : (env.ghprbPullAuthorLogin ?: CHANGE_AUTHOR)
 changeBranch = env.ghprbSourceBranch ?: CHANGE_BRANCH
 changeTarget = env.ghprbTargetBranch ?: CHANGE_TARGET
@@ -7,7 +9,9 @@ changeTarget = env.ghprbTargetBranch ?: CHANGE_TARGET
 BUILD_FAILED_IMAGES = []
 
 pipeline {
-    agent { label 'kogito-image-slave && !built-in' }
+    agent { 
+        label 'kogito-image-slave && !built-in' 
+    }
     tools {
         jdk 'kie-jdk11'
     }
@@ -27,14 +31,9 @@ pipeline {
                     if (env.MAVEN_MIRROR_REPOSITORY != null
                             && env.MAVEN_MIRROR_REPOSITORY != '') {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
-                            }
+                    }
 
                     githubscm.checkoutIfExists('kogito-images', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
-
-                    //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
-                    if (env.MAVEN_MIRROR_URL != '') {
-                        sh 'python3 scripts/update-tests.py --ignore-self-signed-cert'
-                    }
                 }
             }
         }
@@ -52,9 +51,84 @@ pipeline {
                 }
             }
         }
-        stage('Prepare offline kogito-examples') {
+        stage('Prepare Quarkus platform') {
             steps {
-                sh 'make clone-repos'
+                script {
+                    // Launch Nexus3
+                    // Commands taken from https://github.com/sonatype/docker-nexus3#persistent-data
+                    sh '''
+                        docker rm -f nexus
+                        docker volume rm -f nexus-data
+                    '''
+                    sh '''
+                        docker volume create --name nexus-data
+
+                        docker run -d -p 8081:8081 --name nexus -v nexus-data:/nexus-data sonatype/nexus3
+                    '''
+
+                    String adminPwd = ''
+                    retry(10) {
+                        sleep(time: 30, unit: 'SECONDS')
+                        adminPwd = sh(returnStdout: true, script: 'docker exec nexus cat /nexus-data/admin.password').trim()
+                        assert adminPwd
+                    }
+
+                    if (!adminPwd) {
+                        sh 'docker logs nexus'
+                        error 'Cannot retrieve the admin password. Is Nexus running correctly ?'
+                    }
+
+                    echo "Retrieve password ${adminPwd}"
+                    String repoUrl = 'http://localhost:8081/repository/maven-releases/'
+
+                    // Read quarkus verison to checkout the correct tag
+                    def moduleData = readYaml(file: 'modules/kogito-swf-builder/module.yaml')
+                    String quarkusVersion = moduleData.envs.find { it.name == 'QUARKUS_VERSION' }?.value
+                    if (!quarkusVersion) {
+                        sh 'cat modules/kogito-swf-builder/module.yaml' 
+                        error 'Cannot retrieve the `QUARKUS_VERSION` env value. Is it defined correctly into the module file ?'
+                    }
+
+                    dir('quarkus') {
+                        deleteDir()
+
+                        checkout(githubscm.resolveRepository('quarkus-platform', 'quarkusio', '2.13.3.Final', false))
+
+                        String settingsStr = """
+<settings>
+    <servers>
+        <server>
+            <id>quarkus-platform</id>
+            <username>admin</username>
+            <password>${adminPwd}</password>
+        </server>
+    </servers>
+</settings>  
+"""
+                        writeFile(text: settingsStr, file: 'settings.xml')
+                        new MavenCommand(this, ['-fae', '-ntp'])
+                            .withSettingsXmlFile('settings.xml')
+                            .skipTests()
+                            .withProperty('altDeploymentRepository', "quarkus-platform::default::${repoUrl}")
+                            .withProperty('enforcer.skip', true)
+                            // .run('clean install')
+                            .run('clean deploy')
+                    }
+
+                    sh "python3 scripts/update-tests.py --repo-url ${repoUrl}"
+                }
+            }
+        }
+        stage('Prepare for tests') {
+            steps {
+                script {
+                    //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
+                    if (env.MAVEN_MIRROR_URL != '') {
+                        sh 'python3 scripts/update-tests.py --ignore-self-signed-cert'
+                    }
+
+                    sh 'make clone-repos'
+                }
             }
         }
         stage('Build & Test Images') {

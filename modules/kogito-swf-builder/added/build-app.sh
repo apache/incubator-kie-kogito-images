@@ -8,10 +8,10 @@ if [ ! -z "${resources_path}" ]; then
 fi
 
 # Call the configure-maven here
-source "${KOGITO_HOME}"/launch/configure-maven.sh
+source "${script_dir_path}"/configure-maven.sh
 configure
 
-source "${KOGITO_HOME}"/launch/logging.sh
+source "${script_dir_path}"/logging.sh
 
 if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     set -x
@@ -19,7 +19,7 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
-cd "${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
+cd "${PROJECT_ARTIFACT_ID}"
 
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
   ${script_dir_path}/add-extension.sh "${QUARKUS_EXTENSIONS}"

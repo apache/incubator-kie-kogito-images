@@ -19,6 +19,10 @@ modules:
 envs:
   - name: "KOGITO_VERSION"
     value: "2.0.0-SNAPSHOT"
+    description: Please do not change
+  - name: "QUARKUS_VERSION"
+    value: "2.14.0.CR1"
+    description: Please do not change
 
 packages:
   manager: microdnf

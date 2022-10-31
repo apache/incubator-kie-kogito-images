@@ -1,4 +1,5 @@
 IMAGE_VERSION := $(shell cat image.yaml | egrep ^version  | cut -d"\"" -f2)
+QUARKUS_VERSION := $(shell awk '/- name: "QUARKUS_VERSION"/,/description/' image.yaml | grep value | awk -F'"' '{print $$2}')
 SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"."$$2}')
 KOGITO_APPS_TARGET_BRANCH ?= main
 KOGITO_APPS_TARGET_URI ?= https://github.com/kiegroup/kogito-apps.git
@@ -28,7 +29,6 @@ build: clone-repos _build
 _build:
 	@for f in $(shell make list); do make build-image image_name=$${iname}; done
 
-
 .PHONY: build-image
 image_name=
 build-image: clone-repos _build-image
@@ -36,7 +36,8 @@ build-image: clone-repos _build-image
 _build-image:
 ifneq ($(ignore_build),true)
 	scripts/build-kogito-apps-components.sh ${image_name} ${KOGITO_APPS_TARGET_BRANCH} ${KOGITO_APPS_TARGET_URI};
-	${CEKIT_CMD} build --overrides-file ${image_name}-overrides.yaml ${BUILD_ENGINE}
+	scripts/build-quarkus-app.sh $(QUARKUS_VERSION)
+	# ${CEKIT_CMD} build --overrides-file ${image_name}-overrides.yaml ${BUILD_ENGINE}
 endif
 # if ignore_test is set to true, ignore the tests
 ifneq ($(ignore_test),true)

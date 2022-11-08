@@ -4,7 +4,7 @@ name: "quay.io/kiegroup/kogito-swf-builder"
 description: "Kogito Serverless Workflow base builder with Quarkus extensions libraries preinstalled"
 
 labels:
-  - name: "org.quarkus.version"
+  - name: "io.quarkus.platform.version"
     value: "2.16.0.Final"
 
 modules:
@@ -23,7 +23,7 @@ modules:
 run:
   workdir: "/home/kogito"
   user: 1001
-  entrypoint: 
+  cmd: 
     - "/home/kogito/launch/run-app-devmode.sh"
 
 ports:

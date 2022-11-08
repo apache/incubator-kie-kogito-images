@@ -20,8 +20,8 @@ PROD_IMAGE_STREAM_FILENAME = "logic-imagestream.yaml"
 IMAGE_FILENAME = "image.yaml"
 ARTIFACTS_VERSION_ENV_KEY = "KOGITO_VERSION"
 
-QUARKUS_VERSION_ENV_KEY = "QUARKUS_VERSION"
-QUARKUS_VERSION_LABEL_NAME = "org.quarkus.version"
+QUARKUS_PLATFORM_VERSION_ENV_KEY = "QUARKUS_PLATFORM_VERSION"
+QUARKUS_PLATFORM_VERSION_LABEL_NAME = "io.quarkus.platform.version"
 
 # behave tests that needs to be updated
 BEHAVE_BASE_DIR = 'tests/features'
@@ -125,7 +125,7 @@ def update_image_stream(target_version, prod=False):
         raise
 
 
-def get_all_module_dirs(prefix):
+def get_all_module_dirs():
     """
     Retrieve the module directories
     """
@@ -135,9 +135,7 @@ def get_all_module_dirs(prefix):
     for r, d, f in os.walk(MODULES_DIR):
         for item in f:
             if MODULE_FILENAME == item:
-                path = os.path.dirname(os.path.join(r, item))
-                if os.path.basename(path).startswith(prefix):
-                    modules.append(path)
+                modules.append(os.path.dirname(os.path.join(r, item)))
 
     return modules
 
@@ -146,14 +144,25 @@ def get_community_module_dirs():
     """
     Retrieve the Kogito module directories
     """
-    return get_all_module_dirs(COMMUNITY_PREFIX)
+    community_modules = []
+    for module_path in get_all_module_dirs():
+        if "{0}".format(os.path.relpath(module_path, MODULES_DIR)).startswith(COMMUNITY_PREFIX) and os.path.basename(module_path) != "prod":
+            community_modules.append(module_path)
+
+    return community_modules
+
 
 
 def get_prod_module_dirs():
     """
     Retrieve the Logic module directories
     """
-    return get_all_module_dirs(PRODUCT_PREFIX)
+    prod_modules = []
+    for module_path in get_all_module_dirs():
+        if "{0}".format(os.path.relpath(module_path, MODULES_DIR)).startswith(PRODUCT_PREFIX) or ("{0}".format(os.path.relpath(module_path, MODULES_DIR)).startswith(COMMUNITY_PREFIX) and os.path.basename(module_path) == "prod"):
+            prod_modules.append(module_path)
+
+    return prod_modules
 
 
 def get_images(prefix):
@@ -333,12 +342,24 @@ def retrieve_artifacts_version():
     except TypeError:
         raise
 
-def update_quarkus_version_env_in_image(quarkus_version):
+def update_quarkus_platform_version_env_in_image(quarkus_platform_version):
     """
-    Update `QUARKUS_VERSION` env var in image.yaml.
-    :param quarkus_version: quarkus version used to update image.yaml which contains the `QUARKUS_VERSION` env var
+    Update `QUARKUS_PLATFORM_VERSION` env var in image.yaml.
+    :param quarkus_platform_version: quarkus platform version used to update image.yaml which contains the `QUARKUS_PLATFORM_VERSION` env var
     """
-    update_env_value(IMAGE_FILENAME, QUARKUS_VERSION_ENV_KEY, quarkus_version)
+    update_env_value(IMAGE_FILENAME, QUARKUS_PLATFORM_VERSION_ENV_KEY, quarkus_platform_version)
+
+def update_quarkus_platform_version_in_behave_tests_repository_paths(quarkus_platform_version):
+    """
+    Update quarkus_platform_version version into behave tests repository paths
+    :param quarkus_platform_version: quarkus version to set
+    """
+    print("Set quarkus_platform_version {} in behave tests as repository path".format(quarkus_platform_version))
+    # pattern to change the KOGITO_VERSION
+    pattern = re.compile(
+        'io/quarkus/platform/quarkus-bom/([\d.]+.Final)/quarkus-bom-([\d.]+.Final).pom')
+    replacement = 'io/quarkus/platform/quarkus-bom/{}/quarkus-bom-{}.pom'.format(quarkus_platform_version, quarkus_platform_version)
+    update_in_behave_tests(pattern, replacement)
 
 def update_artifacts_version_env_in_image(artifacts_version):
     """
@@ -429,6 +450,30 @@ def update_maven_mirror_url_in_quarkus_plugin_behave_tests(repo_url):
         "MAVEN_MIRROR_URL", repo_url)
     update_in_behave_tests(pattern, replacement)
 
+def update_maven_repo_in_images_env_value(repo_url, replace_jboss_repository, prod=False):
+    """
+    Update the given maven repository value for all images.
+    :param repo_url: Maven repository url
+    :param replace_jboss_repository: Set to true if default Jboss repository needs to be ove
+    :param prod: if the module to be updated is prod version.
+    """
+    env_name = "MAVEN_REPO_URL"
+    if replace_jboss_repository:
+        env_name = "JBOSS_MAVEN_REPO_URL"
+    update_images_env_value(env_name, repo_url, prod)
+
+def update_maven_repo_in_modules_env_value(repo_url, replace_jboss_repository, prod=False):
+    """
+    Update the given maven repository value for all modules.
+    :param repo_url: Maven repository url
+    :param replace_jboss_repository: Set to true if default Jboss repository needs to be ove
+    :param prod: if the module to be updated is prod version.
+    """
+    env_name = "MAVEN_REPO_URL"
+    if replace_jboss_repository:
+        env_name = "JBOSS_MAVEN_REPO_URL"
+    update_modules_env_value(env_name, repo_url, prod)
+
 
 def ignore_maven_self_signed_certificate_in_behave_tests():
     """
@@ -507,8 +552,7 @@ def update_env_value(filename, env_name, env_value):
                     if env['name'] == env_name:
                         print("Updating {0} label {1} with value {2}".format(filename, env_name,
                                                                                     env_value))
-                        if 'value' in data['envs'][index]: # Do not update if no value already defined
-                            data['envs'][index]['value'] = env_value
+                        data['envs'][index]['value'] = env_value
 
         with open(filename, 'w') as yaml_file:
             yaml_loader().dump(data, yaml_file)

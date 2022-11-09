@@ -12,7 +12,7 @@ Feature: kogito-s2i-builder image native build tests
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.8.6
     And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
     And run sh -c 'echo $GRAALVM_HOME' in container and immediately check its output for /usr/share/graalvm
-    And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 21.3.1
+    And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 22.2.0
 
   Scenario: Verify if the s2i build is finished as expected using native build and runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-1.30.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
@@ -127,7 +127,7 @@ Feature: kogito-s2i-builder image native build tests
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | true           |
       | LIMIT_MEMORY   | 6442450944     |
-      | KOGITO_VERSION | 1.30.0-SNAPSHOT |     
+      | KOGITO_VERSION | 1.30.1-SNAPSHOT |     
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner should exist
     And check that page is served
       | property        | value                                                                                            |

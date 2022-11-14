@@ -35,28 +35,31 @@ pipeline {
                     if (env.MAVEN_MIRROR_URL != '') {
                         sh 'python3 scripts/update-tests.py --ignore-self-signed-cert'
                     }
+
+                    // Prod fix to be able to build the image as a community one
+                    sh "echo '' > content_sets.yaml"
                 }
             }
         }
-        stage('Validate CeKit Image and Modules descriptors') {
-            steps {
-                script {
-                    sh '''
-                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.1/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
-                        tar -xzvf cekit-image-validator-runner.tgz
-                        chmod +x cekit-image-validator-runner
-                    '''
-                    sh './cekit-image-validator-runner modules/'
-                    sh './cekit-image-validator-runner image.yaml'
-                    getImages().each { image -> sh "./cekit-image-validator-runner ${image}-overrides.yaml" }
-                }
-            }
-        }
-        stage('Prepare offline kogito-examples') {
-            steps {
-                sh 'make clone-repos'
-            }
-        }
+        // stage('Validate CeKit Image and Modules descriptors') { // Disabled until https://issues.redhat.com/browse/SRVLOGIC-58 is fixed
+        //     steps {
+        //         script {
+        //             sh '''
+        //                 curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.1/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+        //                 tar -xzvf cekit-image-validator-runner.tgz
+        //                 chmod +x cekit-image-validator-runner
+        //             '''
+        //             sh './cekit-image-validator-runner modules/'
+        //             sh './cekit-image-validator-runner image.yaml'
+        //             getImages().each { image -> sh "./cekit-image-validator-runner ${image}-overrides.yaml" }
+        //         }
+        //     }
+        // }
+        // stage('Prepare offline kogito-examples') { // No needed with only logic data-index image
+        //     steps {
+        //         sh 'make clone-repos'
+        //     }
+        // }
         stage('Build & Test Images') {
             steps {
                 script {
@@ -145,11 +148,11 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true"
+    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true"
 }
 
 void testImage(String imageName) {
-    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true"
+    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_tag=true ignore_test_prepare=true"
 }
 
 String getMakeBuildImageArgs() {
@@ -186,5 +189,5 @@ String getWorkspacePath(String image) {
 }
 
 String[] getImages() {
-    return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    return sh(script: "make list arg=--prod | tr '\\n' ','", returnStdout: true).trim().split(',')
 }

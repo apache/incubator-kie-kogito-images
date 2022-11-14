@@ -35,9 +35,13 @@ pipeline {
                     if (env.MAVEN_MIRROR_URL != '') {
                         sh 'python3 scripts/update-tests.py --ignore-self-signed-cert'
                     }
+
+                    // Prod fix to be able to build the image as a community one
+                    sh "echo '' > content_sets.yaml"
                 }
             }
         }
+        // Disabled until https://issues.redhat.com/browse/SRVLOGIC-58 is fixed
         // stage('Validate CeKit Image and Modules descriptors') {
         //     steps {
         //         script {

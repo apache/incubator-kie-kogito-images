@@ -38,20 +38,20 @@ pipeline {
                 }
             }
         }
-        stage('Validate CeKit Image and Modules descriptors') {
-            steps {
-                script {
-                    sh '''
-                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.1/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
-                        tar -xzvf cekit-image-validator-runner.tgz
-                        chmod +x cekit-image-validator-runner
-                    '''
-                    sh './cekit-image-validator-runner modules/'
-                    sh './cekit-image-validator-runner image.yaml'
-                    getImages().each { image -> sh "./cekit-image-validator-runner ${image}-overrides.yaml" }
-                }
-            }
-        }
+        // stage('Validate CeKit Image and Modules descriptors') {
+        //     steps {
+        //         script {
+        //             sh '''
+        //                 curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.1/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+        //                 tar -xzvf cekit-image-validator-runner.tgz
+        //                 chmod +x cekit-image-validator-runner
+        //             '''
+        //             sh './cekit-image-validator-runner modules/'
+        //             sh './cekit-image-validator-runner image.yaml'
+        //             getImages().each { image -> sh "./cekit-image-validator-runner ${image}-overrides.yaml" }
+        //         }
+        //     }
+        // }
         stage('Prepare offline kogito-examples') {
             steps {
                 sh 'make clone-repos'

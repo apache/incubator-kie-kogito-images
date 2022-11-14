@@ -41,8 +41,7 @@ pipeline {
                 }
             }
         }
-        // Disabled until https://issues.redhat.com/browse/SRVLOGIC-58 is fixed
-        // stage('Validate CeKit Image and Modules descriptors') {
+        // stage('Validate CeKit Image and Modules descriptors') { // Disabled until https://issues.redhat.com/browse/SRVLOGIC-58 is fixed
         //     steps {
         //         script {
         //             sh '''
@@ -56,11 +55,11 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Prepare offline kogito-examples') {
-            steps {
-                sh 'make clone-repos'
-            }
-        }
+        // stage('Prepare offline kogito-examples') { // No needed with only logic data-index image
+        //     steps {
+        //         sh 'make clone-repos'
+        //     }
+        // }
         stage('Build & Test Images') {
             steps {
                 script {

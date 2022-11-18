@@ -10,13 +10,9 @@ cp -v "${ADDED_DIR}"/create-app.sh "${LAUNCH_DIR}"
 cp -v "${ADDED_DIR}"/add-extension.sh "${LAUNCH_DIR}"
 cp -v "${ADDED_DIR}"/build-app.sh "${LAUNCH_DIR}"
 
-# Quarkus app
+# Unzip Quarkus app and Maven repository
 unzip "${SOURCES_DIR}"/kogito-swf-builder-quarkus-app.zip -d "${KOGITO_HOME}"
-ls -al "${KOGITO_HOME}"
-
-# Maven repository
 unzip "${SOURCES_DIR}"/kogito-swf-builder-maven-repo.zip -d "${KOGITO_HOME}"/.m2/repository
-ls -al "${KOGITO_HOME}/.m2/repository"
 
 chown -R 1001:0 "${KOGITO_HOME}"
 chmod -R ug+rwX "${KOGITO_HOME}"

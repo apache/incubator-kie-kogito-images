@@ -782,7 +782,7 @@ There are 3 exposed environment variables that can be used to configure the beha
 - ENABLE_EVENTS: enable the events add-on
 - JOBS_SERVICE_PERSISTENCE: select which persistence variant to use
 
-Note, as the Jobs Services are built on top of Quarkus, we can also set any configured supported by Quarkus
+Note: As the Jobs Services are built on top of Quarkus, we can also set any configuration supported by Quarkus
 using either environment variables or system properties.
 
 Using environment variables:

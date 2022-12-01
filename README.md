@@ -769,7 +769,7 @@ have an Infinispan, MongoDB or PostgreSQL server, respectively, previously runni
 
 #### Jobs Services All-in-one 
 
-THe Jobs Services All in One image provides the option th run any supported variant that we have at disposal, which are:
+The Jobs Services All in One image provides the option th run any supported variant that we have at disposal, which are:
 
 - PostgreSQL
 - Infinispan

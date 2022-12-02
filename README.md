@@ -800,7 +800,7 @@ For convenience there are `container-compose` files that can be used to start th
 persistence variant, to use execute the following command:
 
 ```bash
-podman-compose -f contrib/jobs-service/container-compose-<variant>.yaml
+podman-compose -f contrib/jobs-service/container-compose-<variant>.yaml up
 ```
 
 The above command will spinup the Jobs-service so you can connect your application.

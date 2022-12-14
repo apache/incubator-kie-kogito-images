@@ -2,7 +2,7 @@ schema_version: 1
 
 name: "ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8"
 version: "8.0.2"
-from: "registry.redhat.io/ubi8/ubi-minimal:8.6"
+from: "registry.redhat.io/ubi8/ubi-minimal:latest"
 description: "IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image"
 
 labels:
@@ -43,6 +43,7 @@ modules:
     - name: org.kie.kogito.s2i.core
     - name: org.kie.kogito.runtime.jvm
     - name: org.kie.kogito.security.custom.truststores
+    - name: org.kie.kogito.pkg-update
 
 packages:
   content_sets_file: content_sets.yaml

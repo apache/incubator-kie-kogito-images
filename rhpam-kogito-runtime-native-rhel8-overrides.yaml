@@ -39,6 +39,7 @@ modules:
     - name: org.kie.kogito.launch.scripts
     - name: org.kie.kogito.s2i.core
     - name: org.kie.kogito.runtime.native
+    - name: org.kie.kogito.pkg-update
 
 packages:
   content_sets_file: content_sets.yaml

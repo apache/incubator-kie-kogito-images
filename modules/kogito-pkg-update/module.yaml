@@ -4,4 +4,4 @@ version: "1.27.0"
 description: "Perform a system update via the package manager."
 
 execute:
-- script: configure
+  - script: configure

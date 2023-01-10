@@ -52,7 +52,7 @@ mvn -U "${MAVEN_OPTIONS}" \
 
 echo "Build quarkus app"
 cd "serverless-workflow-project"
-mvn ${MAVEN_OPTIONS} -U clean install -DskipTests -Dmaven.repo.local=${mvn_local_repo} -Dquarkus.container-image.build=false
+mvn ${MAVEN_OPTIONS} -U clean install -DskipTests -Dquarkus.version="${quarkus_version}" -Dmaven.repo.local=${mvn_local_repo} -Dquarkus.container-image.build=false
 
 cd ${build_target_dir}
 

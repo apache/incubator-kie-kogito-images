@@ -28,6 +28,4 @@ run:
 
 ports:
   - value: 8080
-    service: http
   - value: 5005
-    service: debug

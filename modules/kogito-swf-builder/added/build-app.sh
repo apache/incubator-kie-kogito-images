@@ -24,6 +24,7 @@ configure
 cd "${PROJECT_ARTIFACT_ID}"
 
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
+  log_info "Adding extensions '${QUARKUS_EXTENSIONS}'"
   ${script_dir_path}/add-extension.sh "${QUARKUS_EXTENSIONS}"
 fi
 

@@ -41,4 +41,9 @@ fi
 # auto configure JVM settings
 source "${KOGITO_HOME}"/launch/jvm-settings.sh
 
-"${MAVEN_HOME}"/bin/mvn ${MAVEN_ARGS_APPEND} -U -B clean install -DskipTests -s "${MAVEN_SETTINGS_PATH}" -Dquarkus.container-image.build=false
+"${MAVEN_HOME}"/bin/mvn -U -B ${MAVEN_ARGS_APPEND} \
+  -s "${MAVEN_SETTINGS_PATH}" \
+  -Dquarkus.version="${QUARKUS_VERSION}" \
+  -DskipTests \
+  -Dquarkus.container-image.build=false \
+  clean install

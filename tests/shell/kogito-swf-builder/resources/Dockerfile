@@ -21,11 +21,14 @@ FROM registry.access.redhat.com/ubi8/openjdk-11-runtime:latest
 ARG QUARKUS_LAUNCH_DEVMODE=false
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
+# Default name is 'serverless-workflow-project'
+ARG PROJECT_ARTIFACT_ID='serverless-workflow-project'
+
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --from=builder --chown=185 /home/kogito/serverless-workflow-project/target/quarkus-app/lib/ /deployments/lib/
-COPY --from=builder --chown=185 /home/kogito/serverless-workflow-project/target/quarkus-app/*.jar /deployments/
-COPY --from=builder --chown=185 /home/kogito/serverless-workflow-project/target/quarkus-app/app/ /deployments/app/
-COPY --from=builder --chown=185 /home/kogito/serverless-workflow-project/target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/*.jar /deployments/
+COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/app/ /deployments/app/
+COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/quarkus/ /deployments/quarkus/
 
 HEALTHCHECK --interval=2s --timeout=4s CMD curl --fail http://localhost:8080 || exit 1
 

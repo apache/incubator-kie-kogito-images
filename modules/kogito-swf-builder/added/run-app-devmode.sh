@@ -23,4 +23,4 @@ fi
 # auto configure JVM settings
 source "${KOGITO_HOME}"/launch/jvm-settings.sh
 
-"${MAVEN_HOME}"/bin/mvn ${MAVEN_ARGS_APPEND} -U -B clean compile -DskipTests -s "${MAVEN_SETTINGS_PATH}" quarkus:dev -Dquarkus.http.host=0.0.0.0
+"${MAVEN_HOME}"/bin/mvn ${MAVEN_ARGS_APPEND} -U -B clean compile -DskipTests -s "${MAVEN_SETTINGS_PATH}" quarkus:dev -Dquarkus.version="${QUARKUS_VERSION}" -Dquarkus.http.host=0.0.0.0

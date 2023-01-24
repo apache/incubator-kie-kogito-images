@@ -75,7 +75,7 @@ pipeline {
                         if (getKogitoArtifactsVersion()) {
                             versionCmd += " --artifacts-version ${getKogitoArtifactsVersion()}"
                         }
-                        sh versionCmd
+                        runPythonCommand(versionCmd)
                     }
                 }
             }
@@ -85,7 +85,7 @@ pipeline {
                 script {
                     dir(getRepoName()) {
                         sh '''
-                            curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.2/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+                            curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.4/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
                             tar -xzvf cekit-image-validator-runner.tgz
                             chmod +x cekit-image-validator-runner
                         '''
@@ -99,6 +99,34 @@ pipeline {
                 always {
                     dir(getRepoName()) {
                         sh 'rm -rf cekit-image-validator-runner*'
+                    }
+                }
+            }
+        }
+        stage('Clean release notes') {
+            when {
+                expression { isMainBranch() }
+            }
+            steps {
+                script {
+                    String releaseNotesFilename = 'RELEASE_NOTES.md'
+                    dir(getRepoName()) {
+                        sh "rm -rf ${releaseNotesFilename}"
+                        writeFile(file: releaseNotesFilename, text: getCleanedReleaseNotes())
+                    }
+                }
+            }
+        }
+        stage('Update branch') {
+            steps {
+                script {
+                    dir(getRepoName()) {
+                        if (githubscm.isThereAnyChanges()) {
+                            githubscm.commitChanges("[${getBuildBranch()}] Update version to ${getKogitoVersion()}")
+                            githubscm.pushObject('origin', getBuildBranch(), getGitAuthorCredsID())
+                        } else {
+                            println '[WARN] no changes to commit'
+                        }
                     }
                 }
             }
@@ -165,20 +193,6 @@ pipeline {
                 }
             }
         }
-        stage('Update branch') {
-            steps {
-                script {
-                    dir(getRepoName()) {
-                        if (githubscm.isThereAnyChanges()) {
-                            githubscm.commitChanges("[${getBuildBranch()}] Update version to ${getKogitoVersion()}")
-                            githubscm.pushObject('origin', getBuildBranch(), getGitAuthorCredsID())
-                        } else {
-                            println '[WARN] no changes to commit'
-                        }
-                    }
-                }
-            }
-        }
     }
     post {
         unsuccessful {
@@ -220,7 +234,7 @@ void cleanImages() {
 }
 
 void buildImage(String imageName) {
-    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true"
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true")
 }
 
 String getMakeBuildImageArgs() {
@@ -444,7 +458,11 @@ String getMavenArtifactRepository() {
 }
 
 String[] getImages() {
-    return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    return runPythonCommand("make list | tr '\\n' ','", true).trim().split(',')
+}
+
+boolean isMainBranch() {
+    return env.IS_MAIN_BRANCH?.toBoolean()
 }
 
 MavenCommand getMavenCommand(String directory) {
@@ -455,4 +473,20 @@ MavenCommand getMavenCommand(String directory) {
 
 String getDroolsTargetBranch() {
     return util.calculateTargetReleaseBranch(getBuildBranch(), 7)
+}
+
+String getCleanedReleaseNotes() {
+    return '''
+<!-- Keep them in alphabetical order -->
+## Enhancements
+
+## Bug Fixes
+
+## Known Issues
+
+'''
+}
+
+void runPythonCommand(String cmd, boolean stdout = false) {
+    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
 }

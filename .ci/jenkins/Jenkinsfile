@@ -54,7 +54,7 @@ pipeline {
         }
         stage('Prepare offline kogito-examples') {
             steps {
-                sh 'make clone-repos'
+                runPythonCommand('make clone-repos')
             }
         }
         stage('Build & Test Images') {
@@ -149,11 +149,11 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    sh "make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'"
+    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'")
 }
 
 void testImage(String imageName) {
-    sh "make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'"
+    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'")
 }
 
 void registerBuildFailedImage(String imageName) {
@@ -185,5 +185,8 @@ String getWorkspacePath(String image) {
 
 String[] getImages() {
     return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]
-    // return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+}
+
+void runPythonCommand(String cmd, boolean stdout = false) {
+    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
 }

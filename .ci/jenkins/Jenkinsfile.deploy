@@ -101,35 +101,12 @@ pipeline {
                     if (getKogitoArtifactsVersion()) {
                         versionCmd += " --artifacts-version ${getKogitoArtifactsVersion()}"
                     }
-                    sh versionCmd
+                    runPythonCommand(versionCmd)
 
                     commitChanges("Update project version to ${getProjectVersion()}")
                 }
             }
         }
-        // stage('Update Maven information') {
-        //     steps {
-        //         script {
-        //             // Update artifacts
-        //             updateArtifactCmd = 'python3 scripts/update-maven-artifacts.py'
-        //             if (getMavenArtifactRepository() != '') {
-        //                 updateArtifactCmd += " --repo-url ${getMavenArtifactRepository()} --ignore-self-signed-cert"
-        //             }
-
-        //             try {
-        //                 sh updateArtifactCmd
-        //             } catch (err) {
-        //                 unstable('Error while updating Maven artifacts. Please check logs.')
-        //             } finally {
-        //                 if (isThereAnyChanges()) {
-        //                     commitChanges('Updated Maven artifacts')
-        //                 } else {
-        //                     echo 'No changes to commit'
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
         stage('Validate CeKit Image and Modules descriptors') {
             steps {
                 script {
@@ -174,14 +151,14 @@ pipeline {
                         updateTestsCommand += ' --ignore-self-signed-cert'
                     }
                     // Launch update tests
-                    sh updateTestsCommand
+                    runPythonCommand(updateTestsCommand)
 
                     // Debug purpose in case of issue
                     sh 'cat tests/test-apps/clone-repo.sh'
                     sh 'cat tests/features/kogito-builder.feature'
 
                     // Prepare local examples
-                    sh 'make clone-repos'
+                    runPythonCommand('make clone-repos')
                 }
             }
         }
@@ -189,7 +166,7 @@ pipeline {
             steps {
                 script {
                     parallelStages = [:]
-                    getImages().each { image -> 
+                    getImages().each { image ->
                         initWorkspace(image)
                         String workspacePath = getWorkspacePath(image)
                         parallelStages["Build&Test ${image}"] = { 
@@ -289,7 +266,7 @@ pipeline {
                         getBuiltImages().each {
                             prBody += "- ${it}\n"
                         }
-                        if (getBuildFailedImages()){
+                        if (getBuildFailedImages()) {
                             prBody += '\nBuild failures on those images:\n'
                             getBuildFailedImages().each {
                                 prBody += "- ${it}\n"
@@ -297,7 +274,7 @@ pipeline {
                         } else {
                             prBody += '\nImages were all successfully built but some other problem occured in the pipeline execution...\n'
                         }
-                        if (getTestFailedImages()){
+                        if (getTestFailedImages()) {
                             prBody += '\nTest failures on those images:\n'
                             getTestFailedImages().each {
                                 prBody += "- ${it}\n"
@@ -386,11 +363,11 @@ void cleanImages() {
 }
 
 void buildImage(String imageName) {
-    sh "make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'"
+    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'")
 }
 
 void testImage(String imageName) {
-    sh "make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'"
+    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'")
 }
 
 void registerBuiltImage(String imageName) {
@@ -563,7 +540,6 @@ boolean isDeployLatestTag() {
     return params.DEPLOY_WITH_LATEST_TAG
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 // Workspaces
 ////////////////////////////////////////////////////////////////////////
@@ -645,9 +621,12 @@ void setDeployPropertyIfNeeded(String key, def value) {
 
 String[] getImages() {
     return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]
-    // return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
 }
 
 boolean isThereAnyChanges() {
     return sh(script: 'git status --porcelain', returnStdout: true).trim() != ''
+}
+
+void runPythonCommand(String cmd, boolean stdout = false) {
+    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
 }

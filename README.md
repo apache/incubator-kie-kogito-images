@@ -196,11 +196,11 @@ ENTRYPOINT ['java', '-jar', 'target/quarkus-app/quarkus-run.jar']
 #=============================
 ```
 
-##### Using for Quarkus devmode
+##### Using for application development
 
-If you run the image, it will start an empty [Kogito Serverless Workflow](https://kiegroup.github.io/kogito-docs/serverlessworkflow/latest/index.html) application in [Quarkus Devmode](https://quarkus.io/guides/maven-tooling#dev-mode). This allows you to run quick tests locally without having to setup Maven or Java. You can have your workflows in your local file system mounted in the image so that you can see test the application live.
+If you run the image, it will start an empty [Kogito Serverless Workflow](https://kiegroup.github.io/kogito-docs/serverlessworkflow/latest/index.html) application with [Quarkus Devmode](https://quarkus.io/guides/maven-tooling#dev-mode). This allows you to develop and to run quick tests locally without having to setup Maven or Java on your machine. You can have your workflows in your local file system mounted in the image so that you can see test the application live.
 
-To run the image with a local volume with workflow files run:
+To run the image for testing your local workflow files, run:
 
 ```shell
 docker run -it --rm -p 8080:8080 -v <local_workflow_path>:/home/kogito/serverless-workflow-project/src/main/resources/workflows quay.io/kiegroup/kogito-swf-builder:latest

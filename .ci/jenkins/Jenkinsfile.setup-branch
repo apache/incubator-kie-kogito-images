@@ -75,7 +75,7 @@ pipeline {
                         if (getKogitoArtifactsVersion()) {
                             versionCmd += " --artifacts-version ${getKogitoArtifactsVersion()}"
                         }
-                        sh versionCmd
+                        runPythonCommand(versionCmd)
                     }
                 }
             }
@@ -234,7 +234,7 @@ void cleanImages() {
 }
 
 void buildImage(String imageName) {
-    sh "make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true"
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true")
 }
 
 String getMakeBuildImageArgs() {
@@ -458,7 +458,7 @@ String getMavenArtifactRepository() {
 }
 
 String[] getImages() {
-    return sh(script: "make list | tr '\\n' ','", returnStdout: true).trim().split(',')
+    return runPythonCommand("make list | tr '\\n' ','", true).trim().split(',')
 }
 
 boolean isMainBranch() {
@@ -485,4 +485,8 @@ String getCleanedReleaseNotes() {
 ## Known Issues
 
 '''
+}
+
+void runPythonCommand(String cmd, boolean stdout = false) {
+    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
 }

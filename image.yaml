@@ -4,6 +4,7 @@ name: "kogito-image-real-name-on-overrides-file"
 version: "2.0.0-snapshot"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 
+
 labels:
   - name: "io.openshift.s2i.scripts-url"
     value: "image:///usr/local/s2i"

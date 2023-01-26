@@ -13,13 +13,26 @@ teardown() {
     rm -rf "${KOGITO_HOME}"
 }
 
-@test "check if the quarkus profile correctly set on data index" {
-    configure_data_index_events
+@test "check if the default quarkus profile is correctly set on data index" {
+    local expected=" -Dquarkus.profile=kafka-events-support"
+    configure_data_index_quarkus_profile
+    echo "Result is [${KOGITO_DATA_INDEX_PROPS}] and expected is [${expected}]"
+    [ "${expected}" = "${KOGITO_DATA_INDEX_PROPS}" ]
+}
 
-    result="${KOGITO_DATA_INDEX_PROPS}"
-    expected=" -Dquarkus.profile=kafka-events-support"
+@test "check if a provided data index quarkus profile is correctly set on data index" {
+    export KOGITO_DATA_INDEX_QUARKUS_PROFILE="http-events-support"
+    local expected=" -Dquarkus.profile=http-events-support"
+    configure_data_index_quarkus_profile
+    echo "Result is [${KOGITO_DATA_INDEX_PROPS}] and expected is [${expected}]"
+    [ "${expected}" = "${KOGITO_DATA_INDEX_PROPS}" ]
+}
 
-    echo "Result is ${result} and expected is ${expected}"
-    [ "${result}" = "${expected}" ]
+@test "test if a invalid value for data-index url will set the default value" {
+    export KOGITO_DATA_INDEX_QUARKUS_PROFILE="unexisting-quarkus-profile"
+    local expected=" -Dquarkus.profile=kafka-events-support"
+    configure_data_index_quarkus_profile
+    echo "Result is [${KOGITO_DATA_INDEX_PROPS}] and expected is [${expected}]"
+    [ "${expected}" = "${KOGITO_DATA_INDEX_PROPS}" ]
 }
 

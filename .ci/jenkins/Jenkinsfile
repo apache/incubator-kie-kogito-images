@@ -20,6 +20,10 @@ pipeline {
     }
     environment {
         CI = true
+
+        CEKIT_VIRTUALENV_DEFAULT = '~/virtenvs/cekit'
+        CEKIT_VIRTUALENV_BASE = "${WORKSPACE}/virtenvs"
+        CEKIT_VIRTUALENV_CLONE = "${CEKIT_VIRTUALENV_BASE}/venv_dummy"
     }
     stages {
         stage('Initialization') {
@@ -39,6 +43,8 @@ pipeline {
                         // Prod fix to be able to build the image as a community one
                         sh "echo '' > content_sets.yaml"
                     }
+
+                    installVirtualenvClone()
                 }
             }
         }
@@ -156,11 +162,11 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=${isProdCI()}")
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=${isProdCI()}", "${imageName}-build")
 }
 
 void testImage(String imageName) {
-    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()}")
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()}", "${imageName}-test")
 }
 
 String getMakeBuildImageArgs() {
@@ -201,13 +207,29 @@ String[] getImages() {
     if (isProdCI()) {
         listCmd += ' arg=--prod'
     }
-    return runPythonCommand("${listCmd} | tr '\\n' ','", true).trim().split(',')
+    return runPythonCommand("${listCmd} | tr '\\n' ','", '', true).trim().split(',')
 }
 
 boolean isProdCI() {
     return env.PROD_CI ? env.PROD_CI.toBoolean() : false
 }
 
-void runPythonCommand(String cmd, boolean stdout = false) {
-    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
+void installVirtualenvClone() {
+    sh """
+        python3 -m virtualenv ${CEKIT_VIRTUALENV_CLONE}
+        source ${CEKIT_VIRTUALENV_CLONE}/bin/activate
+        pip install virtualenv-clone
+    """
+}
+
+def runPythonCommand(String cmd, String virtualenvId = '', boolean stdout = false) {
+    String cekitVirtualEnv = ${CEKIT_VIRTUALENV_DEFAULT}
+    if (virtualenvId) {
+        cekitVirtualEnv = "${CEKIT_VIRTUALENV_BASE}/${virtualenvId}"
+        String script = """
+            source ${CEKIT_VIRTUALENV_CLONE}/bin/activate
+            virtualenv-clone ${CEKIT_VIRTUALENV_DEFAULT} ${cekitVirtualEnv}
+        """
+    }
+    return sh(script: "source ${cekitVirtualEnv}/bin/activate && ${cmd}", returnStdout: stdout)
 }

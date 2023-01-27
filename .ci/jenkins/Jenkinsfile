@@ -70,7 +70,8 @@ pipeline {
                         runPythonCommand('python3 scripts/update-tests.py --ignore-self-signed-cert')
                     }
 
-                    runPythonCommand('make clone-repos')
+                    echo "$STAGE_NAME"
+                    // runPythonCommand('make clone-repos')
                 }
             }
         }
@@ -166,6 +167,7 @@ void buildImage(String imageName) {
 }
 
 void testImage(String imageName) {
+    sh "docker run -it --rm quay.io/kiegroup/kogito-swf-builder:2.0 sh -c 'ls /home/kogito/.m2/repository/io/quarkus/quarkus-bom  | wc -l'"
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()}", "${imageName}-test")
 }
 

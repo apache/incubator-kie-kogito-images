@@ -23,7 +23,7 @@ modules:
 run:
   workdir: "/home/kogito"
   user: 1001
-  entrypoint: 
+  cmd: 
     - "/home/kogito/launch/run-app-devmode.sh"
 
 ports:

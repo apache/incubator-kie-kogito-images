@@ -223,10 +223,10 @@ void installVirtualenvClone() {
 }
 
 def runPythonCommand(String cmd, String virtualenvId = '', boolean stdout = false) {
-    String cekitVirtualEnv = ${CEKIT_VIRTUALENV_DEFAULT}
+    String cekitVirtualEnv = "${CEKIT_VIRTUALENV_DEFAULT}"
     if (virtualenvId) {
         cekitVirtualEnv = "${CEKIT_VIRTUALENV_BASE}/${virtualenvId}"
-        String script = """
+        sh """
             source ${CEKIT_VIRTUALENV_CLONE}/bin/activate
             virtualenv-clone ${CEKIT_VIRTUALENV_DEFAULT} ${cekitVirtualEnv}
         """

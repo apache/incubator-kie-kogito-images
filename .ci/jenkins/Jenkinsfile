@@ -203,11 +203,12 @@ String getWorkspacePath(String image) {
 }
 
 String[] getImages() {
-    String listCmd = 'make list'
-    if (isProdCI()) {
-        listCmd += ' arg=--prod'
-    }
-    return runPythonCommand("${listCmd} | tr '\\n' ','", '', true).trim().split(',')
+    // String listCmd = 'make list'
+    // if (isProdCI()) {
+    //     listCmd += ' arg=--prod'
+    // }
+    // return runPythonCommand("${listCmd} | tr '\\n' ','", '', true).trim().split(',')
+    return ['kogito-swf-builder']
 }
 
 boolean isProdCI() {

@@ -34,7 +34,7 @@ mvn_local_repo="/tmp/temp_maven/kogito-swf-builder"
 
 rm -rf ${target_tmp_dir} && mkdir -p ${target_tmp_dir}
 rm -rf ${build_target_dir} && mkdir -p ${build_target_dir}
-mkdir -p ${mvn_local_repo}
+rm -rf ${mvn_local_repo} && mkdir -p ${mvn_local_repo}
 
 . ${script_dir_path}/setup-maven.sh "${build_target_dir}"/settings.xml
 

@@ -168,6 +168,7 @@ void buildImage(String imageName) {
 
 void testImage(String imageName) {
     sh "docker run --rm quay.io/kiegroup/kogito-swf-builder:2.0 sh -c 'ls /home/kogito/.m2/repository/io/quarkus/quarkus-bom  | wc -l'"
+    sh "ls -al /tmp/temp_maven/kogito-swf-builder/io/quarkus/quarkus-bom"
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()} test_options=\"--steps-url https://github.com/radtriste/behave-test-steps.git\"", "${imageName}-test")
 }
 

@@ -26,7 +26,7 @@ Feature: Kogito-trusty infinispan feature.
       | QUARKUS_INFINISPAN_CLIENT_HOSTS           | 172.18.0.1:11222  |
       | QUARKUS_INFINISPAN_CLIENT_USE_AUTH        | true              |
       | QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME   | IamNotExist       |
-      | QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD   | hard2guess        |
+      | QUARKUS_INFINISPAN_CLIENT_PASSWORD   | hard2guess        |
       | QUARKUS_INFINISPAN_CLIENT_AUTH_REALM      | SecretRealm       |
       | QUARKUS_INFINISPAN_CLIENT_SASL_MECHANISM  | COOLGSSAPI        |
     Then container log should contain QUARKUS_INFINISPAN_CLIENT_HOSTS=172.18.0.1:11222

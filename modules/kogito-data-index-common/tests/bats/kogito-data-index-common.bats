@@ -28,7 +28,7 @@ teardown() {
     [ "${expected}" = "${KOGITO_DATA_INDEX_PROPS}" ]
 }
 
-@test "test if a invalid value for data-index url will set the default value" {
+@test "test if a invalid value for data-index quarkus profile will set the default value" {
     export KOGITO_DATA_INDEX_QUARKUS_PROFILE="unexisting-quarkus-profile"
     local expected=" -Dquarkus.profile=kafka-events-support"
     configure_data_index_quarkus_profile

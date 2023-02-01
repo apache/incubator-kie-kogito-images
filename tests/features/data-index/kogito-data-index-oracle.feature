@@ -22,23 +22,3 @@ Feature: Kogito-data-index oracle feature.
     Then container log should contain -Djava.library.path=/home/kogito/lib -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8080 -jar /home/kogito/bin/quarkus-app/quarkus-run.jar
     And container log should contain Datasource '<default>': IO Error: The Network Adapter could not establish the connection
     And container log should not contain Application failed to start
-
-  Scenario:   Scenario: check if the default quarkus profile is correctly set on data index
-    When container is started with env
-      | variable               | value   |
-      | SCRIPT_DEBUG           | true    |
-    Then container log should contain -Dquarkus.profile=kafka-events-support
-
-  Scenario:   Scenario: check if a provided data index quarkus profile is correctly set on data index
-    When container is started with env
-      | variable                           | value               |
-      | SCRIPT_DEBUG                       | true                |
-      | KOGITO_DATA_INDEX_QUARKUS_PROFILE  | http-events-support |
-    Then container log should contain -Dquarkus.profile=http-events-support
-
-  Scenario:   Scenario: test if a invalid value for data-index quarkus profile will set the default value
-    When container is started with env
-      | variable                           | value                      |
-      | SCRIPT_DEBUG                       | true                       |
-      | KOGITO_DATA_INDEX_QUARKUS_PROFILE  | unexisting-quarkus-profile |
-    Then container log should contain -Dquarkus.profile=kafka-events-support

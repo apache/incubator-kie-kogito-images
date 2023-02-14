@@ -1,4 +1,4 @@
-FROM quay.io/kiegroup/kogito-swf-builder:2.0 AS builder
+FROM quay.io/kiegroup/kogito-swf-builder:1.34 AS builder
 
 # Kogito user
 USER 1001

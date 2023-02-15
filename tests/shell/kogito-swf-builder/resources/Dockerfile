@@ -1,4 +1,4 @@
-FROM quay.io/kiegroup/kogito-swf-builder:2.0 AS builder
+FROM quay.io/kiegroup/kogito-swf-builder:1.34 AS builder
 
 # Kogito user
 USER 1001
@@ -29,8 +29,6 @@ COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quark
 COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/*.jar /deployments/
 COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/app/ /deployments/app/
 COPY --from=builder --chown=185 /home/kogito/${PROJECT_ARTIFACT_ID}/target/quarkus-app/quarkus/ /deployments/quarkus/
-
-HEALTHCHECK --interval=2s --timeout=4s CMD curl --fail http://localhost:8080 || exit 1
 
 EXPOSE 8080
 USER 185

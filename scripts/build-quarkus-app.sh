@@ -72,8 +72,6 @@ if [ ! -z ${kogito_version} ]; then
         N;N;N
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml
-
-    rm -rf serverless-workflow-project/*.bak
 fi
 
 echo "Build quarkus app"

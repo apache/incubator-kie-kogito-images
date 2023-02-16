@@ -11,6 +11,6 @@ function configure() {
 }
 
 function configure_data_index_quarkus_profile() {
-    local quarkusProfile =${KOGITO_DATA_INDEX_QUARKUS_PROFILE}
+    local quarkusProfile=${KOGITO_DATA_INDEX_QUARKUS_PROFILE}
     KOGITO_DATA_INDEX_PROPS="${KOGITO_DATA_INDEX_PROPS} -Dquarkus.profile=${quarkusProfile}"
 }

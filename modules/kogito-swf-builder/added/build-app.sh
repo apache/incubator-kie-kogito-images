@@ -17,9 +17,7 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
-# Call the configure-maven here
-source "${script_dir_path}"/configure-maven.sh
-configure
+source "${script_dir_path}"/configure-jvm-mvn.sh
 
 cd "${PROJECT_ARTIFACT_ID}"
 
@@ -37,9 +35,6 @@ if [ ! -z "${resources_path}" ]; then
 else
   log_warn "-> Nothing to copy from ${resources_path}"
 fi
-
-# auto configure JVM settings
-source "${KOGITO_HOME}"/launch/jvm-settings.sh
 
 "${MAVEN_HOME}"/bin/mvn -B ${MAVEN_ARGS_APPEND} \
   -nsu \

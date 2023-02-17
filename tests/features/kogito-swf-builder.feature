@@ -14,7 +14,6 @@ Feature: SWF and Quarkus installation
   #   When container is started with command bash
   #   Then run sh -c 'ls /home/kogito/.m2/repository/io/quarkus/quarkus-bom  | wc -l' in container and immediately check its output for 1
 
-  @wip
   Scenario: verify if container starts in devmode by default
     When container is ready
     Then check that page is served

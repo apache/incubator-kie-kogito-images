@@ -54,6 +54,9 @@ mvn ${MAVEN_OPTIONS} \
     -Dextensions="quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,smallrye-health" \
     io.quarkus.platform:quarkus-maven-plugin:"${quarkus_platform_version}":create
 
+# Replaces the default Kogito Quarkus Platform BOM with the Kogito one instead.
+# One can use this feature to test a latest patch passing the kogito version to this script as 2.0.0-SNAPSHOT, for example.
+# Make sure that the CI env var is set. For example, `export CI=true` before running this script
 if [ ! -z ${kogito_version} ]; then
     echo "Replacing Kogito Platform BOM with version ${kogito_version}"
 

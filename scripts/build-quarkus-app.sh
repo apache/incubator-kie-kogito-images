@@ -71,7 +71,7 @@ if [ ! -z ${kogito_version} ]; then
     replace_3="        <version>${kogito_version}<\/version>\n"
     complete_replace="$replace_1$replace_2$replace_3"
 
-    sed -i.bak -e "/$pattern_1/{
+    sed -i.bak "/$pattern_1/{
         N;N;N
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml

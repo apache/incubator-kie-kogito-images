@@ -68,8 +68,8 @@ envs:
 # unfortunately by now the version needs to be hardcoded.
 artifacts:
   - name: apache-maven-3.8.1-bin.tar.gz
-    url: http://download.devel.redhat.com/brewroot/packages/org.apache.maven-apache-maven/3.8.1/1/maven/org/apache/maven/apache-maven/3.8.1/apache-maven-3.8.1-bin.tar.gz
-    sha256: b98a1905eb554d07427b2e5509ff09bd53e2f1dd7a0afa38384968b113abef02
+    url: https://archive.apache.org/dist/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz
+    md5: 90197f18ed9036a1709ff0e09558c083
 
 execute:
   - script: configure

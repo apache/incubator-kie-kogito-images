@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.dataindex.common
-version: "1.34.0-snapshot"
+version: "1.34.0"
 description: "Common modules for data-index persistence provider images, any addition that is common must be added in this module"
 
 execute:

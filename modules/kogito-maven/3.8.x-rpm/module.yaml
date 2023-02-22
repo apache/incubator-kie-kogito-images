@@ -1,12 +1,15 @@
 schema_version: 1
 name: org.kie.kogito.maven
-version: "3.8.1"
+version: "3.8-rpm"
 
 envs:
   - name: "MAVEN_VERSION"
-    value: "3.8.1"
-  - name: " MAVEN_HOME"
+    value: "3.8"
+  - name: "MAVEN_HOME"
     value: "/usr/share/maven"
+  - name: "MAVEN_SETTINGS_PATH"
+    description: "The location of the settings.xml file"
+    value: '${KOGITO_HOME}/.m2/settings.xml'
   - name: "HTTP_PROXY"
     description: "The location of the http proxy, will be used for both Maven builds and Java runtime."
     example: "http://127.0.0.1:8080"
@@ -65,11 +68,15 @@ envs:
   - name: "MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE"
     description: "When set, use of relaxed SSL check for user generated certificates. Default value is false"
     example: "true"
-# unfortunately by now the version needs to be hardcoded.
-artifacts:
-  - name: apache-maven-3.8.1-bin.tar.gz
-    url: https://archive.apache.org/dist/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz
-    md5: 90197f18ed9036a1709ff0e09558c083
+
+modules:
+  install:
+    - name: org.kie.kogito.maven.dnf.module
+
+packages:
+  install:
+    - maven
+
 
 execute:
   - script: configure

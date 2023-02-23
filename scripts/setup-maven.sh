@@ -2,9 +2,7 @@
 # Holds common maven configuration for CI;
 # Usage: . setup-maven.sh
 
-alias log_info='echo' # Alias to be able to log correctly from `configure-maven` script
 MAVEN_VERSION="3.8.x"
-
 MVN_MODULE="$(dirname "${BASH_SOURCE[0]}")/../modules/kogito-maven/${MAVEN_VERSION}"
 MAVEN_OPTIONS="-DskipTests"
 # Do not remove below, this can be updated by the python scripts
@@ -14,6 +12,9 @@ maven_settings_path=$1
 if [ -z "${maven_settings_path}" ]; then
     maven_settings_path="${HOME}"/.m2/settings.xml
 fi
+
+LOGGING_MODULE="$(dirname "${BASH_SOURCE[0]}")/../modules/kogito-logging/"
+source "${LOGGING_MODULE}"/added/logging.sh
 
 echo "Updating settings file ${maven_settings_path}"
 

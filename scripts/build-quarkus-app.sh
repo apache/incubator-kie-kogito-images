@@ -54,29 +54,6 @@ mvn ${MAVEN_OPTIONS} \
     -Dextensions="quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,smallrye-health" \
     io.quarkus.platform:quarkus-maven-plugin:"${quarkus_platform_version}":create
 
-# Replaces the default Kogito Quarkus Platform BOM with the Kogito one instead.
-# One can use this feature to test a latest patch passing the kogito version to this script as 2.0.0-SNAPSHOT, for example.
-# Make sure that the CI env var is set. For example, `export CI=true` before running this script
-if [ ! -z ${kogito_version} ]; then
-    echo "Replacing Kogito Platform BOM with version ${kogito_version}"
-
-    # [ ]* -> is a regexp pattern to match any number of spaces
-    pattern_1="[ ]*<groupId>.*<\/groupId>"
-    pattern_2="[ ]*<artifactId>quarkus-kogito-bom<\/artifactId>\n"
-    pattern_3="[ ]*<version>.*<\/version>\n"
-    complete_pattern="$pattern_1\n$pattern_2$pattern_3"
-
-    replace_1="        <groupId>org.kie.kogito<\/groupId>\n"
-    replace_2="        <artifactId>kogito-bom<\/artifactId>\n"
-    replace_3="        <version>${kogito_version}<\/version>\n"
-    complete_replace="$replace_1$replace_2$replace_3"
-
-    sed -i.bak "/$pattern_1/{
-        N;N;N
-        s/$complete_pattern/$complete_replace/
-        }" serverless-workflow-project/pom.xml
-fi
-
 echo "Build quarkus app"
 cd "serverless-workflow-project"
 # Quarkus version is enforced if some dependency pulled has older version of Quarkus set.

@@ -12,6 +12,8 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
+cd "${PROJECT_ARTIFACT_ID}"
+
 source "${script_dir_path}"/configure-jvm-mvn.sh
 
 "${MAVEN_HOME}"/bin/mvn -B -s "${MAVEN_SETTINGS_PATH}" \
@@ -22,8 +24,6 @@ source "${script_dir_path}"/configure-jvm-mvn.sh
   -DprojectVersionId="${PROJECT_VERSION}" \
   -DplatformVersion="${QUARKUS_PLATFORM_VERSION}" \
   -Dextensions="${QUARKUS_EXTENSIONS}"
-
-cd "${PROJECT_ARTIFACT_ID}"
 
 "${MAVEN_HOME}"/bin/mvn -B ${MAVEN_ARGS_APPEND} \
   -nsu \

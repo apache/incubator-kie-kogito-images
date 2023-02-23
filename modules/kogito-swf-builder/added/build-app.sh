@@ -17,9 +17,9 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
-source "${script_dir_path}"/configure-jvm-mvn.sh
-
 cd "${PROJECT_ARTIFACT_ID}"
+
+source "${script_dir_path}"/configure-jvm-mvn.sh
 
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
   log_info "Adding extensions '${QUARKUS_EXTENSIONS}'"

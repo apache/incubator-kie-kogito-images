@@ -4,13 +4,17 @@ name: "kogito-image-real-name-on-overrides-file"
 version: "2.0.0-snapshot"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 
-labels:
+labels:  
   - name: "io.openshift.s2i.scripts-url"
     value: "image:///usr/local/s2i"
   - name: "io.openshift.s2i.destination"
     value: "/tmp"
   - name: "io.openshift.expose-services"
     value: "8080:http"
+  - name: "io.quarkus.platform.version"
+    value: "2.16.0.Final"
+  - name: "org.kie.kogito.version"
+    value: "2.0.0-SNAPSHOT"
 
 modules:
   repositories:

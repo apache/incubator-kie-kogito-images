@@ -39,12 +39,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.repo_url:
+        common.update_maven_repo_in_setup_maven(args.repo_url, args.replace_jboss_repo)
         if args.tests_only:
             common.update_maven_repo_in_behave_tests(args.repo_url, args.replace_jboss_repo)
         else:
-            common.update_maven_repo_in_setup_maven(args.repo_url, args.replace_jboss_repo)
-            common.update_maven_repo_in_images_env_value(args.repo_url, args.replace_jboss_repo, args.prod)
-            common.update_maven_repo_in_modules_env_value(args.repo_url, args.replace_jboss_repo, args.prod)
+            common.update_maven_repo_env_value(args.repo_url, args.replace_jboss_repo, args.prod)
     
     if args.ignore_self_signed_cert:
         common.ignore_maven_self_signed_certificate_in_setup_maven()
@@ -62,18 +61,11 @@ if __name__ == "__main__":
         common.update_examples_ref_in_clone_repo(args.examples_ref)
 
     if args.artifacts_version:
-        common.update_artifacts_version_env_in_image(args.artifacts_version)
-        common.update_artifacts_version_in_behave_tests(args.artifacts_version)
+        common.update_artifacts_version_in_build(args.artifacts_version, args.prod)
     
     if args.quarkus_platform_version:
         if not args.tests_only:
-            common.update_quarkus_platform_version_env_in_image(args.quarkus_platform_version)
-
-            common.update_images_env_value(common.QUARKUS_PLATFORM_VERSION_ENV_KEY, args.quarkus_platform_version, args.prod)
-            common.update_modules_env_value(common.QUARKUS_PLATFORM_VERSION_ENV_KEY, args.quarkus_platform_version, args.prod)
-            
-            common.update_images_label_value(common.QUARKUS_PLATFORM_VERSION_LABEL_NAME, args.quarkus_platform_version, args.prod)
-            common.update_modules_label_value(common.QUARKUS_PLATFORM_VERSION_LABEL_NAME, args.quarkus_platform_version, args.prod)
+            common.update_quarkus_platform_version_in_build(args.quarkus_platform_version, args.prod)
         
         common.update_quarkus_platform_version_in_behave_tests_repository_paths(args.quarkus_platform_version)
     

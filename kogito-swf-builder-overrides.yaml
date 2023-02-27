@@ -3,10 +3,6 @@ schema_version: 1
 name: "quay.io/kiegroup/kogito-swf-builder"
 description: "Kogito Serverless Workflow base builder with Quarkus extensions libraries preinstalled"
 
-labels:
-  - name: "io.quarkus.platform.version"
-    value: "2.16.0.Final"
-
 modules:
   install:
     - name: org.kie.kogito.image.dependencies

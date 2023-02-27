@@ -44,8 +44,8 @@ if [ ! -z "${NPM_REGISTRY_URL}" ]; then
 </properties>\
 </profile>\
 "   
-    sed -i.bak -e "s|(<!-- ### extra maven repositories ### -->)|\1\n${npm_profile}|" "${MAVEN_SETTINGS_PATH}"
-    sed -i.bak -e "s|(<!-- ### extra maven profile ### -->)|\1\n<activeProfile>internal-npm-registry</activeProfile>|" "${MAVEN_SETTINGS_PATH}"
+    sed -i.bak -E "s|(<!-- ### extra maven repositories ### -->)|\1\n${npm_profile}|" "${MAVEN_SETTINGS_PATH}"
+    sed -i.bak -E "s|(<!-- ### extra maven profile ### -->)|\1\n<activeProfile>internal-npm-registry</activeProfile>|" "${MAVEN_SETTINGS_PATH}"
     
     rm -rf "${MAVEN_SETTINGS_PATH}/*.bak"
 fi

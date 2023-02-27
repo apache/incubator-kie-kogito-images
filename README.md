@@ -208,7 +208,7 @@ After the image bootstrap, you can access [http://localhost:8080/q/swagger-ui](h
 ##### Using the Kogito SWF Builder Image nightly image
 
 The nightly builder image has been built and optimized with an internal nightly build of the Quarkus Platform.  
-2 environment variables should not be changed when using it:
+There are 2 environment variables that should not be changed when using it:
 
 - QUARKUS_PLATFORM_VERSION = kogito-${KOGITO_VERSION}
 - MAVEN_REPO_URL = https://repository.jboss.org/nexus/content/repositories/kogito-internal-repository/

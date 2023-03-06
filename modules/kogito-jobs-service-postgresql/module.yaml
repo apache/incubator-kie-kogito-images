@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.postgresql
-version: "1.35.0"
+version: "1.35.1-snapshot"
 
 # see build-kogito-apps-components.sh script, responsible for build it.
 # called by the Makefile before builds

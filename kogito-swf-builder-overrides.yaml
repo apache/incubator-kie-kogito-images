@@ -5,7 +5,7 @@ description: "Kogito Serverless Workflow base builder with Quarkus extensions li
 
 labels:
   - name: "org.quarkus.version"
-    value: "2.16.0.Final"
+    value: "2.13.7.Final"
 
 modules:
   install:
@@ -23,7 +23,7 @@ modules:
 run:
   workdir: "/home/kogito"
   user: 1001
-  entrypoint: 
+  entrypoint:
     - "/home/kogito/launch/run-app-devmode.sh"
 
 ports:

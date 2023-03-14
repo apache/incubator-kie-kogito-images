@@ -131,4 +131,4 @@ bats:
 prod_component=
 container-build-osbs:
 	echo "calling RHPAM container-build-osbs......................................"
-	$(CEKIT_CMD) --redhat --descriptor $(prod_component).yaml build osbs
+	$(CEKIT_CMD) --redhat --overrides-file $(prod_component)-overrides.yaml build osbs

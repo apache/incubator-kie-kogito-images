@@ -98,3 +98,9 @@ push-local-registry:
 .PHONY: bats
 bats:
 	./scripts/run-bats.sh
+
+.PHONY: container-build-osbs
+prod_component=
+container-build-osbs:
+	echo "calling BAMOE container-build-osbs......................................"
+	$(CEKIT_CMD) --redhat build --overrides-file $(prod_component).yaml osbs --assume-yes

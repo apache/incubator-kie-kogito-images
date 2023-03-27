@@ -139,7 +139,9 @@ pipeline {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
 
                         // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
-                        runPythonCommand("python3 scripts/update-repository.py --ignore-self-signed-cert")
+                        dir(getRepoName()) {
+                            runPythonCommand("python3 scripts/update-repository.py --ignore-self-signed-cert")
+                        }
                     }
                 }
             }
@@ -151,7 +153,9 @@ pipeline {
                     String quarkusPlatformVersion = "kogito-${kogitoVersion}"
 
                     // Setup quarkus platform repo configuration
-                    runPythonCommand("python3 scripts/update-repository.py --repo-url ${QUARKUS_PLATFORM_NEXUS_URL} --ignore-self-signed-cert --quarkus-platform-version ${quarkusPlatformVersion}")
+                    dir(getRepoName()) {
+                        runPythonCommand("python3 scripts/update-repository.py --repo-url ${QUARKUS_PLATFORM_NEXUS_URL} --ignore-self-signed-cert --quarkus-platform-version ${quarkusPlatformVersion}")
+                    }
                 }
             }
         }

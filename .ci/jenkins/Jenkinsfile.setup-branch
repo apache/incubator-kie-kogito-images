@@ -139,7 +139,7 @@ pipeline {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
 
                         // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
-                        runPythonCommand("python3 scripts/update-build.py --ignore-self-signed-cert")
+                        runPythonCommand("python3 scripts/update-repository.py --ignore-self-signed-cert")
                     }
                 }
             }

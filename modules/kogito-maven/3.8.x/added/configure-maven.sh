@@ -43,7 +43,7 @@ function configure() {
 }
 
 # When Running on OpenShift with AnyUID the HOME environment variable gets overridden to "/"
-# Maven build main fail with this issue Could not create local repository at /.m2/repository
+# Maven build might fail with this issue:  'Could not create local repository at /.m2/repository'
 # Set the property maven.home to $KOGITO_HOME so the HOME env is ignored.
 function configureMavenHome() {
   export MAVEN_ARGS_APPEND="${MAVEN_ARGS_APPEND} -Duser.home=${KOGITO_HOME}"

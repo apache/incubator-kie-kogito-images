@@ -15,18 +15,18 @@ items:
         openshift.io/provider-display-name: IBM, Inc.
     spec:
       tags:
-        - name: '8.0.2'
+        - name: '8.0.3'
           annotations:
             description: IBM BAMOE Runtime image for Kogito based on Quarkus or SpringBoot JVM image
             iconClass: icon-jbpm
             tags: ibm-bamoe-kogito,runtime,kogito,quarkus,springboot,jvm
             supports: quarkus
-            version: '8.0.2'
+            version: '8.0.3'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:8.0.2
+            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:8.0.3
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -36,18 +36,18 @@ items:
         openshift.io/provider-display-name: IBM, Inc.
     spec:
       tags:
-        - name: '8.0.2'
+        - name: '8.0.3'
           annotations:
             description: IBM BAMOE Runtime image for Kogito based on Quarkus native image
             iconClass: icon-jbpm
             tags: ibm-bamoe-kogito,runtime,kogito,quarkus,native
             supports: quarkus
-            version: '8.0.2'
+            version: '8.0.3'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-native-rhel8:8.0.2
+            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-runtime-native-rhel8:8.0.3
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -57,15 +57,15 @@ items:
         openshift.io/provider-display-name: IBM, Inc.
     spec:
       tags:
-        - name: '8.0.2'
+        - name: '8.0.3'
           annotations:
             description: IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot
             iconClass: icon-jbpm
             tags: ibm-bamoe-kogito,builder,kogito,quarkus,springboot
             supports: quarkus
-            version: '8.0.2'
+            version: '8.0.3'
           referencePolicy:
             type: Local
           from:
             kind: DockerImage
-            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-builder-rhel8:8.0.2
+            name: registry.connect.redhat.com/ibm-bamoe/bamoe-kogito-builder-rhel8:8.0.3

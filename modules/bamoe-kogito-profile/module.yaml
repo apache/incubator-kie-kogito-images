@@ -1,6 +1,6 @@
 schema_version: 1
 name: bamoe.prod.profile
-version: '8.0.2'
+version: '8.0.3'
 description: Holds custom configurations for BAMOE Kogito images. Add as the last module as it can depend on other modules.
 
 envs:
@@ -9,4 +9,4 @@ envs:
     description: "If set, will enable the usage of the Red Hat Maven repositories to resolve Java dependencies. Enabled by default on productized images."
 
 execute:
-- script: configure
+  - script: configure

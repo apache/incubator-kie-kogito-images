@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "ibm-bamoe/bamoe-kogito-builder-rhel8"
-version: "8.0.2"
+version: "8.0.3"
 from: "registry.redhat.io/ubi8/ubi-minimal:latest"
 description: "IBM BAMOE Platform for building Kogito based on Quarkus or SpringBoot"
 

@@ -43,6 +43,7 @@ ports:
 modules:
   install:
     - name: org.kie.kogito.rhpam.prod.profile
+      version: "7.13.3"
     - name: org.kie.kogito.image.dependencies
     - name: org.kie.kogito.system.user
     - name: org.kie.kogito.logging

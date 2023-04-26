@@ -7,7 +7,9 @@ def changeTarget = env.ghprbTargetBranch ?: CHANGE_TARGET
 BUILD_FAILED_IMAGES = []
 
 pipeline {
-    agent { label 'kogito-image-slave && !built-in' }
+    agent { 
+        label 'kogito-image-slave && !built-in' 
+    }
     tools {
         jdk 'kie-jdk11'
         maven 'kie-maven-3.8.6'
@@ -28,13 +30,18 @@ pipeline {
                     if (env.MAVEN_MIRROR_REPOSITORY != null
                             && env.MAVEN_MIRROR_REPOSITORY != '') {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
-                            }
+                    }
 
                     githubscm.checkoutIfExists('kogito-images', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
 
                     //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
                     if (env.MAVEN_MIRROR_URL != '') {
                         runPythonCommand('python3 scripts/update-tests.py --ignore-self-signed-cert')
+                    }
+
+                    if (isProdCI()) {
+                        // Prod fix to be able to build the image as a community one
+                        sh "echo '' > content_sets.yaml"
                     }
                 }
             }
@@ -150,11 +157,11 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'")
+    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .' ignore_tag=${isProdCI()}")
 }
 
 void testImage(String imageName) {
-    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'")
+    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .' ignore_tag=${isProdCI()}")
 }
 
 void registerBuildFailedImage(String imageName) {
@@ -185,9 +192,20 @@ String getWorkspacePath(String image) {
 }
 
 String[] getImages() {
+    if (isProdCI()) {
+        return [ 
+            'rhpam-kogito-builder-rhel8', 
+            'rhpam-kogito-runtime-jvm-rhel8', 
+            'rhpam-kogito-runtime-native-rhel8' 
+        ]
+    }
     return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
     return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
+}
+
+boolean isProdCI() {
+    return env.PROD_CI ? env.PROD_CI.toBoolean() : false
 }

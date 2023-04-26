@@ -1,6 +1,12 @@
 @rhpam-7/rhpam-kogito-builder-rhel8
 Feature: rhpam-kogito-builder-rhel8 feature.
 
+  Scenario: verify if the maven and java installation are correct
+    When container is started with command bash
+    Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
+    And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.8.5
+    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
+
   Scenario: verify if all labels are correctly set on rhpam-kogito-builder-rhel8 image
     Given image is built
     # Then the image should not contain label maintainer TODO add support to this sentence on cekit behave steps

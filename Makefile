@@ -36,7 +36,7 @@ ifneq ($(ignore_test),true)
 endif
 # tag with shortened version
 ifneq ($(ignore_tag),true)
-    ifneq ($(findstring rc,$(IMAGE_VERSION)),rc)
+	ifneq ($(findstring rc,$(IMAGE_VERSION)),rc)
 		${BUILD_ENGINE} tag quay.io/kiegroup/${image_name}:${IMAGE_VERSION} quay.io/kiegroup/${image_name}:${SHORTENED_LATEST_VERSION}
 	endif
 endif

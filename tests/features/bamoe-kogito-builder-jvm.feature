@@ -1,7 +1,13 @@
 @ibm-bamoe/bamoe-kogito-builder-rhel8
 Feature: rhpam-kogito-builder-rhel8 feature.
 
-  Scenario: verify if all labels are correctly set on bamoe-kogito-builder-rhel8 image
+  Scenario: verify if the maven and java installation are correct
+    When container is started with command bash
+    Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
+    And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.8
+    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
+
+  Scenario: verify if all labels are correctly set on rhpam-kogito-builder-rhel8 image
     Given image is built
     # Then the image should not contain label maintainer TODO add support to this sentence on cekit behave steps
     Then the image should contain label io.openshift.s2i.scripts-url with value image:///usr/local/s2i
@@ -23,6 +29,14 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And file /home/kogito/.m2/settings.xml should contain <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
     And file /home/kogito/.m2/settings.xml should contain <id>redhat-techpreview-repository</id>
     And file /home/kogito/.m2/settings.xml should contain <url>https://maven.repository.redhat.com/techpreview/all</url>
+
+  Scenario: Check if the expected message is printed if native build is enabled
+    Given failing s2i build /tmp/kogito-examples from dmn-example using 1.13.x
+      | variable       | value          |
+      | RUNTIME_TYPE   | quarkus        |
+      | NATIVE         | true           |
+      | KOGITO_VERSION | 2.0.0-SNAPSHOT |
+    # Then s2i build log should contain does not supports native builds # looks like it does not work ...
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
     Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:latest

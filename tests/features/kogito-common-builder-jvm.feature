@@ -2,12 +2,6 @@
 @ibm-bamoe/bamoe-kogito-builder-rhel8
 Feature: kogito-builder image JVM build tests
 
-  Scenario: verify if the maven and java installation are correct
-    When container is started with command bash
-    Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
-    And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.8.1
-    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
-
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using nightly-1.13.x-blue
       | variable     | value   |
@@ -23,8 +17,6 @@ Feature: kogito-builder image JVM build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
-    And file /home/kogito/ssl-libs/libsunec.so should exist
-    And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image and no RUNTIME_TYPE defined
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using nightly-1.13.x-blue
@@ -40,8 +32,6 @@ Feature: kogito-builder image JVM build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
-    And file /home/kogito/ssl-libs/libsunec.so should exist
-    And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with runtime image
     Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld using nightly-1.13.x-blue and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest

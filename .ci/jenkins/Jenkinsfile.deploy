@@ -16,7 +16,7 @@ pipeline {
     // Needed for local build
     tools {
         jdk 'kie-jdk11'
-        maven 'kie-maven-3.8.1'
+        maven 'kie-maven-3.8.6'
     }
 
     options {

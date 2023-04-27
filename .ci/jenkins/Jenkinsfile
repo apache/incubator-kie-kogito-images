@@ -10,7 +10,7 @@ pipeline {
     agent { label 'kogito-image-slave && !built-in' }
     tools {
         jdk 'kie-jdk11'
-        maven 'kie-maven-3.8.1'
+        maven 'kie-maven-3.8.6'
     }
     options {
         timeout(time: 120, unit: 'MINUTES')

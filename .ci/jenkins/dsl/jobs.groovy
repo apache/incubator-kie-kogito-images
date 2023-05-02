@@ -50,6 +50,13 @@ void setupPrJob(String branch = "${GIT_BRANCH}") {
         disable_status_message_error: true,
         disable_status_message_failure: true,
     ])
+    if (isProdCI) {
+        jobParams.job.name += '.prod'
+        jobParams.pr.trigger_phrase = '.*[j|J]enkins,?.*(rerun|run) [prod|Prod|PROD].*'
+        jobParams.pr.trigger_phrase_only = true
+        jobParams.pr.commitContext = 'Prod'
+        jobParams.env.put('PROD_CI', true)
+    }
     KogitoJobTemplate.createPRJob(this, jobParams)
 }
 

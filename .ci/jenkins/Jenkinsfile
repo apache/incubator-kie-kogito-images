@@ -43,7 +43,7 @@ pipeline {
                         // Prod fix to be able to build the image as a community one
                         sh """
                             echo '' > content_sets.yaml
-                            sed -i 's|from: "registry.redhat.io/ubi8|from: "registry.access.redhat.com/ubi8|g' rhpam-kogito-*.yaml
+                            sed -i 's|from: "registry.redhat.io/ubi8|from: "registry.access.redhat.com/ubi8|g' bamoe-kogito-*.yaml
                             sed -i 's/\\(| KOGITO_VERSION.* | .* |\\)/\\1\\n      | QUARKUS_PLUGIN | io.quarkus:quarkus-maven-plugin |\\n      | QUARKUS_PLATFORM_GROUP_ID | io.quarkus.platform |/g' tests/features/*.feature
                             git diff
                         """
@@ -199,9 +199,9 @@ String getWorkspacePath(String image) {
 String[] getImages() {
     if (isProdCI()) {
         return [ 
-            'rhpam-kogito-builder-rhel8', 
-            'rhpam-kogito-runtime-jvm-rhel8', 
-            'rhpam-kogito-runtime-native-rhel8' 
+            'bamoe-kogito-builder-rhel8', 
+            'bamoe-kogito-runtime-jvm-rhel8', 
+            'bamoe-kogito-runtime-native-rhel8' 
         ]
     }
     return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]

@@ -41,7 +41,10 @@ pipeline {
 
                     if (isProdCI()) {
                         // Prod fix to be able to build the image as a community one
-                        sh "echo '' > content_sets.yaml"
+                        sh """
+                            echo '' > content_sets.yaml
+                            sed -i 's|from: "registry.redhat.io/ubi8|from: "registry.access.redhat.com/ubi8|g' rhpam-kogito-*.yaml
+                        """
                     }
                 }
             }

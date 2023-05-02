@@ -7,7 +7,9 @@ def changeTarget = env.ghprbTargetBranch ?: CHANGE_TARGET
 BUILD_FAILED_IMAGES = []
 
 pipeline {
-    agent { label 'kogito-image-slave && !built-in' }
+    agent { 
+        label 'kogito-image-slave && !built-in' 
+    }
     tools {
         jdk 'kie-jdk11'
         maven 'kie-maven-3.8.6'
@@ -28,13 +30,23 @@ pipeline {
                     if (env.MAVEN_MIRROR_REPOSITORY != null
                             && env.MAVEN_MIRROR_REPOSITORY != '') {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
-                            }
+                    }
 
                     githubscm.checkoutIfExists('kogito-images', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
 
                     //Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
                     if (env.MAVEN_MIRROR_URL != '') {
                         runPythonCommand('python3 scripts/update-tests.py --ignore-self-signed-cert')
+                    }
+
+                    if (isProdCI()) {
+                        // Prod fix to be able to build the image as a community one
+                        sh """
+                            echo '' > content_sets.yaml
+                            sed -i 's|from: "registry.redhat.io/ubi8|from: "registry.access.redhat.com/ubi8|g' bamoe-kogito-*.yaml
+                            sed -i 's/\\(| KOGITO_VERSION.* | .* |\\)/\\1\\n      | QUARKUS_PLUGIN | io.quarkus:quarkus-maven-plugin |\\n      | QUARKUS_PLATFORM_GROUP_ID | io.quarkus.platform |/g' tests/features/*.feature
+                            git diff
+                        """
                     }
                 }
             }
@@ -43,7 +55,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.2/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.4/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
                         tar -xzvf cekit-image-validator-runner.tgz
                         chmod +x cekit-image-validator-runner
                     '''
@@ -150,11 +162,11 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'")
+    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .' ignore_tag=${isProdCI()}")
 }
 
 void testImage(String imageName) {
-    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'")
+    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .' ignore_tag=${isProdCI()}")
 }
 
 void registerBuildFailedImage(String imageName) {
@@ -185,9 +197,20 @@ String getWorkspacePath(String image) {
 }
 
 String[] getImages() {
+    if (isProdCI()) {
+        return [ 
+            'bamoe-kogito-builder-rhel8', 
+            'bamoe-kogito-runtime-jvm-rhel8', 
+            'bamoe-kogito-runtime-native-rhel8' 
+        ]
+    }
     return [ 'kogito-builder', 'kogito-runtime-jvm', 'kogito-runtime-native' ]
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
     return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
+}
+
+boolean isProdCI() {
+    return env.PROD_CI ? env.PROD_CI.toBoolean() : false
 }

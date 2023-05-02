@@ -35,7 +35,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | true           |
-      | KOGITO_VERSION | 2.0.0-SNAPSHOT |
+      | KOGITO_VERSION | 1.13.1-SNAPSHOT |
     # Then s2i build log should contain does not supports native builds # looks like it does not work ...
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
@@ -70,7 +70,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |
-      | KOGITO_VERSION | 1.13.2-SNAPSHOT |    
+      | KOGITO_VERSION      | 1.13.1-SNAPSHOT |
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |

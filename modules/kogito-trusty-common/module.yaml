@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.trusty.common
-version: "1.37.0-snapshot"
+version: "1.37.0"
 description: "Common modules for trusty provider images, any addition that is common must be added in this module"
 
 execute:

@@ -11,7 +11,7 @@ set -o pipefail
 # Read entries before sourcing
 image_name="${1}"
 quarkus_platform_version="${2}"
-kogito_version="${KOGITO_VERSION:-}"
+kogito_version="${KOGITO_VERSION:-${3}}"
 
 quarkus_extensions='quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,smallrye-health'
 

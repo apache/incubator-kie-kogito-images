@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # This script defines some common function that are used by manage-kogito-version.py and push-staging.py script
 
-
 import os
 import re
 
@@ -45,6 +44,7 @@ def update_community_image_version(target_version):
     """
     update_image_version_tag_in_yaml_file(target_version, IMAGE_FILENAME)
 
+
 def update_prod_image_version(target_version):
     """
     Update bamoe-*-overrides.yaml files version tag.
@@ -53,6 +53,7 @@ def update_prod_image_version(target_version):
     for img in sorted(get_prod_images()):
         file = "{}-overrides.yaml".format(img)
         update_image_version_tag_in_yaml_file(target_version, file)
+
 
 def update_image_version_tag_in_yaml_file(target_version, yaml_file):
     """
@@ -74,6 +75,7 @@ def update_image_version_tag_in_yaml_file(target_version, yaml_file):
             yaml_loader().dump(data, image)
     except TypeError as err:
         print("Unexpected error:", err)
+
 
 def update_image_stream(target_version, prod=False):
     """
@@ -127,11 +129,13 @@ def get_community_module_dirs():
     """
     return get_all_module_dirs(COMMUNITY_PREFIX)
 
+
 def get_prod_module_dirs():
     """
     Retrieve the RHPAM module directories
     """
     return get_all_module_dirs(PRODUCT_PREFIX)
+
 
 def get_images(prefix):
     """
@@ -148,17 +152,20 @@ def get_images(prefix):
 
     return images
 
+
 def get_community_images():
     """
     Retrieve the Community images' names
     """
     return get_images(COMMUNITY_PREFIX)
 
+
 def get_prod_images():
     """
     Retrieve the Prod images' names
     """
     return get_images(PRODUCT_PREFIX)
+
 
 def update_modules_version(target_version, prod=False):
     """
@@ -181,6 +188,7 @@ def update_module_version(module_dir, target_version):
     :param module_dir: directory where cekit modules are hold
     :param target_version: version to set into the module
     """
+
     try:
         module_file = os.path.join(module_dir, "module.yaml")
         with open(module_file) as module:
@@ -267,6 +275,7 @@ def update_artifacts_version_in_behave_tests(artifacts_version):
     replacement = '| KOGITO_VERSION | {} | '.format(artifacts_version)
     update_in_behave_tests(pattern, replacement)
 
+
 def update_runtime_image_in_behave_tests(runtime_image_name, image_suffix):
     """
     Update a runtime image into behave tests
@@ -299,6 +308,7 @@ def update_maven_repo_in_behave_tests(repo_url, replaceJbossRepository):
                                                                                                            repo_url)
     update_in_behave_tests(pattern, replacement)
 
+
 def update_maven_mirror_url_in_quarkus_plugin_behave_tests(repo_url):
     """
     Update maven repository into behave tests
@@ -308,6 +318,7 @@ def update_maven_mirror_url_in_quarkus_plugin_behave_tests(repo_url):
     pattern = re.compile('(Kogito Maven archetype.*(?<!springboot)\r?\n\s*Given.*\r?\n\s*)\|\s*variable[\s]*\|[\s]*value[\s]*\|')
     replacement = "\g<1>| variable | value |\n      | {} | {} |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |\n      | DEBUG | true |".format("MAVEN_MIRROR_URL", repo_url)
     update_in_behave_tests(pattern, replacement)
+
 
 def ignore_maven_self_signed_certificate_in_behave_tests():
     """
@@ -370,6 +381,7 @@ def update_maven_repo_in_clone_repo(repo_url, replace_jboss_repository):
         pattern = re.compile(r'(# export MAVEN_REPO_URL=.*)')
         replacement = 'export MAVEN_REPO_URL="{}"'.format(repo_url)
     update_in_file(CLONE_REPO_SCRIPT, pattern, replacement)
+
 
 def ignore_maven_self_signed_certificate_in_clone_repo():
     """

@@ -469,3 +469,15 @@ teardown() {
     echo "expected: $expected"
     [ "${result}" = "${expected}" ]
 }
+
+@test "Check if the expected message is printed if native build is enabled" {
+    QUARKUS_PLATFORM_VERSION="1.2.3.4"
+    JBOSS_IMAGE_NAME="ibm-bamoe/kogito-builder"
+    NATIVE=true
+    mkdir /tmp/src
+    run build_kogito_app
+    echo "result   = $(echo ${lines[0]} |  sed -r 's/\x1B\[(;?[0-9]{1,3})+[mGK]//g')"
+    [ "$status" -eq 10 ]
+    # remove color from the log_warning func
+    [ "$(echo ${lines[0]} |  sed -r 's/\x1B\[(;?[0-9]{1,3})+[mGK]//g')" = "WARN Container Image ibm-bamoe/kogito-builder does not supports native builds, please refer to the documentation." ]
+}

@@ -31,7 +31,7 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And file /home/kogito/.m2/settings.xml should contain <url>https://maven.repository.redhat.com/techpreview/all</url>
 
   Scenario: Check if the expected message is printed if native build is enabled
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue and runtime-image ibm-bamoe/bamoe-kogito-runtime-jvm-rhel8:latest
+    Given failing s2i build /tmp/kogito-examples from dmn-example using nightly-1.13.x-blue
       | variable       | value           |
       | RUNTIME_TYPE   | quarkus         |
       | NATIVE         | true            |

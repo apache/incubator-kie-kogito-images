@@ -45,6 +45,7 @@ pipeline {
                             echo '' > content_sets.yaml
                             sed -i 's|from: "registry.redhat.io/ubi8|from: "registry.access.redhat.com/ubi8|g' bamoe-kogito-*.yaml
                             sed -i 's/\\(| KOGITO_VERSION.* | .* |\\)/\\1\\n      | QUARKUS_PLUGIN | io.quarkus:quarkus-maven-plugin |\\n      | QUARKUS_PLATFORM_GROUP_ID | io.quarkus.platform |/g' tests/features/*.feature
+                            sed -i 's|Using Quarkus com.redhat.quarkus.platform:quarkus-maven-plugin|Using Quarkus io.quarkus:quarkus-maven-plugin|g' tests/features/*.feature
                             git diff
                         """
                     }

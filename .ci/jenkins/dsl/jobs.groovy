@@ -28,8 +28,8 @@ if (Utils.isMainBranch(this)) {
 setupPrJob()
 if (!Utils.isMainBranch(this)) {
     setupPrJob(true)
-    setupPrJob(false, "${Utils.getGitBranch(this)}-next")
-    setupPrJob(true, "${Utils.getGitBranch(this)}-next")
+    setupPrJob(false, true)
+    setupPrJob(true, true)
 }
 
 // Branch jobs
@@ -48,10 +48,10 @@ setupProdUpdateVersionJob()
 // Methods
 /////////////////////////////////////////////////////////////////
 
-void setupPrJob(boolean isProdCI = false, String branch = "${GIT_BRANCH}") {
+void setupPrJob(boolean isProdCI = false, boolean isNextBranch = false) {
     def jobParams = getDefaultJobParams()
     jobParams.pr.putAll([
-        run_only_for_branches: [ branch ],
+        run_only_for_branches: [ Utils.getGitBranch(this) ],
         disable_status_message_error: true,
         disable_status_message_failure: true,
     ])
@@ -61,6 +61,10 @@ void setupPrJob(boolean isProdCI = false, String branch = "${GIT_BRANCH}") {
         jobParams.pr.trigger_phrase_only = true
         jobParams.pr.commitContext = 'Prod'
         jobParams.env.put('PROD_CI', true)
+    }
+    if (isNextBranch) {
+        jobParams.job.name += '.next'
+        jobParams.pr.run_only_for_branches = [ "${Utils.getGitBranch(this)}-next" ]
     }
     KogitoJobTemplate.createPRJob(this, jobParams)
 }

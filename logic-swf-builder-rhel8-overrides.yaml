@@ -39,6 +39,9 @@ ports:
   - value: 8080
   - value: 5005
 
+packages:
+  content_sets_file: content_sets.yaml
+  
 osbs:
   configuration:
     container:

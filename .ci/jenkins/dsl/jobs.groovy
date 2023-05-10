@@ -26,6 +26,11 @@ if (Utils.isMainBranch(this)) {
 }
 
 setupPrJob()
+if (!Utils.isMainBranch(this)) {
+    setupPrJob(true)
+    setupPrJob(false, "${Utils.getGitBranch(this)}-next")
+    setupPrJob(true, "${Utils.getGitBranch(this)}-next")
+}
 
 // Branch jobs
 setupDeployJob(FolderUtils.getNightlyFolder(this), KogitoJobType.NIGHTLY)
@@ -43,7 +48,7 @@ setupProdUpdateVersionJob()
 // Methods
 /////////////////////////////////////////////////////////////////
 
-void setupPrJob(String branch = "${GIT_BRANCH}") {
+void setupPrJob(boolean isProdCI = false, String branch = "${GIT_BRANCH}") {
     def jobParams = getDefaultJobParams()
     jobParams.pr.putAll([
         run_only_for_branches: [ branch ],

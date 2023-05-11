@@ -149,7 +149,6 @@ function build_kogito_app() {
             # Fix as we cannot rely on Quarkus platform
             # Should be removed once https://issues.redhat.com/browse/KOGITO-9120 is implemented
             if [ ! -z ${KOGITO_VERSION} ]; then
-                cd "${PROJECT_ARTIFACT_ID}"
                 echo "Replacing Kogito Platform BOM with version ${KOGITO_VERSION}"
                 # [ ]* -> is a regexp pattern to match any number of spaces
                 pattern_1="[ ]*<groupId>.*<\/groupId>"
@@ -165,8 +164,7 @@ function build_kogito_app() {
                 sed -i.bak -e "/$pattern_1/{
                     N;N;N
                     s/$complete_pattern/$complete_replace/
-                    }" serverless-workflow-project/pom.xml
-                cd -
+                    }" ${PROJECT_ARTIFACT_ID}/pom.xml
             fi
 
         elif [ "${RUNTIME_TYPE}" == "${SPRINGBOOT_RUNTIME_TYPE}" ]; then

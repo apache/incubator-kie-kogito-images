@@ -25,19 +25,19 @@ Feature: rhpam-kogito-builder-rhel8 feature.
     And file /home/kogito/.m2/settings.xml should contain <url>https://maven.repository.redhat.com/techpreview/all</url>
 
   Scenario: Check if the expected message is printed if native build is enabled
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | true           |
-      | KOGITO_VERSION | 1.38.0-SNAPSHOT |  
+      | KOGITO_VERSION | 1.38.0.Final |   
     Then s2i build log should contain Container Image rhpam-7/rhpam-kogito-builder-rhel8 does not supports native builds, please refer to the documentation.
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | false          |
-      | KOGITO_VERSION | 1.38.0-SNAPSHOT |          
+      | KOGITO_VERSION | 1.38.0.Final |           
     Then file /home/kogito/bin/quarkus-run.jar should exist
     And s2i build log should contain Generating quarkus project structure for project...
     And s2i build log should contain Using Quarkus com.redhat.quarkus.platform:quarkus-maven-plugin
@@ -60,11 +60,11 @@ Feature: rhpam-kogito-builder-rhel8 feature.
       | request_body    | {"status": "UP", "checks": []}  |
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly with custom group id, archetype & version
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
       | variable            | value          |
       | RUNTIME_TYPE        | quarkus        |
       | NATIVE              | false          |
-      | KOGITO_VERSION | 1.38.0-SNAPSHOT |  
+      | KOGITO_VERSION | 1.38.0.Final |   
       | PROJECT_GROUP_ID    | com.mycompany  |
       | PROJECT_ARTIFACT_ID | myproject      |
       | PROJECT_VERSION     | 2.0-SNAPSHOT   |
@@ -83,9 +83,9 @@ Feature: rhpam-kogito-builder-rhel8 feature.
 #### SpringBoot Scenarios
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly when runtime is springboot
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.38.x and runtime-image rhpam-7/rhpam-kogito-runtime-jvm-rhel8:latest
       | variable       | value          |
-      | KOGITO_VERSION | 1.38.0-SNAPSHOT |          
+      | KOGITO_VERSION | 1.38.0.Final |           
       | RUNTIME_TYPE   | springboot     |
     Then file /home/kogito/bin/project-1.0-SNAPSHOT.jar should exist
     And s2i build log should contain Generating springboot project structure for project...

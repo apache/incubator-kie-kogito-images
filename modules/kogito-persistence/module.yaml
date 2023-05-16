@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.persistence
-version: "1.38.0-snapshot"
+version: "1.38.0"
 
 modules:
   install:

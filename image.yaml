@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "kogito-image-real-name-on-overrides-file"
-version: "1.38.0-snapshot"
+version: "1.38.0"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 
 labels:
@@ -14,7 +14,7 @@ labels:
   - name: "io.quarkus.platform.version"
     value: "2.16.7.Final"
   - name: "org.kie.kogito.version"
-    value: "1.38.0-SNAPSHOT"
+    value: "1.38.0.Final"
 
 modules:
   repositories:
@@ -22,7 +22,7 @@ modules:
 
 envs:
   - name: "KOGITO_VERSION"
-    value: "1.38.0-SNAPSHOT"
+    value: "1.38.0.Final"
     description: Defines the Kogito version to be used by the builder images. Not intended to be changed by end user.
   - name: "QUARKUS_PLATFORM_VERSION"
     value: "2.16.7.Final"

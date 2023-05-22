@@ -5,7 +5,8 @@ Feature: SWF and Quarkus installation
     When container is started with env
       | variable     | value |
       | SCRIPT_DEBUG | true  |
-    Then container log should contain --no-transfer-progress -Duser.home=/home/kogito -o
+    Then container log should contain --no-transfer-progress
+    And container log should contain -Duser.home=/home/kogito -o
     And check that page is served
       | property             | value             |
       | port                 | 8080              |

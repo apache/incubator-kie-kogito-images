@@ -1,12 +1,18 @@
 @quay.io/kiegroup/kogito-swf-devmode
-Feature: SWF and Quarkus installation
+Feature: Serverless Workflow devmode images
 
-  Scenario: verify if container starts in devmode by default
+  Scenario: Verify if container starts in devmode by default
     When container is started with env
       | variable     | value |
       | SCRIPT_DEBUG | true  |
     Then container log should contain --no-transfer-progress
     And container log should contain -Duser.home=/home/kogito -o
+    And container log should match regex Installed features:.*kubernetes
+    And container log should match regex Installed features:.*kogito-serverless-workflow
+    And container log should match regex Installed features:.*kogito-addon-knative-eventing-extension
+    And container log should match regex Installed features:.*smallrye-health
+    And container log should match regex Installed features:.*swf-quarkus-extension
+    And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And check that page is served
       | property             | value             |
       | port                 | 8080              |
@@ -15,7 +21,7 @@ Feature: SWF and Quarkus installation
       | request_method       | GET               |
       | expected_status_code | 200               |
 
-  Scenario: verify if container starts correctly when QUARKUS_EXTENSIONS env is used
+  Scenario: Verify if container starts correctly when QUARKUS_EXTENSIONS env is used
     When container is started with env
       | variable            | value                                    |
       | SCRIPT_DEBUG        | true                                     |
@@ -23,6 +29,13 @@ Feature: SWF and Quarkus installation
     Then container log should contain -Duser.home=/home/kogito
     And container log should not contain /bin/mvn -B -X --batch-mode -o
     And container log should contain Extension io.quarkus:quarkus-elytron-security-jdbc has been installed
+    And container log should match regex Installed features:.*kubernetes
+    And container log should match regex Installed features:.*kogito-serverless-workflow
+    And container log should match regex Installed features:.*kogito-addon-knative-eventing-extension
+    And container log should match regex Installed features:.*smallrye-health
+    And container log should match regex Installed features:.*swf-quarkus-extension
+    And container log should match regex Installed features:.*kogito-addon-source-files-extension
+    And container log should match regex Installed features:.*security-jdbc
     And check that page is served
       | property             | value             |
       | port                 | 8080              |

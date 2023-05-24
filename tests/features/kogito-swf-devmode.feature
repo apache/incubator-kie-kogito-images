@@ -13,6 +13,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*smallrye-health
     And container log should match regex Installed features:.*swf-quarkus-extension
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
+    And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And check that page is served
       | property             | value             |
       | port                 | 8080              |
@@ -35,6 +36,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*smallrye-health
     And container log should match regex Installed features:.*swf-quarkus-extension
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
+    And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*security-jdbc
     And check that page is served
       | property             | value             |

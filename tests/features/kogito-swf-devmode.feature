@@ -5,7 +5,14 @@ Feature: Serverless Workflow devmode images
     When container is started with env
       | variable     | value |
       | SCRIPT_DEBUG | true  |
-    Then container log should contain --no-transfer-progress
+    Then check that page is served
+      | property             | value             |
+      | port                 | 8080              |
+      | path                 | /q/health/ready   |
+      | wait                 | 480               |
+      | request_method       | GET               |
+      | expected_status_code | 200               |
+    And container log should contain --no-transfer-progress
     And container log should contain -Duser.home=/home/kogito -o
     And container log should match regex Installed features:.*kubernetes
     And container log should match regex Installed features:.*kogito-serverless-workflow
@@ -14,20 +21,20 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*swf-quarkus-extension
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
-    And check that page is served
-      | property             | value             |
-      | port                 | 8080              |
-      | path                 | /q/health/ready   |
-      | wait                 | 480               |
-      | request_method       | GET               |
-      | expected_status_code | 200               |
 
   Scenario: Verify if container starts correctly when QUARKUS_EXTENSIONS env is used
     When container is started with env
       | variable            | value                                    |
       | SCRIPT_DEBUG        | true                                     |
       | QUARKUS_EXTENSIONS  | io.quarkus:quarkus-elytron-security-jdbc |
-    Then container log should contain -Duser.home=/home/kogito
+    Then check that page is served
+      | property             | value             |
+      | port                 | 8080              |
+      | path                 | /q/health/ready   |
+      | wait                 | 480               |
+      | request_method       | GET               |
+      | expected_status_code | 200               |
+    And container log should contain -Duser.home=/home/kogito
     And container log should not contain /bin/mvn -B -X --batch-mode -o
     And container log should contain Extension io.quarkus:quarkus-elytron-security-jdbc has been installed
     And container log should match regex Installed features:.*kubernetes
@@ -38,27 +45,20 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*security-jdbc
-    And check that page is served
-      | property             | value             |
-      | port                 | 8080              |
-      | path                 | /q/health/ready   |
-      | wait                 | 480               |
-      | request_method       | GET               |
-      | expected_status_code | 200               |
 
   Scenario: verify that the embedded jobs-service is running
     When container is started with env
       | variable                    | value |
       | QUARKUS_DEVSERVICES_ENABLED | false |
-    Then container log should contain Embedded Postgres started at port
-    And container log should contain SET Leader
-    And check that page is served
+    Then check that page is served
       | property             | value             |
       | port                 | 8080              |
       | path                 | /q/health/ready   |
       | wait                 | 480               |
       | request_method       | GET               |
       | expected_status_code | 200               |
+    And container log should contain Embedded Postgres started at port
+    And container log should contain SET Leader
     And check that page is served
       | property             | value             |
       | port                 | 8080              |
@@ -72,14 +72,14 @@ Feature: Serverless Workflow devmode images
     When container is started with env
       | variable                    | value |
       | QUARKUS_DEVSERVICES_ENABLED | false |
-    Then container log should contain Embedded Postgres started at port
-    And check that page is served
+    Then check that page is served
       | property             | value             |
       | port                 | 8080              |
       | path                 | /q/health/ready   |
       | request_method       | GET               |
       | wait                 | 480               |
       | expected_status_code | 200               |
+    And container log should contain Embedded Postgres started at port
     And check that page is served
       | property             | value                                    |
       | port                 | 8080                                     |

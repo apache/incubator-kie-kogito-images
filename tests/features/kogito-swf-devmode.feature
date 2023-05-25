@@ -21,6 +21,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-serverless-workflow-devui
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
+    And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
 
   Scenario: Verify if container starts correctly when QUARKUS_EXTENSIONS env is used
     When container is started with env
@@ -44,6 +45,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-serverless-workflow-devui
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
+    And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
     And container log should match regex Installed features:.*security-jdbc
 
   Scenario: verify that the embedded jobs-service is running

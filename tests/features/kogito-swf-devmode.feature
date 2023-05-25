@@ -18,7 +18,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-serverless-workflow
     And container log should match regex Installed features:.*kogito-addon-knative-eventing-extension
     And container log should match regex Installed features:.*smallrye-health
-    And container log should match regex Installed features:.*swf-quarkus-extension
+    And container log should match regex Installed features:.*kogito-serverless-workflow-devui
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
 
@@ -41,7 +41,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-serverless-workflow
     And container log should match regex Installed features:.*kogito-addon-knative-eventing-extension
     And container log should match regex Installed features:.*smallrye-health
-    And container log should match regex Installed features:.*swf-quarkus-extension
+    And container log should match regex Installed features:.*kogito-serverless-workflow-devui
     And container log should match regex Installed features:.*kogito-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*security-jdbc

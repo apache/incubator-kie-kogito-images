@@ -12,17 +12,17 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
+# copy .mvn/jvm-config from resources to project's base dir.
+find . -name 'jvm.config' -exec echo "--> found {}" \; -exec mkdir -p .mvn \; -exec cp -v {} .mvn/ \;
+source "${script_dir_path}"/configure-jvm-mvn.sh
+
+# `-o` means offline mode
 offline_param="-o"
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
   ${KOGITO_HOME}/launch/add-extension.sh "${QUARKUS_EXTENSIONS}"
   offline_param=""
 fi
 
-cd serverless-workflow-project
-
-source "${script_dir_path}"/configure-jvm-mvn.sh
-
-# `-o` means offline mode
 "${MAVEN_HOME}"/bin/mvn -B ${MAVEN_ARGS_APPEND} \
   ${offline_param} \
   -s "${MAVEN_SETTINGS_PATH}" \

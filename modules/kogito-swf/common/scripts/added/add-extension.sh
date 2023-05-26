@@ -13,10 +13,6 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
-cd "${PROJECT_ARTIFACT_ID}"
-
-source "${script_dir_path}"/configure-jvm-mvn.sh
-
 "${MAVEN_HOME}"/bin/mvn -B ${MAVEN_ARGS_APPEND} \
   -nsu \
   -s "${MAVEN_SETTINGS_PATH}" \

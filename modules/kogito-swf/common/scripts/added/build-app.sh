@@ -16,14 +16,12 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
+source "${script_dir_path}"/configure-jvm-mvn.sh
+
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
   log_info "Adding extensions '${QUARKUS_EXTENSIONS}'"
   ${script_dir_path}/add-extension.sh "${QUARKUS_EXTENSIONS}"
 fi
-
-cd "${PROJECT_ARTIFACT_ID}"
-
-source "${script_dir_path}"/configure-jvm-mvn.sh
 
 # Copy resources if exists
 SUPPORTED_FILES=(".yaml" ".yml" ".json" ".properties" ".mvn/jvm.config")

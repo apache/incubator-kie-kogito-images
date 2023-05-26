@@ -24,6 +24,22 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
 
+  Scenario: Verify if container starts correctly when continuous testing is enabled
+    When container is started with env
+      | variable                   | value    |
+      | SCRIPT_DEBUG               | true     |
+      | QUARKUS_CONTINUOUS_TESTING | enabled  |
+    Then check that page is served
+      | property             | value             |
+      | port                 | 8080              |
+      | path                 | /q/health/ready   |
+      | wait                 | 480               |
+      | request_method       | GET               |
+      | expected_status_code | 200               |
+    And container log should contain -Duser.home=/home/kogito
+    And container log should not contain /bin/mvn -B -X --batch-mode -o
+    And container log should contain -Dquarkus.test.continuous-testing=enabled
+
   Scenario: Verify if container starts correctly when QUARKUS_EXTENSIONS env is used
     When container is started with env
       | variable                   | value                                    |

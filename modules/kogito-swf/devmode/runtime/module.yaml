@@ -15,7 +15,7 @@ envs:
     value: "false"
   - name: QUARKUS_CONTINUOUS_TESTING
     description: Whether to enable Quarkus continous testing on DevMode or not. Default to "disabled".
-    example: "disabled"
+    value: "disabled"
 
 artifacts:
   - image: builder

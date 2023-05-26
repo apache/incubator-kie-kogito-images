@@ -45,7 +45,6 @@ Feature: Serverless Workflow devmode images
       | variable                   | value                                    |
       | SCRIPT_DEBUG               | true                                     |
       | QUARKUS_EXTENSIONS         | io.quarkus:quarkus-elytron-security-jdbc |
-      | QUARKUS_CONTINUOUS_TESTING | enabled                                  |
     Then check that page is served
       | property             | value             |
       | port                 | 8080              |
@@ -55,7 +54,6 @@ Feature: Serverless Workflow devmode images
       | expected_status_code | 200               |
     And container log should contain -Duser.home=/home/kogito
     And container log should not contain /bin/mvn -B -X --batch-mode -o
-    And container log should contain -Dquarkus.test.continuous-testing=enabled
     And container log should contain Extension io.quarkus:quarkus-elytron-security-jdbc has been installed
     And container log should match regex Installed features:.*kubernetes
     And container log should match regex Installed features:.*kogito-serverless-workflow

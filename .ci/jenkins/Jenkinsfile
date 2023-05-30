@@ -22,7 +22,7 @@ pipeline {
 
         // Linked to node label
         CONTAINER_ENGINE='podman'
-        CONTAINER_TLS_OPTIONS='--tls-verify-false'
+        CONTAINER_ENGINE_TLS_OPTIONS='--tls-verify-false'
     }
     stages {
         stage('Initialization') {
@@ -183,6 +183,8 @@ void testImage(String imageName) {
 String getMakeBuildImageArgs() {
     List args = [ "cekit_option='--work-dir .'" ]
     args.add("KOGITO_APPS_TARGET_BRANCH=${changeTarget}")
+    args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
+    args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")
     return args.join(' ')
 }
 

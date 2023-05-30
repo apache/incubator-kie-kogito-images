@@ -5,7 +5,7 @@ deployProperties = [:]
 
 pipeline {
     agent {
-        label 'rhel8 && podman && !built-in'
+        label 'rhel8 && !built-in'
     }
 
     options {
@@ -19,6 +19,10 @@ pipeline {
         // Static env is defined into ./dsl/jobs.groovy file
 
         KOGITO_CI_EMAIL_TO = credentials("${JENKINS_EMAIL_CREDS_ID}")
+
+        // Linked to node label
+        CONTAINER_ENGINE='podman'
+        CONTAINER_TLS_OPTIONS='--tls-verify-false'
 
         OPENSHIFT_API = credentials('OPENSHIFT_API')
         OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')

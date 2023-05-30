@@ -8,7 +8,7 @@ BUILD_FAILED_IMAGES = []
 
 pipeline {
     agent {
-        label 'kogito-image-slave && !built-in'
+        label 'kie-rhel8 && kie-mem16g && !built-in'
     }
     tools {
         maven env.BUILD_MAVEN_TOOL
@@ -19,6 +19,10 @@ pipeline {
     }
     environment {
         CI = true
+
+        // Linked to node label
+        CONTAINER_ENGINE='podman'
+        CONTAINER_TLS_OPTIONS='--tls-verify-false'
     }
     stages {
         stage('Initialization') {
@@ -32,6 +36,8 @@ pipeline {
                         // Prod fix to be able to build the image as a community one
                         sh "echo '' > content_sets.yaml"
                     }
+
+                    // setupPodmanForMavenBuilds()
                 }
             }
         }
@@ -56,7 +62,7 @@ pipeline {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
                         
                         // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
-                        runPythonCommand("python3 scripts/update-repository.py --build-maven-mirror-url ${MAVEN_MIRROR_URL} --ignore-self-signed-cert")
+                        runShellCommand("python3 scripts/update-repository.py --build-maven-mirror-url ${MAVEN_MIRROR_URL} --ignore-self-signed-cert")
                     }
                 }
             }
@@ -70,14 +76,14 @@ pipeline {
         //             String quarkusPlatformVersion = "kogito-${kogitoVersion}"
 
         //             // Setup quarkus platform repo configuration
-        //             runPythonCommand("python3 scripts/update-repository.py --repo-url ${QUARKUS_PLATFORM_NEXUS_URL} --ignore-self-signed-cert --quarkus-platform-version ${quarkusPlatformVersion}")
+        //             runShellCommand("python3 scripts/update-repository.py --repo-url ${QUARKUS_PLATFORM_NEXUS_URL} --ignore-self-signed-cert --quarkus-platform-version ${quarkusPlatformVersion}")
         //         }
         //     }
         // }
         stage('Prepare offline kogito-examples') {
             steps {
                 script {
-                    runPythonCommand('make clone-repos')
+                    runShellCommand('make clone-repos')
                 }
             }
         }
@@ -169,11 +175,11 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=${isProdCI()}")
+    runShellCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=${isProdCI()}")
 }
 
 void testImage(String imageName) {
-    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()}")
+    runShellCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()}")
 }
 
 String getMakeBuildImageArgs() {
@@ -214,13 +220,31 @@ String[] getImages() {
     if (isProdCI()) {
         listCmd += ' arg=--prod'
     }
-    return runPythonCommand("${listCmd} | tr '\\n' ','", true).trim().split(',')
+    return runShellCommand("${listCmd} | tr '\\n' ','", true).trim().split(',')
 }
 
 boolean isProdCI() {
     return env.PROD_CI ? env.PROD_CI.toBoolean() : false
 }
 
-void runPythonCommand(String cmd, boolean stdout = false) {
-    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
+void runShellCommand(String cmd, boolean stdout = false) {
+// export MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS='-Dquarkus.native.remote-container-build=true -Dquarkus.native.container-runtime=podman'
+    return sh(returnStdout: stdout, script: """
+export DOCKER_HOST=${getPodmanSocket()}
+source ~/virtenvs/cekit/bin/activate 
+${cmd}
+""")
+}
+
+void setupPodmanForMavenBuilds() {        
+    sh """
+        sudo yum install -y podman-docker
+        systemctl --user enable podman.socket --now
+    """
+    echo "DOCKER_HOST = ${getPodmanSocket()}"
+}
+
+String getPodmanSocket() {
+    String podmanSocketPath = sh(returnStdout: true, script: "podman info | grep -A2 remoteSocket | grep path: | awk -F' ' '{print \$2}'").trim()
+    return "unix://${podmanSocketPath}"
 }

@@ -8,7 +8,7 @@ BUILD_FAILED_IMAGES = []
 
 pipeline {
     agent {
-        label 'kie-rhel8 && kie-mem16g && !built-in'
+        label 'kie-rhel8 && docker && kie-mem16g && !built-in'
     }
     tools {
         maven env.BUILD_MAVEN_TOOL
@@ -21,8 +21,8 @@ pipeline {
         CI = true
 
         // Linked to node label
-        CONTAINER_ENGINE='podman'
-        CONTAINER_ENGINE_TLS_OPTIONS='--tls-verify-false'
+        CONTAINER_ENGINE='docker'
+        CONTAINER_ENGINE_TLS_OPTIONS=''
     }
     stages {
         stage('Initialization') {
@@ -184,7 +184,9 @@ String getMakeBuildImageArgs() {
     List args = [ "cekit_option='--work-dir .'" ]
     args.add("KOGITO_APPS_TARGET_BRANCH=${changeTarget}")
     args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
-    args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")
+    if (env.CONTAINER_ENGINE_TLS_OPTIONS) {
+        args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")   
+    }
     return args.join(' ')
 }
 

@@ -10,7 +10,7 @@ TEST_FAILED_IMAGES = []
 
 pipeline {
     agent {
-        label 'kie-rhel8 && kie-mem16g && !built-in'
+        label 'kie-rhel8 && docker && kie-mem16g && !built-in'
     }
 
     // Needed for local build
@@ -35,8 +35,8 @@ pipeline {
         JAVA_HOME = "${GRAALVM_HOME}"
 
         // Linked to node label
-        CONTAINER_ENGINE='podman'
-        CONTAINER_TLS_OPTIONS='--tls-verify-false'
+        CONTAINER_ENGINE='docker'
+        CONTAINER_TLS_OPTIONS=''
 
         OPENSHIFT_API = credentials('OPENSHIFT_API')
         OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
@@ -62,9 +62,6 @@ pipeline {
                         assert getProjectVersion()
                         assert getBuildBranch() == util.getReleaseBranchFromVersion(getProjectVersion())
                     }
-
-                    // As we are using a podman node
-                    setupPodmanForMavenBuilds()
                 }
             }
             post {
@@ -406,6 +403,10 @@ String getMakeBuildImageArgs() {
     args.add("KOGITO_APPS_TARGET_BRANCH=${getKogitoAppsRef()}")
     if (getKogitoAppsUri()) {
         args.add("KOGITO_APPS_TARGET_URI=${getKogitoAppsUri()}")
+    }
+    args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
+    if (env.CONTAINER_ENGINE_TLS_OPTIONS) {
+        args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")   
     }
     return args.join(' ')
 }

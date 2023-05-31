@@ -114,8 +114,6 @@ void setupDeployJob(String jobFolder, KogitoJobType jobType) {
             env('REPO_NAME', 'kogito-images')
             env('PROPERTIES_FILE_NAME', 'deployment.properties')
 
-            env('CONTAINER_ENGINE', 'docker')
-            env('CONTAINER_TLS_OPTIONS', '')
             env('MAX_REGISTRY_RETRIES', 3)
 
             env('RELEASE', jobType == KogitoJobType.RELEASE)
@@ -180,8 +178,6 @@ void setupPromoteJob(String jobFolder, KogitoJobType jobType) {
             env('REPO_NAME', 'kogito-images')
             env('PROPERTIES_FILE_NAME', 'deployment.properties')
 
-            env('CONTAINER_ENGINE', 'podman')
-            env('CONTAINER_TLS_OPTIONS', '--tls-verify=false')
             env('MAX_REGISTRY_RETRIES', 3)
 
             env('RELEASE', jobType == KogitoJobType.RELEASE)

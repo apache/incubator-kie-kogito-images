@@ -4,9 +4,9 @@
 
 SCRIPT_DIR=`pwd`
 MVN_MODULE="${SCRIPT_DIR}/../../modules/kogito-maven/3.6.x"
-CONTAINER_ENGINE="docker"
+CONTAINER_ENGINE=${CONTAINER_ENGINE:-"docker"}
 MAVEN_OPTIONS="-DskipTests -U"
-MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS="-Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=${CONTAINER_ENGINE}"
+MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS=${MAVEN_QUARKUS_NATIVE_CONTAINER_BUILD_ARGS:-"-Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=${CONTAINER_ENGINE}"}
 # MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE=true
 
 NATIVE_BUILD=$1

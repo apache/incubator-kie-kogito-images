@@ -10,7 +10,7 @@ TEST_FAILED_IMAGES = []
 
 pipeline {
     agent {
-        label 'kie-rhel8 && docker && kie-mem16g && !built-in'
+        label 'kie-rhel8 && docker && kie-mem24g && !built-in'
     }
 
     // Needed for local build

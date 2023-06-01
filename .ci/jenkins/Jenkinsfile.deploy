@@ -10,7 +10,7 @@ TEST_FAILED_IMAGES = []
 
 pipeline {
     agent {
-        label 'kogito-image-slave && !built-in'
+        label 'kie-rhel8 && docker && kie-mem24g && !built-in'
     }
 
     // Needed for local build
@@ -35,8 +35,8 @@ pipeline {
         JAVA_HOME = "${GRAALVM_HOME}"
 
         // Linked to node label
-        CONTAINER_ENGINE='docker'
-        CONTAINER_ENGINE_TLS_OPTIONS=''
+        CONTAINER_ENGINE = 'docker'
+        CONTAINER_ENGINE_TLS_OPTIONS = ''
 
         OPENSHIFT_API = credentials('OPENSHIFT_API')
         OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
@@ -368,11 +368,20 @@ void cleanImages() {
 }
 
 void buildImage(String imageName) {
-    runPythonCommand("make build-image image_name=${imageName} ignore_test=true cekit_option='--work-dir .'")
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true")
 }
 
 void testImage(String imageName) {
-    runPythonCommand("make build-image image_name=${imageName} ignore_build=true cekit_option='--work-dir .'")
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true")
+}
+
+String getMakeBuildImageArgs() {
+    List args = [ "cekit_option='--work-dir .'" ]
+    args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
+    if (env.CONTAINER_ENGINE_TLS_OPTIONS) {
+        args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")   
+    }
+    return args.join(' ')
 }
 
 void registerBuiltImage(String imageName) {
@@ -633,5 +642,8 @@ boolean isThereAnyChanges() {
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
-    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
+    return sh(returnStdout: stdout, script: """
+source ~/virtenvs/cekit/bin/activate 
+${cmd}
+""")
 }

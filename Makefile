@@ -1,6 +1,7 @@
 IMAGE_VERSION := $(shell cat image.yaml | egrep ^version  | cut -d"\"" -f2)
 SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"."$$2}')
-BUILD_ENGINE := docker
+BUILD_ENGINE ?= docker
+BUILD_ENGINE_TLS_OPTIONS ?= ''
 .DEFAULT_GOAL := build
 CEKIT_CMD := cekit -v ${cekit_option}
 NATIVE := true
@@ -71,11 +72,11 @@ _push:
 .PHONY: push-image
 image_name=
 push-image:
-	docker push quay.io/kiegroup/${image_name}:${IMAGE_VERSION}
-	docker push quay.io/kiegroup/${image_name}:latest
+	${BUILD_ENGINE} ${BUILD_ENGINE_TLS_OPTIONS} push quay.io/kiegroup/${image_name}:${IMAGE_VERSION}
+	${BUILD_ENGINE} ${BUILD_ENGINE_TLS_OPTIONS} push quay.io/kiegroup/${image_name}:latest
 ifneq ($(findstring rc,$(IMAGE_VERSION)), rc)
 	@echo "${SHORTENED_LATEST_VERSION} will be pushed"
-	docker push quay.io/kiegroup/${image_name}:${SHORTENED_LATEST_VERSION}
+	${BUILD_ENGINE} ${BUILD_ENGINE_TLS_OPTIONS} push quay.io/kiegroup/${image_name}:${SHORTENED_LATEST_VERSION}
 endif
 
 

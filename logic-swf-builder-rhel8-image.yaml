@@ -1,0 +1,81 @@
+  - name: builder
+    from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
+    version: "2.0.0-snapshot"
+    modules:
+      repositories:
+        - path: modules
+      install:
+        - name: org.kie.kogito.image.dependencies
+        - name: org.kie.kogito.system.user
+        - name: org.kie.kogito.logging
+        - name: org.kie.kogito.launch.scripts
+        - name: org.kie.kogito.openjdk
+          version: "11"
+        - name: org.kie.kogito.dynamic.resources
+        - name: org.kie.kogito.maven
+          version: "3.8-rpm"
+        - name: org.kie.kogito.project.versions
+        - name: org.kie.kogito.swf.common.scripts
+        - name: org.kie.kogito.swf.builder.build-config
+        - name: org.kie.kogito.swf.common.build
+
+    packages:
+      manager: microdnf
+
+  - name: "openshift-serverless-1-tech-preview/logic-swf-builder-rhel8"
+    version: "1.29.0"
+    from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
+    description: "Red Hat build of Runtime image for Kogito Serverless Workflow base builder with Quarkus extensions libraries preinstalled"
+
+    labels:
+      - name: "com.redhat.component"
+        value: "openshift-serverless-1-logic-swf-builder-rhel8-container"
+      - name: "io.k8s.description"
+        value: "Red Hat build of Runtime image for Kogito Serverless Workflow builder with Quarkus extensions libraries preinstalled"
+      - name: "io.k8s.display-name"
+        value: "Red Hat OpenShift Serverless Logic Builder image"
+      - name: "io.openshift.tags"
+        value: "logic-swf-builder,kogito,swf-builder"
+      - name: "io.openshift.expose-services"
+        value: "8080:http"
+
+    modules:
+      install:
+        - name: org.kie.kogito.image.dependencies
+        - name: org.kie.kogito.system.user
+        - name: org.kie.kogito.logging
+        - name: org.kie.kogito.launch.scripts
+        - name: org.kie.kogito.openjdk
+          version: "11"
+        - name: org.kie.kogito.dynamic.resources
+        - name: org.kie.kogito.maven
+          version: "3.8-rpm"
+        - name: org.kie.kogito.project.versions
+        - name: org.kie.kogito.swf.common.scripts
+        - name: org.kie.kogito.swf.builder.runtime
+
+    run:
+      workdir: "/home/kogito"
+      user: 1001
+
+    ports:
+      - value: 8080
+      - value: 5005
+
+    packages:
+      manager: microdnf
+      content_sets_file: content_sets.yaml
+
+    osbs:
+      configuration:
+        container:
+          platforms:
+            only:
+              - x86_64
+              - ppc64le
+          compose:
+            pulp_repos: true
+      extra_dir: osbs-extra/logic-swf-builder-rhel8
+      repository:
+        name: containers/openshift-serverless-1-logic-swf-builder
+        branch: openshift-serverless-1.29-rhel-8

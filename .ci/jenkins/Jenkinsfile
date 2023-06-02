@@ -21,8 +21,11 @@ pipeline {
         CI = true
 
         // Linked to node label
+        // Use docker due to multiplatform build
         CONTAINER_ENGINE='docker'
         CONTAINER_ENGINE_TLS_OPTIONS=''
+
+        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64' // TODO export to DSL ?
     }
     stages {
         stage('Initialization') {
@@ -36,6 +39,8 @@ pipeline {
                         // Prod fix to be able to build the image as a community one
                         sh "echo '' > content_sets.yaml"
                     }
+
+                    assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
                 }
             }
         }
@@ -149,15 +154,12 @@ pipeline {
 
 void clean() {
     cleanWorkspaces()
-    cleanImages()
+    util.cleanContainersAndImages(env.CONTAINER_ENGINE)
+    
+    cleanDockerMultiplatformBuild()
 
     // Clean Cekit cache, in case we reuse an old node
     sh "rm -rf \$HOME/.cekit/cache"
-}
-
-void cleanImages() {
-    sh "docker rm -f \$(docker ps -a -q) || date"
-    sh "docker rmi -f \$(docker images -q) || date"
 }
 
 void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
@@ -173,7 +175,25 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 }
 
 void buildImage(String imageName) {
-    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=${isProdCI()}")
+    // Generate the Dockerfile
+    runPythonCommand("make build-image cekit_option='--work-dir .' ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
+
+    // Build multiplatform from generated Dockerfile
+    dir('target/image') {
+        // TODO default values in env ?
+        String finalImageName = "quay.io/kiegroup/${imageName}"
+        String finalImageTag = "latest"
+        
+        // Build image locally in tgz file
+        sh """
+            docker buildx build -o type=oci,dest=img-temp.tgz --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${finalImageName}:${finalImageTag} .
+        """
+        String imgSha256 = sh(returnStdout: true, script: "docker import img-temp.tgz").trim()
+        echo "Import result = ${imgSha256}"
+        sh 'docker images' // Debug
+        sh "docker tag ${imgSha256} ${finalImageName}:${finalImageTag}"
+        sh "docker inspect ${finalImageName}:${finalImageTag}"
+    }
 }
 
 void testImage(String imageName) {
@@ -181,7 +201,7 @@ void testImage(String imageName) {
 }
 
 String getMakeBuildImageArgs() {
-    List args = [ "cekit_option='--work-dir .'" ]
+    List args = []
     args.add("KOGITO_APPS_TARGET_BRANCH=${changeTarget}")
     args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
     if (env.CONTAINER_ENGINE_TLS_OPTIONS) {
@@ -234,4 +254,37 @@ void runPythonCommand(String cmd, boolean stdout = false) {
 source ~/virtenvs/cekit/bin/activate 
 ${cmd}
 """)
+}
+
+List getBuildPlatforms() {
+    return env.BUILD_IMAGE_PLATFORMS?.split(',')
+}
+
+void prepareForDockerMultiplatformBuild(boolean debug = false) {
+    sh 'docker run --rm --privileged docker.io/tonistiigi/binfmt --install all'
+    
+    // Debug purpose
+    if (debug) {
+        sh 'docker context ls'
+        sh 'docker buildx ls'
+    }
+    
+    writeFile(file: 'buildkitd.toml', text: '''
+debug = true
+[registry."docker.io"]
+mirrors = ["mirror.gcr.io"]
+        ''')
+    
+    sh 'docker buildx rm mybuilder || true'
+    sh 'docker buildx create --name mybuilder --driver docker-container --bootstrap --config ${WORKSPACE}/buildkitd.toml'
+    sh 'docker buildx use mybuilder'
+    
+    if (debug) {
+        sh 'docker buildx inspect'
+        sh 'docker buildx ls'
+    }
+}
+
+void cleanDockerMultiplatformBuild() {
+    sh 'docker buildx rm mybuilder || true'
 }

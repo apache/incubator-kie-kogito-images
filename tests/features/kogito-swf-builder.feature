@@ -20,7 +20,7 @@ Feature: Serverless Workflow builder images
     And container log should match regex Installed features:.*smallrye-health
 
   Scenario: Verify that the application is built and started correctly when QUARKUS_EXTENSIONS env is used
-    When container is started with command bash -c '../launch/build-app.sh && java -jar target/quarkus-app/quarkus-run.jar'
+    When container is started with command bash -c '/home/kogito/launch/build-app.sh && java -jar target/quarkus-app/quarkus-run.jar'
       | variable            | value                                    |
       | SCRIPT_DEBUG        | true                                     |
       | QUARKUS_EXTENSIONS  | io.quarkus:quarkus-elytron-security-jdbc |

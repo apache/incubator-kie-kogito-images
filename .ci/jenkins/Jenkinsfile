@@ -43,6 +43,7 @@ pipeline {
                     assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
 
                     prepareForDockerMultiplatformBuild()
+                    startLocalRegistry()
                 }
             }
         }
@@ -159,6 +160,7 @@ void clean() {
     util.cleanNode(env.CONTAINER_ENGINE)
     
     cleanDockerMultiplatformBuild()
+    cleanLocalRegistry()
 
     // Clean Cekit cache, in case we reuse an old node
     sh "rm -rf \$HOME/.cekit/cache"
@@ -182,8 +184,15 @@ void buildImage(String imageName) {
 
     // Build multiplatform from generated Dockerfile
     String finalBuiltTag = getFullBuiltImageTag(imageName)
-    dir('target/image') {        
-        dockerBuildMultiPlatform(imageName, finalBuiltTag)
+    dir('target/image') {
+        // Use local registry
+        String internalRegistryImage = "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
+        dockerBuildMultiPlatform(internalRegistryImage)
+        // Pull and tag to final image
+        sh """
+            docker pull ${internalRegistryImage}
+            docker tag ${internalRegistryImage} ${finalBuiltTag}
+        """
     }
 }
 
@@ -262,8 +271,6 @@ List getBuildPlatforms() {
 void prepareForDockerMultiplatformBuild(boolean debug = false) {
     // For multiplatform build
     sh 'docker run --rm --privileged --name binfmt docker.io/tonistiigi/binfmt --install all'
-    // For pushing built images
-    sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
     
     // Debug purpose
     if (debug) {
@@ -291,19 +298,23 @@ http = true
     }
 }
 
-void dockerBuildMultiPlatform(String imageName, String finalBuiltTag) {
+void dockerBuildMultiPlatform(String buildImageTag) {
     // Build image locally in tgz file
-    String internalRegistryImage = "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
     sh """
-        docker buildx build --push --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${internalRegistryImage} .
-        docker buildx imagetools inspect ${internalRegistryImage}
-        docker pull ${internalRegistryImage}
-        docker tag ${internalRegistryImage} ${finalBuiltTag}
+        docker buildx build --push --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${buildImageTag} .
+        docker buildx imagetools inspect ${buildImageTag}
     """
+}
+
+void startLocalRegistry() {
+    sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
+}
+
+void cleanLocalRegistry() {
+    sh 'docker kill registry || true'
 }
 
 void cleanDockerMultiplatformBuild() {
     sh 'docker buildx rm mybuilder || true'
     sh 'docker kill binfmt || true'
-    sh 'docker kill registry || true'
 }

@@ -35,14 +35,17 @@ pipeline {
         JAVA_HOME = "${GRAALVM_HOME}"
 
         // Linked to node label
-        CONTAINER_ENGINE='docker'
-        CONTAINER_ENGINE_TLS_OPTIONS=''
+        // Use docker due to multiplatform build
+        CONTAINER_ENGINE = 'docker'
+        CONTAINER_ENGINE_TLS_OPTIONS = ''
 
         OPENSHIFT_API = credentials('OPENSHIFT_API')
         OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
         OPENSHIFT_CREDS_KEY = 'OPENSHIFT_CREDS'
 
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
+
+        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64' // TODO export to DSL ?
     }
 
     stages {
@@ -62,6 +65,16 @@ pipeline {
                         assert getProjectVersion()
                         assert getBuildBranch() == util.getReleaseBranchFromVersion(getProjectVersion())
                     }
+
+                    // Login to final registry
+                    if (isDeployImageInOpenshiftRegistry()) {
+                        loginOpenshiftRegistry()
+                    } else if (getDeployImageRegistryCredentials()) {
+                        loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
+                    }
+
+                    assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
+                    prepareForDockerMultiplatformBuild()
                 }
             }
             post {
@@ -247,11 +260,6 @@ pipeline {
         stage('Pushing') {
             steps {
                 script {
-                    if (isDeployImageInOpenshiftRegistry()) {
-                        loginOpenshiftRegistry()
-                    } else if (getDeployImageRegistryCredentials()) {
-                        loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
-                    }
                     pushImages()
 
                     if (isQuayRegistry()) {
@@ -379,18 +387,30 @@ void commitChanges(String commitMsg) {
 
 void clean() {
     cleanWs()
-    cleanImages()
+    util.cleanNode(env.CONTAINER_ENGINE)
+
+    cleanDockerMultiplatformBuild()
 
     // Clean Cekit cache, in case we reuse an old node
     sh 'rm -rf \$HOME/.cekit/cache'
 }
 
-void cleanImages() {
-    sh "${env.CONTAINER_ENGINE} rm -f \$(${env.CONTAINER_ENGINE} ps -a -q) || date"
-    sh "${env.CONTAINER_ENGINE} rmi -f \$(${env.CONTAINER_ENGINE} images -q) || date"
-}
-
 void buildImage(String imageName) {
+    // Generate the Dockerfile
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
+
+    // Build multiplatform from generated Dockerfile
+    String finalBuiltTag = getFullBuiltImageTag(imageName)
+    dir('target/image') {
+        String tempImageTag = getTempBuiltImageTag(imageName)
+        dockerBuildMultiPlatform(tempImageTag)
+        // Pull and tag to final image
+        sh """
+            docker pull ${tempImageTag}
+            docker tag ${tempImageTag} ${finalBuiltTag}
+        """
+    }
+
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true")
 }
 
@@ -406,7 +426,7 @@ String getMakeBuildImageArgs() {
     }
     args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
     if (env.CONTAINER_ENGINE_TLS_OPTIONS) {
-        args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")   
+        args.add("BUILD_ENGINE_TLS_OPTIONS=${CONTAINER_ENGINE_TLS_OPTIONS}")
     }
     return args.join(' ')
 }
@@ -453,7 +473,7 @@ List getTestFailedImages() {
 
 void tagImages() {
     for (String imageName : getBuiltImages()) {
-        String builtImageFullTag = "quay.io/kiegroup/${imageName}:${getImageVersion()}"
+        String builtImageFullTag = getFullBuiltImageTag()
         tagImage(builtImageFullTag, buildImageName(imageName))
         if (isDeployLatestTag()) {
             tagImage(builtImageFullTag, buildImageName(imageName, 'latest'))
@@ -511,7 +531,7 @@ String getFinalImageName(String imageName) {
 }
 
 String getImageVersion() {
-    return sh(returnStdout: true, script: 'make display-image-version').trim()
+    return runPythonCommand('make display-image-version', true).trim()
 }
 
 String getReducedTag() {
@@ -684,9 +704,72 @@ boolean isThereAnyChanges() {
     return sh(script: 'git status --porcelain', returnStdout: true).trim() != ''
 }
 
+String getTempBuiltImageTag(String imageName) {
+    return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${imageName}-nightly:${githubscm.getCommitHash()}"
+}
+
+String getFullBuiltImageTag(String imageName) {
+    return "quay.io/kiegroup/${imageName}:${getImageVersion()}"
+}
+
 void runPythonCommand(String cmd, boolean stdout = false) {
     return sh(returnStdout: stdout, script: """
-source ~/virtenvs/cekit/bin/activate 
+source ~/virtenvs/cekit/bin/activate
 ${cmd}
 """)
+}
+
+List getBuildPlatforms() {
+    return env.BUILD_IMAGE_PLATFORMS?.split(',')
+}
+
+void prepareForDockerMultiplatformBuild(boolean debug = false) {
+    // For multiplatform build
+    sh 'docker run --rm --privileged --name binfmt docker.io/tonistiigi/binfmt --install all'
+
+    // Debug purpose
+    if (debug) {
+        sh 'docker context ls'
+        sh 'docker buildx ls'
+        sh 'docker ps'
+    }
+
+    writeFile(file: 'buildkitd.toml', text: '''
+debug = true
+[registry."docker.io"]
+mirrors = ["mirror.gcr.io"]
+[registry."localhost:5000"]
+http = true
+        ''')
+
+    sh 'docker buildx rm mybuilder || true'
+    sh 'docker buildx create --name mybuilder --driver docker-container --driver-opt network=host --bootstrap --config ${WORKSPACE}/buildkitd.toml'
+    sh 'docker buildx use mybuilder'
+
+    if (debug) {
+        sh 'docker buildx inspect'
+        sh 'docker buildx ls'
+        sh 'docker ps'
+    }
+}
+
+void dockerBuildMultiPlatform(String buildImageTag) {
+    // Build image locally in tgz file
+    sh """
+        docker buildx build --push --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${buildImageTag} .
+        docker buildx imagetools inspect ${buildImageTag}
+    """
+}
+
+void startLocalRegistry() {
+    sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
+}
+
+void cleanLocalRegistry() {
+    sh 'docker kill registry || true'
+}
+
+void cleanDockerMultiplatformBuild() {
+    sh 'docker buildx rm mybuilder || true'
+    sh 'docker kill binfmt || true'
 }

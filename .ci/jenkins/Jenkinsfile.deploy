@@ -453,7 +453,7 @@ List getTestFailedImages() {
 
 void tagImages() {
     for (String imageName : getBuiltImages()) {
-        String builtImageFullTag = "quay.io/kiegroup/${imageName}:latest"
+        String builtImageFullTag = "quay.io/kiegroup/${imageName}:${getImageVersion()}"
         tagImage(builtImageFullTag, buildImageName(imageName))
         if (isDeployLatestTag()) {
             tagImage(builtImageFullTag, buildImageName(imageName, 'latest'))
@@ -508,6 +508,10 @@ String buildImageName(String imageName, String imageTag = '') {
 
 String getFinalImageName(String imageName) {
     return getDeployImageNameSuffix() ? "${imageName}-${getDeployImageNameSuffix()}" : imageName
+}
+
+String getImageVersion() {
+    return sh(returnStdout: true, script: 'make display-image-version').trim()
 }
 
 String getReducedTag() {

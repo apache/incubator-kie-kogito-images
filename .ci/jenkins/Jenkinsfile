@@ -41,6 +41,8 @@ pipeline {
                     }
 
                     assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
+
+                    prepareForDockerMultiplatformBuild()
                 }
             }
         }
@@ -154,7 +156,7 @@ pipeline {
 
 void clean() {
     cleanWorkspaces()
-    util.cleanContainersAndImages(env.CONTAINER_ENGINE)
+    util.cleanNode(env.CONTAINER_ENGINE)
     
     cleanDockerMultiplatformBuild()
 
@@ -179,20 +181,9 @@ void buildImage(String imageName) {
     runPythonCommand("make build-image cekit_option='--work-dir .' ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
 
     // Build multiplatform from generated Dockerfile
-    dir('target/image') {
-        // TODO default values in env ?
-        String finalImageName = "quay.io/kiegroup/${imageName}"
-        String finalImageTag = "latest"
-        
-        // Build image locally in tgz file
-        sh """
-            docker buildx build -o type=oci,dest=img-temp.tgz --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${finalImageName}:${finalImageTag} .
-        """
-        String imgSha256 = sh(returnStdout: true, script: "docker import img-temp.tgz").trim()
-        echo "Import result = ${imgSha256}"
-        sh 'docker images' // Debug
-        sh "docker tag ${imgSha256} ${finalImageName}:${finalImageTag}"
-        sh "docker inspect ${finalImageName}:${finalImageTag}"
+    String finalBuiltTag = getFullBuiltImageTag(imageName)
+    dir('target/image') {        
+        dockerBuildMultiPlatform(imageName, finalBuiltTag)
     }
 }
 
@@ -245,8 +236,16 @@ String[] getImages() {
     return runPythonCommand("${listCmd} | tr '\\n' ','", true).trim().split(',')
 }
 
+String getImageVersion() {
+    return runPythonCommand('make display-image-version', true).trim()
+}
+
 boolean isProdCI() {
     return env.PROD_CI ? env.PROD_CI.toBoolean() : false
+}
+
+String getFullBuiltImageTag(String imageName) {
+    return "quay.io/kiegroup/${imageName}:${getImageVersion()}"
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
@@ -261,7 +260,10 @@ List getBuildPlatforms() {
 }
 
 void prepareForDockerMultiplatformBuild(boolean debug = false) {
-    sh 'docker run --rm --privileged docker.io/tonistiigi/binfmt --install all'
+    // For multiplatform build
+    sh 'docker run --rm --privileged --name binfmt docker.io/tonistiigi/binfmt --install all'
+    // For pushing built images
+    sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
     
     // Debug purpose
     if (debug) {
@@ -285,6 +287,20 @@ mirrors = ["mirror.gcr.io"]
     }
 }
 
+void dockerBuildMultiPlatform(String imageName, String finalBuiltTag) {
+    // Build image locally in tgz file
+    String internalRegistryImage = "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
+    sh """
+        docker buildx build --push --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${internalRegistryImage} .
+        docker buildx imagetools inspect ${internalRegistryImage}
+        docker pull ${internalRegistryImage}
+        docker tag ${internalRegistryImage} ${finalBuiltTag}
+        docker inspect ${finalBuiltTag}
+    """
+}
+
 void cleanDockerMultiplatformBuild() {
     sh 'docker buildx rm mybuilder || true'
+    sh 'docker kill binfmt || true'
+    sh 'docker kill registry || true'
 }

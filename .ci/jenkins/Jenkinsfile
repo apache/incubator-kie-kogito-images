@@ -269,21 +269,25 @@ void prepareForDockerMultiplatformBuild(boolean debug = false) {
     if (debug) {
         sh 'docker context ls'
         sh 'docker buildx ls'
+        sh 'docker ps'
     }
     
     writeFile(file: 'buildkitd.toml', text: '''
 debug = true
 [registry."docker.io"]
 mirrors = ["mirror.gcr.io"]
+[registry."localhost:5000"]
+http = true
         ''')
     
     sh 'docker buildx rm mybuilder || true'
-    sh 'docker buildx create --name mybuilder --driver docker-container --bootstrap --config ${WORKSPACE}/buildkitd.toml'
+    sh 'docker buildx create --name mybuilder --driver docker-container --driver-opt network=host --bootstrap --config ${WORKSPACE}/buildkitd.toml'
     sh 'docker buildx use mybuilder'
     
     if (debug) {
         sh 'docker buildx inspect'
         sh 'docker buildx ls'
+        sh 'docker ps'
     }
 }
 
@@ -295,7 +299,6 @@ void dockerBuildMultiPlatform(String imageName, String finalBuiltTag) {
         docker buildx imagetools inspect ${internalRegistryImage}
         docker pull ${internalRegistryImage}
         docker tag ${internalRegistryImage} ${finalBuiltTag}
-        docker inspect ${finalBuiltTag}
     """
 }
 

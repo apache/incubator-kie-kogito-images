@@ -12,8 +12,8 @@
         - name: org.kie.kogito.openjdk
           version: "11"
         - name: org.kie.kogito.dynamic.resources
-        - name: org.kie.kogito.maven
-          version: "3.8-rpm"
+        - name: org.kie.kogito.maven.rpm
+          version: "3.8"
         - name: org.kie.kogito.project.versions
         - name: org.kie.kogito.swf.common.scripts
         - name: org.kie.kogito.swf.builder.build-config
@@ -48,8 +48,8 @@
         - name: org.kie.kogito.openjdk
           version: "11"
         - name: org.kie.kogito.dynamic.resources
-        - name: org.kie.kogito.maven
-          version: "3.8-rpm"
+        - name: org.kie.kogito.maven.rpm
+          version: "3.8"
         - name: org.kie.kogito.project.versions
         - name: org.kie.kogito.swf.common.scripts
         - name: org.kie.kogito.swf.builder.runtime

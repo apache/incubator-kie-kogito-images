@@ -41,7 +41,7 @@ SUPPORTING_SERVICES_IMAGES = {"kogito-data-index-ephemeral", "kogito-data-index-
 
 PROD_SUPPORTING_SERVICES_IMAGES = {"logic-data-index-ephemeral-rhel8"}
 SWF_BUILDER_IMAGES = {"kogito-swf-builder", "kogito-base-builder", "kogito-swf-devmode"}
-PROD_SWF_BUILDER_IMAGES = {"logic-swf-devmode-rhel8"}
+PROD_SWF_BUILDER_IMAGES = {"logic-swf-devmode-rhel8", "logic-swf-builder-rhel8"}
 
 
 def yaml_loader():
@@ -212,12 +212,10 @@ def is_supporting_services_or_swf_builder(image_name, prod=False):
             raise RuntimeError('{} is not a supporting service or a swf builder image.'.format(image_name))
 
 
-def get_swf_builder_images(is_prod_image):
+def get_swf_builder_images():
     """
     Raise an error if the given image is not a supporting service
     """
-    if is_prod_image:
-            return PROD_SWF_BUILDER_IMAGES
     return SWF_BUILDER_IMAGES
 
 

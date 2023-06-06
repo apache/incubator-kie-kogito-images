@@ -75,6 +75,7 @@ pipeline {
 
                     assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
                     prepareForDockerMultiplatformBuild()
+                    installSkopeo() // TODO should be installed directly on the node
                 }
             }
             post {
@@ -250,17 +251,10 @@ pipeline {
                 }
             }
         }
-        stage('Tagging') {
+        stage('Copy to final image') {
             steps {
                 script {
-                    tagImages()
-                }
-            }
-        }
-        stage('Pushing') {
-            steps {
-                script {
-                    pushImages()
+                    copyToFinalImages()
 
                     if (isQuayRegistry()) {
                         makeQuayImagesPublic()
@@ -390,6 +384,7 @@ void clean() {
     util.cleanNode(env.CONTAINER_ENGINE)
 
     cleanDockerMultiplatformBuild()
+    cleanSkopeo()
 
     // Clean Cekit cache, in case we reuse an old node
     sh 'rm -rf \$HOME/.cekit/cache'
@@ -400,21 +395,20 @@ void buildImage(String imageName) {
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
 
     // Build multiplatform from generated Dockerfile
-    String finalBuiltTag = getFullBuiltImageTag(imageName)
     dir('target/image') {
         String tempImageTag = getTempBuiltImageTag(imageName)
         dockerBuildMultiPlatform(tempImageTag)
-        // Pull and tag to final image
-        sh """
-            docker pull ${tempImageTag}
-            docker tag ${tempImageTag} ${finalBuiltTag}
-        """
     }
-
-    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true")
 }
 
 void testImage(String imageName) {
+    String testImageTag = "quay.io/kiegroup/${imageName}:${getImageVersion()}"
+    String tempBuiltImageTag = getTempBuiltImageTag(imageName)
+    // Pull and tag to test image
+    sh """
+        docker pull ${tempBuiltImageTag}
+        docker tag ${tempBuiltImageTag} ${testImageTag}
+    """
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true")
 }
 
@@ -471,40 +465,26 @@ List getTestFailedImages() {
     return TEST_FAILED_IMAGES
 }
 
-void tagImages() {
+void copyToFinalImages() {
     for (String imageName : getBuiltImages()) {
-        String builtImageFullTag = getFullBuiltImageTag()
-        tagImage(builtImageFullTag, buildImageName(imageName))
+        String tempBuiltImageTag = getTempBuiltImageTag(imageName)
+        copyToFinalImage(tempBuiltImageTag, buildImageName(imageName))
         if (isDeployLatestTag()) {
-            tagImage(builtImageFullTag, buildImageName(imageName, 'latest'))
+            copyToFinalImage(tempBuiltImageTag, buildImageName(imageName, 'latest'))
         }
         String reducedTag = getReducedTag()
         if (reducedTag) {
-            tagImage(builtImageFullTag, buildImageName(imageName, reducedTag))
+            copyToFinalImage(tempBuiltImageTag, buildImageName(imageName, reducedTag))
         }
     }
 }
 
-void tagImage(String oldImageName, String newImageName) {
-    sh "${env.CONTAINER_ENGINE} tag ${oldImageName} ${newImageName}"
-}
-
-void pushImages() {
-    for (String imageName : getBuiltImages()) {
-        pushImage(buildImageName(imageName))
-        if (isDeployLatestTag()) {
-            pushImage(buildImageName(imageName, 'latest'))
-        }
-        String reducedTag = getReducedTag()
-        if (reducedTag) {
-            pushImage(buildImageName(imageName, reducedTag))
-        }
-    }
-}
-
-void pushImage(String fullImageName) {
+void copyToFinalImage(String oldImageName, String newImageName) {
     retry(env.MAX_REGISTRY_RETRIES) {
-        sh "${env.CONTAINER_ENGINE} push ${env.CONTAINER_ENGINE_TLS_OPTIONS ?: ''} ${fullImageName}"
+        sh """
+            skopeo inspect docker://${oldImageName}
+            skopeo copy --all docker://${oldImageName} docker://${newImageName}
+        """
     }
 }
 
@@ -708,10 +688,6 @@ String getTempBuiltImageTag(String imageName) {
     return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${imageName}-nightly:${githubscm.getCommitHash()}"
 }
 
-String getFullBuiltImageTag(String imageName) {
-    return "quay.io/kiegroup/${imageName}:${getImageVersion()}"
-}
-
 void runPythonCommand(String cmd, boolean stdout = false) {
     return sh(returnStdout: stdout, script: """
 source ~/virtenvs/cekit/bin/activate
@@ -761,15 +737,18 @@ void dockerBuildMultiPlatform(String buildImageTag) {
     """
 }
 
-void startLocalRegistry() {
-    sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
-}
-
-void cleanLocalRegistry() {
-    sh 'docker kill registry || true'
-}
-
 void cleanDockerMultiplatformBuild() {
     sh 'docker buildx rm mybuilder || true'
     sh 'docker kill binfmt || true'
+}
+
+void installSkopeo() {
+    sh """
+        sudo yum -y install --nobest skopeo
+        skopeo --version
+    """
+}
+
+void cleanSkopeo() {
+    sh 'sudo yum -y remove skopeo || true'
 }

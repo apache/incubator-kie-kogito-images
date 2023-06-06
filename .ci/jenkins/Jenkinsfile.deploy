@@ -73,10 +73,9 @@ pipeline {
                         loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
                     }
 
-                    assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
                     prepareForDockerMultiplatformBuild()
                     startLocalRegistry()
-                    installSkopeo() // TODO should be installed directly on the node
+                    installSkopeo()
                 }
             }
             post {
@@ -696,10 +695,6 @@ ${cmd}
 """)
 }
 
-List getBuildPlatforms() {
-    return env.BUILD_IMAGE_PLATFORMS?.split(',')
-}
-
 void prepareForDockerMultiplatformBuild(boolean debug = false) {
     // For multiplatform build
     sh 'docker run --rm --privileged --name binfmt docker.io/tonistiigi/binfmt --install all'
@@ -733,7 +728,7 @@ http = true
 void dockerBuildMultiPlatform(String buildImageTag) {
     // Build image locally in tgz file
     sh """
-        docker buildx build --push --sbom=false --provenance=false --platform ${getBuildPlatforms().join(',')} -t ${buildImageTag} .
+        docker buildx build --push --sbom=false --provenance=false --platform ${BUILD_IMAGE_PLATFORMS} -t ${buildImageTag} .
         docker buildx imagetools inspect ${buildImageTag}
     """
 }

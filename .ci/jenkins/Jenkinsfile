@@ -25,7 +25,7 @@ pipeline {
         CONTAINER_ENGINE='docker'
         CONTAINER_ENGINE_TLS_OPTIONS=''
 
-        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64' // TODO export to DSL ?
+        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64'
     }
     stages {
         stage('Initialization') {
@@ -183,20 +183,19 @@ void buildImage(String imageName) {
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
 
     // Build multiplatform from generated Dockerfile
-    String finalBuiltTag = getFullBuiltImageTag(imageName)
     dir('target/image') {
-        // Use local registry
-        String internalRegistryImage = "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
-        dockerBuildMultiPlatform(internalRegistryImage)
-        // Pull and tag to final image
-        sh """
-            docker pull ${internalRegistryImage}
-            docker tag ${internalRegistryImage} ${finalBuiltTag}
-        """
+        dockerBuildMultiPlatform(getTempBuiltImageTag(imageName))
     }
 }
 
 void testImage(String imageName) {
+    String testImageTag = "quay.io/kiegroup/${imageName}:${getImageVersion()}"
+    String tempBuiltImageTag = getTempBuiltImageTag(imageName)
+    // Pull and tag to test image
+    sh """
+        docker pull ${tempBuiltImageTag}
+        docker tag ${tempBuiltImageTag} ${testImageTag}
+    """
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_build=true ignore_test_prepare=true ignore_tag=${isProdCI()}")
 }
 
@@ -253,8 +252,8 @@ boolean isProdCI() {
     return env.PROD_CI ? env.PROD_CI.toBoolean() : false
 }
 
-String getFullBuiltImageTag(String imageName) {
-    return "quay.io/kiegroup/${imageName}:${getImageVersion()}"
+String getTempBuiltImageTag(String imageName) {
+    return "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {

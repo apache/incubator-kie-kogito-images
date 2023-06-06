@@ -45,7 +45,7 @@ pipeline {
 
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
 
-        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64' // TODO export to DSL ?
+        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64'
     }
 
     stages {
@@ -75,6 +75,7 @@ pipeline {
 
                     assert getBuildPlatforms(): 'Please provide `BUILD_IMAGE_PLATFORMS` env (example: \'linux/amd64\')'
                     prepareForDockerMultiplatformBuild()
+                    startLocalRegistry()
                     installSkopeo() // TODO should be installed directly on the node
                 }
             }
@@ -384,6 +385,7 @@ void clean() {
     util.cleanNode(env.CONTAINER_ENGINE)
 
     cleanDockerMultiplatformBuild()
+    cleanLocalRegistry()
     cleanSkopeo()
 
     // Clean Cekit cache, in case we reuse an old node
@@ -396,8 +398,7 @@ void buildImage(String imageName) {
 
     // Build multiplatform from generated Dockerfile
     dir('target/image') {
-        String tempImageTag = getTempBuiltImageTag(imageName)
-        dockerBuildMultiPlatform(tempImageTag)
+        dockerBuildMultiPlatform(getTempBuiltImageTag(imageName))
     }
 }
 
@@ -482,8 +483,8 @@ void copyToFinalImages() {
 void copyToFinalImage(String oldImageName, String newImageName) {
     retry(env.MAX_REGISTRY_RETRIES) {
         sh """
-            skopeo inspect docker://${oldImageName}
-            skopeo copy --all docker://${oldImageName} docker://${newImageName}
+            skopeo inspect --tls-verify=false docker://${oldImageName}
+            skopeo copy --tls-verify=false --all docker://${oldImageName} docker://${newImageName}
         """
     }
 }
@@ -685,7 +686,7 @@ boolean isThereAnyChanges() {
 }
 
 String getTempBuiltImageTag(String imageName) {
-    return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${imageName}-nightly:${githubscm.getCommitHash()}"
+    return "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
@@ -740,6 +741,14 @@ void dockerBuildMultiPlatform(String buildImageTag) {
 void cleanDockerMultiplatformBuild() {
     sh 'docker buildx rm mybuilder || true'
     sh 'docker kill binfmt || true'
+}
+
+void startLocalRegistry() {
+    sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
+}
+
+void cleanLocalRegistry() {
+    sh 'docker kill registry || true'
 }
 
 void installSkopeo() {

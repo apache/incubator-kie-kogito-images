@@ -180,7 +180,7 @@ void launchParallelForEachImage(stageNamePrefix, executeOnImage) {
 
 void buildImage(String imageName) {
     // Generate the Dockerfile
-    runPythonCommand("make build-image cekit_option='--work-dir .' ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
+    runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
 
     // Build multiplatform from generated Dockerfile
     String finalBuiltTag = getFullBuiltImageTag(imageName)
@@ -201,7 +201,7 @@ void testImage(String imageName) {
 }
 
 String getMakeBuildImageArgs() {
-    List args = []
+    List args = [ "cekit_option='--work-dir .'" ]
     args.add("KOGITO_APPS_TARGET_BRANCH=${changeTarget}")
     args.add("BUILD_ENGINE=${CONTAINER_ENGINE}")
     if (env.CONTAINER_ENGINE_TLS_OPTIONS) {

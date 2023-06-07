@@ -727,9 +727,23 @@ http = true
 
 void dockerBuildMultiPlatform(String buildImageTag) {
     // Build image locally in tgz file
+    "${BUILD_IMAGE_PLATFORMS}".split(',').each { platform ->
+        String os_arch = platform.replaceAll('/', '-')
+        String platformImage = "${buildImageTag}-${os_arch}"
+        sh """
+            docker buildx build --push --sbom=false --provenance=false --platform ${platform} -t ${platformImage} .
+            docker buildx imagetools inspect ${platformImage}
+            docker pull --platform ${platform} -t ${platformImage}
+        """
+    }
+    List architectures = "${BUILD_IMAGE_PLATFORMS}".collect { it.replaceAll('/', '-') }
+    String dockerManifestCmd = "docker manifest create ${buildImageTag}"
+    architectures.each {
+        dockerManifestCmd += " --amend ${buildImageTag}-${it}"
+    }
     sh """
-        docker buildx build --push --sbom=false --provenance=false --platform ${BUILD_IMAGE_PLATFORMS} -t ${buildImageTag} .
-        docker buildx imagetools inspect ${buildImageTag}
+        ${dockerManifestCmd}
+        docker manifest push ${buildImageTag}
     """
 }
 

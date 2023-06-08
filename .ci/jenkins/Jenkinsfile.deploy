@@ -482,12 +482,7 @@ void copyToFinalImages() {
 }
 
 void copyToFinalImage(String oldImageName, String newImageName) {
-    retry(env.MAX_REGISTRY_RETRIES) {
-        sh """
-            skopeo inspect --tls-verify=false docker://${oldImageName}
-            skopeo copy --tls-verify=false --all docker://${oldImageName} docker://${newImageName}
-        """
-    }
+    cloud.skopeoCopyRegistryImages(oldImageName, newImageName, env.MAX_REGISTRY_RETRIES)
 }
 
 // Set images public on quay. Useful when new images are introduced.

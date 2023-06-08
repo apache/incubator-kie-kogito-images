@@ -40,8 +40,8 @@ pipeline {
                         sh "echo '' > content_sets.yaml"
                     }
 
-                    prepareForDockerMultiplatformBuild()
-                    startLocalRegistry()
+                    cloud.prepareForDockerMultiplatformBuild()
+                    cloud.startLocalRegistry()
                 }
             }
         }
@@ -182,7 +182,7 @@ void buildImage(String imageName) {
 
     // Build multiplatform from generated Dockerfile
     dir('target/image') {
-        dockerBuildMultiPlatform(getTempBuiltImageTag(imageName))
+        cloud.dockerBuildMultiPlatform(getTempBuiltImageTag(imageName))
     }
 }
 

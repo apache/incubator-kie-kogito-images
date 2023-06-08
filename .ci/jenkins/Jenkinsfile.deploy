@@ -383,9 +383,9 @@ void clean() {
     cleanWs()
     util.cleanNode(env.CONTAINER_ENGINE)
 
-    cleanDockerMultiplatformBuild()
-    cleanLocalRegistry()
-    cleanSkopeo()
+    cloud.cleanDockerMultiplatformBuild()
+    cloud.cleanLocalRegistry()
+    cloud.cleanSkopeo()
 
     // Clean Cekit cache, in case we reuse an old node
     sh 'rm -rf \$HOME/.cekit/cache'

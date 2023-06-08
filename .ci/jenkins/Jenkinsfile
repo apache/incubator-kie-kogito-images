@@ -182,7 +182,7 @@ void buildImage(String imageName) {
 
     // Build multiplatform from generated Dockerfile
     dir('target/image') {
-        cloud.dockerBuildMultiPlatform(getTempBuiltImageTag(imageName))
+        cloud.dockerBuildMultiPlatformImages(getTempBuiltImageTag(imageName), getImageBuildPlatforms(), false)
     }
 }
 
@@ -240,6 +240,10 @@ String[] getImages() {
         listCmd += ' arg=--prod'
     }
     return runPythonCommand("${listCmd} | tr '\\n' ','", true).trim().split(',')
+}
+
+List getImageBuildPlatforms() {
+    return "${IMAGE_BUILD_PLATFORMS}".split(',') as List
 }
 
 String getImageVersion() {

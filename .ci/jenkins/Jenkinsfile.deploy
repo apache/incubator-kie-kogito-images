@@ -399,7 +399,7 @@ void buildImage(String imageName) {
     String tempBuiltImageTag = getTempBuiltImageTag(imageName)
     String squashMessage = "${imageName}:${getImageVersion()} squashed"
     dir('target/image') {
-        cloud.dockerBuildMultiPlatformImages(tempBuiltImageTag, true, squashMessage)
+        cloud.dockerBuildMultiPlatformImages(tempBuiltImageTag, getImageBuildPlatforms(), true, squashMessage)
     }
 }
 
@@ -482,7 +482,7 @@ void copyToFinalImages() {
 }
 
 void copyToFinalImage(String oldImageName, String newImageName) {
-    cloud.skopeoCopyRegistryImages(oldImageName, newImageName, env.MAX_REGISTRY_RETRIES)
+    cloud.skopeoCopyRegistryImages(oldImageName, newImageName, Integer.parseInt(env.MAX_REGISTRY_RETRIES))
 }
 
 // Set images public on quay. Useful when new images are introduced.
@@ -668,7 +668,7 @@ boolean shouldSkipTests() {
 }
 
 List getImageBuildPlatforms() {
-    return "${IMAGE_BUILD_PLATFORMS}".split(',')
+    return "${IMAGE_BUILD_PLATFORMS}".split(',') as List
 }
 
 void setDeployPropertyIfNeeded(String key, def value) {

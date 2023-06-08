@@ -45,7 +45,7 @@ pipeline {
 
         BOT_BRANCH_HASH = "${util.generateHash(10)}"
 
-        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64'
+        IMAGE_BUILD_PLATFORMS = 'linux/amd64,linux/arm64'
     }
 
     stages {
@@ -396,8 +396,10 @@ void buildImage(String imageName) {
     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${imageName} ignore_test=true ignore_tag=true build_options='--dry-run'")
 
     // Build multiplatform from generated Dockerfile
+    String tempBuiltImageTag = getTempBuiltImageTag(imageName)
+    String squashMessage = "${imageName}:${getImageVersion()} squashed"
     dir('target/image') {
-        dockerBuildMultiPlatform(getTempBuiltImageTag(imageName))
+        dockerBuildMultiPlatform(tempBuiltImageTag, true, squashMessage)
     }
 }
 
@@ -670,6 +672,10 @@ boolean shouldSkipTests() {
     return params.SKIP_TESTS
 }
 
+List getImageBuildPlatforms() {
+    return "${IMAGE_BUILD_PLATFORMS}".split(',')
+}
+
 void setDeployPropertyIfNeeded(String key, def value) {
     if (value) {
         deployProperties[key] = value
@@ -685,7 +691,7 @@ boolean isThereAnyChanges() {
 }
 
 String getTempBuiltImageTag(String imageName) {
-    return "localhost:5000/${imageName}:${githubscm.getCommitHash()}"
+    return "localhost:5000/${imageName}:${getImageVersion()}"
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
@@ -696,6 +702,8 @@ ${cmd}
 }
 
 void prepareForDockerMultiplatformBuild(boolean debug = false) {
+    cleanDockerMultiplatformBuild()
+
     // For multiplatform build
     sh 'docker run --rm --privileged --name binfmt docker.io/tonistiigi/binfmt --install all'
 
@@ -714,7 +722,6 @@ mirrors = ["mirror.gcr.io"]
 http = true
         ''')
 
-    sh 'docker buildx rm mybuilder || true'
     sh 'docker buildx create --name mybuilder --driver docker-container --driver-opt network=host --bootstrap --config ${WORKSPACE}/buildkitd.toml'
     sh 'docker buildx use mybuilder'
 
@@ -725,46 +732,91 @@ http = true
     }
 }
 
-void dockerBuildMultiPlatform(String buildImageTag) {
+void dockerBuildMultiPlatform(String buildImageTag, boolean squashImages = true, String squashMessage = "Squashed ${buildImageTag}") {
     // Build image locally in tgz file
-    "${BUILD_IMAGE_PLATFORMS}".split(',').each { platform ->
+    List buildPlatformImages = getImageBuildPlatforms().collect { platform ->
         String os_arch = platform.replaceAll('/', '-')
         String platformImage = "${buildImageTag}-${os_arch}"
-        sh """
-            docker buildx build --push --sbom=false --provenance=false --platform ${platform} -t ${platformImage} .
-            docker buildx imagetools inspect ${platformImage}
-            docker pull --platform ${platform} -t ${platformImage}
-        """
+        String finalPlatformImage = platformImage
+
+        // Build
+        dockerBuildPlatformImage(platformImage, platform)
+
+        if (squashImages) {
+            finalPlatformImage = dockerSquashImage(platformImage, squashMessage)
+        }
+
+        return finalPlatformImage
     }
-    List architectures = "${BUILD_IMAGE_PLATFORMS}".collect { it.replaceAll('/', '-') }
-    String dockerManifestCmd = "docker manifest create ${buildImageTag}"
-    architectures.each {
-        dockerManifestCmd += " --amend ${buildImageTag}-${it}"
-    }
+
+    dockerCreateManifest(buildImageTag, buildPlatformImages)
+}
+
+void dockerBuildPlatformImage(String buildImageTag, String platform) {
     sh """
-        ${dockerManifestCmd}
+        docker buildx build --push --sbom=false --provenance=false --platform ${platform} -t ${buildImageTag} .
+        docker buildx imagetools inspect ${buildImageTag}
+        docker pull --platform ${platform} ${buildImageTag}
+    """
+}
+
+void dockerCreateManifest(String buildImageTag, List manifestImages) {
+    // Create multiplatform manifest
+    sh """
+        docker manifest rm ${buildImageTag} || true
+        docker manifest create ${buildImageTag} --insecure ${manifestImages.join(' ')}
         docker manifest push ${buildImageTag}
     """
 }
 
+void debugImage(String imageTag) {
+    sh """
+        docker images
+        docker history ${imageTag}
+        docker inspect ${imageTag}
+    """
+}
+
+void dockerSquashImage(String baseImage, String squashMessage) {
+    String squashedPlatformImage = "${baseImage}"
+
+    // Squash images
+    def nbLayers = Integer.parseInt(sh(returnStdout: true, script: "docker history ${baseImage} | grep buildkit.dockerfile | wc -l").trim())
+    nbLayers++ // Get the next layer not done by buildkit
+    echo "Got ${nbLayers} layers to squash"
+    // Use message option in docker-squash due to https://github.com/goldmann/docker-squash/issues/220
+    runPythonCommand("""
+        docker-squash -v -m '${squashMessage}' -f ${nbLayers} -t ${squashedPlatformImage} ${baseImage} 
+        docker push ${squashedPlatformImage}
+    """)
+
+    return squashedPlatformImage
+}
+
 void cleanDockerMultiplatformBuild() {
     sh 'docker buildx rm mybuilder || true'
-    sh 'docker kill binfmt || true'
+    sh 'docker rm -f binfmt || true'
+    sh 'docker buildx ls'
+    sh 'docker ps'
 }
 
 void startLocalRegistry() {
+    cleanLocalRegistry()
     sh 'docker run -d -p 5000:5000 --restart=always --name registry --name registry registry:2'
+    sh 'docker ps'
 }
 
 void cleanLocalRegistry() {
-    sh 'docker kill registry || true'
+    sh 'docker rm -f registry || true'
+    sh 'docker ps'
 }
 
 void installSkopeo() {
-    sh """
+    cleanSkopeo()
+    sh '''
         sudo yum -y install --nobest skopeo
         skopeo --version
-    """
+    '''
 }
 
 void cleanSkopeo() {

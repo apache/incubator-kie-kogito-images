@@ -25,7 +25,7 @@ pipeline {
         CONTAINER_ENGINE='docker'
         CONTAINER_ENGINE_TLS_OPTIONS=''
 
-        BUILD_IMAGE_PLATFORMS = 'linux/amd64,linux/arm64'
+        IMAGE_BUILD_PLATFORMS = 'linux/amd64,linux/arm64'
     }
     stages {
         stage('Initialization') {
@@ -294,7 +294,7 @@ http = true
 void dockerBuildMultiPlatform(String buildImageTag) {
     // Build image locally in tgz file
     sh """
-        docker buildx build --push --sbom=false --provenance=false --platform ${BUILD_IMAGE_PLATFORMS} -t ${buildImageTag} .
+        docker buildx build --push --sbom=false --provenance=false --platform ${IMAGE_BUILD_PLATFORMS} -t ${buildImageTag} .
         docker buildx imagetools inspect ${buildImageTag}
     """
 }

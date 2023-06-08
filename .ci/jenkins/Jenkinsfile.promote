@@ -552,5 +552,5 @@ String[] getImages() {
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
-    return sh(script: "source ~/virtenvs/cekit/bin/activate && ${cmd}", returnStdout: stdout)
+    return util.runWithPythonVirtualEnv(cmd, 'cekit', stdout)
 }

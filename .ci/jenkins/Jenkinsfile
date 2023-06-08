@@ -255,10 +255,7 @@ String getTempBuiltImageTag(String imageName) {
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
-    return sh(returnStdout: stdout, script: """
-source ~/virtenvs/cekit/bin/activate 
-${cmd}
-""")
+    return util.runWithPythonVirtualEnv(cmd, 'cekit', stdout)
 }
 
 void prepareForDockerMultiplatformBuild(boolean debug = false) {

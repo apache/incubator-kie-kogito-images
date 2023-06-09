@@ -26,7 +26,8 @@
     </licenses>
     <properties>
         <build.quarkusapp.argument.imagename>kogito-swf-devmode</build.quarkusapp.argument.imagename>
-        <build.quarkusapp.argument.quarkusplatform>2.16.7.Final</build.quarkusapp.argument.quarkusplatform>
+        <build.quarkusapp.argument.quarkusplatform.groupid>io.quarkus.platform</build.quarkusapp.argument.quarkusplatform.groupid>
+        <build.quarkusapp.argument.quarkusplatform.version>2.16.7.Final</build.quarkusapp.argument.quarkusplatform.version>
         <build.quarkusapp.argument.kogitoversion>1.39.0.Final</build.quarkusapp.argument.kogitoversion>
     </properties>
 
@@ -54,7 +55,8 @@
                     <executable>${project.basedir}/build-quarkus-app.sh</executable>
                     <arguments>
                         <argument>${build.quarkusapp.argument.imagename}</argument>
-                        <argument>${build.quarkusapp.argument.quarkusplatform}</argument>
+                        <argument>${build.quarkusapp.argument.quarkusplatform.groupid}</argument>
+                        <argument>${build.quarkusapp.argument.quarkusplatform.version}</argument>
                         <argument>${build.quarkusapp.argument.kogitoversion}</argument>
                     </arguments>
                 </configuration>

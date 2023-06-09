@@ -10,8 +10,9 @@ set -o pipefail
 
 # Read entries before sourcing
 image_name="${1}"
-quarkus_platform_version="${2}"
-kogito_version="${KOGITO_VERSION:-${3}}"
+quarkus_platform_groupid="${2}"
+quarkus_platform_version="${3}"
+kogito_version="${KOGITO_VERSION:-${4}}"
 
 # common extensions used by the kogito-swf-builder and kogito-swf-devmode
 quarkus_extensions='quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,smallrye-health'
@@ -61,7 +62,7 @@ mvn ${MAVEN_OPTIONS} \
     -DprojectVersionId="1.0.0-SNAPSHOT" \
     -DplatformVersion="${quarkus_platform_version}" \
     -Dextensions="${quarkus_extensions}" \
-    io.quarkus.platform:quarkus-maven-plugin:"${quarkus_platform_version}":create
+    "${quarkus_platform_groupid}":quarkus-maven-plugin:"${quarkus_platform_version}":create
 
 # Fix as we cannot rely on Quarkus platform
 # Should be removed once https://issues.redhat.com/browse/KOGITO-9120 is implemented

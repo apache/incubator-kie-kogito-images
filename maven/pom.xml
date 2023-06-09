@@ -3,11 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-build-quarkus-app</artifactId>
+    <artifactId>kogito-build-quarkus-app-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
 
     <name>Kogito Build Quarkus App</name>
     <description>Maven project to build a Quarkus App with Kogito Serverless Worflow</description>
+    <packaging>pom</packaging>
 
     <url>http://kogito.kie.org</url>
     <inceptionYear>2019</inceptionYear>
@@ -29,11 +30,17 @@
         <build.quarkusapp.argument.kogitoversion>1.39.0.Final</build.quarkusapp.argument.kogitoversion>
     </properties>
 
+    <modules>
+        <module>quarkus-app</module>
+        <module>maven-repo</module>
+    </modules>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <inherited>false</inherited>
                 <executions>
                     <execution>
                         <id>build-quarkus-app</id>
@@ -51,33 +58,6 @@
                         <argument>${build.quarkusapp.argument.kogitoversion}</argument>
                     </arguments>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>/tmp/build/${build.quarkusapp.argument.imagename}/${build.quarkusapp.argument.imagename}-quarkus-app.zip</file>
-                                    <type>zip</type>
-                                    <classifier>optional</classifier>
-                                </artifact>
-                                <artifact>
-                                    <file>/tmp/build/${build.quarkusapp.argument.imagename}/${build.quarkusapp.argument.imagename}-maven-repo.zip</file>
-                                    <type>zip</type>
-                                    <classifier>optional</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

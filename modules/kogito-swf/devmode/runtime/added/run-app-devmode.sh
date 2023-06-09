@@ -19,14 +19,14 @@ source "${script_dir_path}"/configure-jvm-mvn.sh
 # `-o` means offline mode
 offline_param="-o"
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
-  ${KOGITO_HOME}/launch/add-extension.sh "${QUARKUS_EXTENSIONS}"
-  offline_param=""
+    ${KOGITO_HOME}/launch/add-extension.sh "${QUARKUS_EXTENSIONS}" "ignorejvm"
+    offline_param=""
 fi
 
 "${MAVEN_HOME}"/bin/mvn -B ${MAVEN_ARGS_APPEND} \
-  ${offline_param} \
-  -s "${MAVEN_SETTINGS_PATH}" \
-  -DskipTests \
-  -Dquarkus.http.host=0.0.0.0 \
-  -Dquarkus.test.continuous-testing=${QUARKUS_CONTINUOUS_TESTING:-disabled} \
-  clean compile quarkus:dev
+    ${offline_param} \
+    -s "${MAVEN_SETTINGS_PATH}" \
+    -DskipTests \
+    -Dquarkus.http.host=0.0.0.0 \
+    -Dquarkus.test.continuous-testing=${QUARKUS_CONTINUOUS_TESTING:-disabled} \
+    clean compile quarkus:dev

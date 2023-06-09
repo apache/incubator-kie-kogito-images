@@ -251,10 +251,10 @@ pipeline {
                 }
             }
         }
-        stage('Copy to final image') {
+        stage('Push to registry') {
             steps {
                 script {
-                    copyToFinalImages()
+                    pushFinalImages()
 
                     if (isQuayRegistry()) {
                         makeQuayImagesPublic()
@@ -467,21 +467,21 @@ List getTestFailedImages() {
     return TEST_FAILED_IMAGES
 }
 
-void copyToFinalImages() {
+void pushFinalImages() {
     for (String imageName : getBuiltImages()) {
         String tempBuiltImageTag = getTempBuiltImageTag(imageName)
-        copyToFinalImage(tempBuiltImageTag, buildImageName(imageName))
+        pushFinalImage(tempBuiltImageTag, buildImageName(imageName))
         if (isDeployLatestTag()) {
-            copyToFinalImage(tempBuiltImageTag, buildImageName(imageName, 'latest'))
+            pushFinalImage(tempBuiltImageTag, buildImageName(imageName, 'latest'))
         }
         String reducedTag = getReducedTag()
         if (reducedTag) {
-            copyToFinalImage(tempBuiltImageTag, buildImageName(imageName, reducedTag))
+            pushFinalImage(tempBuiltImageTag, buildImageName(imageName, reducedTag))
         }
     }
 }
 
-void copyToFinalImage(String oldImageName, String newImageName) {
+void pushFinalImage(String oldImageName, String newImageName) {
     cloud.skopeoCopyRegistryImages(oldImageName, newImageName, Integer.parseInt(env.MAX_REGISTRY_RETRIES))
 }
 

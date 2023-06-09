@@ -36,8 +36,6 @@ case ${image_name} in
 esac
 
 
-script_dir_path=$(cd ../scripts; pwd -P)
-
 target_tmp_dir="/tmp/build/${image_name}"
 build_target_dir="/tmp/${image_name}"
 mvn_local_repo="/tmp/temp_maven/${image_name}"
@@ -49,8 +47,6 @@ if [ "${CI}" = "true" ]; then
     rm -rf ${mvn_local_repo}
 fi
 mkdir -p ${mvn_local_repo}
-
-. ${script_dir_path}/setup-maven.sh "${build_target_dir}"/settings.xml
 
 set -x
 echo "Create quarkus project to path ${build_target_dir}"

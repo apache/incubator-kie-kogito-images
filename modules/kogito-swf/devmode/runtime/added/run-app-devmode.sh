@@ -13,13 +13,13 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
 fi
 
 # copy .mvn/jvm-config from resources to project's base dir.
-find . -name 'jvm.config' -exec echo "--> found {}" \; -exec mkdir -p .mvn \; -exec cp -v {} .mvn/ \;
+find . -maxdepth 5 -name  'jvm.config' -exec echo "--> found {}" \; -exec mkdir -p .mvn \; -exec cp -v {} .mvn/ \;
 source "${script_dir_path}"/configure-jvm-mvn.sh
 
 # `-o` means offline mode
 offline_param="-o"
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
-    ${KOGITO_HOME}/launch/add-extension.sh "${QUARKUS_EXTENSIONS}" "ignorejvm"
+    ${KOGITO_HOME}/launch/add-extension.sh "${QUARKUS_EXTENSIONS}" "true"
     offline_param=""
 fi
 

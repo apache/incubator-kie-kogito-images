@@ -2,7 +2,7 @@
 
 # identify the caller, if it is called by run-add-devmode.sh or by the build-app.sh, the jvm
 # configuration will me ignored.
-caller=${2:-run}
+ignore_jvm_settings=${2:-false}
 
 script_dir_path="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 extensions="$1"
@@ -16,7 +16,7 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
-if [ "${caller}" = "run" ]; then
+if [ "${ignore_jvm_settings}" = "false" ]; then
     source "${script_dir_path}"/configure-jvm-mvn.sh
 fi
 

@@ -30,7 +30,7 @@ source "${script_dir_path}"/configure-jvm-mvn.sh
 
 if [ ! -z "${QUARKUS_EXTENSIONS}" ]; then
     log_info "Adding extensions '${QUARKUS_EXTENSIONS}'"
-    ${script_dir_path}/add-extension.sh "${QUARKUS_EXTENSIONS}" "ignorejvm"
+    ${script_dir_path}/add-extension.sh "${QUARKUS_EXTENSIONS}" "true"
 fi
 
 "${MAVEN_HOME}"/bin/mvn -B ${MAVEN_ARGS_APPEND} \

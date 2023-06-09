@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-build-quarkus-app</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+
+    <name>Kogito Build Quarkus App</name>
+    <description>Maven project to build a Quarkus App with Kogito Serverless Worflow</description>
+
+    <url>http://kogito.kie.org</url>
+    <inceptionYear>2019</inceptionYear>
+    <organization>
+        <name>JBoss by Red Hat</name>
+        <url>http://www.jboss.org/</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <properties>
+        <build.quarkusapp.argument.imagename>kogito-swf-devmode</build.quarkusapp.argument.imagename>
+        <build.quarkusapp.argument.quarkusplatform>2.16.7.Final</build.quarkusapp.argument.quarkusplatform>
+        <build.quarkusapp.argument.kogitoversion>1.38.0</build.quarkusapp.argument.kogitoversion>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-quarkus-app</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>${project.basedir}/build-quarkus-app.sh</executable>
+                    <arguments>
+                        <argument>${build.quarkusapp.argument.imagename}</argument>
+                        <argument>${build.quarkusapp.argument.quarkusplatform}</argument>
+                        <argument>${build.quarkusapp.argument.kogitoversion}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

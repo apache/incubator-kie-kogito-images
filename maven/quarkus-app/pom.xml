@@ -4,12 +4,12 @@
 
     <parent>
         <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-build-quarkus-app-parent</artifactId>
+        <artifactId>kogito-devmode-quarkus-app-parent</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>kogito-build-quarkus-app</artifactId>
-    <name>Kogito Build Quarkus App - Quarkus app zip</name>
+    <artifactId>kogito-devmode-quarkus-app</artifactId>
+    <name>Kogito Dev Mode Quarkus App - Quarkus app zip</name>
 
     <build>
         <plugins>

@@ -35,7 +35,7 @@ case ${image_name} in
 esac
 
 
-script_dir_path=$(cd `dirname "${BASH_SOURCE[0]}"`; pwd -P)
+script_dir_path=$(cd ../scripts; pwd -P)
 
 target_tmp_dir="/tmp/build/${image_name}"
 build_target_dir="/tmp/${image_name}"

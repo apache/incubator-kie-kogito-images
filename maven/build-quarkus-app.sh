@@ -16,6 +16,8 @@ kogito_version="${KOGITO_VERSION:-${4}}"
 
 # common extensions used by the kogito-swf-builder and kogito-swf-devmode
 quarkus_extensions='quarkus-kubernetes,kogito-quarkus-serverless-workflow,kogito-addons-quarkus-knative-eventing,smallrye-health'
+# extensions that are not available in RHBQ 2.13.x
+quarkus_extensions_2_16="org.kie.kogito:kogito-addons-quarkus-jobs-service-embedded:${kogito_version},org.kie.kogito:kogito-addons-quarkus-data-index-inmemory:${kogito_version}"
 # dev mode purpose extensions used only by the kogito-swf-devmode
 kogito_swf_devmode_extensions='kogito-quarkus-serverless-workflow-devui,kogito-addons-quarkus-source-files'
 
@@ -27,8 +29,7 @@ fi
 case ${image_name} in
     "kogito-swf-builder")        ;;
     "kogito-swf-devmode")
-        quarkus_extensions="${quarkus_extensions},${kogito_swf_devmode_extensions}"
-        quarkus_extensions_2_16="kogito-addons-quarkus-jobs-service-embedded,kogito-addons-quarkus-data-index-inmemory"
+        quarkus_extensions="${quarkus_extensions},${kogito_swf_devmode_extensions},${quarkus_extensions_2_16}"
         ;;
     *)
         echo "${image_name} is not a quarkus app image, exiting..."
@@ -81,29 +82,6 @@ if [ ! -z ${kogito_version} ]; then
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml
 fi
-
-# Those extensions are not available in RHBQ 2.13.x and have to be injected in the pom as a workaround
-for extension in ${quarkus_extensions_2_16//,/ }
-do
-    echo "Injecting extension ${extension} in serverless-workflow-project/pom.xml"
-    # [ ]* -> is a regexp pattern to match any number of spaces
-    pattern_1="[ ]*<\/dependencyManagement>"
-    pattern_2="[ ]*<dependencies>"
-    complete_pattern="$pattern_1\n$pattern_2"
-
-    replace_1="  <\/dependencyManagement>\n"
-    replace_2="  <dependencies>\n"
-    replace_3="    <dependency>\n"
-    replace_4="     <groupId>org.kie.kogito<\/groupId>\n"
-    replace_5="     <artifactId>${extension}<\/artifactId>\n"
-    replace_6="   <\/dependency>"
-    complete_replace="$replace_1$replace_2$replace_3$replace_4$replace_5$replace_6"
-
-    sed -i.bak -e "/$pattern_1/{
-        N;N;N
-        s/$complete_pattern/$complete_replace/
-        }" serverless-workflow-project/pom.xml
-done
 
 echo "Build quarkus app"
 cd "serverless-workflow-project"

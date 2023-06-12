@@ -15,7 +15,7 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     printenv
 fi
 
-if [ "${ignore_jvm_settings}" = "false" ]; then
+if [ "${ignore_jvm_settings}" != "true" ]; then
     source "${script_dir_path}"/configure-jvm-mvn.sh
 fi
 

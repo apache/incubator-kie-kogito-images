@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Parameters:
-#   1 - image name - can't  be empty.
-#   2 - git target branch - defaults to main
-#   3 - git target uri - defaults to https://github.com/kiegroup/kogito-apps.git
+#   1 - Image name
+#   2 - Quarkus platform group id
+#   3 - Quarkus platform version
+#   4 - Kogito version
+# Note that all parameters are required and can't be empty
 
 # fast fail
 set -e

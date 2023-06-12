@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-# identify the caller, if it is called by run-add-devmode.sh or by the build-app.sh, the jvm
-# configuration will me ignored.
-ignore_jvm_settings=${2:-false}
-
 script_dir_path="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+# extensions to be added, comma separated.
 extensions="$1"
+# parameter passed which will trigger or not the jvm/maven configuration.
+ignore_jvm_settings=${2:-false}
 
 source "${script_dir_path}"/logging.sh
 

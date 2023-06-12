@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.kie.kogito</groupId>
     <artifactId>kogito-devmode-quarkus-app-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0.redhat-2023061122</version>
 
     <name>Kogito Dev Mode Quarkus App</name>
     <description>Maven project to build a Quarkus App with Kogito Serverless Worflow</description>
@@ -26,8 +25,8 @@
     </licenses>
     <properties>
         <build.quarkusapp.argument.imagename>kogito-swf-devmode</build.quarkusapp.argument.imagename>
-        <build.quarkusapp.argument.quarkusplatform.groupid>io.quarkus.platform</build.quarkusapp.argument.quarkusplatform.groupid>
-        <build.quarkusapp.argument.quarkusplatform.version>2.16.7.Final</build.quarkusapp.argument.quarkusplatform.version>
+        <build.quarkusapp.argument.quarkusplatform.groupid>com.redhat.quarkus.platform</build.quarkusapp.argument.quarkusplatform.groupid>
+        <build.quarkusapp.argument.quarkusplatform.version>2.13.7.SP2-redhat-00002</build.quarkusapp.argument.quarkusplatform.version>
         <build.quarkusapp.argument.kogitoversion>1.39.0.Final</build.quarkusapp.argument.kogitoversion>
     </properties>
 

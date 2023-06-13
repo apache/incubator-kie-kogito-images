@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 script_dir_path="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 # extensions to be added, comma separated.

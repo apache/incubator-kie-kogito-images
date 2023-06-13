@@ -9,8 +9,6 @@ labels:
     value: "2.16.7.Final"
   - name: "org.kie.kogito.version"
     value: "2.0.0-SNAPSHOT"
-  - name: "maintainer"
-    value: "kogito <bsig-cloud@redhat.com>"
   - name: "io.k8s.description"
     value: "Red Hat build of Kogito Serverless Workflow development mode image with Quarkus extensions libraries preinstalled."
   - name: "io.k8s.display-name"
@@ -19,6 +17,8 @@ labels:
     value: "logic,devmode,kogito,kogito,development,serverless,workflow"
   - name: "io.openshift.expose-services"
     value: "8080:http,5005:http"
+  - name: "com.redhat.component"
+    value: "openshift-serverless-1-logic-swf-devmode-rhel8-container"
 
 modules:
   repositories:

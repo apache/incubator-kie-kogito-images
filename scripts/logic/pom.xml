@@ -29,7 +29,7 @@
         <build.quarkusapp.argument.imagename.builder>kogito-swf-builder</build.quarkusapp.argument.imagename.builder>
         <build.quarkusapp.argument.quarkusplatform.groupid>io.quarkus.platform</build.quarkusapp.argument.quarkusplatform.groupid>
         <build.quarkusapp.argument.quarkusplatform.version>2.16.7.Final</build.quarkusapp.argument.quarkusplatform.version>
-        <build.quarkusapp.argument.kogitoversion>1.39.0.Final</build.quarkusapp.argument.kogitoversion>
+        <build.quarkusapp.argument.kogitoversion>1.40.0.Final</build.quarkusapp.argument.kogitoversion>
     </properties>
 
     <modules>

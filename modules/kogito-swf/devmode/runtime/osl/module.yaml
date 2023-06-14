@@ -21,10 +21,10 @@ envs:
     value: "false"
 
 artifacts:
-  - path: /home/kogito/build_output/kogito-swf-quarkus-app.zip
+  - name: kogito-devmode-quarkus-app-image-build.zip
     # kogito-devmode-quarkus-app-1.38.0.Final-redhat-00001-image-build.zip
     md5: c67fa5b0c78688023a5ac39877415dc7
-  - path: /home/kogito/build_output/kogito-swf-maven-repo.zip
+  - name: kogito-devmode-maven-repository-image-build.zip
     # kogito-devmode-maven-repository-1.38.0.Final-redhat-00001-image-build.zip
     md5: 5452062f247963d2ef7dbc35fbe29c3b
 

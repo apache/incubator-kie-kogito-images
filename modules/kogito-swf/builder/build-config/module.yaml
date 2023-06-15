@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.swf.builder.build-config
-version: "2.0.0-snapshot"
+version: "1.40.0-snapshot"
 description: "Kogito Serverless Workflow builder image build configuration"
 
 envs:

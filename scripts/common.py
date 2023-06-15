@@ -212,10 +212,12 @@ def is_supporting_services_or_swf_builder(image_name, prod=False):
             raise RuntimeError('{} is not a supporting service or a swf builder image.'.format(image_name))
 
 
-def get_swf_builder_images():
+def get_swf_builder_images(is_prod_image):
     """
     Raise an error if the given image is not a supporting service
     """
+    if is_prod_image:
+            return PROD_SWF_BUILDER_IMAGES
     return SWF_BUILDER_IMAGES
 
 

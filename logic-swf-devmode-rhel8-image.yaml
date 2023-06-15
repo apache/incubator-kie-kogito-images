@@ -35,6 +35,7 @@ modules:
       version: "3.8"
     - name: org.kie.kogito.project.versions
     - name: org.kie.kogito.swf.common.scripts
+    - name: org.kie.kogito.swf.devmode.runtime.common
     - name: org.kie.kogito.swf.devmode.runtime.osl
 
 ports:
@@ -58,6 +59,7 @@ osbs:
         only:
           - x86_64
           - ppc64le
+          - aarch64
       compose:
         pulp_repos: true
   extra_dir: osbs-extra/logic-swf-devmode-rhel8

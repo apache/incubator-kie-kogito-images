@@ -1,5 +1,6 @@
 schema_version: 1
 
+
 name: "quay.io/kiegroup/kogito-data-index-ephemeral"
 version: "1.40.0-snapshot"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"

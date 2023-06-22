@@ -76,7 +76,7 @@ if [ "${arch}" = "x86_64" ]; then
     echo "Removing arm64 dependencies from kogito-addons-quarkus-jobs-service-embedded and kogito-addons-quarkus-data-index-inmemory dependencies"
     exclusion_jobs_service="${pattern_jobs_service}\
      <exclusions>\
-        $base_exclusion\
+        $base_exclusions\
         <exclusion>\
           <groupId>io.zonky.test.postgres</groupId>\
           <artifactId>embedded-postgres-binaries-linux-arm64v8</artifactId>\

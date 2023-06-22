@@ -1,13 +1,13 @@
 schema_version: 1
 
 name: "quay.io/kiegroup/kogito-explainability"
-version: "1.40.0"
+version: "1.40.1-snapshot"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 description: "Runtime image for Kogito Explainability Service"
 
 labels:
   - name: "org.kie.kogito.version"
-    value: "1.40.0.Final"
+    value: "1.40.1-SNAPSHOT"
   - name: "maintainer"
     value: "kogito <bsig-cloud@redhat.com>"
   - name: "io.k8s.description"

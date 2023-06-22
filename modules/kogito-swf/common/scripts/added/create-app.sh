@@ -53,7 +53,7 @@ fi
 # kogito-addons-quarkus-jobs-service-embedded and kogito-addons-quarkus-data-index-inmemory
 # using maven exclusions
 pattern_jobs_service="<artifactId>kogito-addons-quarkus-jobs-service-embedded</artifactId>"
-base_exclusion="      <exclusions>\
+base_exclusions="
         <exclusion>\
           <groupId>io.zonky.test.postgres</groupId>\
           <artifactId>embedded-postgres-binaries-linux-amd64-alpine</artifactId>\
@@ -74,7 +74,8 @@ base_exclusion="      <exclusions>\
 arch=$(uname -p)
 if [ "${arch}" = "x86_64" ]; then
     echo "Removing arm64 dependencies from kogito-addons-quarkus-jobs-service-embedded and kogito-addons-quarkus-data-index-inmemory dependencies"
-    exclusion="\
+    exclusion_jobs_service="${pattern_jobs_service}\
+     <exclusions>\
         $base_exclusion\
         <exclusion>\
           <groupId>io.zonky.test.postgres</groupId>\
@@ -82,26 +83,20 @@ if [ "${arch}" = "x86_64" ]; then
         </exclusion>\
       </exclusions>"
 
-    exclusion_jobs_service="<artifactId>kogito-addons-quarkus-jobs-service-embedded</artifactId>\
-    $exclusion"
-
-    sed -i.bak "s|$pattern_jobs_service|$exclusion_jobs_service|" pom.xml
-
-   # rm -rfv "${KOGITO_HOME}"/.m2/repository/io/zonky/test/postgres/embedded-postgres-binaries-linux-arm64v8
-
 elif [ "${arch}" = "aarch64" ]; then
     echo "Removing amd64 dependencies from kogito-addons-quarkus-jobs-service-embedded and kogito-addons-quarkus-data-index-inmemory dependencies"
-    exclusion="\
-        $base_exclusion\
+    exclusion_jobs_service="${pattern_jobs_service}\
+     <exclusions>\
+        $base_exclusions\
         <exclusion>\
           <groupId>io.zonky.test.postgres</groupId>\
           <artifactId>embedded-postgres-binaries-linux-amd64</artifactId>\
         </exclusion>\
       </exclusions>"
+fi
 
-    exclusion_jobs_service="<artifactId>kogito-addons-quarkus-jobs-service-embedded</artifactId>\
-    $exclusion"
-
+// Do the replace if needed
+if [ -z "${exclusion_jobs_service}" ]; then
     sed -i.bak "s|$pattern_jobs_service|$exclusion_jobs_service|" pom.xml
 fi
 

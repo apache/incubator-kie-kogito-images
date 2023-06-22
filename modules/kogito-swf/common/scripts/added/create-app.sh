@@ -95,11 +95,10 @@ elif [ "${arch}" = "aarch64" ]; then
       </exclusions>"
 fi
 
-// Do the replace if needed
+# Do the replace if needed
 if [ -z "${exclusion_jobs_service}" ]; then
     sed -i.bak "s|$pattern_jobs_service|$exclusion_jobs_service|" pom.xml
 fi
-
 
 if [ "${SCRIPT_DEBUG^^}" = "TRUE" ]; then
     cat pom.xml

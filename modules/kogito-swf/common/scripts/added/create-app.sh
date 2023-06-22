@@ -52,9 +52,9 @@ fi
 # if the image being built is X86_64, remove the arm64 maven dependencies from
 # kogito-addons-quarkus-jobs-service-embedded and kogito-addons-quarkus-data-index-inmemory
 # using maven exclusions
+exclusion_jobs_service=""
 pattern_jobs_service="<artifactId>kogito-addons-quarkus-jobs-service-embedded</artifactId>"
-base_exclusions="
-        <exclusion>\
+base_exclusions="<exclusion>\
           <groupId>io.zonky.test.postgres</groupId>\
           <artifactId>embedded-postgres-binaries-linux-amd64-alpine</artifactId>\
         </exclusion>\
@@ -81,7 +81,7 @@ if [ "${arch}" = "x86_64" ]; then
           <groupId>io.zonky.test.postgres</groupId>\
           <artifactId>embedded-postgres-binaries-linux-arm64v8</artifactId>\
         </exclusion>\
-      </exclusions>"
+     </exclusions>"
 
 elif [ "${arch}" = "aarch64" ]; then
     echo "Removing amd64 dependencies from kogito-addons-quarkus-jobs-service-embedded and kogito-addons-quarkus-data-index-inmemory dependencies"
@@ -92,11 +92,11 @@ elif [ "${arch}" = "aarch64" ]; then
           <groupId>io.zonky.test.postgres</groupId>\
           <artifactId>embedded-postgres-binaries-linux-amd64</artifactId>\
         </exclusion>\
-      </exclusions>"
+     </exclusions>"
 fi
 
 # Do the replace if needed
-if [ -z "${exclusion_jobs_service}" ]; then
+if [ ! -z "${exclusion_jobs_service}" ]; then
     sed -i.bak "s|$pattern_jobs_service|$exclusion_jobs_service|" pom.xml
 fi
 

@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "quay.io/kiegroup/kogito-base-builder"
-version: "2.0.0-snapshot"
+version: "1.40.1-snapshot"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 description: "Image with JDK and Maven, used as a base image. It is used by Web Tools !"
 

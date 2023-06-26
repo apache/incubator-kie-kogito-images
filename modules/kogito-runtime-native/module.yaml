@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.runtime.native
-version: "1.40.2-snapshot"
+version: "1.40.3-snapshot"
 
 execute:
   - script: configure

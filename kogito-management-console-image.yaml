@@ -1,13 +1,13 @@
 schema_version: 1
 
 name: "quay.io/kiegroup/kogito-management-console"
-version: "1.40.2-snapshot"
+version: "1.40.3-snapshot"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 description: "Runtime image for Kogito Management Console"
 
 labels:
   - name: "org.kie.kogito.version"
-    value: "1.40.2-SNAPSHOT"
+    value: "1.40.3-SNAPSHOT"
   - name: "maintainer"
     value: "kogito <bsig-cloud@redhat.com>"
   - name: "io.k8s.description"

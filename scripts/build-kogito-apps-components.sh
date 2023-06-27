@@ -20,8 +20,7 @@ shift $#
 script_dir_path=$(cd `dirname "${BASH_SOURCE[0]}"`; pwd -P)
 
 export NODE_OPTIONS="${NODE_OPTIONS} --max_old_space_size=4096"
-MAVEN_OPTIONS="${MAVEN_OPTIONS} ${BUILD_MVN_OPTS} -Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
-echo "Got MAVEN_OPTIONS = ${MAVEN_OPTIONS}"
+APPS_MAVEN_OPTIONS="-Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
 # used for all-in-one image
 extended_context=""
 
@@ -100,11 +99,12 @@ for ctx in ${contextDir}; do
     mkdir -p ${mvn_local_repo}
 
     . ${script_dir_path}/setup-maven.sh "${build_target_dir}"/settings.xml
+    MAVEN_OPTIONS="${MAVEN_OPTIONS} ${APPS_MAVEN_OPTIONS}"
 
-    if stat ${HOME}/.m2/repository/ &> /dev/null; then
-        echo "Copy current maven repo to maven context local repo ${mvn_local_repo}"
-        cp -r ${HOME}/.m2/repository/* "${mvn_local_repo}"
-    fi
+    # if stat ${HOME}/.m2/repository/ &> /dev/null; then
+    #     echo "Copy current maven repo to maven context local repo ${mvn_local_repo}"
+    #     cp -r ${HOME}/.m2/repository/* "${mvn_local_repo}"
+    # fi
 
     cd ${build_target_dir}
     echo "Using branch/tag ${gitBranch}, checking out. Temporary build dir is ${build_target_dir} and target dist is ${target_tmp_dir}"
@@ -115,6 +115,7 @@ for ctx in ${contextDir}; do
         eval ${git_command}
     fi
     cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
+    echo "Got MAVEN_OPTIONS = ${MAVEN_OPTIONS}"
     mvn_command="mvn -am -pl ${ctx} package ${MAVEN_OPTIONS} -Dmaven.repo.local=${mvn_local_repo} -Dquarkus.container-image.build=false"
     echo "Building component(s) ${contextDir} with the following maven command [${mvn_command}]"
     export YARN_CACHE_FOLDER=/tmp/cache/yarn/${ctx} # Fix for building yarn apps in parallel

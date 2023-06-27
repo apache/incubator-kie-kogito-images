@@ -60,6 +60,8 @@ void setupPrJob(boolean isProdCI = false) {
         jobParams.pr.trigger_phrase_only = true
         jobParams.pr.commitContext = 'Prod'
         jobParams.env.put('PROD_CI', true)
+    } else if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
     }
     KogitoJobTemplate.createPRJob(this, jobParams)
 }
@@ -128,6 +130,9 @@ void setupDeployJob(JobType jobType, String envName = '') {
 
             QUARKUS_PLATFORM_NEXUS_URL: Utils.getMavenQuarkusPlatformRepositoryUrl(this),
         ])
+    }
+    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
     }
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         parameters {
@@ -236,6 +241,9 @@ void setupPromoteJob(JobType jobType) {
         DEFAULT_STAGING_REPOSITORY: "${MAVEN_NEXUS_STAGING_PROFILE_URL}",
         MAVEN_ARTIFACT_REPOSITORY: "${MAVEN_ARTIFACTS_REPOSITORY}",
     ])
+    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
+    }
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         parameters {
             stringParam('DISPLAY_NAME', '', 'Setup a specific build display name')

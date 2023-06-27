@@ -418,6 +418,9 @@ void setDeployPropertyIfNeeded(String key, def value) {
 }
 
 String[] getImages() {
+    if (env.IMAGES_LIST) {
+        return env.IMAGES_LIST.split(',')
+    }
     return runPythonCommand("make list | tr '\\n' ','", true).trim().split(',')
 }
 

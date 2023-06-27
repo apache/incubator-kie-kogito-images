@@ -72,6 +72,11 @@ pipeline {
                         // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
                         runPythonCommand("python3 scripts/update-repository.py --build-maven-mirror-url ${MAVEN_MIRROR_URL} --ignore-self-signed-cert")
                     }
+
+                    if (getMavenArtifactRepository()) {
+                        echo "Setup Repository url to '${getMavenArtifactRepository()}'"
+                        runPythonCommand("python3 scripts/update-repository.py  --repo-url ${getMavenArtifactRepository()}")
+                    }
                 }
             }
         }
@@ -149,7 +154,6 @@ pipeline {
             steps {
                 script {
                     updateTestsCommand = 'python3 scripts/update-repository.py --tests-only'
-                    updateTestsCommand += getMavenArtifactRepository() ? " --repo-url ${getMavenArtifactRepository()}" : ''
                     updateTestsCommand += getTestsKogitoExamplesRef() ? " --examples-ref ${getTestsKogitoExamplesRef()}" : ''
                     updateTestsCommand += getTestsKogitoExamplesURI() ? " --examples-uri ${getTestsKogitoExamplesURI()}" : ''
 

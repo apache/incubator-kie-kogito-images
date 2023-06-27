@@ -1,4 +1,4 @@
- @Library('jenkins-pipeline-shared-libraries')_
+@Library('jenkins-pipeline-shared-libraries')_
 
 QUAY_REGISTRY = 'quay.io'
 
@@ -38,10 +38,10 @@ pipeline {
                     currentBuild.displayName = params.DISPLAY_NAME ?: currentBuild.displayName
 
                     if (getTargetBranch()) {
-                        echo "Got a target branch ... Trying to merge the source with the target"
+                        echo 'Got a target branch ... Trying to merge the source with the target'
                         githubscm.checkoutIfExists(getRepoName(), getSourceAuthor(), getSourceBranch(), getTargetAuthor(), getTargetBranch(), true)
                     } else {
-                        echo "No target branch ... Checking out simply"
+                        echo 'No target branch ... Checking out simply'
                         checkout(githubscm.resolveRepository(getRepoName(), getSourceAuthor(), getSourceBranch(), false))
                     }
 
@@ -67,6 +67,7 @@ pipeline {
                 script {
                     // Set the mirror url only if exist
                     if (env.MAVEN_MIRROR_REPOSITORY) {
+                        echo "Setup Maven mirror url to '${env.MAVEN_MIRROR_REPOSITORY}'"
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
 
                         // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
@@ -141,8 +142,8 @@ pipeline {
                     }
                     try {
                         cloud.skopeoCopyRegistryImages(cloud.getReducedTag(getDeployImageTag()), getBuiltImageTag(reducedTag), retries)
-                    } catch(err) {
-                        echo "Reduced tag cannot be applied"
+                    } catch (err) {
+                        echo 'Reduced tag cannot be applied'
                     }
                 }
             }
@@ -340,7 +341,7 @@ List getImageBuildPlatforms() {
 }
 
 String getMavenArtifactRepository() {
-    return params.TESTS_MAVEN_ARTIFACTS_REPOSITORY_URL
+    return params.MAVEN_ARTIFACTS_REPOSITORY
 }
 
 boolean isProdCI() {

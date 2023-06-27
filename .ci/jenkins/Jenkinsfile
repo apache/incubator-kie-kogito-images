@@ -77,10 +77,18 @@ Closure createBuildAndTestStageClosure(String image) {
             buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: getChangeTarget()))
             
-            build(job: "${getRepoName()}.build-image", wait: false, parameters: buildParams, propagate: false)
-            
             githubscm.prepareCommitStatusInformationForPullRequest(getRepoName(), getChangeAuthor(), getChangeBranch(), 'kiegroup', getGitAuthorCredentialsId())
             githubscm.updateGithubCommitStatus(image, 'PENDING', 'Queued', getRepoName())
+            
+            // Keep executing so we can cancel all if needed
+            def job = build(job: "${getRepoName()}.build-image", wait: true, parameters: buildParams, propagate: false)
+            if (job.result != 'SUCCESS') {
+                if (job.result == 'UNSTABLE') {
+                    unstable("Tests on ${image} seems to have failed")
+                } else {
+                    error("Error building ${image}. Please check the logs of the job: ${job.absoluteUrl}")
+                }
+            }
         }
     }
 }

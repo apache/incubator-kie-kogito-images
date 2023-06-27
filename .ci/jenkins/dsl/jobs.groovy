@@ -53,14 +53,14 @@ void setupPrJob(boolean isProdCI = false) {
         run_only_for_branches: [ "${GIT_BRANCH}" ],
         disable_status_message_error: true,
         disable_status_message_failure: true,
-        commitContext: 'Launch Image Checks',
+        commitContext: 'Retrieve and Launch Image Checks',
         contextShowtestResults: false,
     ])
     if (isProdCI) {
         jobParams.job.name += '.prod'
         jobParams.pr.trigger_phrase = '.*[j|J]enkins,?.*(rerun|run) [prod|Prod|PROD].*'
         jobParams.pr.trigger_phrase_only = true
-        jobParams.pr.commitContext = '(Prod) Launch Image Checks'
+        jobParams.pr.commitContext = '(Prod) Retrieve and Launch Image Checks'
         jobParams.env.put('PROD_CI', true)
     } else if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
         jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))

@@ -207,12 +207,13 @@ Feature: kogito-s2i-builder image JVM build tests
     And container log should contain Started DemoApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
+  @wip
   Scenario: Perform a incremental s2i build using springboot runtime type
     Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-springboot-examples/process-springboot-example with env and incremental using nightly-main
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
-    Then check that page is served
+    And check that page is served
       | property             | value                                                                         |
       | port                 | 8080                                                                          |
       | path                 | /orders                                                                       |
@@ -222,10 +223,7 @@ Feature: kogito-s2i-builder image JVM build tests
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
     And file /home/kogito/bin/process-springboot-example.jar should exist
-
-  # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario: Perform a second incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-springboot-examples/process-springboot-example with env and incremental using nightly-main
+    When s2i build https://github.com/kiegroup/kogito-examples.git from kogito-springboot-examples/process-springboot-example with env and incremental using nightly-main
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |

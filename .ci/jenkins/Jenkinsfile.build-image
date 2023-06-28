@@ -192,7 +192,7 @@ pipeline {
                         docker tag ${builtImageTag} ${testImageTag}
                     """
                     try {
-                        runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${getBuildImageName()} ignore_build=true")
+                        runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${getBuildImageName()} ignore_build=true test_options='--wip'")
                     } catch (err) {
                         unstable "Testing error(s) for image ${getBuildImageName()}"
                     } finally {

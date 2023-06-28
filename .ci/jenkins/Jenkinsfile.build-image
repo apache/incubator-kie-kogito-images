@@ -155,7 +155,6 @@ pipeline {
             steps {
                 script {
                     updateTestsCommand = 'python3 scripts/update-repository.py --tests-only'
-                    updateTestsCommand += getMavenArtifactRepository() ? " --repo-url ${getMavenArtifactRepository()}" : ''
                     updateTestsCommand += getTestsKogitoExamplesRef() ? " --examples-ref ${getTestsKogitoExamplesRef()}" : ''
                     updateTestsCommand += getTestsKogitoExamplesURI() ? " --examples-uri ${getTestsKogitoExamplesURI()}" : ''
 

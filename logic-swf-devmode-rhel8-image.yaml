@@ -6,9 +6,9 @@ description: "Red Hat build of Kogito Serverless Workflow development mode with 
 
 labels:
   - name: "io.quarkus.platform.version"
-    value: "2.16.7.Final"
+    value: "2.13.8.Final"
   - name: "org.kie.kogito.version"
-    value: "2.0.0-SNAPSHOT"
+    value: "1.40.3-SNAPSHOT"
   - name: "io.k8s.description"
     value: "Red Hat build of Kogito Serverless Workflow development mode image with Quarkus extensions libraries preinstalled."
   - name: "io.k8s.display-name"

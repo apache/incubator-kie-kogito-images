@@ -1,6 +1,6 @@
   - name: builder
     from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
-    version: "2.0.0-snapshot"
+    version: "1.41.0-snapshot"
     modules:
       repositories:
         - path: modules
@@ -24,14 +24,14 @@
 
   - name: "quay.io/kiegroup/kogito-swf-devmode"
     from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
-    version: "2.0.0-snapshot"
+    version: "1.41.0-snapshot"
     description: "Kogito Serverless Workflow development mode with Quarkus extensions libraries preinstalled"
 
     labels:
       - name: "io.quarkus.platform.version"
         value: "2.16.7.Final"
       - name: "org.kie.kogito.version"
-        value: "2.0.0-SNAPSHOT"
+        value: "1.41.0-SNAPSHOT"
       - name: "maintainer"
         value: "kogito <bsig-cloud@redhat.com>"
       - name: "io.k8s.description"

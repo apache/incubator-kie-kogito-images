@@ -213,7 +213,6 @@ Feature: kogito-s2i-builder image JVM build tests
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
     And s2i build https://github.com/kiegroup/kogito-examples.git from kogito-springboot-examples/process-springboot-example with env and incremental using nightly-main
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
@@ -226,7 +225,8 @@ Feature: kogito-s2i-builder image JVM build tests
       | request_method       | POST                                                                          |
       | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
       | content_type         | application/json                                                              |
-      | expected_status_code | 201                                                                           |
+      | expected_status_code | 201 
+    And file /home/kogito/bin/process-springboot-example.jar should exist                                                                          |
     And s2i build log should contain Expanding artifacts from incremental build...
     And s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
 

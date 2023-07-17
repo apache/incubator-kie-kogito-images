@@ -213,7 +213,12 @@ Feature: kogito-s2i-builder image JVM build tests
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
-    And check that page is served
+    And file /home/kogito/bin/process-springboot-example.jar should exist
+    And s2i build https://github.com/kiegroup/kogito-examples.git from kogito-springboot-examples/process-springboot-example with env and incremental using nightly-main
+      # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
+      | variable     | value      |
+      | RUNTIME_TYPE | springboot |
+    Then check that page is served
       | property             | value                                                                         |
       | port                 | 8080                                                                          |
       | path                 | /orders                                                                       |
@@ -222,12 +227,7 @@ Feature: kogito-s2i-builder image JVM build tests
       | request_body         | {"approver" : "john", "order" : {"orderNumber" : "12345", "shipped" : false}} |
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
-    And file /home/kogito/bin/process-springboot-example.jar should exist
-    When s2i build https://github.com/kiegroup/kogito-examples.git from kogito-springboot-examples/process-springboot-example with env and incremental using nightly-main
-      # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
-      | variable     | value      |
-      | RUNTIME_TYPE | springboot |
-    Then s2i build log should contain Expanding artifacts from incremental build...
+    And s2i build log should contain Expanding artifacts from incremental build...
     And s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
 
   Scenario: Verify if the s2i build is finished as expected with uber-jar package type built

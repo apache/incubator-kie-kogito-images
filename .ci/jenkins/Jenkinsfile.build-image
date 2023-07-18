@@ -135,9 +135,10 @@ pipeline {
                         cloud.skopeoCopyRegistryImages(imageTag, getBuiltImageTag('latest'), retries)
                     }
                     try {
-                        cloud.skopeoCopyRegistryImages(cloud.getReducedTag(getDeployImageTag()), getBuiltImageTag(reducedTag), retries)
-                    } catch(err) {
-                        echo "Reduced tag cannot be applied"
+                        String reducedTag = cloud.getReducedTag(getDeployImageTag())
+                        cloud.skopeoCopyRegistryImages(imageTag, getBuiltImageTag(reducedTag), retries)
+                    } catch (err) {
+                        echo "Reduced tag cannot be applied: ${err}"
                     }
                 }
             }

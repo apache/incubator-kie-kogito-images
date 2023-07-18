@@ -94,7 +94,14 @@ Closure createBuildAndTestStageClosure(String image) {
 }
 
 String[] getImages() {
-    return ['kogito-s2i-builder']
+    if (env.IMAGES_LIST) {
+        return env.IMAGES_LIST.split(',')
+    }
+    String listCmd = 'make list'
+    if (isProdCI()) {
+        listCmd += ' arg=--prod'
+    }
+    return util.runWithPythonVirtualEnv("${listCmd} | tr '\\n' ','", 'cekit', true).trim().split(',')
 }
 
 boolean isProdCI() {

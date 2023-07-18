@@ -96,7 +96,7 @@ Feature: kogito-s2i-builder image native build tests
     Then s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
     And s2i build log should contain Expanding artifacts from incremental build...
     And s2i build log should contain -J-Xmx5153960755
-    And file /home/kogito/bin/quarkus-run.jar should exist
+    And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
     And check that page is served
       | property        | value                 |
       | port            | 8080                  |

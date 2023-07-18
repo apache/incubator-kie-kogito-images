@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.trusty.redis
-version: "1.41.0"
+version: "1.41.1-snapshot"
 
 # see build-kogito-apps-components.sh script, responsible for build it.
 # called by the Makefile before builds

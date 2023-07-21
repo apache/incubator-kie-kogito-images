@@ -70,6 +70,8 @@ public class RunTests {
     }
 
     public static void main(String... args) throws Exception {
+        // Log docker build. Source: https://github.com/testcontainers/testcontainers-java/issues/3093
+        System.setProperty("org.slf4j.simpleLogger.log.com.github.dockerjava.api.command.BuildImageResultCallback", "debug");
         CommandLineOptions options = new CommandLineOptions();
         options.setSelectedClasses(Collections.singletonList(RunTests.class.getName()));
         options.setReportsDir(Paths.get(getOutputDir()));

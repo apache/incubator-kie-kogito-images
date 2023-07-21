@@ -219,23 +219,11 @@ void makeQuayNewImagesPublic() {
 }
 
 void createRelease() {
-    if (isReleaseExist()) {
-        deleteRelease()
+    if(githubscm.isReleaseExist(getGitTag(), getGitAuthorCredsID())) {
+        githubscm.deleteReleaseAndTag(getGitTag(), getGitAuthorCredsID())
     }
-
-    if (githubscm.isTagExist('origin', getGitTag())) {
-        githubscm.removeLocalTag(getGitTag())
-        githubscm.removeRemoteTag('origin', getGitTag(), getGitAuthorCredsID())
-    }
-
-    def releaseName = "Kogito Images Version ${getProjectVersion()}"
-    def description = params.RELEASE_NOTES ?: "We are glad to announce that the Kogito ${getProjectVersion()} release is now available!"
-    withCredentials([string(credentialsId: env.GITHUB_TOKEN_CREDS_ID, variable: 'GITHUB_TOKEN')]) {
-        sh """
-            export GITHUB_USER=${getGitAuthor()}
-            github-release release --tag ${getGitTag()} --target '${getBuildBranch()}' --name '${releaseName}' --description '${description}' --pre-release
-        """
-    }
+    githubscm.createReleaseWithGeneratedReleaseNotes(getGitTag(), getBuildBranch(), githubscm.getPreviousTag(getGitTag()), getGitAuthorCredsID())
+    githubscm.updateReleaseBody(getGitTag(), getGitAuthorCredsID())
 }
 
 boolean isReleaseExist() {

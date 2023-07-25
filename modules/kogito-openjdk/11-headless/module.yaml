@@ -25,4 +25,5 @@ execute:
 
 packages:
   install:
+    - tzdata-java
     - java-11-openjdk-headless

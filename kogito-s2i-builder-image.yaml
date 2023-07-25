@@ -80,5 +80,3 @@ ports:
 run:
   workdir: "/home/kogito"
   user: 1001
-  cmd:
-    - "/usr/local/s2i/run"

@@ -313,6 +313,6 @@ void setupProdUpdateVersionJob() {
 void setupQuarkusUpdateJob(boolean isProdCI = false) {
     def prodFlag = isProdCI ? '--prod' : ''
     KogitoJobUtils.createQuarkusUpdateToolsJob(this, 'kogito-images', [:], [:], [], [
-        "source ~/virtenvs/cekit/bin/activate && python3 scripts/update-repository.py --quarkus-platform-version ${prodFlag} %new_version%"
+        "source ~/virtenvs/cekit/bin/activate && python3 scripts/update-repository.py --quarkus-platform-version %new_version% ${prodFlag}"
     ])
 }

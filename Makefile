@@ -9,7 +9,10 @@ NATIVE := true
 clone-repos:
 # if the NO_TEST env defined, proceed with the tests, as first step prepare the repo to be used
 ifneq ($(ignore_test),true)
-	cd tests/test-apps && sh clone-repo.sh $(NATIVE)
+ifneq ($(ignore_test_prepare),true)
+	cd tests/test-apps && export CONTAINER_ENGINE=$(BUILD_ENGINE) && sh clone-repo.sh $(NATIVE) $(image_name)
+	cd ../..
+endif
 endif
 
 .PHONY: list

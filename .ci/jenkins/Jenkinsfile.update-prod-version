@@ -86,6 +86,10 @@ String getGitAuthor() {
     return "${GIT_AUTHOR}"
 }
 
+String getGitAuthorCredsID() {
+    retrun env.AUTHOR_CREDS_ID
+}
+
 String getPRBranch() {
     return "${getProdProjectVersion() ?: getBuildBranch()}-${env.PR_BRANCH_HASH}"
 }

@@ -21,10 +21,6 @@ pipeline {
         CONTAINER_ENGINE = 'docker'
         CONTAINER_ENGINE_TLS_OPTIONS = ''
 
-        OPENSHIFT_API = credentials('OPENSHIFT_API')
-        OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
-        OPENSHIFT_CREDS_KEY = 'OPENSHIFT_CREDS'
-
         IMAGE_BUILD_PLATFORMS = 'linux/amd64,linux/arm64'
     }
     stages {
@@ -55,13 +51,8 @@ pipeline {
                     }
 
                     // Login to final registry if deploy is needed
-                    if (shouldDeployImage()) {
-                        if (isDeployImageInOpenshiftRegistry()) {
-                            cloud.loginOpenShift(env.OPENSHIFT_API, env.OPENSHIFT_CREDS_KEY)
-                            cloud.loginOpenshiftRegistry(env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
-                        } else if (getDeployImageRegistryCredentials()) {
-                            cloud.loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials(), env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
-                        }
+                    if (shouldDeployImage() && getDeployImageRegistryCredentials()) {
+                        getContainerEngineService().loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials())
                     }
                 }
             }
@@ -107,7 +98,7 @@ pipeline {
                 script {
                     updateGithubCommitStatus('PENDING', 'Build in progress')
 
-                    String localRegistry = cloud.startLocalRegistry()
+                    String localRegistry = getContainerEngineService().startLocalRegistry()
                     cloud.prepareForDockerMultiplatformBuild([localRegistry],[cloud.getDockerIOMirrorRegistryConfig()], false)
 
                     // Generate the Dockerfile
@@ -214,11 +205,16 @@ pipeline {
     }
 }
 
+ContainerEngineService getContainerEngineService() {
+    return new ContainerEngineService(this)
+}
+
 void clean() {
-    util.cleanNode(env.CONTAINER_ENGINE)
+    util.cleanNode()
+    getContainerEngineService().clean()
+    getContainerEngineService().cleanLocalRegistry()
 
     cloud.cleanDockerMultiplatformBuild()
-    cloud.cleanLocalRegistry()
     cloud.cleanSkopeo()
 
     // Clean Cekit cache, in case we reuse an old node
@@ -260,20 +256,16 @@ void runPythonCommand(String cmd, boolean stdout = false) {
 // Deploy image information
 ////////////////////////////////////////////////////////////////////////
 
-boolean isDeployImageInOpenshiftRegistry() {
-    return params.DEPLOY_IMAGE_USE_OPENSHIFT_REGISTRY
-}
-
 String getDeployImageRegistryCredentials() {
     return params.DEPLOY_IMAGE_REGISTRY_CREDENTIALS
 }
 
 String getDeployImageRegistry() {
-    return isDeployImageInOpenshiftRegistry() ? env.OPENSHIFT_REGISTRY : params.DEPLOY_IMAGE_REGISTRY
+    return params.DEPLOY_IMAGE_REGISTRY
 }
 
 String getDeployImageNamespace() {
-    return isDeployImageInOpenshiftRegistry() ? 'openshift' : params.DEPLOY_IMAGE_NAMESPACE
+    return params.DEPLOY_IMAGE_NAMESPACE
 }
 
 String getDeployImageNameSuffix() {

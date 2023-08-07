@@ -1,6 +1,6 @@
   - name: builder
     from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
-    version: "1.42.0"
+    version: "1.42.1-snapshot"
     modules:
       repositories:
         - path: modules
@@ -24,7 +24,7 @@
 
   - name: "quay.io/kiegroup/kogito-swf-builder"
     from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
-    version: "1.42.0"
+    version: "1.42.1-snapshot"
     description: "Kogito Serverless Workflow base builder with Quarkus extensions libraries preinstalled"
 
     labels:
@@ -35,7 +35,7 @@
       - name: "io.quarkus.platform.version"
         value: "2.16.8.Final"
       - name: "org.kie.kogito.version"
-        value: "1.42.0.Final"
+        value: "1.42.1-SNAPSHOT"
       - name: "maintainer"
         value: "kogito <bsig-cloud@redhat.com>"
       - name: "io.k8s.description"

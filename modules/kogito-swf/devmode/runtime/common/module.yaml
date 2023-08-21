@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.swf.devmode.runtime.common
-version: "1.43.0-snapshot"
+version: "1.43.0"
 description: "Kogito Serverless Workflow devmode common module"
 
 execute:

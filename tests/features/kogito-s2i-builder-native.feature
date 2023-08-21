@@ -15,7 +15,7 @@ Feature: kogito-s2i-builder image native build tests
     And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 22.3.2
 
   Scenario: Verify if the s2i build is finished as expected using native build and runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using 1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable     | value      |
       | NATIVE       | true       |
       | RUNTIME_TYPE | quarkus    |
@@ -33,7 +33,7 @@ Feature: kogito-s2i-builder image native build tests
     And s2i build log should contain -J-Xmx2576980378
 
   Scenario: Verify if the s2i build is finished as expected using native build and no runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-1.43.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using 1.43.x
       | variable | value          |
       | NATIVE       | true       |
       | RUNTIME_TYPE | quarkus    |
@@ -53,7 +53,7 @@ Feature: kogito-s2i-builder image native build tests
     And s2i build log should contain -J-Xmx2576980378
 
   Scenario: Verify if the s2i build is finished as expected performing a native build and if it is listening on the expected port, test uses custom properties file to test the port configuration.
-    Given s2i build /tmp/kogito-examples from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
+    Given s2i build /tmp/kogito-examples from kogito-quarkus-examples/rules-quarkus-helloworld using 1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable     | value      |
       | NATIVE       | true       |
       | RUNTIME_TYPE | quarkus    |
@@ -71,7 +71,7 @@ Feature: kogito-s2i-builder image native build tests
     And s2i build log should contain -J-Xmx5153960755
 
   Scenario: Verify if the s2i build is finished as expected performing a native build with persistence enabled - Step 1: build the application and copy to the runtime image
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/process-quarkus-example using nightly-1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/process-quarkus-example using 1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable          | value         |
       | RUNTIME_TYPE      | quarkus       |
       | NATIVE            | true          |
@@ -84,11 +84,11 @@ Feature: kogito-s2i-builder image native build tests
      And s2i build log should contain -J-Xmx5153960755
 
   Scenario: Perform an incremental s2i build for native test
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld with env and incremental using nightly-1.43.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld with env and incremental using 1.43.x
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
-    And s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld with env and incremental using nightly-1.43.x
+    And s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld with env and incremental using 1.43.x
       | variable     | value      |
       | RUNTIME_TYPE | quarkus    |
       | NATIVE       | true       |
@@ -108,12 +108,12 @@ Feature: kogito-s2i-builder image native build tests
       | expected_phrase | ["hello","world"]     |    
 
   Scenario: Verify that the Kogito Maven archetype is generating the project and compiling it correctly using native build
-    Given s2i build /tmp/kogito-examples from dmn-example using nightly-1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
+    Given s2i build /tmp/kogito-examples from dmn-example using 1.43.x and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
       | variable       | value          |
       | RUNTIME_TYPE   | quarkus        |
       | NATIVE         | true           |
       | LIMIT_MEMORY   | 6442450944     |
-      | KOGITO_VERSION | 1.43.0-SNAPSHOT |    
+      | KOGITO_VERSION | 1.43.0.Final |     
     Then file /home/kogito/bin/project-1.0-SNAPSHOT-runner should exist
     And check that page is served
       | property        | value                                                                                            |

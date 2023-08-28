@@ -86,26 +86,12 @@ Feature: kogito-builder image JVM build tests
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
 
-  Scenario: Perform a incremental s2i build using quarkus runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using nightly-1.13.x-blue
+  Scenario: Perform an incremental s2i build using quarkus runtime type
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
-    Then s2i build log should not contain WARNING: Clean build will be performed because of error saving previous build artifacts
-    And file /home/kogito/bin/quarkus-run.jar should exist
-    And check that page is served
-      | property        | value                 |
-      | port            | 8080                  |
-      | path            | /hello                |
-      | request_method  | POST                  |
-      | content_type    | application/json      |
-      | request_body    | {"strings":["hello"]} |
-      | wait            | 80                    |
-      | expected_phrase | ["hello","world"]     |
-
-  # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario: Perform a second incremental s2i build using quarkus runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using nightly-1.13.x-blue
+    And s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
@@ -199,25 +185,12 @@ Feature: kogito-builder image JVM build tests
     And container log should contain Started KogitoSpringbootApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
-  Scenario: Perform a incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from ruleunit-springboot-example with env and incremental using nightly-1.13.x-blue
+  Scenario: Perform an incremental s2i build using springboot runtime type
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.13.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
-    Then check that page is served
-      | property             | value                                                                                                                      |
-      | port                 | 8080                                                                                                                       |
-      | path                 | /find-approved                                                                                                             |
-      | wait                 | 80                                                                                                                         |
-      | request_method       | POST                                                                                                                       |
-      | request_body         | {"maxAmount":5000,"loanApplications":[{"id":"ABC10001","amount":2000,"deposit":100,"applicant":{"age":45,"name":"John"}}]} |
-      | content_type         | application/json                                                                                                           |
-      | expected_status_code | 200                                                                                                                        |
-    And file /home/kogito/bin/ruleunit-springboot-example.jar should exist
-
-  # Since the same image is used we can do a subsequent incremental build and verify if it is working as expected.
-  Scenario: Perform a second incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from ruleunit-springboot-example with env and incremental using nightly-1.13.x-blue
+    And s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.13.x
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |

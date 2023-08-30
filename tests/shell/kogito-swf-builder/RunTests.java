@@ -67,6 +67,7 @@ public class RunTests {
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
         assertEquals(201, response.statusCode());
+        greetBuiltImage.stop();
     }
 
     @Container
@@ -91,6 +92,7 @@ public class RunTests {
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
         assertEquals(201, response.statusCode());
+        greetWithInputSchemaBuiltImage.stop();
     }
 
     public static void main(String... args) throws Exception {

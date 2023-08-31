@@ -48,10 +48,11 @@ Feature: Common tests for Kogito images
     And container log should match regex -Xmx512m
 
   Scenario: Verify if Java Remote Debug is correctly configured
-   When container is started with args
-      | arg       | value                   |
-      | command   | bash -c "sleep 2s; /home/kogito/kogito-app-launch.sh"                  |
-      | env_json  | {"SCRIPT_DEBUG":"true", "JAVA_DEBUG":"true", "JAVA_DEBUG_PORT":"9222"} |
+    When container is started with env
+      | variable        | value |
+      | SCRIPT_DEBUG    | true  |
+      | JAVA_DEBUG      | true  |
+      | JAVA_DEBUG_PORT | 9222  |
     Then container log should match regex -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=9222
 
   Scenario: Verify if the DEFAULT MEM RATIO properties are overridden with different values from user provided Xmx and Xms

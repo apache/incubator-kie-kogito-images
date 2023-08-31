@@ -61,6 +61,7 @@ cp /tmp/kogito-examples/dmn-quarkus-example/src/main/resources/* /tmp/kogito-exa
 cp "${SCRIPT_DIR}"/application.properties /tmp/kogito-examples/rules-quarkus-helloworld/src/main/resources/META-INF/
 (echo ""; echo "server.port=10000") >> /tmp/kogito-examples/ruleunit-springboot-example/src/main/resources/application.properties
 
+git config commit.gpgsign false
 git add --all  :/
 git commit -am "test"
 

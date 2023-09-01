@@ -16,6 +16,12 @@ quarkus_platform_groupid="${2}"
 quarkus_platform_version="${3}"
 kogito_version="${KOGITO_VERSION:-${4}}"
 
+# GAV of maven plugins to be injected in the plugin management section
+maven_plugins_gav=("org.apache.maven.plugins:maven-resources-plugin:3.3.1" "org.apache.maven.plugins:maven-install-plugin:3.1.1" "org.apache.maven.plugins:maven-jar-plugin:3.3.0" "org.apache.maven.plugins:maven-clean-plugin:3.3.1")
+
+# Properties to be replaced in the pom by the new versions
+properties_with_versions=("compiler-plugin.version:3.11.0" "surefire-plugin.version:3.1.2")
+
 # arch specific dependencies
 quarkus_extensions_arch_specific="com.aayushatharva.brotli4j:native-linux-aarch64:1.8.0"
 # common extensions used by the kogito-swf-builder and kogito-swf-devmode
@@ -74,6 +80,9 @@ mvn ${MAVEN_OPTIONS} \
     -Dextensions="${quarkus_extensions}" \
     "${quarkus_platform_groupid}":quarkus-maven-plugin:"${quarkus_platform_version}":create
 
+# backup original pom
+cp serverless-workflow-project/pom.xml serverless-workflow-project/pom.xml.bak
+
 # Fix as we cannot rely on Quarkus platform
 # Should be removed once https://issues.redhat.com/browse/KOGITO-9120 is implemented
 if [ ! -z ${kogito_version} ]; then
@@ -89,11 +98,68 @@ if [ ! -z ${kogito_version} ]; then
     replace_3="        <version>${kogito_version}<\/version>\n"
     complete_replace="$replace_1$replace_2$replace_3"
 
-    sed -i.bak -e "/$pattern_1/{
+    sed -i -e "/$pattern_1/{
         N;N;N
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml
 fi
+
+
+# Inject empty plugin management section if not present in the pom.xml
+if ! grep -q "<pluginManagement>" "serverless-workflow-project/pom.xml"; then
+    echo "Injecting empty plugin Management section as it does not exist in pom"
+    pattern_1="[ ]*<build>"
+    complete_pattern="$pattern_1"
+
+    replace_1="  <\build>\n"
+    replace_2="    <pluginManagement>\n"
+    replace_3="      <plugins>\n"
+    replace_4="      <\/plugins>\n"
+    replace_5="    <\/pluginManagement>"
+    complete_replace="$replace_1$replace_2$replace_3$replace_4$replace_5"
+
+    sed -i -e "/$pattern_1/{
+        N;N;N
+        s/$complete_pattern/$complete_replace/
+        }" serverless-workflow-project/pom.xml
+fi
+
+# Inject maven plugins into plugin management section
+for gav in ${maven_plugins_gav[@]}; do
+    group_id=$(echo $gav | cut -f1 -d:)
+    artifact_id=$(echo $gav | cut -f2 -d:)
+    version=$(echo $gav | cut -f3 -d:)
+
+    echo "Injecting ${gav} in plugin management section"
+    pattern_1="[ ]*<pluginManagement>"
+    pattern_2="[ ]*<plugins>"
+    complete_pattern="$pattern_1\n$pattern_2"
+
+    replace_1="    <pluginManagement>\n"
+    replace_2="      <plugins>\n"
+    replace_3="        <plugin>\n"
+    replace_4="          <groupId>${group_id}<\/groupId>\n"
+    replace_5="          <artifactId>${artifact_id}<\/artifactId>\n"
+    replace_6="          <version>${version}<\/version>\n"
+    replace_7="        <\/plugin>"
+    complete_replace="$replace_1$replace_2$replace_3$replace_4$replace_5$replace_6$replace_7"
+
+    sed -i -e "/$pattern_1/{
+        N;N;N
+        s/$complete_pattern/$complete_replace/
+        }" serverless-workflow-project/pom.xml
+done
+
+# Replace properties values by new values
+for property_with_version in ${properties_with_versions[@]}; do
+    property=$(echo $property_with_version | cut -f1 -d:)
+    new_version=$(echo $property_with_version | cut -f2 -d:)
+
+    echo "Replacing property ${property} with value ${new_version}"
+    complete_pattern="[ ]*<${property}>.*<\/${property}>"
+    complete_replace="    <${property}>${new_version}<\/${property}>"
+    sed -i "s/$complete_pattern/$complete_replace/g" serverless-workflow-project/pom.xml
+done
 
 echo "Build quarkus app"
 cd "serverless-workflow-project"
@@ -103,7 +169,7 @@ mvn ${MAVEN_OPTIONS} \
     -DskipTests \
     -Dmaven.repo.local=${mvn_local_repo} \
     -Dquarkus.container-image.build=false \
-    install
+    clean install
 
 cd ${build_target_dir}
 

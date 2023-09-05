@@ -4,7 +4,7 @@ QUAY_REGISTRY = 'quay.io'
 
 pipeline {
     agent {
-        label 'kie-rhel8 && docker && !built-in'
+        label 'ubuntu'
     }
     tools {
         maven env.BUILD_MAVEN_TOOL

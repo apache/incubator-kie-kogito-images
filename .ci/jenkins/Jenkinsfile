@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label 'rhel8 && !built-in'
+        label 'ubuntu'
     }
     tools {
         maven env.BUILD_MAVEN_TOOL

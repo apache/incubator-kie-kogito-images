@@ -3,7 +3,7 @@ import org.jenkinsci.plugins.workflow.libs.Library
 
 pipeline {
     agent {
-        label 'rhel8 && podman && !built-in'
+        label 'ubuntu'
     }
 
     // Needed for local build

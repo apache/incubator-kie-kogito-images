@@ -10,7 +10,7 @@ TEST_FAILED_IMAGES = []
 
 pipeline {
     agent {
-        label 'rhel8 && !built-in'
+        label 'ubuntu'
     }
 
     // Needed for local build

@@ -35,8 +35,8 @@ pipeline {
         JAVA_HOME = "${GRAALVM_HOME}"
 
         // Linked to node label
-        CONTAINER_ENGINE='docker'
-        CONTAINER_ENGINE_TLS_OPTIONS=''
+        CONTAINER_ENGINE = 'docker'
+        CONTAINER_ENGINE_TLS_OPTIONS = ''
 
         OPENSHIFT_API = credentials('OPENSHIFT_API')
         OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')

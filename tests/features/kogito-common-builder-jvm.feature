@@ -87,11 +87,11 @@ Feature: kogito-builder image JVM build tests
     And file /home/kogito/bin/quarkus-run.jar should exist
 
   Scenario: Perform an incremental s2i build using quarkus runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x-blue
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
-    And s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x
+    And s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x-blue
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
@@ -185,11 +185,11 @@ Feature: kogito-builder image JVM build tests
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
 
   Scenario: Perform an incremental s2i build using springboot runtime type
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.13.x
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.13.x-blue
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |
-    And s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.13.x
+    And s2i build https://github.com/kiegroup/kogito-examples.git from process-springboot-example with env and incremental using 1.13.x-blue
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
       | variable     | value      |
       | RUNTIME_TYPE | springboot |

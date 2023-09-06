@@ -51,9 +51,9 @@ setupProdUpdateVersionJob()
 void setupPrJob(boolean isProdCI = false, boolean isNextBranch = false) {
     def jobParams = getDefaultJobParams()
     jobParams.pr.putAll([
-            run_only_for_branches: [ Utils.getGitBranch(this) ],
-            disable_status_message_error: true,
-            disable_status_message_failure: true,
+        run_only_for_branches: [ Utils.getGitBranch(this) ],
+        disable_status_message_error: true,
+        disable_status_message_failure: true,
     ])
     if (isProdCI) {
         jobParams.job.name += '.prod'

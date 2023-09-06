@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.rhpam.prod.profile
-version: '7.13.4'
+version: '7.13.5'
 description: Holds custom configurations for productized Kogito images. Add as first module to be installed.
 
 envs:

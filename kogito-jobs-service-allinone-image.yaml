@@ -1,13 +1,13 @@
 schema_version: 1
 
 name: "quay.io/kiegroup/kogito-jobs-service-allinone"
-version: "1.44.0-snapshot"
+version: "1.44.0"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
 description: "Runtime image for Kogito Jobs Service with all available jdbc providers"
 
 labels:
   - name: "org.kie.kogito.version"
-    value: "1.44.0-SNAPSHOT"
+    value: "1.44.0.Final"
   - name: "maintainer"
     value: "kogito <bsig-cloud@redhat.com>"
   - name: "io.k8s.description"

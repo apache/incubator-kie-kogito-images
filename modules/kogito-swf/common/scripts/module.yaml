@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.swf.common.scripts
-version: "1.44.0-snapshot"
+version: "1.44.0"
 description: "Kogito Serverless Workflow image common scripts"
 
 envs:

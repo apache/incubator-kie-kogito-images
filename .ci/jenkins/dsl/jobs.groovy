@@ -40,22 +40,23 @@ setupQuarkusUpdateJob()
 void setupPrJob() {
     setupBuildImageJob(JobType.PULL_REQUEST)
 
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images PR check")
-    JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
-    jobParams.pr.putAll([
-        run_only_for_branches: [ "${GIT_BRANCH}" ],
-        disable_status_message_error: true,
-        disable_status_message_failure: true,
-        commitContext: 'Retrieve and Launch Image Checks',
-        contextShowtestResults: false,
-    ])
-    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
-        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
-    }
-    jobParams.env.putAll([
-        AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
-    ])
-    KogitoJobTemplate.createPRJob(this, jobParams)
+    // TODO create PR job with branch source plugin
+    // def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images PR check")
+    // JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
+    // jobParams.pr.putAll([
+    //     run_only_for_branches: [ "${GIT_BRANCH}" ],
+    //     disable_status_message_error: true,
+    //     disable_status_message_failure: true,
+    //     commitContext: 'Retrieve and Launch Image Checks',
+    //     contextShowtestResults: false,
+    // ])
+    // if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+    //     jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
+    // }
+    // jobParams.env.putAll([
+    //     AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
+    // ])
+    // KogitoJobTemplate.createPRJob(this, jobParams)
 }
 
 void createSetupBranchJob() {

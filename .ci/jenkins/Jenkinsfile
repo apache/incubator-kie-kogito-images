@@ -56,7 +56,7 @@ pipeline {
         }
         unsuccessful {
             script {
-                pullrequest.postComment(util.getMarkdownTestSummary(isProdCI() ? 'Prod' : 'PR', '', "${BUILD_URL}", 'GITHUB'))
+                pullrequest.postComment(util.getMarkdownTestSummary('PR', "${BUILD_URL}", 'GITHUB'))
             }
         }
     }
@@ -97,15 +97,7 @@ String[] getImages() {
     if (env.IMAGES_LIST) {
         return env.IMAGES_LIST.split(',')
     }
-    String listCmd = 'make list'
-    if (isProdCI()) {
-        listCmd += ' arg=--prod'
-    }
-    return util.runWithPythonVirtualEnv("${listCmd} | tr '\\n' ','", 'cekit', true).trim().split(',')
-}
-
-boolean isProdCI() {
-    return env.PROD_CI ? env.PROD_CI.toBoolean() : false
+    return util.runWithPythonVirtualEnv("make list | tr '\\n' ','", 'cekit', true).trim().split(',')
 }
 
 String getChangeAuthor() {

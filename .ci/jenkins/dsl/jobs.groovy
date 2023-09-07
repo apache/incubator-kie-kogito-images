@@ -30,12 +30,6 @@ KogitoJobUtils.createEnvironmentIntegrationBranchNightlyJob(this, 'quarkus-lts')
 setupDeployJob(JobType.RELEASE)
 setupPromoteJob(JobType.RELEASE)
 
-if (Utils.isProductizedBranch(this)) {
-    setupPrJob(true) // Prod CI job
-    setupProdUpdateVersionJob()
-    setupQuarkusUpdateJob(true) // Prod CI job
-}
-
 // Update quarkus on community
 setupQuarkusUpdateJob()
 
@@ -43,10 +37,10 @@ setupQuarkusUpdateJob()
 // Methods
 /////////////////////////////////////////////////////////////////
 
-void setupPrJob(boolean isProdCI = false) {
-    setupBuildImageJob(JobType.PULL_REQUEST, isProdCI)
+void setupPrJob() {
+    setupBuildImageJob(JobType.PULL_REQUEST)
 
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images${isProdCI ? ' Prod' : ''} PR check")
+    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images PR check")
     JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
     jobParams.pr.putAll([
         run_only_for_branches: [ "${GIT_BRANCH}" ],
@@ -55,13 +49,7 @@ void setupPrJob(boolean isProdCI = false) {
         commitContext: 'Retrieve and Launch Image Checks',
         contextShowtestResults: false,
     ])
-    if (isProdCI) {
-        jobParams.job.name += '.prod'
-        jobParams.pr.trigger_phrase = '.*[j|J]enkins,?.*(rerun|run) [prod|Prod|PROD].*'
-        jobParams.pr.trigger_phrase_only = true
-        jobParams.pr.commitContext = '(Prod) Retrieve and Launch Image Checks'
-        jobParams.env.put('PROD_CI', true)
-    } else if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
         jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
     }
     jobParams.env.putAll([
@@ -158,7 +146,7 @@ void setupDeployJob(JobType jobType) {
     }
 }
 
-void setupBuildImageJob(JobType jobType, boolean prodCI = false) {
+void setupBuildImageJob(JobType jobType) {
     def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images.build-image', jobType, "${jenkins_path}/Jenkinsfile.build-image", 'Kogito Images Build single image')
     // Use jenkinsfile from the build branch
     jobParams.git.author = '${SOURCE_AUTHOR}'
@@ -167,7 +155,6 @@ void setupBuildImageJob(JobType jobType, boolean prodCI = false) {
     jobParams.env.putAll([
         MAX_REGISTRY_RETRIES: 3,
         TARGET_AUTHOR: Utils.getGitAuthor(this), // In case of a PR to merge with target branch
-        PROD_CI: prodCI,
 
         AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
         AUTHOR_TOKEN_CREDS_ID: "${GIT_AUTHOR_TOKEN_CREDENTIALS_ID}",
@@ -286,9 +273,8 @@ void setupProdUpdateVersionJob() {
     }
 }
 
-void setupQuarkusUpdateJob(boolean isProdCI = false) {
-    def prodFlag = isProdCI ? '--prod' : ''
+void setupQuarkusUpdateJob() {
     KogitoJobUtils.createQuarkusUpdateToolsJob(this, 'kogito-images', [:], [:], [], [
-        "source ~/virtenvs/cekit/bin/activate && python3 scripts/update-repository.py --quarkus-platform-version %new_version% ${prodFlag}"
+        "source ~/virtenvs/cekit/bin/activate && python3 scripts/update-repository.py --quarkus-platform-version %new_version%"
     ])
 }

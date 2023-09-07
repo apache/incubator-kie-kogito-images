@@ -49,11 +49,6 @@ pipeline {
                     }
                     updateGithubCommitStatus('PENDING', 'Started')
 
-                    if (isProdCI()) {
-                        // Prod fix to be able to build the image as a community one
-                        sh "echo '' > content_sets.yaml"
-                    }
-
                     // Login to final registry if deploy is needed
                     if (shouldDeployImage()) {
                         if (isDeployImageInOpenshiftRegistry()) {
@@ -362,10 +357,6 @@ List getImageBuildPlatforms() {
 
 String getMavenArtifactRepository() {
     return params.MAVEN_ARTIFACTS_REPOSITORY
-}
-
-boolean isProdCI() {
-    return env.PROD_CI ? Boolean.parseBoolean(env.PROD_CI) : false
 }
 
 String getQuarkusPlatformURL() {

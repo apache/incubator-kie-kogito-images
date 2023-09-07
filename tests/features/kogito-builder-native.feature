@@ -84,11 +84,11 @@ Feature: kogito-builder image native build tests
 #      And s2i build log should contain -J-Xmx5153960755
 
   Scenario: Perform an incremental s2i build for native test
-    Given s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld with env and incremental using nightly-main
+    Given s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x-blue
       | variable     | value   |
       | RUNTIME_TYPE | quarkus |
       | NATIVE       | false   |
-    And s2i build https://github.com/kiegroup/kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld with env and incremental using nightly-main
+    And s2i build https://github.com/kiegroup/kogito-examples.git from rules-quarkus-helloworld with env and incremental using 1.13.x-blue
       | variable     | value      |
       | RUNTIME_TYPE | quarkus    |
       | NATIVE       | true       |

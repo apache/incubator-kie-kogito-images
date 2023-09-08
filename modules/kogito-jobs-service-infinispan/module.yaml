@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.infinispan
-version: "1.44.0-snapshot"
+version: "1.44.1"
 
 # see build-kogito-apps-components.sh script, responsible for build it.
 # called by the Makefile before builds

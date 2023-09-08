@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.swf.builder.runtime.community
-version: "1.44.0-snapshot"
+version: "1.44.1"
 description: "Kogito Serverless Workflow builder runtime module"
 
 artifacts:

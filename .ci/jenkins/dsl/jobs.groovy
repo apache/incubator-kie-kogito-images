@@ -17,7 +17,8 @@ import org.kie.jenkins.jobdsl.Utils
 jenkins_path = '.ci/jenkins'
 
 // PR checks
-setupPrJob()
+// TODO create PR job with branch source plugin
+// setupPrJob()
 
 // Init branch
 createSetupBranchJob()
@@ -40,28 +41,27 @@ setupQuarkusUpdateJob()
 void setupPrJob() {
     setupBuildImageJob(JobType.PULL_REQUEST)
 
-    // TODO create PR job with branch source plugin
-    // def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images PR check")
-    // JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
-    // jobParams.pr.putAll([
-    //     run_only_for_branches: [ "${GIT_BRANCH}" ],
-    //     disable_status_message_error: true,
-    //     disable_status_message_failure: true,
-    //     commitContext: 'Retrieve and Launch Image Checks',
-    //     contextShowtestResults: false,
-    // ])
-    // if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
-    //     jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
-    // }
-    // jobParams.env.putAll([
-    //     AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
-    // ])
-    // KogitoJobTemplate.createPRJob(this, jobParams)
+    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images PR check")
+    JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
+    jobParams.pr.putAll([
+        run_only_for_branches: [ "${GIT_BRANCH}" ],
+        disable_status_message_error: true,
+        disable_status_message_failure: true,
+        commitContext: 'Retrieve and Launch Image Checks',
+        contextShowtestResults: false,
+    ])
+    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
+    }
+    jobParams.env.putAll([
+        AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
+    ])
+    KogitoJobTemplate.createPRJob(this, jobParams)
 }
 
 void createSetupBranchJob() {
     def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.SETUP_BRANCH, "${jenkins_path}/Jenkinsfile.setup-branch", 'Kogito Images Init Branch')
-    JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
+    JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         REPO_NAME: 'kogito-images',
         GIT_AUTHOR: "${GIT_AUTHOR_NAME}",
@@ -91,7 +91,7 @@ void setupDeployJob(JobType jobType) {
     setupBuildImageJob(jobType)
 
     def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images-deploy', jobType, "${jenkins_path}/Jenkinsfile.deploy", 'Kogito Images Deploy')
-    JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
+    JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         PROPERTIES_FILE_NAME: 'deployment.properties',
 
@@ -152,7 +152,7 @@ void setupBuildImageJob(JobType jobType) {
     // Use jenkinsfile from the build branch
     jobParams.git.author = '${SOURCE_AUTHOR}'
     jobParams.git.branch = '${SOURCE_BRANCH}'
-    JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
+    JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         MAX_REGISTRY_RETRIES: 3,
         TARGET_AUTHOR: Utils.getGitAuthor(this), // In case of a PR to merge with target branch
@@ -199,6 +199,7 @@ void setupBuildImageJob(JobType jobType) {
 
 void setupPromoteJob(JobType jobType) {
     def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images-promote', jobType, "${jenkins_path}/Jenkinsfile.promote", 'Kogito Images Promote')
+    JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         REPO_NAME: 'kogito-images',
         PROPERTIES_FILE_NAME: 'deployment.properties',
@@ -252,24 +253,6 @@ void setupPromoteJob(JobType jobType) {
             stringParam('RELEASE_NOTES', '', 'Release notes to be added. If none provided, a default one will be given.')
 
             booleanParam('SEND_NOTIFICATION', false, 'In case you want the pipeline to send a notification on CI channel for this run.')
-        }
-    }
-}
-
-void setupProdUpdateVersionJob() {
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images-update-prod-version', JobType.TOOLS, "${jenkins_path}/Jenkinsfile.update-prod-version", 'Update prod version for Kogito Images')
-    jobParams.env.putAll([
-        REPO_NAME: 'kogito-images',
-
-        BUILD_BRANCH_NAME: "${GIT_BRANCH}",
-        GIT_AUTHOR: "${GIT_AUTHOR_NAME}",
-        AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
-        GITHUB_TOKEN_CREDS_ID: "${GIT_AUTHOR_TOKEN_CREDENTIALS_ID}",
-    ])
-    KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
-        parameters {
-            stringParam('JIRA_NUMBER', '', 'KIECLOUD-XXX or RHPAM-YYYY or else. This will be added to the commit and PR.')
-            stringParam('PROD_PROJECT_VERSION', '', 'Which version to set ?')
         }
     }
 }

@@ -4,18 +4,15 @@ QUAY_REGISTRY = 'quay.io'
 
 pipeline {
     agent {
-        label 'ubuntu'
-    }
-    tools {
-        maven env.BUILD_MAVEN_TOOL
-        jdk env.BUILD_JDK_TOOL
+        docker { 
+            image env.AGENT_DOCKER_BUILDER_IMAGE
+            args env.AGENT_DOCKER_BUILDER_ARGS
+        }
     }
     options {
         timeout(time: 120, unit: 'MINUTES')
     }
     environment {
-        CI = true
-
         // Linked to node label
         // Use docker due to multiplatform build
         CONTAINER_ENGINE = 'docker'
@@ -248,7 +245,7 @@ String getBuiltImageTag(String imageTag = '') {
 }
 
 void runPythonCommand(String cmd, boolean stdout = false) {
-    return util.runWithPythonVirtualEnv(cmd, 'cekit', stdout)
+    return sh(returnStdout: stdout, script: cmd)
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -15,7 +15,7 @@ pipeline {
 
                     sh 'printenv'
                     
-                    githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'kiegroup', getChangeTarget(), true)
+                    githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true)
                 }
             }
         }
@@ -73,7 +73,7 @@ Closure createBuildAndTestStageClosure(String image) {
             buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: getChangeTarget()))
             
-            githubscm.prepareCommitStatusInformationForPullRequest(getRepoName(), getChangeAuthor(), getChangeBranch(), 'kiegroup', getGitAuthorCredentialsId())
+            githubscm.prepareCommitStatusInformationForPullRequest(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getGitAuthorCredentialsId())
             githubscm.updateGithubCommitStatus(image, 'PENDING', 'Queued', getRepoName())
             
             // Keep executing so we can cancel all if needed

@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.system.user
-version: "1.44.1"
+version: "1.44.2-snapshot"
 
 execute:
   - script: add-user

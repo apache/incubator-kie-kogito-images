@@ -1,6 +1,6 @@
 schema_version: 1
 name: org.kie.kogito.jobs.service.mongodb
-version: "1.44.1"
+version: "1.44.2-snapshot"
 
 # see build-kogito-apps-components.sh script, responsible for build it.
 # called by the Makefile before builds

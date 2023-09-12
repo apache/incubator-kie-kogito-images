@@ -80,9 +80,6 @@ mvn ${MAVEN_OPTIONS} \
     -Dextensions="${quarkus_extensions}" \
     "${quarkus_platform_groupid}":quarkus-maven-plugin:"${quarkus_platform_version}":create
 
-# backup original pom
-cp serverless-workflow-project/pom.xml serverless-workflow-project/pom.xml.bak
-
 # Fix as we cannot rely on Quarkus platform
 # Should be removed once https://issues.redhat.com/browse/KOGITO-9120 is implemented
 if [ ! -z ${kogito_version} ]; then
@@ -98,7 +95,7 @@ if [ ! -z ${kogito_version} ]; then
     replace_3="        <version>${kogito_version}<\/version>\n"
     complete_replace="$replace_1$replace_2$replace_3"
 
-    sed -i -e "/$pattern_1/{
+    sed -i.bak -e "/$pattern_1/{
         N;N;N
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml
@@ -118,7 +115,7 @@ if ! grep -q "<pluginManagement>" "serverless-workflow-project/pom.xml"; then
     replace_5="    <\/pluginManagement>"
     complete_replace="$replace_1$replace_2$replace_3$replace_4$replace_5"
 
-    sed -i -e "/$pattern_1/{
+    sed -i.bak -e "/$pattern_1/{
         N;N;N
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml
@@ -144,7 +141,7 @@ for gav in ${maven_plugins_gav[@]}; do
     replace_7="        <\/plugin>"
     complete_replace="$replace_1$replace_2$replace_3$replace_4$replace_5$replace_6$replace_7"
 
-    sed -i -e "/$pattern_1/{
+    sed -i.bak -e "/$pattern_1/{
         N;N;N
         s/$complete_pattern/$complete_replace/
         }" serverless-workflow-project/pom.xml
@@ -158,7 +155,7 @@ for property_with_version in ${properties_with_versions[@]}; do
     echo "Replacing property ${property} with value ${new_version}"
     complete_pattern="[ ]*<${property}>.*<\/${property}>"
     complete_replace="    <${property}>${new_version}<\/${property}>"
-    sed -i "s/$complete_pattern/$complete_replace/g" serverless-workflow-project/pom.xml
+    sed -i.bak "s/$complete_pattern/$complete_replace/g" serverless-workflow-project/pom.xml
 done
 
 echo "Build quarkus app"

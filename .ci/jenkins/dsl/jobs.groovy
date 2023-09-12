@@ -17,8 +17,7 @@ import org.kie.jenkins.jobdsl.Utils
 jenkins_path = '.ci/jenkins'
 
 // PR checks
-// TODO create PR job with branch source plugin
-// setupPrJob()
+Utils.isMainBranch(this) && KogitoJobTemplate.createPullRequestMultibranchPipelineJob(this, "${jenkins_path}/Jenkinsfile")
 
 // Init branch
 createSetupBranchJob()

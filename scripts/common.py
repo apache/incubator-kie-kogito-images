@@ -91,6 +91,7 @@ def update_image_version_tag_in_yaml_file(target_version, yaml_file):
     except TypeError as err:
         print("Unexpected error:", err)
 
+
 def update_image_stream(target_version, prod=False):
     """
     Update the imagestream file, it will update the tag name, version and image tag.
@@ -135,6 +136,7 @@ def get_all_module_dirs():
 
     return modules
 
+
 def get_community_module_dirs():
     """
     Retrieve the Kogito module directories
@@ -145,7 +147,6 @@ def get_community_module_dirs():
             community_modules.append(module_path)
 
     return community_modules
-
 
 
 def get_prod_module_dirs():
@@ -217,7 +218,7 @@ def get_swf_builder_images(is_prod_image):
     Raise an error if the given image is not a supporting service
     """
     if is_prod_image:
-            return PROD_SWF_BUILDER_IMAGES
+        return PROD_SWF_BUILDER_IMAGES
     return SWF_BUILDER_IMAGES
 
 
@@ -231,7 +232,6 @@ def retrieve_version():
 def get_project_versions_module_data():
     """
     Get a specific field value from project versions module file
-    :param field_name: Field to search for
     """
     try:
         project_versions_module_file = os.path.join(PROJECT_VERSIONS_MODULE)
@@ -262,6 +262,7 @@ def update_kogito_modules_version(target_version, prod=False):
 def update_kogito_module_version(module_dir, old_version, target_version):
     """
     Set Kogito module.yaml to given version.
+    :param old_version:
     :param module_dir: directory where cekit modules are hold
     :param target_version: version to set into the module
     """
@@ -280,13 +281,16 @@ def update_kogito_module_version(module_dir, old_version, target_version):
     except TypeError:
         raise
 
+
 def update_quarkus_platform_version_in_build(quarkus_platform_version, prod=False):
     """
     Update quarkus_platform_version version into images/modules
+    :param prod:
     :param quarkus_platform_version: quarkus version to set
     """
     update_env_value(QUARKUS_PLATFORM_VERSION_ENV_KEY, quarkus_platform_version, prod)
     update_label_value(QUARKUS_PLATFORM_VERSION_LABEL_NAME, quarkus_platform_version, prod)
+
 
 def update_quarkus_platform_version_in_behave_tests_repository_paths(quarkus_platform_version):
     """
@@ -299,6 +303,7 @@ def update_quarkus_platform_version_in_behave_tests_repository_paths(quarkus_pla
         'io/quarkus/platform/quarkus-bom/([\d.]+.Final)/quarkus-bom-([\d.]+.Final).pom')
     replacement = 'io/quarkus/platform/quarkus-bom/{}/quarkus-bom-{}.pom'.format(quarkus_platform_version, quarkus_platform_version)
     update_in_behave_tests(pattern, replacement)
+
 
 def update_examples_ref_in_behave_tests(examples_ref):
     """
@@ -323,13 +328,16 @@ def update_examples_uri_in_behave_tests(examples_uri):
     replacement = examples_uri
     update_in_behave_tests(pattern, replacement)
 
+
 def update_artifacts_version_in_build(artifacts_version, prod=False):
     """
     Update artifacts version into modules / images
+    :param prod:
     :param artifacts_version: artifacts version to set
     """
     update_env_value(KOGITO_VERSION_ENV_KEY, artifacts_version, prod)
     update_label_value(KOGITO_VERSION_LABEL_NAME, artifacts_version, prod)
+
 
 def update_artifacts_version_in_behave_tests(artifacts_version):
     """
@@ -384,6 +392,7 @@ def update_maven_mirror_url_in_build_config(mirror_url):
     """
     update_env_value_in_build_config_modules('MAVEN_MIRROR_URL', mirror_url, True)
 
+
 def update_maven_mirror_url_in_quarkus_plugin_behave_tests(mirror_url):
     """
     Update maven mirror url into behave tests
@@ -395,6 +404,7 @@ def update_maven_mirror_url_in_quarkus_plugin_behave_tests(mirror_url):
     replacement = "\g<1>| variable | value |\n      | {} | {} |\n      | MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE | true |\n      | DEBUG | true |".format(
         "MAVEN_MIRROR_URL", mirror_url)
     update_in_behave_tests(pattern, replacement)
+
 
 def update_maven_repo_env_value(repo_url, replace_jboss_repository, prod=False):
     """
@@ -453,6 +463,7 @@ def update_examples_uri_in_clone_repo(examples_uri):
     replacement = "git clone {}".format(examples_uri)
     update_in_file(CLONE_REPO_SCRIPT, pattern, replacement)
 
+
 def update_maven_repo_in_build_config(repo_url, replace_jboss_repository):
     """
     Update maven repository in build config modules
@@ -463,6 +474,7 @@ def update_maven_repo_in_build_config(repo_url, replace_jboss_repository):
     if replace_jboss_repository:
         maven_env_name = 'JBOSS_MAVEN_REPO_URL'
     update_env_value_in_build_config_modules(maven_env_name, repo_url, True)
+
 
 def update_maven_repo_in_setup_maven(repo_url, replace_jboss_repository):
     """
@@ -481,9 +493,11 @@ def update_maven_repo_in_setup_maven(repo_url, replace_jboss_repository):
         replacement = 'export MAVEN_REPO_URL="{}"'.format(repo_url)
     update_in_file(SETUP_MAVEN_SCRIPT, pattern, replacement)
 
+
 def update_env_value(env_name, env_value, prod=False):
     """
     Update environment value into the given yaml module/image file
+    :param prod:
     :param env_name: environment variable name to update
     :param env_value: value to set
     """
@@ -505,6 +519,7 @@ def update_env_value(env_name, env_value, prod=False):
         module_file = os.path.join(module_dir, "module.yaml")
         update_env_value_in_file(module_file, env_name, env_value)
 
+
 def update_env_value_in_file(filename, env_name, env_value):
     """
     Update environment value into the given yaml module/image file
@@ -525,7 +540,7 @@ def update_env_value_in_file(filename, env_name, env_value):
         raise
 
 
-def update_env_value_in_data(data, env_name, env_value, ignore_empty = False):
+def update_env_value_in_data(data, env_name, env_value, ignore_empty=False):
     """
     Update environment variable value in data dict if exists
     :param data: dict to update
@@ -547,7 +562,7 @@ def update_env_value_in_data(data, env_name, env_value, ignore_empty = False):
                     update_field_in_dict(env, 'value', env_value, ignore_empty)
 
 
-def update_env_value_in_build_config_modules(env_name, new_value, ignore_empty = False):
+def update_env_value_in_build_config_modules(env_name, new_value, ignore_empty=False):
     """
     Update environment variable in build config modules
     :param env_name: Environment variable to lookup
@@ -572,9 +587,11 @@ def update_env_value_in_build_config_modules(env_name, new_value, ignore_empty =
         except TypeError:
             raise
 
+
 def update_label_value(label_name, label_value, prod=False):
     """
     Update label value in all module / image files 
+    :param prod:
     :param label_name: label name to update
     :param label_value: value to set
     """
@@ -596,6 +613,7 @@ def update_label_value(label_name, label_value, prod=False):
         module_file = os.path.join(module_dir, "module.yaml")
         update_label_value_in_file(module_file, label_name, label_name)
 
+
 def update_label_value_in_file(filename, label_name, label_value):
     """
     Update label value into the given yaml module/image file
@@ -616,7 +634,7 @@ def update_label_value_in_file(filename, label_name, label_value):
         raise
 
 
-def update_label_value_in_data(data, label_name, label_value, ignore_empty = False):
+def update_label_value_in_data(data, label_name, label_value, ignore_empty=False):
     """
     Update label value in data dict if exists
     :param data: dict to update
@@ -667,7 +685,8 @@ def update_in_file(file, pattern, replacement):
     with open(file, 'w') as fe:
         fe.write(updated_value)
 
-def update_field_in_dict(data, key, new_value, ignore_empty = False):
+
+def update_field_in_dict(data, key, new_value, ignore_empty=False):
     """
     Update version field in given data dict
     :param data: dictionary to update
@@ -683,6 +702,7 @@ def update_field_in_dict(data, key, new_value, ignore_empty = False):
             data[key] = new_value
         else:
             print("Field " + key + " not found, returning...")
+
 
 if __name__ == "__main__":
     print("Community modules:")

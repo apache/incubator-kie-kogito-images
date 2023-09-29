@@ -3,7 +3,7 @@
 # Usage: . setup-maven.sh
 
 MAVEN_VERSION="3.8.x"
-MVN_MODULE="$(dirname "${BASH_SOURCE[0]}")/../modules/kogito-maven/${MAVEN_VERSION}"
+MVN_MODULE="$(dirname "${BASH_SOURCE[0]}")/../modules/kogito-maven/configure"
 export MAVEN_OPTIONS="${BUILD_MVN_OPTS} -DskipTests"
 # Do not remove below, this can be updated by the python scripts
 MAVEN_IGNORE_SELF_SIGNED_CERTIFICATE=true

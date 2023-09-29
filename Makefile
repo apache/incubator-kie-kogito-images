@@ -73,7 +73,7 @@ ifneq ($(ignore_build),true)
 endif
 # if ignore_test is set to true, ignore the tests
 ifneq ($(ignore_test),true)
-	scripts/build-product-image.sh "test" $(image_name) ${test_options}
+	scripts/build-product-image.sh "test" $(image_name) ${test_options} ${BUILD_ENGINE}
 endif
 
 # push images to quay.io, this requires permissions under kiegroup organization

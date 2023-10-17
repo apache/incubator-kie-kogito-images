@@ -4,9 +4,9 @@ deployProperties = [:]
 
 changesDone = false
 
-BUILT_IMAGES = []
-BUILD_FAILED_IMAGES = []
-TEST_FAILED_IMAGES = []
+BUILT_IMAGES = Collections.synchronizedList([])
+BUILD_FAILED_IMAGES = Collections.synchronizedList([])
+TEST_FAILED_IMAGES = Collections.synchronizedList([])
 
 pipeline {
     agent {
@@ -304,21 +304,15 @@ void createBuildAndTestStageClosure(String image) {
 }
 
 void registerBuiltImage(String imageName) {
-    lock("${BUILD_URL} build success") {
-        BUILT_IMAGES.add(imageName)
-    }
+    BUILT_IMAGES.add(imageName)
 }
 
 void registerBuildFailedImage(String imageName) {
-    lock("${BUILD_URL} build failed") {
-        BUILD_FAILED_IMAGES.add(imageName)
-    }
+    BUILD_FAILED_IMAGES.add(imageName)
 }
 
 void registerTestFailedImage(String imageName) {
-    lock("${BUILD_URL} test failed") {
-        TEST_FAILED_IMAGES.add(imageName)
-    }
+    TEST_FAILED_IMAGES.add(imageName)
 }
 
 List getBuiltImages() {

@@ -1,4 +1,4 @@
-IMAGE_VERSION := $(shell python3 scripts/retrieve_version.py)
+IMAGE_VERSION := $(shell python scripts/retrieve_version.py)
 SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"."$$2}')
 KOGITO_APPS_TARGET_BRANCH ?= main
 KOGITO_APPS_TARGET_URI ?= https://github.com/kiegroup/kogito-apps.git
@@ -19,7 +19,7 @@ endif
 
 .PHONY: list
 list:
-	@python3 scripts/list-images.py $(arg)
+	@python scripts/list-images.py $(arg)
 
 .PHONY: display-image-version
 display-image-version:
@@ -99,7 +99,7 @@ endif
 .PHONY: push-staging
 push-staging: build _push-staging
 _push-staging:
-	python3 scripts/push-staging.py ${override}
+	python scripts/push-staging.py ${override}
 
 
 # push to local registry, useful to push the built images to local registry

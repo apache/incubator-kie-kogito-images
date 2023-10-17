@@ -67,12 +67,12 @@ pipeline {
                         env.MAVEN_MIRROR_URL = env.MAVEN_MIRROR_REPOSITORY
 
                         // Ignore self-signed certificates if MAVEN_MIRROR_URL is defined
-                        runPythonCommand("python3 scripts/update-repository.py --build-maven-mirror-url ${MAVEN_MIRROR_URL} --ignore-self-signed-cert")
+                        runPythonCommand("python scripts/update-repository.py --build-maven-mirror-url ${MAVEN_MIRROR_URL} --ignore-self-signed-cert")
                     }
 
                     if (getMavenArtifactRepository()) {
                         echo "Setup Repository url to '${getMavenArtifactRepository()}'"
-                        runPythonCommand("python3 scripts/update-repository.py  --repo-url ${getMavenArtifactRepository()}")
+                        runPythonCommand("python scripts/update-repository.py  --repo-url ${getMavenArtifactRepository()}")
                     }
                 }
             }
@@ -89,7 +89,7 @@ pipeline {
         //                     echo "[WARN] Artifacts repository defined in env will override the quarkus platform URL in tests. Make sure the platform artifacts are available on that artifacts repository (you can use a maven group)"
         //                 }
         //                 // Setup quarkus platform repo configuration
-        //                 runPythonCommand("python3 scripts/update-repository.py --repo-url ${getQuarkusPlatformURL()} --ignore-self-signed-cert --quarkus-platform-version ${quarkusPlatformVersion}")
+        //                 runPythonCommand("python scripts/update-repository.py --repo-url ${getQuarkusPlatformURL()} --ignore-self-signed-cert --quarkus-platform-version ${quarkusPlatformVersion}")
         //             }
         //         }
         //     }
@@ -153,7 +153,7 @@ pipeline {
             }
             steps {
                 script {
-                    updateTestsCommand = 'python3 scripts/update-repository.py --tests-only'
+                    updateTestsCommand = 'python scripts/update-repository.py --tests-only'
                     updateTestsCommand += getMavenArtifactRepository() ? " --repo-url ${getMavenArtifactRepository()}" : ''
                     updateTestsCommand += getTestsKogitoExamplesRef() ? " --examples-ref ${getTestsKogitoExamplesRef()}" : ''
                     updateTestsCommand += getTestsKogitoExamplesURI() ? " --examples-uri ${getTestsKogitoExamplesURI()}" : ''

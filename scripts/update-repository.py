@@ -1,7 +1,7 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 #Script responsible to update the tests with 
 #Should be run from root directory of the repository
-#Sample usage:  python3 scripts/update-tests.py
+#Sample usage:  python scripts/update-tests.py
 
 import sys
 sys.dont_write_bytecode = True

@@ -256,6 +256,6 @@ void setupPromoteJob(JobType jobType) {
 
 void setupQuarkusUpdateJob() {
     KogitoJobUtils.createQuarkusUpdateToolsJob(this, 'kogito-images', [:], [:], [], [
-        "source ~/virtenvs/cekit/bin/activate && python3 scripts/update-repository.py --quarkus-platform-version %new_version%"
+        "python scripts/update-repository.py --quarkus-platform-version %new_version%"
     ])
 }

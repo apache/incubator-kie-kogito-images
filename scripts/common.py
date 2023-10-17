@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # This script defines some common function that are used by manage-kogito-version.py and push-staging.py script
 
 

@@ -14,27 +14,25 @@ pipeline {
             image env.AGENT_DOCKER_BUILDER_IMAGE
             args env.AGENT_DOCKER_BUILDER_ARGS
         }
-    }
+    }    
 
     options {
-        timeout(time: 120, unit: 'MINUTES')
+        timeout(time: 240, unit: 'MINUTES')
     }
 
     environment {
         KOGITO_CI_EMAIL_TO = credentials("${JENKINS_EMAIL_CREDS_ID}")
-
-        OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
     }
 
     stages {
         stage('Initialization') {
             steps {
                 script {
-                    clean()
-
                     currentBuild.displayName = params.DISPLAY_NAME ?: currentBuild.displayName
 
-                    checkoutRepo()
+                    dir(getRepoName()) {
+                        checkoutRepo()
+                    }
 
                     if (isRelease()) {
                         // Verify version is set and if on right release branch
@@ -62,10 +60,12 @@ pipeline {
             }
             steps {
                 script {
-                    if (githubscm.isBranchExist('origin',getPRBranch())) {
-                        githubscm.removeRemoteBranch('origin', getPRBranch())
+                    dir(getRepoName()) {
+                        if (githubscm.isBranchExist('origin',getPRBranch())) {
+                            githubscm.removeRemoteBranch('origin', getPRBranch())
+                        }
+                        githubscm.createBranch(getPRBranch())
                     }
-                    githubscm.createBranch(getPRBranch())
                 }
             }
         }
@@ -76,12 +76,14 @@ pipeline {
             }
             steps {
                 script {
-                    if (getQuarkusPlatformVersion()) {
-                        runPythonCommand("python3 scripts/update-repository.py --quarkus-platform-version ${getQuarkusPlatformVersion()}")
+                    dir(getRepoName()) {
+                        if (getQuarkusPlatformVersion()) {
+                            sh "python scripts/update-repository.py --quarkus-platform-version ${getQuarkusPlatformVersion()}"
 
-                        commitAndPushChanges("Update Quarkus Platform version to ${getQuarkusPlatformVersion()}")
-                    } else {
-                        echo 'No new quarkus version given for the release. Statu quo ...'
+                            commitAndPushChanges("Update Quarkus Platform version to ${getQuarkusPlatformVersion()}")
+                        } else {
+                            echo 'No new quarkus version given for the release. Statu quo ...'
+                        }
                     }
                 }
             }
@@ -93,16 +95,18 @@ pipeline {
             }
             steps {
                 script {
-                    versionCmd = "python3 scripts/manage-kogito-version.py --bump-to ${getProjectVersion()} --confirm"
-                    if (getBuildBranch() != 'main') {
-                        versionCmd += " --examples-ref ${!isRelease() ? 'nightly-' : ''}${getBuildBranch()}"
-                    }
-                    if (getKogitoArtifactsVersion()) {
-                        versionCmd += " --artifacts-version ${getKogitoArtifactsVersion()}"
-                    }
-                    runPythonCommand(versionCmd)
+                    dir(getRepoName()) {
+                        versionCmd = "python scripts/manage-kogito-version.py --bump-to ${getProjectVersion()} --confirm"
+                        if (getBuildBranch() != 'main') {
+                            versionCmd += " --examples-ref ${!isRelease() ? 'nightly-' : ''}${getBuildBranch()}"
+                        }
+                        if (getKogitoArtifactsVersion()) {
+                            versionCmd += " --artifacts-version ${getKogitoArtifactsVersion()}"
+                        }
+                        sh versionCmd
 
-                    commitAndPushChanges("Update project version to ${getProjectVersion()}")
+                        commitAndPushChanges("Update project version to ${getProjectVersion()}")
+                    }
                 }
             }
         }
@@ -110,18 +114,15 @@ pipeline {
         stage('Validate CeKit Image and Modules descriptors') {
             steps {
                 script {
-                    sh '''
-                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.6/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
-                        tar -xzvf cekit-image-validator-runner.tgz
-                        chmod +x cekit-image-validator-runner
-                    '''
-                    sh './cekit-image-validator-runner modules/'
-                    getImages().each { image -> sh "./cekit-image-validator-runner ${image}-image.yaml" }
-                }
-            }
-            post {
-                always {
-                    sh 'rm -rf cekit-image-validator-runner*'
+                    dir(getRepoName()) {
+                        sh '''
+                            curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.6/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+                            tar -xzvf cekit-image-validator-runner.tgz
+                            chmod +x cekit-image-validator-runner
+                        '''
+                        sh './cekit-image-validator-runner modules/'
+                        getImages().each { image -> sh "./cekit-image-validator-runner ${image}-image.yaml" }
+                    }
                 }
             }
         }
@@ -129,11 +130,13 @@ pipeline {
         stage('Build, Push & Test Images') {
             steps {
                 script {
-                    parallelStages = [:]
-                    getImages().each { image ->
-                        parallelStages["Build&Test ${image}"] = createBuildAndTestStageClosure(image)
+                    dir(getRepoName()) {
+                        parallelStages = [:]
+                        getImages().each { image ->
+                            parallelStages["Build&Test ${image}"] = createBuildAndTestStageClosure(image)
+                        }
+                        parallel parallelStages
                     }
-                    parallel parallelStages
                 }
             }
             post {
@@ -159,37 +162,39 @@ pipeline {
             }
             steps {
                 script {
-                    def commitMsg = "[${getBuildBranch()}] Update Maven artifacts"
-                    def prBody = "Generated by build ${BUILD_TAG}: ${BUILD_URL}."
-                    if (isRelease()) {
-                        commitMsg = "[${getBuildBranch()}] Update project version to ${getProjectVersion()}"
-                        prBody += '\nPlease do not merge, it should be merged automatically.'
-                    } else if (currentBuild.currentResult != 'SUCCESS') {
-                        commitMsg += " (${currentBuild.currentResult})"
-                        prBody += '\n\nSuccessful images:\n'
-                        getBuiltImages().each {
-                            prBody += "- ${it}\n"
-                        }
-                        if (getBuildFailedImages()) {
-                            prBody += '\nBuild failures on those images:\n'
-                            getBuildFailedImages().each {
+                    dir(getRepoName()) {
+                        def commitMsg = "[${getBuildBranch()}] Update Maven artifacts"
+                        def prBody = "Generated by build ${BUILD_TAG}: ${BUILD_URL}."
+                        if (isRelease()) {
+                            commitMsg = "[${getBuildBranch()}] Update project version to ${getProjectVersion()}"
+                            prBody += '\nPlease do not merge, it should be merged automatically.'
+                        } else if (currentBuild.currentResult != 'SUCCESS') {
+                            commitMsg += " (${currentBuild.currentResult})"
+                            prBody += '\n\nSuccessful images:\n'
+                            getBuiltImages().each {
                                 prBody += "- ${it}\n"
                             }
-                        } else {
-                            prBody += '\nImages were all successfully built but some other problem occured in the pipeline execution...\n'
-                        }
-                        if (getTestFailedImages()) {
-                            prBody += '\nTest failures on those images:\n'
-                            getTestFailedImages().each {
-                                prBody += "- ${it}\n"
+                            if (getBuildFailedImages()) {
+                                prBody += '\nBuild failures on those images:\n'
+                                getBuildFailedImages().each {
+                                    prBody += "- ${it}\n"
+                                }
+                            } else {
+                                prBody += '\nImages were all successfully built but some other problem occured in the pipeline execution...\n'
                             }
-                        } else {
-                            prBody += '\nImages were all successfully built but some other problem occured in the pipeline execution...\n'
+                            if (getTestFailedImages()) {
+                                prBody += '\nTest failures on those images:\n'
+                                getTestFailedImages().each {
+                                    prBody += "- ${it}\n"
+                                }
+                            } else {
+                                prBody += '\nImages were all successfully built but some other problem occured in the pipeline execution...\n'
+                            }
+                            prBody += '\nSee build url above for more information'
                         }
-                        prBody += '\nSee build url above for more information'
+                        String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getGitAuthorCredsID())
+                        deployProperties["${getRepoName()}.pr.link"] = prLink
                     }
-                    String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getGitAuthorCredsID())
-                    deployProperties["${getRepoName()}.pr.link"] = prLink
                 }
             }
             post {
@@ -224,9 +229,6 @@ pipeline {
         unsuccessful {
             sendUnsuccessfulNotification()
         }
-        cleanup {
-            clean()
-        }
     }
 }
 
@@ -257,10 +259,6 @@ void commitAndPushChanges(String commitMsg) {
     githubscm.commitChanges(commitMsg)
     githubscm.pushObject('origin', getPRBranch(), getGitAuthorCredsID())
     changesDone = true
-}
-
-void clean() {
-    util.cleanNode()
 }
 
 void createBuildAndTestStageClosure(String image) {
@@ -348,7 +346,7 @@ String getDeployImageRegistryCredentials() {
 }
 
 String getDeployImageRegistry() {
-    return isDeployImageInOpenshiftRegistry() ? env.OPENSHIFT_REGISTRY : params.IMAGE_REGISTRY
+    return isDeployImageInOpenshiftRegistry() ? getOpenShiftRegistry() : params.IMAGE_REGISTRY
 }
 String getDeployImageNamespace() {
     return isDeployImageInOpenshiftRegistry() ? 'openshift' : params.IMAGE_NAMESPACE
@@ -404,6 +402,14 @@ String getKogitoArtifactsVersion() {
     return params.KOGITO_ARTIFACTS_VERSION
 }
 
+String getOpenShiftRegistry() {
+    String registry = ''
+    withCredentials([string(credentialsId: 'OPENSHIFT_REGISTRY', variable: 'OPENSHIFT_REGISTRY')]) {
+        registry = env.OPENSHIFT_REGISTRY
+    }
+    return registry
+}
+
 void setDeployPropertyIfNeeded(String key, def value) {
     if (value) {
         deployProperties[key] = value
@@ -414,11 +420,7 @@ String[] getImages() {
     if (env.IMAGES_LIST) {
         return env.IMAGES_LIST.split(',')
     }
-    return runPythonCommand("make list | tr '\\n' ','", true).trim().split(',')
-}
-
-void runPythonCommand(String cmd, boolean stdout = false) {
-    return sh(returnStdout: stdout, script: cmd)
+    return sh(returnStdout: true, script: "make list | tr '\\n' ','").trim().split(',')
 }
 
 String getQuarkusPlatformVersion() {

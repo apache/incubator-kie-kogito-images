@@ -17,7 +17,10 @@ pipeline {
                     sh 'printenv'
                     
                     dir(getRepoName()) {
-                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true)
+                        // githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
+                        // TODO Test pupose
+                        deleteDir()
+                        checkout(githubscm.resolveRepository('kogito-images', 'radtriste', 'fix_pipelines', false))
                     }
                 }
             }
@@ -95,15 +98,15 @@ String[] getImages() {
 }
 
 String getChangeAuthor() {
-    return env.ghprbAuthorRepoGitUrl ? util.getGroup(env.ghprbAuthorRepoGitUrl) : (env.ghprbPullAuthorLogin ?: CHANGE_AUTHOR)
+    return CHANGE_AUTHOR
 }
 
 String getChangeBranch() {
-    return env.ghprbSourceBranch ?: CHANGE_BRANCH
+    return CHANGE_BRANCH
 }
 
 String getChangeTarget() {
-    return env.ghprbTargetBranch ?: CHANGE_TARGET
+    return CHANGE_TARGET
 }
 
 String getRepoName() {

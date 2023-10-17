@@ -18,8 +18,6 @@ pipeline {
         CONTAINER_ENGINE = 'docker'
         CONTAINER_ENGINE_TLS_OPTIONS = ''
 
-        OPENSHIFT_API = credentials('OPENSHIFT_API')
-        OPENSHIFT_REGISTRY = credentials('OPENSHIFT_REGISTRY')
         OPENSHIFT_CREDS_KEY = 'OPENSHIFT_CREDS'
 
         IMAGE_BUILD_PLATFORMS = 'linux/amd64,linux/arm64'
@@ -28,8 +26,6 @@ pipeline {
         stage('Initialization') {
             steps {
                 script {
-                    clean()
-
                     sh 'printenv'
 
                     assert getBuildImageName() : 'Please provide `BUILD_IMAGE_NAME` parameter'
@@ -49,7 +45,7 @@ pipeline {
                     // Login to final registry if deploy is needed
                     if (shouldDeployImage()) {
                         if (isDeployImageInOpenshiftRegistry()) {
-                            cloud.loginOpenShift(env.OPENSHIFT_API, env.OPENSHIFT_CREDS_KEY)
+                            cloud.loginOpenShift(getOpenShiftAPI(), env.OPENSHIFT_CREDS_KEY)
                             cloud.loginOpenshiftRegistry(env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
                         } else if (getDeployImageRegistryCredentials()) {
                             cloud.loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials(), env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
@@ -199,22 +195,9 @@ pipeline {
         always {
             script {
                 updateGithubCommitStatusFromBuildResult()
-
-                clean()
             }
         }
     }
-}
-
-void clean() {
-    util.cleanNode(env.CONTAINER_ENGINE)
-
-    cloud.cleanDockerMultiplatformBuild()
-    cloud.cleanLocalRegistry()
-    cloud.cleanSkopeo()
-
-    // Clean Cekit cache, in case we reuse an old node
-    sh "rm -rf \$HOME/.cekit/cache"
 }
 
 String getMakeBuildImageArgs() {
@@ -261,7 +244,7 @@ String getDeployImageRegistryCredentials() {
 }
 
 String getDeployImageRegistry() {
-    return isDeployImageInOpenshiftRegistry() ? env.OPENSHIFT_REGISTRY : params.DEPLOY_IMAGE_REGISTRY
+    return isDeployImageInOpenshiftRegistry() ? getOpenShiftRegistry() : params.DEPLOY_IMAGE_REGISTRY
 }
 
 String getDeployImageNamespace() {
@@ -291,6 +274,22 @@ boolean isDeployLatestTag() {
 ////////////////////////////////////////////////////////////////////////
 // utils
 ////////////////////////////////////////////////////////////////////////
+
+String getOpenShiftRegistry() {
+    String registry = ''
+    withCredentials([string(credentialsId: 'OPENSHIFT_REGISTRY', variable: 'OPENSHIFT_REGISTRY')]) {
+        registry = env.OPENSHIFT_REGISTRY
+    }
+    return registry
+}
+
+String getOpenShiftAPI() {
+    String openShiftAPI = ''
+    withCredentials([string(credentialsId: 'OPENSHIFT_API', variable: 'OPENSHIFT_API')]) {
+        openShiftAPI = env.OPENSHIFT_API
+    }
+    return openShiftAPI
+}
 
 String getRepoName() {
     return env.REPO_NAME

@@ -2,7 +2,10 @@
 
 pipeline {
     agent {
-        label 'ubuntu'
+        docker { 
+            image env.AGENT_DOCKER_BUILDER_IMAGE
+            args env.AGENT_DOCKER_BUILDER_ARGS
+        }
     }
     options {
         timeout(time: 120, unit: 'MINUTES')
@@ -11,55 +14,50 @@ pipeline {
         stage('Initialization') {
             steps {
                 script {
-                    clean()
-
                     sh 'printenv'
                     
-                    githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true)
+                    dir(getRepoName()) {
+                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true)
+                    }
                 }
             }
         }
         stage('Validate CeKit Image and Modules descriptors') {
             steps {
                 script {
-                    sh '''
-                        curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.6/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
-                        tar -xzvf cekit-image-validator-runner.tgz
-                        chmod +x cekit-image-validator-runner
-                    '''
-                    sh './cekit-image-validator-runner modules/'
-                    getImages().each { image -> sh "./cekit-image-validator-runner ${image}-image.yaml" }
+                    dir(getRepoName()) {
+                        sh '''
+                            curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.6/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
+                            tar -xzvf cekit-image-validator-runner.tgz
+                            chmod +x cekit-image-validator-runner
+                        '''
+                        sh './cekit-image-validator-runner modules/'
+                        getImages().each { image -> sh "./cekit-image-validator-runner ${image}-image.yaml" }
+                    }
                 }
             }
         }
         stage('Build & Test Images') {
             steps {
                 script {
-                    parallelStages = [:]
-                    for(String image : getImages()){
-                        parallelStages[image] = createBuildAndTestStageClosure(image)
+                    dir(getRepoName()) {
+                        parallelStages = [:]
+                        for(String image : getImages()){
+                            parallelStages[image] = createBuildAndTestStageClosure(image)
+                        }
+                        parallel parallelStages
                     }
-                    parallel parallelStages
                 }
             }
         }
     }
     post {
-        always {
-            script {
-                clean()
-            }
-        }
         unsuccessful {
             script {
                 pullrequest.postComment(util.getMarkdownTestSummary('PR', "${BUILD_URL}", 'GITHUB'))
             }
         }
     }
-}
-
-void clean() {
-    util.cleanNode()
 }
 
 Closure createBuildAndTestStageClosure(String image) {

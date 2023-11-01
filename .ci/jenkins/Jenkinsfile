@@ -20,7 +20,7 @@ pipeline {
                         // githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
                         // TODO Test pupose
                         deleteDir()
-                        checkout(githubscm.resolveRepository('kogito-images', 'radtriste', 'fix_pipelines', false))
+                        checkout(githubscm.resolveRepository('kogito-images', 'radtriste', 'fix-pipelines', false))
                     }
                 }
             }

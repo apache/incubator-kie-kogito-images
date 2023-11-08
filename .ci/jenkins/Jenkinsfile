@@ -11,22 +11,25 @@ pipeline {
     }
     stages {
         stage("Build&Test") {
-            List buildParams = []
-            buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${CHANGE_ID} - ${image}: ${CHANGE_URL}"))
-            buildParams.add(string(name: "CHANGE_ID", value: CHANGE_ID))
-            buildParams.add(string(name: "CHANGE_URL", value: CHANGE_URL))
-            buildParams.add(string(name: 'SOURCE_AUTHOR', value: getChangeAuthor()))
-            buildParams.add(string(name: 'SOURCE_BRANCH', value: getChangeBranch()))
-            buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
-            buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: getChangeTarget()))
-            
-            // Keep executing so we can cancel all if needed
-            def job = build(job: "${getRepoName()}.build-and-test", wait: true, parameters: buildParams, propagate: false)
-            if (job.result != 'SUCCESS') {
-                if (job.result == 'UNSTABLE') {
-                    unstable("Tests on images seems to have failed: ${job.absoluteUrl}")
-                } else {
-                    error("Error building images. Please check the logs of the job: ${job.absoluteUrl}")
+            steps {
+                script {
+                    List buildParams = []
+                    buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${CHANGE_ID}: ${CHANGE_URL}"))
+                    buildParams.add(string(name: "CHANGE_ID", value: CHANGE_ID))
+                    buildParams.add(string(name: "CHANGE_URL", value: CHANGE_URL))
+                    buildParams.add(string(name: 'SOURCE_AUTHOR', value: getChangeAuthor()))
+                    buildParams.add(string(name: 'SOURCE_BRANCH', value: getChangeBranch()))
+                    buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
+                    buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: getChangeTarget()))
+                    // Keep executing so we can cancel all if needed
+                    def job = build(job: "../kogito-images.build-and-test", wait: true, parameters: buildParams, propagate: false)
+                    if (job.result != 'SUCCESS') {
+                        if (job.result == 'UNSTABLE') {
+                            unstable("Tests on images seems to have failed: ${job.absoluteUrl}")
+                        } else {
+                            error("Error building images. Please check the logs of the job: ${job.absoluteUrl}")
+                        }
+                    }
                 }
             }
         }

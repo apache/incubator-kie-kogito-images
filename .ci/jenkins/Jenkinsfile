@@ -20,7 +20,7 @@ pipeline {
                         // githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
                         // TODO Test pupose
                         deleteDir()
-                        checkout(githubscm.resolveRepository('kogito-images', 'radtriste', 'fix-pipelines', false))
+                        checkout(githubscm.resolveRepository('incubator-kie-kogito-images', 'apache', 'radtriste-fix-pipelines', false))
                     }
                 }
             }
@@ -67,7 +67,7 @@ Closure createBuildAndTestStageClosure(String image) {
     return {
         stage("Build&Test ${image}") {
             List buildParams = []
-            buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${ghprbPullId} - ${image}: ${ghprbPullLink}"))
+            buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${CHANGE_ID} - ${image}: ${CHANGE_URL}"))
             buildParams.add(string(name: 'BUILD_IMAGE_NAME', value: image))
             buildParams.add(string(name: 'SOURCE_AUTHOR', value: getChangeAuthor()))
             buildParams.add(string(name: 'SOURCE_BRANCH', value: getChangeBranch()))

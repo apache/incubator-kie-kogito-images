@@ -17,7 +17,7 @@ import org.kie.jenkins.jobdsl.Utils
 jenkins_path = '.ci/jenkins'
 
 // PR checks
-Utils.isMainBranch(this) && KogitoJobTemplate.createPullRequestMultibranchPipelineJob(this, "${jenkins_path}/Jenkinsfile")
+Utils.isMainBranch(this) && KogitoJobTemplate.createPullRequestMultibranchPipelineJob(this, "${jenkins_path}/Jenkinsfile", JobType.PULL_REQUEST.getName())
 
 // Init branch
 createSetupBranchJob()
@@ -40,22 +40,8 @@ setupQuarkusUpdateJob()
 void setupPrJob() {
     setupBuildImageJob(JobType.PULL_REQUEST)
 
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images-pr', JobType.PULL_REQUEST, "${jenkins_path}/Jenkinsfile", "Kogito Images PR check")
-    JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
-    jobParams.pr.putAll([
-        run_only_for_branches: [ "${GIT_BRANCH}" ],
-        disable_status_message_error: true,
-        disable_status_message_failure: true,
-        commitContext: 'Retrieve and Launch Image Checks',
-        contextShowtestResults: false,
-    ])
-    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
-        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
-    }
-    jobParams.env.putAll([
-        AUTHOR_CREDS_ID: "${GIT_AUTHOR_CREDENTIALS_ID}",
-    ])
-    KogitoJobTemplate.createPRJob(this, jobParams)
+    // Branch Source Plugin multibranchPipelineJob
+    Utils.isMainBranch(this) && KogitoJobTemplate.createPullRequestMultibranchPipelineJob(this, "${jenkins_path}/Jenkinsfile", JobType.PULL_REQUEST.getName())
 }
 
 void createSetupBranchJob() {

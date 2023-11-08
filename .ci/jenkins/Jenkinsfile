@@ -13,6 +13,7 @@ pipeline {
         stage("Build&Test") {
             steps {
                 script {
+                    sh 'env'
                     List buildParams = []
                     buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${CHANGE_ID}: ${CHANGE_URL}"))
                     buildParams.add(string(name: "CHANGE_ID", value: CHANGE_ID))

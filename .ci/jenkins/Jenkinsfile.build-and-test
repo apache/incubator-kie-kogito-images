@@ -9,6 +9,7 @@ pipeline {
     }
     options {
         timeout(time: 120, unit: 'MINUTES')
+        skipDefaultCheckout()
     }
     stages {
         stage('Initialization') {
@@ -17,10 +18,9 @@ pipeline {
                     sh 'printenv'
                     
                     dir(getRepoName()) {
-                        // githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
                         // TODO Test pupose
                         deleteDir()
-                        checkout(githubscm.resolveRepository('incubator-kie-kogito-images', 'apache', 'radtriste-fix-pipelines', false))
+                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
                     }
                 }
             }

@@ -13,11 +13,12 @@ pipeline {
         stage("Build&Test") {
             steps {
                 script {
-                    sh 'env'
+                    sh 'printenv'
                     List buildParams = []
-                    buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${CHANGE_ID}: ${CHANGE_URL}"))
-                    buildParams.add(string(name: "CHANGE_ID", value: CHANGE_ID))
-                    buildParams.add(string(name: "CHANGE_URL", value: CHANGE_URL))
+                    buildParams.add(string(name: 'DISPLAY_NAME', value: "PR #${CHANGE_ID}: ${CHANGE_URL}"))
+                    buildParams.add(string(name: 'CHANGE_ID', value: CHANGE_ID))
+                    buildParams.add(string(name: 'CHANGE_URL', value: CHANGE_URL))
+                    buildParams.add(string(name: 'SOURCE_REPOSITORY', value: getChangeRepository()))
                     buildParams.add(string(name: 'SOURCE_AUTHOR', value: getChangeAuthor()))
                     buildParams.add(string(name: 'SOURCE_BRANCH', value: getChangeBranch()))
                     buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
@@ -38,7 +39,11 @@ pipeline {
 }
 
 String getChangeAuthor() {
-    return CHANGE_AUTHOR
+    return pullrequest.getAuthorAndRepoForPr().split('/')[0]
+}
+
+String getChangeRepository() {
+    return pullrequest.getAuthorAndRepoForPr().split('/')[1]
 }
 
 String getChangeBranch() {
@@ -47,10 +52,6 @@ String getChangeBranch() {
 
 String getChangeTarget() {
     return CHANGE_TARGET
-}
-
-String getRepoName() {
-    return env.REPO_NAME
 }
 
 String getGitAuthorCredentialsId() {

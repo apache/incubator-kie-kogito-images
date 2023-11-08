@@ -186,6 +186,7 @@ void setupBuildAndTestJob(JobType jobType) {
     def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images.build-and-test', jobType, "${jenkins_path}/Jenkinsfile.build-and-test", 'Kogito Images Build And test images')
     // Use jenkinsfile from the build branch
     jobParams.git.author = '${SOURCE_AUTHOR}'
+    jobParams.git.repository = '${SOURCE_REPOSITORY}'
     jobParams.git.branch = '${SOURCE_BRANCH}'
     JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
@@ -206,6 +207,7 @@ void setupBuildAndTestJob(JobType jobType) {
             stringParam('DISPLAY_NAME', '', 'Setup a specific build display name')
 
             stringParam('SOURCE_AUTHOR', Utils.getGitAuthor(this), 'Build author')
+            stringParam('SOURCE_REPOSITORY', Utils.getRepoName(this), 'Build repository name')
             stringParam('SOURCE_BRANCH', Utils.getGitBranch(this), 'Build branch name')
             stringParam('TARGET_BRANCH', '', '(Optional) In case of a PR to merge with target branch, please provide the target branch')
             stringParam('CHANGE_ID', '', 'CHANGE_ID coming from Branch Source Plugin')

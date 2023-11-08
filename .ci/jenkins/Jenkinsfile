@@ -6,92 +6,31 @@ pipeline {
     }
     options {
         timeout(time: 120, unit: 'MINUTES')
+        disableConcurrentBuilds(abortPrevious: true)
+        skipDefaultCheckout()
     }
     stages {
-        stage('Initialization') {
-            steps {
-                script {
-                    sh 'printenv'
-                    
-                    dir(getRepoName()) {
-                        // githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
-                        // TODO Test pupose
-                        deleteDir()
-                        checkout(githubscm.resolveRepository('incubator-kie-kogito-images', 'apache', 'radtriste-fix-pipelines', false))
-                    }
-                }
-            }
-        }
-        stage('Validate CeKit Image and Modules descriptors') {
-            steps {
-                script {
-                    dir(getRepoName()) {
-                        sh '''
-                            curl -Ls https://github.com/kiegroup/kie-cloud-tools/releases/download/v1.3.6/cekit-image-validator-runner.tgz --output cekit-image-validator-runner.tgz
-                            tar -xzvf cekit-image-validator-runner.tgz
-                            chmod +x cekit-image-validator-runner
-                        '''
-                        sh './cekit-image-validator-runner modules/'
-                        getImages().each { image -> sh "./cekit-image-validator-runner ${image}-image.yaml" }
-                    }
-                }
-            }
-        }
-        stage('Build & Test Images') {
-            steps {
-                script {
-                    dir(getRepoName()) {
-                        parallelStages = [:]
-                        for(String image : getImages()){
-                            parallelStages[image] = createBuildAndTestStageClosure(image)
-                        }
-                        parallel parallelStages
-                    }
-                }
-            }
-        }
-    }
-    post {
-        unsuccessful {
-            script {
-                pullrequest.postComment(util.getMarkdownTestSummary('PR', '', "${BUILD_URL}", 'GITHUB'))
-            }
-        }
-    }
-}
-
-Closure createBuildAndTestStageClosure(String image) {
-    return {
-        stage("Build&Test ${image}") {
+        stage("Build&Test") {
             List buildParams = []
             buildParams.add(string(name: "DISPLAY_NAME", value: "PR #${CHANGE_ID} - ${image}: ${CHANGE_URL}"))
-            buildParams.add(string(name: 'BUILD_IMAGE_NAME', value: image))
+            buildParams.add(string(name: "CHANGE_ID", value: CHANGE_ID))
+            buildParams.add(string(name: "CHANGE_URL", value: CHANGE_URL))
             buildParams.add(string(name: 'SOURCE_AUTHOR', value: getChangeAuthor()))
             buildParams.add(string(name: 'SOURCE_BRANCH', value: getChangeBranch()))
             buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: getChangeTarget()))
             
-            githubscm.prepareCommitStatusInformationForPullRequest(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getGitAuthorCredentialsId())
-            githubscm.updateGithubCommitStatus(image, 'PENDING', 'Queued', getRepoName())
-            
             // Keep executing so we can cancel all if needed
-            def job = build(job: "${getRepoName()}.build-image", wait: true, parameters: buildParams, propagate: false)
+            def job = build(job: "${getRepoName()}.build-and-test", wait: true, parameters: buildParams, propagate: false)
             if (job.result != 'SUCCESS') {
                 if (job.result == 'UNSTABLE') {
-                    unstable("Tests on ${image} seems to have failed")
+                    unstable("Tests on images seems to have failed: ${job.absoluteUrl}")
                 } else {
-                    error("Error building ${image}. Please check the logs of the job: ${job.absoluteUrl}")
+                    error("Error building images. Please check the logs of the job: ${job.absoluteUrl}")
                 }
             }
         }
     }
-}
-
-String[] getImages() {
-    if (env.IMAGES_LIST) {
-        return env.IMAGES_LIST.split(',')
-    }
-    return sh(returnStdout: true, script: "make list | tr '\\n' ','").trim().split(',')
 }
 
 String getChangeAuthor() {

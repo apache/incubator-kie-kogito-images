@@ -57,7 +57,7 @@ pipeline {
     post {
         unsuccessful {
             script {
-                pullrequest.postComment(util.getMarkdownTestSummary('PR', "${BUILD_URL}", 'GITHUB'))
+                pullrequest.postComment(util.getMarkdownTestSummary('PR', '', "${BUILD_URL}", 'GITHUB'))
             }
         }
     }

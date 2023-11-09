@@ -20,7 +20,7 @@ pipeline {
                     dir(getRepoName()) {
                         // TODO Test pupose
                         deleteDir()
-                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsTokenId(), usernamePassword: getGitAuthorCredentialsId()])
+                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorTokenCredentialsId(), usernamePassword: getGitAuthorCredentialsId()])
                     }
                 }
             }

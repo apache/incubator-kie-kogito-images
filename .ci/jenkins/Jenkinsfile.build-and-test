@@ -20,7 +20,7 @@ pipeline {
                     dir(getRepoName()) {
                         // TODO Test pupose
                         deleteDir()
-                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsId(), usernamePassword: 'kie-ci'])
+                        githubscm.checkoutIfExists(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getChangeTarget(), true, credentials = [token: getGitAuthorCredentialsTokenId(), usernamePassword: getGitAuthorCredentialsId()])
                     }
                 }
             }
@@ -123,4 +123,8 @@ String getRepoName() {
 
 String getGitAuthorCredentialsId() {
     return env.AUTHOR_CREDS_ID
+}
+
+String getGitAuthorTokenCredentialsId() {
+    return env.AUTHOR_TOKEN_CREDS_ID
 }

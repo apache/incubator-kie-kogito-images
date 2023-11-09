@@ -95,7 +95,8 @@ pipeline {
                 script {
                     updateGithubCommitStatus('PENDING', 'Build in progress')
 
-                    String localRegistry = cloud.startLocalRegistry()
+                    int freePort = cloud.findFreePort()
+                    String localRegistry = cloud.startLocalRegistry(freePort)
                     cloud.prepareForDockerMultiplatformBuild([localRegistry],[cloud.getDockerIOMirrorRegistryConfig()], false)
 
                     // Generate the Dockerfile

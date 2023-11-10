@@ -1,7 +1,7 @@
 IMAGE_VERSION := $(shell python scripts/retrieve_version.py)
 SHORTENED_LATEST_VERSION := $(shell echo $(IMAGE_VERSION) | awk -F. '{print $$1"."$$2}')
 KOGITO_APPS_TARGET_BRANCH ?= main
-KOGITO_APPS_TARGET_URI ?= https://github.com/kiegroup/kogito-apps.git
+KOGITO_APPS_TARGET_URI ?= https://github.com/apache/incubator-kie-kogito-apps.git
 BUILD_ENGINE ?= docker
 BUILD_ENGINE_TLS_OPTIONS ?= ''
 .DEFAULT_GOAL := build

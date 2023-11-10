@@ -2,7 +2,7 @@
 # Parameters:
 #   1 - image name - can't  be empty.
 #   2 - git target branch - defaults to main
-#   3 - git target uri - defaults to https://github.com/kiegroup/kogito-apps.git
+#   3 - git target uri - defaults to https://github.com/apache/incubator-kie-kogito-apps.git
 
 # fast fail
 set -e
@@ -13,7 +13,7 @@ KOGITO_APPS_REPO_NAME="kogito-apps"
 # Read entries before sourcing
 imageName="${1}"
 gitBranch="${2:-main}"
-gitUri="${3:-https://github.com/kiegroup/kogito-apps.git}"
+gitUri="${3:-https://github.com/apache/incubator-kie-kogito-apps.git}"
 contextDir=""
 shift $#
 
@@ -24,7 +24,7 @@ APPS_MAVEN_OPTIONS="-Dquarkus.package.type=fast-jar -Dquarkus.build.image=false"
 # used for all-in-one image
 extended_context=""
 
-# Fix taken from https://github.com/kiegroup/kogito-apps/pull/1762
+# Fix taken from https://github.com/apache/incubator-kie-kogito-apps/pull/1762
 if [ ! -z "${CYPRESS_BINARY_URL}" ]; then
     export CYPRESS_INSTALL_BINARY="${CYPRESS_BINARY_URL}/cypress-9.7.0.zip"
     echo "Setting 'CYPRESS_INSTALL_BINARY' variable to ${CYPRESS_INSTALL_BINARY}"

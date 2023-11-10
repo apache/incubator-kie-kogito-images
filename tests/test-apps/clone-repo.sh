@@ -36,7 +36,7 @@ set -e
 # Clone examples
 cd /tmp
 rm -rf kogito-examples/
-git clone https://github.com/kiegroup/kogito-examples.git
+git clone https://github.com/apache/incubator-kie-kogito-examples.git
 cd kogito-examples/
 git fetch origin
 git fetch origin --tags

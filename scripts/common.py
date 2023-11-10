@@ -319,7 +319,7 @@ def update_examples_uri_in_behave_tests(examples_uri):
     """
     print("Set examples_uri {} in behave tests".format(examples_uri))
     # pattern to get the default examples uri
-    pattern = re.compile(r'(https://github.com/kiegroup/kogito-examples.git)')
+    pattern = re.compile(r'(https://github.com/apache/incubator-kie-kogito-examples.git)')
     replacement = examples_uri
     update_in_behave_tests(pattern, replacement)
 

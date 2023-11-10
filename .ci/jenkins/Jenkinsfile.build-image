@@ -2,6 +2,8 @@
 
 QUAY_REGISTRY = 'quay.io'
 
+def localRegistryUrl = '';
+
 pipeline {
     agent {
         docker { 
@@ -96,8 +98,8 @@ pipeline {
                     updateGithubCommitStatus('PENDING', 'Build in progress')
 
                     int freePort = cloud.findFreePort()
-                    String localRegistry = cloud.startLocalRegistry(freePort)
-                    cloud.prepareForDockerMultiplatformBuild([localRegistry],[cloud.getDockerIOMirrorRegistryConfig()], false)
+                    localRegistryUrl = cloud.startLocalRegistry(freePort)
+                    cloud.prepareForDockerMultiplatformBuild([localRegistryUrl],[cloud.getDockerIOMirrorRegistryConfig()], false)
 
                     // Generate the Dockerfile
                     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${getBuildImageName()} ignore_test=true ignore_tag=true build_options='--dry-run'")
@@ -224,7 +226,7 @@ String getBuiltImageTag(String imageTag = '') {
     if (shouldDeployImage()) {
         return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${getFinalImageName()}:${imageTag ?: getDeployImageTag()}"
     } else {
-        return "localhost:5000/${getBuildImageName()}:${githubscm.getCommitHash()}"
+        return "${localRegistryUrl}/${getBuildImageName()}:${githubscm.getCommitHash()}"
     }
 }
 

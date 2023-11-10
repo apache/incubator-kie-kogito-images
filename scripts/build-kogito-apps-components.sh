@@ -8,12 +8,12 @@
 set -e
 set -o pipefail
 
-KOGITO_APPS_REPO_NAME="kogito-apps"
+KOGITO_APPS_REPO_NAME="incubator-kie-kogito-apps"
 
 # Read entries before sourcing
 imageName="${1}"
 gitBranch="${2:-main}"
-gitUri="${3:-https://github.com/apache/incubator-kie-kogito-apps.git}"
+gitUri="${3:-https://github.com/apache/${KOGITO_APPS_REPO_NAME}.git}"
 contextDir=""
 shift $#
 

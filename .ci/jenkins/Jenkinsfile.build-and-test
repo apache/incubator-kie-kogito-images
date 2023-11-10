@@ -44,6 +44,7 @@ pipeline {
             steps {
                 script {
                     dir(getRepoName()) {
+                        githubscm.prepareCommitStatusInformationForPullRequest(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getGitAuthorCredentialsId())
                         parallelStages = [:]
                         for(String image : getImages()){
                             parallelStages[image] = createBuildAndTestStageClosure(image)
@@ -73,10 +74,9 @@ Closure createBuildAndTestStageClosure(String image) {
             buildParams.add(string(name: 'SOURCE_BRANCH', value: getChangeBranch()))
             buildParams.add(string(name: 'TARGET_BRANCH', value: getChangeTarget()))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: getChangeTarget()))
-            
-            githubscm.prepareCommitStatusInformationForPullRequest(getRepoName(), getChangeAuthor(), getChangeBranch(), 'apache', getGitAuthorCredentialsId())
+
             githubscm.updateGithubCommitStatus(image, 'PENDING', 'Queued', getRepoName())
-            
+
             // Keep executing so we can cancel all if needed
             def job = build(job: 'kogito-images.build-image', wait: true, parameters: buildParams, propagate: false)
             if (job.result != 'SUCCESS') {

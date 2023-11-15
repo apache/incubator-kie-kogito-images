@@ -4,6 +4,7 @@
 # if image name is supporting services, don't build it
 IMAGE_NAME="$2"
 KOGITO_EXAMPLES_REPO_NAME='incubator-kie-kogito-examples'
+KOGITO_EXAMPLES_FOLDER_NAME='kogito-examples' # many tests rely on location /tmp/kogito-examples
 
 prod=""
 if [ -n "${IMAGE_NAME}" ]; then
@@ -36,11 +37,10 @@ fi
 set -e
 
 # Clone examples
-KOGITO_EXAMPLES_DIR=/tmp/${KOGITO_EXAMPLES_REPO_NAME}
-cd /tmp
-rm -rf ${KOGITO_EXAMPLES_REPO_NAME}
-git clone https://github.com/apache/${KOGITO_EXAMPLES_REPO_NAME}.git
-cd ${KOGITO_EXAMPLES_REPO_NAME}/
+KOGITO_EXAMPLES_DIR=/tmp/${KOGITO_EXAMPLES_FOLDER_NAME}
+rm -rf ${KOGITO_EXAMPLES_DIR}
+git clone https://github.com/apache/${KOGITO_EXAMPLES_REPO_NAME}.git ${KOGITO_EXAMPLES_DIR}
+cd ${KOGITO_EXAMPLES_DIR}/
 git fetch origin
 git fetch origin --tags
 git checkout -b nightly-main

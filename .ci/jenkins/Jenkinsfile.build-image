@@ -40,7 +40,7 @@ pipeline {
                         checkout(githubscm.resolveRepository(getRepoName(), getSourceAuthor(), getSourceBranch(), false, getGitAuthorCredentialsId()))
                         githubscm.prepareCommitStatusInformation(getRepoName(), getSourceAuthor(), getSourceBranch(), getGitAuthorCredentialsId())
                     }
-                    githubscm.setUserConfig('robot', 'kie.apache.org')
+                    githubscm.setUserConfig('robot', 'kie.apache.org', true)
                     updateGithubCommitStatus('PENDING', 'Started')
 
                     // Login to final registry if deploy is needed

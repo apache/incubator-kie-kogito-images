@@ -188,7 +188,7 @@ pipeline {
                         unstable "Testing error(s) for image ${getBuildImageName()}"
                     } finally {
                         junit testResults: 'target/**/*.xml', allowEmptyResults: true
-                        archiveArtifacts artifacts: 'target/**/*.xml, **/*-build.log', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'target/**/*.xml', allowEmptyArchive: true
                     }
                 }
             }
@@ -198,10 +198,15 @@ pipeline {
         always {
             script {
                 updateGithubCommitStatusFromBuildResult()
-                archiveArtifacts artifacts: '**/*-build.log', allowEmptyArchive: true
+                collectContainerLogs()
+                archiveArtifacts artifacts: '**/*-build.log, **/*-container.log', allowEmptyArchive: true
             }
         }
     }
+}
+
+void collectContainerLogs() {
+    sh 'for container in $(docker container ls --format "{{.Names}}"); do docker logs $container >& ${container}-container.log; done'
 }
 
 String getMakeBuildImageArgs() {

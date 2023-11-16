@@ -199,7 +199,7 @@ pipeline {
             script {
                 updateGithubCommitStatusFromBuildResult()
                 collectContainerLogs()
-                archiveArtifacts artifacts: '**/*-build.log, **/containers.log', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/*-build.log, **/*.log', allowEmptyArchive: true
             }
         }
     }
@@ -207,7 +207,7 @@ pipeline {
 
 void collectContainerLogs() {
     sh '''#!/bin/bash
-        for container in $(docker container ls --format "{{.Names}}"); do echo "[$container:START]"; docker logs $container; echo "[$container:END]"; done' &> containers.log
+        for container in $(docker container ls --format "{{.Names}}"); do echo "[$container:START]"; docker logs $container; echo "[$container:END]"; done &> containers.log
     '''
 }
 

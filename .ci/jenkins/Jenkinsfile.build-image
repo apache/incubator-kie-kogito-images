@@ -198,6 +198,7 @@ pipeline {
         always {
             script {
                 updateGithubCommitStatusFromBuildResult()
+                archiveArtifacts artifacts: '**/*-build.log', allowEmptyArchive: true
             }
         }
     }

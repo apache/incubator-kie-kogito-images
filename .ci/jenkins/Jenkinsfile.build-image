@@ -107,7 +107,7 @@ pipeline {
                     // Build multiplatform from generated Dockerfile
                     String squashMessage = "${getBuildImageName()}:${getImageVersion()} squashed"
                     dir('target/image') {
-                        cloud.dockerBuildMultiPlatformImages(getBuiltImageTag(), getImageBuildPlatforms(), shouldDeployImage(), squashMessage)
+                        cloud.dockerBuildMultiPlatformImages(getBuiltImageTag(), getImageBuildPlatforms(), shouldDeployImage(), squashMessage, false, true)
                     }
                 }
             }

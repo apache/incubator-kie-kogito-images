@@ -9,6 +9,7 @@ set -e
 set -o pipefail
 
 KOGITO_APPS_REPO_NAME="incubator-kie-kogito-apps"
+KOGITO_APPS_FOLDER_NAME="kogito-apps"
 
 # Read entries before sourcing
 imageName="${1}"
@@ -115,12 +116,13 @@ for ctx in ${contextDir}; do
     cd ${build_target_dir}
     echo "Using branch/tag ${gitBranch}, checking out. Temporary build dir is ${build_target_dir} and target dist is ${target_tmp_dir}"
 
-    if [ ! -d "${build_target_dir}/${KOGITO_APPS_REPO_NAME}" ]; then
-        git_command="git clone --single-branch --branch ${gitBranch} --depth 1 ${gitUri}"
+    KOGITO_APPS_DIR=${build_target_dir}/${KOGITO_APPS_FOLDER_NAME}
+    if [ ! -d "${KOGITO_APPS_DIR}" ]; then
+        git_command="git clone --single-branch --branch ${gitBranch} --depth 1 ${gitUri} ${KOGITO_APPS_DIR}"
         echo "cloning ${KOGITO_APPS_REPO_NAME} with the following git command: ${git_command}"
         eval ${git_command}
     fi
-    cd ${KOGITO_APPS_REPO_NAME} && echo "working dir `pwd`"
+    cd ${KOGITO_APPS_DIR} && echo "working dir `pwd`"
     echo "Got MAVEN_OPTIONS = ${MAVEN_OPTIONS}"
     mvn_command="mvn -am -pl ${ctx} package ${MAVEN_OPTIONS} -Dmaven.repo.local=${mvn_local_repo} -Dquarkus.container-image.build=false"
     echo "Building component(s) ${contextDir} with the following maven command [${mvn_command}]"

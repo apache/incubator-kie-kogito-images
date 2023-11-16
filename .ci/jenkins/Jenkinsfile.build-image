@@ -188,7 +188,7 @@ pipeline {
                         unstable "Testing error(s) for image ${getBuildImageName()}"
                     } finally {
                         junit testResults: 'target/**/*.xml', allowEmptyResults: true
-                        archiveArtifacts artifacts: 'target/**/*.xml', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'target/**/*.xml, **/*.txt, **/*.log', allowEmptyArchive: true
                     }
                 }
             }
@@ -199,7 +199,7 @@ pipeline {
             script {
                 updateGithubCommitStatusFromBuildResult()
                 collectContainerLogs()
-                archiveArtifacts artifacts: '**/*-build.log, **/*-container.log', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/*-build.log, **/containers.log', allowEmptyArchive: true
             }
         }
     }
@@ -207,8 +207,7 @@ pipeline {
 
 void collectContainerLogs() {
     sh '''#!/bin/bash
-        BUILDER_CONTAINER_NAME=$(docker container ls --filter 'name=buildx_buildkit_mybuilder' --format '{{.Names}}')
-        docker exec -it $BUILDER_CONTAINER_NAME bash -c 'for container in $(docker container ls --format "{{.Names}}"); do echo "[$container:START]"; docker logs $container; echo "[$container:END]"; done' &> full.log
+        for container in $(docker container ls --format "{{.Names}}"); do echo "[$container:START]"; docker logs $container; echo "[$container:END]"; done' &> containers.log
     '''
 }
 

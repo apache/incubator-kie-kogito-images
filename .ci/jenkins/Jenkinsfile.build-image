@@ -207,7 +207,7 @@ pipeline {
 
 void collectContainerLogs() {
     sh '''#!/bin/bash
-        for container in $(docker container ls --format "{{.Names}}"); do docker logs $container >& ${container}-container.log; done
+        for container in $(docker container ls -a --format "{{.Names}}"); do docker logs $container >& ${container}-container.log; done
     '''
 }
 

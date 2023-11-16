@@ -207,7 +207,8 @@ pipeline {
 
 void collectContainerLogs() {
     sh '''#!/bin/bash
-        for container in $(docker container ls -a --format "{{.Names}}"); do docker logs $container >& ${container}-container.log; done
+        BUILDER_CONTAINER_NAME=$(docker container ls --filter 'name=buildx_buildkit_mybuilder' --format '{{.Names}}')
+        docker exec -it $BUILDER_CONTAINER_NAME bash -c 'for container in $(docker container ls --format "{{.Names}}"); do echo "[$container:START]"; docker logs $container; echo "[$container:END]"; done' &> full.log
     '''
 }
 

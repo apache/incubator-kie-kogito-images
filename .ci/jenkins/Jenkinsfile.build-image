@@ -118,8 +118,6 @@ pipeline {
             }
             steps {
                 script {
-                    cloud.installSkopeo()
-
                     // Make public if quay registry
                     if (getDeployImageRegistry() == QUAY_REGISTRY) {
                         String namespace = getDeployImageNamespace()

@@ -49,7 +49,7 @@ Feature: Common tests for Kogito images
     And container log should match regex -Xmx512m
 
   Scenario: Verify if Java Remote Debug is correctly configured
-    When container is started with env
+    When container is started with args
       | arg       | value                                                                   |
       | command   | bash -c "sleep 2s; /home/kogito/kogito-app-launch.sh"                   |
       | env_json  | {"SCRIPT_DEBUG":"true", "JAVA_DEBUG":"true", "JAVA_DEBUG_PORT":"9222"}  |

@@ -226,6 +226,9 @@ pipeline {
                 archiveArtifacts artifacts: env.PROPERTIES_FILE_NAME, allowEmptyArchive:true
             }
         }
+        cleanup {
+            util.cleanNode('docker')
+        }
         unsuccessful {
             sendUnsuccessfulNotification()
         }

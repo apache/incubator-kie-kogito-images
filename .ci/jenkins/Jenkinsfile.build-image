@@ -200,6 +200,12 @@ pipeline {
                 archiveArtifacts artifacts: '**/*-build.log, **/*.log', allowEmptyArchive: true
             }
         }
+        cleanup {
+            util.cleanNode(env.CONTAINER_ENGINE)
+
+            cloud.cleanDockerMultiplatformBuild()
+            cloud.cleanLocalRegistry(env.localRegistryUrl.split(':')[1])
+        }
     }
 }
 

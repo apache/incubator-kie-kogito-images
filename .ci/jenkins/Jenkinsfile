@@ -10,7 +10,7 @@ pipeline {
         skipDefaultCheckout()
     }
     stages {
-        stage("Build&Test") {
+        stage("Invoke build-and-test") {
             steps {
                 script {
                     sh 'printenv'

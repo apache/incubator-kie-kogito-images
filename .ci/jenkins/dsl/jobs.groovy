@@ -46,7 +46,7 @@ void setupPrJob() {
 }
 
 void createSetupBranchJob() {
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images-pr', JobType.SETUP_BRANCH, "${jenkins_path}/Jenkinsfile.setup-branch", 'Kogito Images Init Branch')
+    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-images', JobType.SETUP_BRANCH, "${jenkins_path}/Jenkinsfile.setup-branch", 'Kogito Images Init Branch')
     JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         GIT_AUTHOR: "${GIT_AUTHOR_NAME}",
@@ -297,7 +297,7 @@ void setupPromoteJob(JobType jobType) {
 }
 
 void setupQuarkusUpdateJob() {
-    KogitoJobUtils.createQuarkusUpdateToolsJob(this, 'kogito-images-pr', [:], [:], [], [
+    KogitoJobUtils.createQuarkusUpdateToolsJob(this, 'kogito-images', [:], [:], [], [
         "python scripts/update-repository.py --quarkus-platform-version %new_version%"
     ])
 }

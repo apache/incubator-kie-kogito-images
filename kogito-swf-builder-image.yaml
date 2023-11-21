@@ -21,6 +21,8 @@
 
     packages:
       manager: microdnf
+      install:
+        - rsync
 
   - name: "quay.io/kiegroup/kogito-swf-builder"
     from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"

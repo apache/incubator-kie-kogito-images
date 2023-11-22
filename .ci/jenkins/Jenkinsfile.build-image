@@ -203,7 +203,8 @@ pipeline {
         cleanup {
             script {
                 cloud.cleanDockerMultiplatformBuild()
-                util.cleanNode(env.CONTAINER_ENGINE)
+                cloud.cleanContainersAndImages(env.CONTAINER_ENGINE)
+                cleanWs()
             }
         }
     }

@@ -227,7 +227,8 @@ pipeline {
             }
         }
         cleanup {
-            util.cleanNode('docker')
+            cloud.cleanContainersAndImages('docker')
+            cleanWs()
         }
         unsuccessful {
             sendUnsuccessfulNotification()

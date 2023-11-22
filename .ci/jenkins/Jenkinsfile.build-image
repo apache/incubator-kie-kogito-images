@@ -201,10 +201,10 @@ pipeline {
             }
         }
         cleanup {
-            util.cleanNode(env.CONTAINER_ENGINE)
-
-            cloud.cleanDockerMultiplatformBuild()
-            cloud.cleanLocalRegistry(env.localRegistryUrl.split(':')[1])
+            script {
+                cloud.cleanDockerMultiplatformBuild()
+                util.cleanNode(env.CONTAINER_ENGINE)
+            }
         }
     }
 }

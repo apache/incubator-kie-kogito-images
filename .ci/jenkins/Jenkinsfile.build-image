@@ -202,8 +202,6 @@ pipeline {
         }
         cleanup {
             script {
-                cloud.cleanDockerMultiplatformBuild()
-                cloud.cleanContainersAndImages(env.CONTAINER_ENGINE)
                 cleanWs()
             }
         }

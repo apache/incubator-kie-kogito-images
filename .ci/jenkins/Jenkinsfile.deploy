@@ -227,7 +227,6 @@ pipeline {
             }
         }
         cleanup {
-            cloud.cleanContainersAndImages('docker')
             cleanWs()
         }
         unsuccessful {

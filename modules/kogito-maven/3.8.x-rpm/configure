@@ -4,12 +4,8 @@ set -e
 SOURCES_DIR=/tmp/artifacts
 SCRIPT_DIR=$(dirname "${0}")
 
-mkdir "${KOGITO_HOME}"/.m2
-cp -v "${SCRIPT_DIR}"/maven/* "${KOGITO_HOME}"/.m2
-cp -v "${SCRIPT_DIR}"/added/* "${KOGITO_HOME}"/launch/
-
 # configure Red Hat repositories on the maven settings.xml for product builds
-if [ "${ENABLE_RH_MAVEN_REPO}" == "true" ]; then
+if [ "${ENABLE_RH_MAVEN_REPO}" = "true" ]; then
     echo "enabling red hat repositories"
     rh_repos="    <!-- JBoss EAP Maven repository -->\
 <profile>\

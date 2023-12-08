@@ -18,6 +18,7 @@ pipeline {
 
     options {
         timeout(time: 240, unit: 'MINUTES')
+        skipDefaultCheckout()
     }
 
     environment {
@@ -61,8 +62,8 @@ pipeline {
             steps {
                 script {
                     dir(getRepoName()) {
-                        if (githubscm.isBranchExist('origin',getPRBranch())) {
-                            githubscm.removeRemoteBranch('origin', getPRBranch())
+                        if (githubscm.isBranchExist('origin', getPRBranch())) {
+                            githubscm.removeRemoteBranch('origin', getPRBranch(), getGitAuthorPushCredsId())
                         }
                         githubscm.createBranch(getPRBranch())
                     }
@@ -192,7 +193,7 @@ pipeline {
                             }
                             prBody += '\nSee build url above for more information'
                         }
-                        String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getGitAuthorCredsID())
+                        String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getGitAuthorPushCredsId())
                         deployProperties["${getRepoName()}.pr.link"] = prLink
                     }
                 }
@@ -255,12 +256,12 @@ String getNotificationSubject() {
 
 void checkoutRepo() {
     deleteDir()
-    checkout(githubscm.resolveRepository(getRepoName(), getGitAuthor(), getBuildBranch(), false))
+    checkout(githubscm.resolveRepository(getRepoName(), getGitAuthor(), getBuildBranch(), false, getGitAuthorCredsId()))
 }
 
 void commitAndPushChanges(String commitMsg) {
     githubscm.commitChanges(commitMsg)
-    githubscm.pushObject('origin', getPRBranch(), getGitAuthorCredsID())
+    githubscm.pushObject('origin', getPRBranch(), getGitAuthorPushCredsId())
     changesDone = true
 }
 
@@ -383,8 +384,12 @@ String getGitAuthor() {
     return "${GIT_AUTHOR}"
 }
 
-String getGitAuthorCredsID() {
-    return env.AUTHOR_CREDS_ID
+String getGitAuthorCredsId() {
+    return env.GIT_AUTHOR_CREDS_ID
+}
+
+String getGitAuthorPushCredsId() {
+    return env.GIT_AUTHOR_PUSH_CREDS_ID
 }
 
 String getPRBranch() {

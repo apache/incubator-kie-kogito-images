@@ -331,11 +331,11 @@ String getTargetBranch() {
 }
 
 String getGitAuthorCredentialsId() {
-    return env.AUTHOR_CREDS_ID
+    return env.GIT_AUTHOR_CREDS_ID
 }
 
 String getGitAuthorTokenCredentialsId() {
-    return env.AUTHOR_TOKEN_CREDS_ID
+    return env.GIT_AUTHOR_TOKEN_CREDS_ID
 }
 
 boolean shouldDeployImage() {

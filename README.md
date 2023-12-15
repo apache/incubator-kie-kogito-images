@@ -91,7 +91,7 @@ To interact with Kogito images, you would need to install the needed dependencie
             * if any dependency is missing CeKit will tell which one.
     * [Bats](https://github.com/sstephenson/bats) 
     * Java 11 or higher
-    * Maven 3.8.6 or higher
+    * Maven 3.9.3 or higher
             
 * Optional dependencies:
     * [source-to-image](https://github.com/openshift/source-to-image)
@@ -146,7 +146,7 @@ There are three builder images available:
 * [quay.io/kiegroup/kogito-base-builder](https://quay.io/kiegroup/kogito-base-builder)  
 The Kogito base Builder Image is equipped with the following components:
   * OpenJDK 11.0.6
-  * Maven 3.8.6
+  * Maven 3.9.3
 
 * [quay.io/kiegroup/kogito-swf-builder](https://quay.io/kiegroup/kogito-swf-builder)  
   The Kogito SWF Builder Image extends the kogito-base-builder is equipped with the following components for faster builds:
@@ -164,7 +164,7 @@ The Kogito s2i Builder Image is equipped with the following components:
 
  * GraalVM 22.2.0-java11
  * OpenJDK 11+
- * Maven 3.8.6
+ * Maven 3.9.3
  
 For more information about what is installed on this image, take a look [here](kogito-s2i-builder-image.yaml) in the
 **modules.install** section. 

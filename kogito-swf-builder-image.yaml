@@ -13,7 +13,8 @@
           version: "11"
         - name: org.kie.kogito.dynamic.resources
         - name: org.kie.kogito.maven
-          version: "3.8.6"
+          version: "3.9.3"
+        - name: org.kie.kogito.maven.common
         - name: org.kie.kogito.project.versions
         - name: org.kie.kogito.swf.common.scripts
         - name: org.kie.kogito.swf.builder.build-config
@@ -60,7 +61,8 @@
           version: "11"
         - name: org.kie.kogito.dynamic.resources
         - name: org.kie.kogito.maven
-          version: "3.8.6"
+          version: "3.9.3"
+        - name: org.kie.kogito.maven.common
         - name: org.kie.kogito.project.versions
         - name: org.kie.kogito.swf.common.scripts
         - name: org.kie.kogito.swf.builder.runtime.community

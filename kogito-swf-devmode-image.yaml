@@ -30,7 +30,7 @@
 
     labels:
       - name: "io.quarkus.platform.version"
-        value: "2.16.10.Final"
+        value: "3.2.9.Final"
       - name: "org.kie.kogito.version"
         value: "2.0.0-SNAPSHOT"
       - name: "maintainer"

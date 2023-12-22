@@ -22,7 +22,6 @@ Feature: kogito-s2i-builder image JVM build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
-    And file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image and no RUNTIME_TYPE defined
@@ -39,7 +38,6 @@ Feature: kogito-s2i-builder image JVM build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
-    And file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
 
   Scenario: Verify if the s2i build is finished as expected performing a non native build with runtime image

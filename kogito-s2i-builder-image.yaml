@@ -62,11 +62,11 @@ modules:
     - name: org.kie.kogito.system.user
     - name: org.kie.kogito.logging
     - name: org.kie.kogito.launch.scripts
-    - name: org.kie.kogito.graalvm.java11.installer
-      version: "22.3"
-    - name: org.kie.kogito.graalvm.scripts
+    - name: org.kie.kogito.graalvm.java17.installer
+      version: "23.0"
+    - name: org.kie.kogito.graalvm.common.scripts
     - name: org.kie.kogito.openjdk
-      version: "11"
+      version: "17"
     - name: org.kie.kogito.dynamic.resources
     - name: org.kie.kogito.maven
       version: "3.9.3"

@@ -3,8 +3,7 @@ Feature: kogito-s2i-builder image native build tests
 
   Scenario: verify java cacerts and libsunec are available in the given kogito builder container.
     When container is started with command bash
-    Then  file /home/kogito/ssl-libs/libsunec.so should exist
-    And file /home/kogito/cacerts should exist
+    Then file /home/kogito/cacerts should exist
 
   Scenario: verify if the maven and graal vm settings are correct on kogito-s2i-builder image for native
     When container is started with command bash
@@ -12,7 +11,7 @@ Feature: kogito-s2i-builder image native build tests
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.9.3
     And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
     And run sh -c 'echo $GRAALVM_HOME' in container and immediately check its output for /usr/share/graalvm
-    And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 22.3.2
+    And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 23.0.2.1-Final
 
   Scenario: Verify if the s2i build is finished as expected using native build and runtime image
     Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-native:latest
@@ -48,7 +47,6 @@ Feature: kogito-s2i-builder image native build tests
       | wait            | 80                    |
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/rules-quarkus-helloworld-runner should exist
-    And file /home/kogito/ssl-libs/libsunec.so should exist
     And file /home/kogito/cacerts should exist
     And s2i build log should contain -J-Xmx2576980378
 

@@ -5,7 +5,7 @@ Feature: kogito-s2i-builder image JVM build tests
     When container is started with command bash
     Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.9.3
-    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
+    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-17
 
   Scenario: Verify if the s2i build is finished as expected with non native build and no runtime image
     Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-main

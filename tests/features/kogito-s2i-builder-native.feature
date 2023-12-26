@@ -9,7 +9,7 @@ Feature: kogito-s2i-builder image native build tests
     When container is started with command bash
     Then run sh -c 'echo $MAVEN_HOME' in container and immediately check its output for /usr/share/maven
     And run sh -c 'echo $MAVEN_VERSION' in container and immediately check its output for 3.9.3
-    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-11
+    And run sh -c 'echo $JAVA_HOME' in container and immediately check its output for /usr/lib/jvm/java-17
     And run sh -c 'echo $GRAALVM_HOME' in container and immediately check its output for /usr/share/graalvm
     And run sh -c 'echo $GRAALVM_VERSION' in container and immediately check its output for 23.0.2.1-Final
 

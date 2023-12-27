@@ -90,7 +90,7 @@ To interact with Kogito images, you would need to install the needed dependencie
             * All of those can be handled with pip, including CeKit.
             * if any dependency is missing CeKit will tell which one.
     * [Bats](https://github.com/sstephenson/bats) 
-    * Java 11 or higher
+    * Java 17 or higher
     * Maven 3.9.3 or higher
             
 * Optional dependencies:

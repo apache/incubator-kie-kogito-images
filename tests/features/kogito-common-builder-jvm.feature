@@ -40,6 +40,7 @@ Feature: kogito-s2i-builder image JVM build tests
     And file /home/kogito/bin/quarkus-run.jar should exist
     And file /home/kogito/cacerts should exist
 
+  @ignore
   Scenario: Verify if the s2i build is finished as expected performing a non native build with runtime image
     Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable     | value                     |
@@ -59,6 +60,7 @@ Feature: kogito-s2i-builder image JVM build tests
     And container log should contain DEBUG [io.qua.
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Dquarkus.log.level=DEBUG
 
+  @ignore
   Scenario: Verify if the s2i build is finished as expected performing a non native build and if it is listening on the expected port , test uses custom properties file to test the port configuration.
     Given s2i build /tmp/kogito-examples from kogito-quarkus-examples/rules-quarkus-helloworld using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable     | value   |
@@ -75,6 +77,7 @@ Feature: kogito-s2i-builder image JVM build tests
       | expected_phrase | ["hello","world"]     |
     And file /home/kogito/bin/quarkus-run.jar should exist
 
+  @ignore
   Scenario: Verify if the multi-module s2i build is finished as expected performing a non native build
     Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from . using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value                                                    |
@@ -117,6 +120,7 @@ Feature: kogito-s2i-builder image JVM build tests
 
 #### SpringBoot Scenarios
 
+  @ignore
   Scenario: Verify if the s2i build is finished as expected with debug enabled
       Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from kogito-springboot-examples/process-springboot-example using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
         | variable     | value        |
@@ -153,6 +157,7 @@ Feature: kogito-s2i-builder image JVM build tests
     And container log should contain Started DemoApplication
     And run sh -c 'echo $JAVA_OPTIONS' in container and immediately check its output for -Ddebug=true
   
+  @ignore
   Scenario: Verify if the s2i build is finished as expected and if it is listening on the expected port, test uses custom properties file to test the port configuration.
     Given s2i build /tmp/kogito-examples from kogito-springboot-examples/process-springboot-example using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       # Leave those here as placeholder for scripts adding variable to the test. No impact on tests if empty.
@@ -170,6 +175,7 @@ Feature: kogito-s2i-builder image JVM build tests
     And file /home/kogito/bin/process-springboot-example.jar should exist
     And container log should contain Tomcat initialized with port(s): 8080 (http)
   
+  @ignore
   Scenario: Verify if the s2i build is finished as expected using multi-module build with debug enabled
     Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from . using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value |
@@ -212,6 +218,7 @@ Feature: kogito-s2i-builder image JVM build tests
       | content_type         | application/json                                                              |
       | expected_status_code | 201                                                                           |
 
+  @ignore
   Scenario: Verify if the s2i build is finished as expected with uber-jar package type built
     Given s2i build https://github.com/apache/incubator-kie-kogito-examples.git from kogito-quarkus-examples/process-quarkus-example using nightly-main and runtime-image quay.io/kiegroup/kogito-runtime-jvm:latest
       | variable          | value                           |

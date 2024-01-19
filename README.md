@@ -639,7 +639,7 @@ $ docker run -it --env QUARKUS_DATASOURCE_JDBC_URL="jdbc:postgresql://localhost:
 To enable debug just use this env while running this image:
 
 ```bash
-$ docker run -it --env SCRIPT_DEBUG=true --env QUARKUS_INFINISPAN_CLIENT_HOSTS=my-infinispan-server:11222 quay.io/kiegroup/kogito-data-index-postgresql:latest
+$ docker run -it --env SCRIPT_DEBUG=true quay.io/kiegroup/kogito-data-index-postgresql:latest
 ```
 You should notice a few debug messages present in the system output.
 

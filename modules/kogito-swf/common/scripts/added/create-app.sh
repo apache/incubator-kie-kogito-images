@@ -119,6 +119,8 @@ if [ ! -z "${exclusion_jobs_service}" ]; then
     sed -i.bak "s|$pattern_jobs_service|$exclusion_jobs_service|" pom.xml
 fi
 
+source  "${script_dir_path}"/add-sonataflow-deployment-webapp.sh
+
 if [ "${SCRIPT_DEBUG^^}" = "TRUE" ]; then
     cat pom.xml
 fi

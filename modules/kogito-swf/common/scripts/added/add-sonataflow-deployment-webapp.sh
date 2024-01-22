@@ -22,10 +22,8 @@
 
 set -e
 
-sonataFlowDeploymentWebappVersion="0.32.0"
-
 sed -i.bak '/^  <properties>/a\
-    <sonataFlowDeploymentWebapp.version>'"$sonataFlowDeploymentWebappVersion"'<\/sonataFlowDeploymentWebapp.version>' pom.xml
+    <sonataFlowDeploymentWebapp.version>'"$SONATA_FLOW_DEPLOYMENT_WEBAPP_VERSION"'<\/sonataFlowDeploymentWebapp.version>' pom.xml
 
 sed -i.bak '/^  <dependencies>/a\
     <dependency>\

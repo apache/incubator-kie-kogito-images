@@ -40,6 +40,9 @@ envs:
     description: To use only if you plan to use the ${KOGITO_HOME}/launch/create-app.sh
   - name: QUARKUS_ADD_EXTENSION_ARGS
     description: To use only if you plan to use the ${KOGITO_HOME}/launch/add-extension.sh
+  - name: SONATA_FLOW_DEPLOYMENT_WEBAPP_VERSION
+    value: "0.32.0"
+    description: Please do not change. To change only if you plan to use the ${KOGITO_HOME}/launch/create-app.sh
 
 execute:
   - script: configure.sh

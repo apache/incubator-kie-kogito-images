@@ -62,3 +62,8 @@ cd ${KOGITO_HOME}/serverless-workflow-project
     -DskipTests \
     -Dquarkus.container-image.build=false \
     clean install
+
+# hide the disclaimer of SonataFlow Deployment Webapp
+sonataflow_deployment_webapp_data_json="src/main/resources/META-INF/resources/sonataflow-deployment-webapp-data.json"
+
+echo "$(jq '.showDisclaimer = false' $sonataflow_deployment_webapp_data_json)" > $sonataflow_deployment_webapp_data_json

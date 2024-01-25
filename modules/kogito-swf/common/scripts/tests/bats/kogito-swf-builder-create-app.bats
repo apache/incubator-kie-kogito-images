@@ -18,7 +18,7 @@
 # under the License.
 #
 
-setup() {
+setup_file() {
     export KOGITO_HOME=/tmp/kogito
     export HOME="${KOGITO_HOME}"
     export SONATA_FLOW_DEPLOYMENT_WEBAPP_VERSION="0.32.0"
@@ -26,12 +26,9 @@ setup() {
     export PROJECT_ARTIFACT_ID='serverless-workflow-project'
     export PROJECT_DIR="${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
     export PROJECT_POM="${PROJECT_DIR}"/pom.xml
+    export SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON_FILENAME="sonataflow-deployment-webapp-data.json"
+    export SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON="${PROJECT_DIR}/src/main/resources/META-INF/resources/${SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON_FILENAME}"
 
-    if [ -d ${HOME}/.m2 ]; then
-        export MAVEN_ARGS_APPEND="-o"
-    else
-        export MAVEN_ARGS_APPEND=""
-    fi
     mkdir -p ${HOME}/.m2/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-maven/common/maven/settings.xml ${HOME}/.m2/
     export MAVEN_SETTINGS_PATH="${HOME}/.m2/settings.xml"
@@ -43,17 +40,19 @@ setup() {
     cp $BATS_TEST_DIRNAME/../../added/jvm-settings.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-logging/added/logging.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../added/create-app.sh "${KOGITO_HOME}"/launch/
+    cp $BATS_TEST_DIRNAME/../../added/build-app.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../added/add-sonataflow-deployment-webapp.sh "${KOGITO_HOME}"/launch/
 
-    source $BATS_TEST_DIRNAME/../../../../../kogito-maven/common/added/configure-maven.sh
+    source ${KOGITO_HOME}/launch/configure-maven.sh
 
     cd "${KOGITO_HOME}" 
     source ${KOGITO_HOME}/launch/create-app.sh
+
+    source ${KOGITO_HOME}/launch/build-app.sh
 }
 
-teardown() {
-    rm -rf "${KOGITO_HOME}/launch"
-    rm -rf "${PROJECT_DIR}"
+teardown_file() {
+    rm -rf "${KOGITO_HOME}"
 }
 
 @test "Verify the project contains the pom.xml" {
@@ -84,3 +83,12 @@ teardown() {
   result=$(xmllint --xpath "count(/*[local-name()='project']/*[local-name()='build']/*[local-name()='plugins']/*[local-name()='plugin']/*[local-name()='executions']/*[local-name()='execution']/*[local-name()='id'][text()='copy-sonataflow-deployment-webapp-resources'])" $PROJECT_POM)
   [ "$result" -eq 1 ]
 }
+@test "Verify the project contains the ${SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON_FILENAME}" {
+    [[ -f $SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON ]]
+}
+
+@test "Check property showDisclaimer in ${SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON_FILENAME}" {
+    result=$(jq -r ".showDisclaimer" $SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON)
+    [ "$result" == "false" ]
+}
+

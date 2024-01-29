@@ -21,7 +21,7 @@
 setup_file() {
     export KOGITO_HOME=/tmp/kogito
     export HOME="${KOGITO_HOME}"
-    export SONATA_FLOW_DEPLOYMENT_WEBAPP_VERSION="0.32.0"
+    export SONATAFLOW_DEPLOYMENT_WEBAPP_VERSION="0.32.0"
 
     export PROJECT_ARTIFACT_ID='serverless-workflow-project'
     export PROJECT_DIR="${KOGITO_HOME}/${PROJECT_ARTIFACT_ID}"
@@ -61,7 +61,7 @@ teardown_file() {
 
 @test "Check the value of the node sonataFlowDeploymentWebapp.version" {
   result=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='properties']/*[local-name()='sonataFlowDeploymentWebapp.version']/text()" $PROJECT_POM)
-  [ "$result" == $SONATA_FLOW_DEPLOYMENT_WEBAPP_VERSION ]
+  [ "$result" == $SONATAFLOW_DEPLOYMENT_WEBAPP_VERSION ]
 }
 
 @test "Check node 'dependencies' has a node 'dependency' with 'artifactId' node with value 'sonataflow-deployment-webapp'" {

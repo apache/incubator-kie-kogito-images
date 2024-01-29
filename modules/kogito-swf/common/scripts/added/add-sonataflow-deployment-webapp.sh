@@ -23,7 +23,7 @@
 set -e
 
 sed -i.bak '/^  <properties>/a\
-    <sonataFlowDeploymentWebapp.version>'"$SONATA_FLOW_DEPLOYMENT_WEBAPP_VERSION"'<\/sonataFlowDeploymentWebapp.version>' pom.xml
+    <sonataFlowDeploymentWebapp.version>'"$SONATAFLOW_DEPLOYMENT_WEBAPP_VERSION"'<\/sonataFlowDeploymentWebapp.version>' pom.xml
 
 sed -i.bak '/^  <dependencies>/a\
     <dependency>\

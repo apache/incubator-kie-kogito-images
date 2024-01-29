@@ -32,13 +32,18 @@ setup_file() {
     mkdir -p ${HOME}/.m2/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-maven/common/maven/settings.xml ${HOME}/.m2/
     export MAVEN_SETTINGS_PATH="${HOME}/.m2/settings.xml"
+    export JBOSS_CONTAINER_JAVA_JVM_MODULE=${KOGITO_HOME}/launch
 
     mkdir -p "${KOGITO_HOME}"/launch
 
     cp $BATS_TEST_DIRNAME/../../added/configure-jvm-mvn.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-maven/common/added/configure-maven.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-dynamic-resources/added/debug-options "${KOGITO_HOME}"/launch/
+    chmod +x "${KOGITO_HOME}"/launch/debug-options 
     cp $BATS_TEST_DIRNAME/../../../../../kogito-dynamic-resources/added/java-default-options "${KOGITO_HOME}"/launch/
+    chmod +x "${KOGITO_HOME}"/launch/java-default-options 
+    cp $BATS_TEST_DIRNAME/../../../../../kogito-dynamic-resources/added/container-limits "${KOGITO_HOME}"/launch/
+    chmod +x "${KOGITO_HOME}"/launch/container-limits
     cp $BATS_TEST_DIRNAME/../../added/jvm-settings.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-logging/added/logging.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../added/create-app.sh "${KOGITO_HOME}"/launch/

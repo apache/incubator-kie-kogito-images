@@ -37,6 +37,8 @@ setup_file() {
 
     cp $BATS_TEST_DIRNAME/../../added/configure-jvm-mvn.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-maven/common/added/configure-maven.sh "${KOGITO_HOME}"/launch/
+    cp $BATS_TEST_DIRNAME/../../../../../kogito-dynamic-resources/added/debug-options "${KOGITO_HOME}"/launch/
+    cp $BATS_TEST_DIRNAME/../../../../../kogito-dynamic-resources/added/java-default-options "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../added/jvm-settings.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-logging/added/logging.sh "${KOGITO_HOME}"/launch/
     cp $BATS_TEST_DIRNAME/../../added/create-app.sh "${KOGITO_HOME}"/launch/

@@ -29,6 +29,7 @@ setup_file() {
     export SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON_FILENAME="sonataflow-deployment-webapp-data.json"
     export SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON="${PROJECT_DIR}/src/main/resources/META-INF/resources/${SONATAFLOW_DEPLOYMENT_WEBAPP_DATA_JSON_FILENAME}"
 
+    rm -rf "${KOGITO_HOME}"
     mkdir -p ${HOME}/.m2/
     cp $BATS_TEST_DIRNAME/../../../../../kogito-maven/common/maven/settings.xml ${HOME}/.m2/
     export MAVEN_SETTINGS_PATH="${HOME}/.m2/settings.xml"

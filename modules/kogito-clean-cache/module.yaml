@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -17,18 +16,10 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+schema_version: 1
+name: org.kie.kogito.clean.cache
+version: "999-SNAPSHOT"
+description: Clean up cache files and non-deterministic files leftovers to guarantee a reproducible build.
 
-set -e
-
-BUILD_OUTPUT="${KOGITO_HOME}"/build_output/
-
-mkdir -p "${BUILD_OUTPUT}"
-
-echo "Zip and copy scaffold project"
-tar cf kogito-swf-quarkus-app.tar -C "${PROJECT_ARTIFACT_ID}" .
-cp -v kogito-swf-quarkus-app.tar "${BUILD_OUTPUT}"
-
-echo "Zip and copy maven repo"
-cd "${KOGITO_HOME}"/.m2/repository/
-tar cf kogito-swf-maven-repo.tar .
-cp -v kogito-swf-maven-repo.tar "${BUILD_OUTPUT}"
+execute:
+  - script: clean-cache.sh

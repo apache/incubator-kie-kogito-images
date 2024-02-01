@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -18,17 +18,13 @@
 # under the License.
 #
 
-set -e
-
-BUILD_OUTPUT="${KOGITO_HOME}"/build_output/
-
-mkdir -p "${BUILD_OUTPUT}"
-
-echo "Zip and copy scaffold project"
-tar cf kogito-swf-quarkus-app.tar -C "${PROJECT_ARTIFACT_ID}" .
-cp -v kogito-swf-quarkus-app.tar "${BUILD_OUTPUT}"
-
-echo "Zip and copy maven repo"
-cd "${KOGITO_HOME}"/.m2/repository/
-tar cf kogito-swf-maven-repo.tar .
-cp -v kogito-swf-maven-repo.tar "${BUILD_OUTPUT}"
+# Remove font cache
+rm -rf /usr/lib/fontconfig/cache/*
+# Clean dnf history see https://access.redhat.com/solutions/4500331
+rm -f /var/lib/dnf/history*
+# Clean RPM database. We know it's not safe, but we must do it anyway to achieve a reproducible builds
+# Since we won't use rpm once the image is built, it should be ok
+# See 
+# - https://access.redhat.com/solutions/439953
+# - https://access.redhat.com/solutions/6903
+rm -rf /var/lib/rpm/*

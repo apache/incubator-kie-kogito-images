@@ -19,12 +19,8 @@
 #
 set -e
 
-SOURCES_DIR=/tmp/artifacts
 SCRIPT_DIR=$(dirname "${0}")
 ADDED_DIR="${SCRIPT_DIR}"/added
-
-mkdir -p "${KOGITO_HOME}"/bin/postgresql
-cp -vr ${SOURCES_DIR}/quarkus-app "${KOGITO_HOME}"/bin/postgresql
 
 cp "${ADDED_DIR}"/kogito-app-launch.sh "${KOGITO_HOME}"
 chmod +x-w "${KOGITO_HOME}"/kogito-app-launch.sh

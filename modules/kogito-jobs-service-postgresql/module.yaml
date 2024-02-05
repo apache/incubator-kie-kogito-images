@@ -24,6 +24,7 @@ version: "999-SNAPSHOT"
 # called by the Makefile before builds
 artifacts:
   - path: /tmp/build/jobs-service-postgresql
+    dest: /home/kogito/bin/postgresql
     name: quarkus-app
 
 execute:

@@ -347,7 +347,7 @@ void setupWeeklyDeployJob(JobType jobType) {
         QUARKUS_PLATFORM_NEXUS_URL: Utils.getMavenQuarkusPlatformRepositoryUrl(this),
     ])
 
-    jobParams.env.put('IMAGES_LIST', 'kogito-swf-devmode')
+    jobParams.env.put('IMAGES_LIST', 'kogito-swf-builder,kogito-swf-devmode')
 
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         parameters {
@@ -368,7 +368,7 @@ void setupWeeklyDeployJob(JobType jobType) {
             stringParam('IMAGE_REGISTRY_CREDENTIALS', "${CLOUD_IMAGE_REGISTRY_CREDENTIALS}", 'Image registry credentials to use to deploy images. Will be ignored if no IMAGE_REGISTRY is given')
             stringParam('IMAGE_REGISTRY', "${CLOUD_IMAGE_REGISTRY}", 'Image registry to use to deploy images')
             stringParam('IMAGE_NAMESPACE', "${CLOUD_IMAGE_NAMESPACE}", 'Image namespace to use to deploy images')
-            stringParam('DEPLOY_IMAGE_NAME_SUFFIX', '', 'Image name suffix to use to deploy images. In case you need to change the final image name, you can add a suffix to it.')
+            stringParam('IMAGE_NAME_SUFFIX', '', 'Image name suffix to use to deploy images. In case you need to change the final image name, you can add a suffix to it.')
             booleanParam('DEPLOY_WITH_LATEST_TAG', false, 'Set to true if you want the deployed images to also be with the `latest` tag')
 
             stringParam('GIT_CHECKOUT_DATETIME', '', 'Git checkout date and time - (Y-m-d H:i)')

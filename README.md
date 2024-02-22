@@ -1070,26 +1070,15 @@ Below you can find all modules used to build the Kogito Images
 - [kogito-data-index-common](modules/kogito-data-index-common): Data Index common module.
 - [kogito-data-index-ephemeral](modules/kogito-data-index-ephemeral): Installs and Configure the ephemeral PostgreSQL data-index jar inside the image.
 - [kogito-data-index-postgresql](modules/kogito-data-index-postgresql): Installs and Configure the PostgreSQL data-index jar inside the image.
-- [kogito-epel](modules/kogito-epel): Configures the epel repository on the target image.
-- [kogito-graalvm-installer](modules/kogito-graalvm-installer): Installs the GraalVM on the target Image.
-- [kogito-graalvm-scripts](modules/kogito-graalvm-scripts): Configures the GraalVM on the target image and provides custom configuration script. 
-- [kogito-image-dependencies](modules/kogito-image-dependencies): Installs rpm packages on the target image. Contains common dependencies for Kogito Images.
 - [kogito-jobs-service-common](modules/kogito-jobs-service-common): Job service common module
 - [kogito-jobs-service-ephemeral](modules/kogito-jobs-service-ephemeral): Installs and Configure the in-memory jobs-service jar inside the image
 - [kogito-jobs-service-postgresql](modules/kogito-jobs-service-postgresql): Installs and Configure the postgresql jobs-service jar inside the image
 - [kogito-jobs-service-allinone](modules/kogito-jobs-service-all-in-one): Provides the runner script that supports all jobs-service flavors
-- [kogito-kubernetes-client](modules/kogito-kubernetes-client): Provides a simple wrapper to interact with Kubernetes API.
 - [kogito-launch-scripts](modules/kogito-launch-scripts): Main script for all images, it contains the startup script for Kogito Images
 - [kogito-logging](modules/kogito-logging): Provides common logging functions.
 - [kogito-management-console](modules/kogito-management-console): Installs and Configure the management-console jar inside the image
 - [kogito-jit-runner](modules/kogito-jit-runner): Installs and Configure the jit-runner jar inside the image
-- [kogito-maven](modules/kogito-maven): Installs and configure Maven on the S2I images, also provides custom configuration script.
-- [kogito-openjdk](modules/kogito-openjdk): Provides OpenJDK and JRE.
-- [kogito-persistence](modules/kogito-persistence): Provides the needed configuration scripts to properly configure the Kogito Services in the target image.
-- [kogito-runtime-native](modules/kogito-runtime-native): Main module for the quay.io/kiegroup/kogito-runtime-native image.
-- [kogito-runtime-jvm](modules/kogito-runtime-jvm): Main module for the quay.io/kiegroup/kogito-runtime-jvm image.
-- [kogito-s2i-builder](modules/kogito-s2i-builder): Main module for the quay.io/kiegroup/kogito-s2i-builder image.
-- [kogito-s2i-core](modules/kogito-s2i-core): Provides the source-to-image needed scripts and configurations.
+- [kogito-maven](modules/kogito-maven): Provides custom configuration script.
 
 
 For each image, we use a specific *-image.yaml file.
@@ -1102,10 +1091,6 @@ Please inspect the image files to learn which modules are being installed on eac
 - [quay.io/kiegroup/kogito-jobs-service-allinone](kogito-jobs-service-allinone-image.yaml) 
 - [quay.io/kiegroup/kogito-management-console](kogito-management-console-image.yaml)
 - [quay.io/kiegroup/kogito-jit-runner](kogito-jit-runner-image.yaml)
-- [quay.io/kiegroup/kogito-runtime-jvm](kogito-runtime-jvm-image.yaml)
-- [quay.io/kiegroup/kogito-runtime-native](kogito-runtime-native-image.yaml)
-- [quay.io/kiegroup/kogito-s2i-builder](kogito-s2i-builder-image.yaml)
-
 
 ### Testing Images
 
@@ -1129,12 +1114,12 @@ See [Writing Behave Tests](#writing-behave-tests).
 
 Example:
 ```bash
-make build-image image_name=kogito-s2i-builder test_options=--wip
+make build-image image_name=kogito-swf-builder test_options=--wip
 ```
 
 Or by name:
 ```bash
-make build-image image_name=kogito-s2i-builder test_options=--name <Test Scenario Name>
+make build-image image_name=kogito-swf-builder test_options=--name <Test Scenario Name>
 ```
 
 You can also add `cekit_option` to the make command, which will be appended to the Cekit command. Default is `cekit -v`.

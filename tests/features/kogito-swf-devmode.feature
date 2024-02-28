@@ -114,14 +114,14 @@ Feature: Serverless Workflow devmode images
     Then check that page is served
       | property             | value                                                              |
       | port                 | 8080                                                               |
-      | path                 | /q/dev-v1/org.kie.kogito.kogito-quarkus-serverless-workflow/dataindex |
+      | path                 | /q/dev-v1/org.apache.sonataflow.sonataflow-quarkus/dataindex |
       | request_method       | GET                                                                |
       | wait                 | 480                                                                |
       | expected_status_code | 200                                                                |
     And check that page is served
       | property             | value                                                                            |
       | port                 | 8080                                                                             |
-      | path                 | /q/dev-v1/org.kie.kogito.kogito-quarkus-serverless-workflow-devui/workflowInstances |
+      | path                 | /q/dev-v1/org.apache.sonataflow.sonataflow-quarkus-devui/workflowInstances |
       | request_method       | GET                                                                              |
       | wait                 | 480                                                                              |
       | expected_status_code | 200                                                                              |

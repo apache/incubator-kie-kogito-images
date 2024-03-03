@@ -68,7 +68,9 @@
         - name: org.kie.kogito.project.versions
         - name: org.kie.kogito.swf.common.scripts
         - name: org.kie.kogito.swf.builder.runtime.community
+        - name: org.kie.kogito.workflow-manifests
 
     run:
       workdir: "/home/kogito/${PROJECT_ARTIFACT_ID}"
       user: 1001
+

@@ -15,11 +15,11 @@ Feature: Serverless Workflow devmode images
     And container log should contain --no-transfer-progress
     And container log should contain -Duser.home=/home/kogito -o
     And container log should contain -Dquarkus.test.continuous-testing=disabled
-    And container log should match regex Installed features:.*kogito-serverless-workflow
-    And container log should match regex Installed features:.*kogito-addon-knative-eventing-extension
+    And container log should match regex Installed features:.*sonataflow-quarkus
+    And container log should match regex Installed features:.*kie-addons-quarkus-knative-eventing
     And container log should match regex Installed features:.*smallrye-health
-    And container log should match regex Installed features:.*kogito-serverless-workflow-devui
-    And container log should match regex Installed features:.*kogito-addon-source-files-extension
+    And container log should match regex Installed features:.*sonataflow-quarkus-devui
+    And container log should match regex Installed features:.*kie-addons-quarkus-source-files
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
 
@@ -54,11 +54,11 @@ Feature: Serverless Workflow devmode images
     And container log should contain -Duser.home=/home/kogito
     And container log should not contain /bin/mvn -B -X --batch-mode -o
     And container log should contain Extension io.quarkus:quarkus-elytron-security-jdbc has been installed
-    And container log should match regex Installed features:.*kogito-serverless-workflow
-    And container log should match regex Installed features:.*kogito-addon-knative-eventing-extension
+    And container log should match regex Installed features:.*sonataflow-quarkus
+    And container log should match regex Installed features:.*kie-addons-quarkus-knative-eventing
     And container log should match regex Installed features:.*smallrye-health
-    And container log should match regex Installed features:.*kogito-serverless-workflow-devui
-    And container log should match regex Installed features:.*kogito-addon-source-files-extension
+    And container log should match regex Installed features:.*sonataflow-quarkus-devui
+    And container log should match regex Installed features:.*kie-addons-quarkus-source-files
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
     And container log should match regex Installed features:.*security-jdbc
@@ -114,14 +114,14 @@ Feature: Serverless Workflow devmode images
     Then check that page is served
       | property             | value                                                              |
       | port                 | 8080                                                               |
-      | path                 | /q/dev-v1/org.apache.sonataflow.sonataflow-quarkus/dataindex |
+      | path                 | /q/dev-v1/org.apache.kie.sonataflow.sonataflow-quarkus/dataindex |
       | request_method       | GET                                                                |
       | wait                 | 480                                                                |
       | expected_status_code | 200                                                                |
     And check that page is served
       | property             | value                                                                            |
       | port                 | 8080                                                                             |
-      | path                 | /q/dev-v1/org.apache.sonataflow.sonataflow-quarkus-devui/workflowInstances |
+      | path                 | /q/dev-v1/org.apache.kie.sonataflow.sonataflow-quarkus-devui/workflowInstances |
       | request_method       | GET                                                                              |
       | wait                 | 480                                                                              |
       | expected_status_code | 200                                                                              |
@@ -137,7 +137,7 @@ Feature: Serverless Workflow devmode images
       | wait                 | 480               |
       | request_method       | GET               |
       | expected_status_code | 200               |
-    And container log should contain kogito-addon-microprofile-config-service-catalog-extension
+    And container log should contain kogito-addons-quarkus-microprofile-config-service-catalog
     
   Scenario: Verify if container have the KOGITO_CODEGEN_PROCESS_FAILONERROR env set to false
     When container is started with command bash

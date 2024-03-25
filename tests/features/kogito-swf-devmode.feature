@@ -18,7 +18,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-serverless-workflow
     And container log should match regex Installed features:.*kie-addon-knative-eventing-extension
     And container log should match regex Installed features:.*smallrye-health
-    And container log should match regex Installed features:.*kogito-serverless-workflow-devui
+    And container log should match regex Installed features:.*sonataflow-quarkus-devui
     And container log should match regex Installed features:.*kie-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
@@ -57,7 +57,7 @@ Feature: Serverless Workflow devmode images
     And container log should match regex Installed features:.*kogito-serverless-workflow
     And container log should match regex Installed features:.*kie-addon-knative-eventing-extension
     And container log should match regex Installed features:.*smallrye-health
-    And container log should match regex Installed features:.*kogito-serverless-workflow-devui
+    And container log should match regex Installed features:.*sonataflow-quarkus-devui
     And container log should match regex Installed features:.*kie-addon-source-files-extension
     And container log should match regex Installed features:.*kogito-addons-quarkus-jobs-service-embedded
     And container log should match regex Installed features:.*kogito-addons-quarkus-data-index-inmemory
@@ -114,14 +114,14 @@ Feature: Serverless Workflow devmode images
     Then check that page is served
       | property             | value                                                              |
       | port                 | 8080                                                               |
-      | path                 | /q/dev-v1/org.apache.kie.sonataflow.sonataflow-quarkus/dataindex |
+      | path                 | /q/dev-v1/org.kie.kogito-addons-quarkus-data-index-inmemory/dataindex |
       | request_method       | GET                                                                |
       | wait                 | 480                                                                |
       | expected_status_code | 200                                                                |
     And check that page is served
       | property             | value                                                                            |
       | port                 | 8080                                                                             |
-      | path                 | /q/dev-v1/org.apache.kie.sonataflow.sonataflow-quarkus-devui/workflowInstances |
+      | path                 | /q/dev-ui/org.apache.kie.sonataflow.sonataflow-quarkus-devui/workflows |
       | request_method       | GET                                                                              |
       | wait                 | 480                                                                              |
       | expected_status_code | 200                                                                              |

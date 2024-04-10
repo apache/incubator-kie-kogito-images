@@ -194,6 +194,7 @@ void createBuildAndTestStageClosure(String image) {
             buildParams.add(string(name: 'BUILD_IMAGE_NAME', value: image))
             buildParams.add(string(name: 'SOURCE_AUTHOR', value: getGitAuthor()))
             buildParams.add(string(name: 'SOURCE_BRANCH', value: getBuildBranch()))
+            buildParams.add(string(name: 'GIT_CHECKOUT_DATETIME', value: getCheckoutDatetime()))
 
             buildParams.add(string(name: 'MAVEN_ARTIFACTS_REPOSITORY', value: env.MAVEN_ARTIFACT_REPOSITORY))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_URI', value: params.APPS_URI))
@@ -201,6 +202,8 @@ void createBuildAndTestStageClosure(String image) {
             buildParams.add(booleanParam(name: 'SKIP_TESTS', value: params.SKIP_TESTS))
             buildParams.add(string(name: 'TESTS_KOGITO_EXAMPLES_URI', value: params.EXAMPLES_URI))
             buildParams.add(string(name: 'TESTS_KOGITO_EXAMPLES_REF', value: params.EXAMPLES_REF))
+
+            buildParams.add(booleanParam(name: 'UPDATE_KOGITO_VERSION', value: true))
 
             buildParams.add(booleanParam(name: 'DEPLOY_IMAGE', value: true))
             buildParams.add(booleanParam(name: 'DEPLOY_IMAGE_USE_OPENSHIFT_REGISTRY', value: isDeployImageInOpenshiftRegistry()))

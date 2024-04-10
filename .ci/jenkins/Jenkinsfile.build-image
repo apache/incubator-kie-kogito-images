@@ -91,9 +91,25 @@ pipeline {
                         echo "Setup Repository url to '${getMavenArtifactRepository()}'"
                         runPythonCommand("python scripts/update-repository.py  --repo-url ${getMavenArtifactRepository()}")
                     }
+                    // Set current project version
+                    if (params.UPDATE_KOGITO_VERSION) {
+                        env.PROJECT_VERSION = runPythonCommand("python scripts/retrieve_version.py")
+                    }
                 }
             }
         }
+
+        stage('Update project version') {
+            when {
+                expression { params.UPDATE_KOGITO_VERSION }
+            }
+            steps {
+                script {
+                    runPythonCommand("python scripts/manage-kogito-version.py --bump-to ${getProjectVersion()} --confirm")
+                }
+            }
+        }
+
         // Commented as we cannot fully rely on Quarkus platform
         // Should be uncommmented once https://issues.redhat.com/browse/KOGITO-9120 is implemented
         // stage('Setup Quarkus platform') {
@@ -414,4 +430,21 @@ String getTriggeringProjectName() {
         return currentBuild.upstreamBuilds[0].projectName
     }
     return ""
+}
+
+String getCheckoutDatetime() {
+    return params.GIT_CHECKOUT_DATETIME
+}
+
+String getProjectVersionDate() {
+    def projectVersionDate = (getCheckoutDatetime() =~ /(\d{4}-\d{2}-\d{2})/)[0][0]
+    return projectVersionDate.replace('-', '')
+}
+
+String getProjectVersion(boolean keepSnapshotSuffix = true) {
+    def projectVersion = env.PROJECT_VERSION
+    if (keepSnapshotSuffix) {
+        return projectVersion.replace("-SNAPSHOT", "-${getProjectVersionDate()}-SNAPSHOT")
+    }
+    return projectVersion.replace("-SNAPSHOT", "-${getProjectVersionDate()}")
 }

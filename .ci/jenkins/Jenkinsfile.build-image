@@ -93,7 +93,7 @@ pipeline {
                     }
                     // Set current project version
                     if (params.UPDATE_KOGITO_VERSION) {
-                        env.PROJECT_VERSION = runPythonCommand("python scripts/retrieve_version.py")
+                        env.PROJECT_VERSION = runPythonCommand("python scripts/retrieve_version.py", true).trim()
                     }
                 }
             }

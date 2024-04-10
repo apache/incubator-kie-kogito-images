@@ -41,7 +41,7 @@ build-image: clone-repos _build-image
 _build-image:
 ifneq ($(ignore_build),true)
 	scripts/build-kogito-apps-components.sh ${image_name} ${KOGITO_APPS_TARGET_BRANCH} ${KOGITO_APPS_TARGET_URI};
-	${CEKIT_CMD} -v --descriptor ${image_name}-image.yaml build ${build_options} ${BUILD_ENGINE}
+	${CEKIT_CMD} --descriptor ${image_name}-image.yaml build ${build_options} ${BUILD_ENGINE}
 endif
 # tag with shortened version
 ifneq ($(ignore_tag),true)
@@ -51,7 +51,7 @@ ifneq ($(ignore_tag),true)
 endif
 # if ignore_test is set to true, ignore the tests
 ifneq ($(ignore_test),true)
-	${CEKIT_CMD} -v --descriptor ${image_name}-image.yaml test behave ${test_options}
+	${CEKIT_CMD} --descriptor ${image_name}-image.yaml test behave ${test_options}
 	tests/shell/run.sh ${image_name} "quay.io/kiegroup/${image_name}:${SHORTENED_LATEST_VERSION}"
 endif
 

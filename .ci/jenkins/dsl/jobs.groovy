@@ -180,14 +180,13 @@ void setupBuildImageJob(JobType jobType) {
             stringParam('SOURCE_AUTHOR', Utils.getGitAuthor(this), 'Build author')
             stringParam('SOURCE_BRANCH', Utils.getGitBranch(this), 'Build branch name')
             stringParam('TARGET_BRANCH', '', '(Optional) In case of a PR to merge with target branch, please provide the target branch')
-            stringParam('GIT_CHECKOUT_DATETIME', '', '(Optional) Git checkout date and time - (Y-m-d H:i), required to update kogito version')
 
             // Build information
             stringParam('MAVEN_ARTIFACTS_REPOSITORY', "${MAVEN_ARTIFACTS_REPOSITORY}")
             stringParam('BUILD_KOGITO_APPS_URI', '', '(Optional) Git uri to the kogito-apps repository to use for tests.')
             stringParam('BUILD_KOGITO_APPS_REF', '', '(Optional) Git reference (branch/tag) to the kogito-apps repository to use for building. Default to BUILD_BRANCH_NAME.')
             stringParam('QUARKUS_PLATFORM_URL', Utils.getMavenQuarkusPlatformRepositoryUrl(this), 'URL to the Quarkus platform to use. The version to use will be guessed from artifacts.')
-            booleanParam('UPDATE_KOGITO_VERSION', false, '(Optional) Update Kogito Version')
+            stringParam('UPDATE_KOGITO_VERSION', '', '(Optional) Update kogito to a specific version in the project')
 
             // Test information
             booleanParam('SKIP_TESTS', false, 'Skip tests')

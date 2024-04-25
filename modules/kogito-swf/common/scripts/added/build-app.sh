@@ -63,3 +63,5 @@ cd ${KOGITO_HOME}/serverless-workflow-project
     -DskipTests \
     -Dquarkus.container-image.build=false \
     clean install
+
+"${script_dir_path}"/generate-manifests.sh "${resources_path}"

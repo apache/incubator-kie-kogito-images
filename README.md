@@ -166,12 +166,12 @@ The Kogito Component Images can be considered as lightweight images that will co
 by providing extra capabilities, like managing the processes on a web UI or providing persistence layer to the Kogito applications.
 Today we have the following Kogito Component Images:
 
-* [docker.io/apache/incubator-kie-kogito-data-index-ephemeral](https://docker.io/apache/incubator-kie-kogito-data-index-ephemeral)
-* [docker.io/apache/incubator-kie-kogito-data-index-postgresql](https://docker.io/apache/incubator-kie-kogito-data-index-postgresql)
-* [docker.io/apache/incubator-kie-kogito-jobs-service-ephemeral](https://docker.io/apache/incubator-kie-kogito-jobs-service-ephemeral) 
-* [docker.io/apache/incubator-kie-kogito-jobs-service-postgresql](https://docker.io/apache/incubator-kie-kogito-jobs-service-postgresql)
-* [docker.io/apache/incubator-kie-kogito-jobs-service-allinone](https://docker.io/apache/incubator-kie-kogito-jobs-service-allinone)
-* [docker.io/apache/incubator-kie-kogito-jit-runner](https://docker.io/apache/incubator-kie-kogito-jit-runner)
+* [docker.io/apache/incubator-kie-kogito-data-index-ephemeral](https://hub.docker.com/r/apache/incubator-kie-kogito-data-index-ephemeral)
+* [docker.io/apache/incubator-kie-kogito-data-index-postgresql](https://hub.docker.com/r/apache/incubator-kie-kogito-data-index-postgresql)
+* [docker.io/apache/incubator-kie-kogito-jobs-service-ephemeral](https://hub.docker.com/r/apache/incubator-kie-kogito-jobs-service-ephemeral) 
+* [docker.io/apache/incubator-kie-kogito-jobs-service-postgresql](https://hub.docker.com/r/apache/incubator-kie-kogito-jobs-service-postgresql)
+* [docker.io/apache/incubator-kie-kogito-jobs-service-allinone](https://hub.docker.com/r/apache/incubator-kie-kogito-jobs-service-allinone)
+* [docker.io/apache/incubator-kie-kogito-jit-runner](https://hub.docker.com/r/apache/incubator-kie-kogito-jit-runner)
 
 
 ### Kogito Data Index Component Images

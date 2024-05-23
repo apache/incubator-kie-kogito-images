@@ -347,7 +347,9 @@ void setupWeeklyDeployJob(JobType jobType) {
 
         QUARKUS_PLATFORM_NEXUS_URL: Utils.getMavenQuarkusPlatformRepositoryUrl(this),
     ])
-
+    if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
+        jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
+    }
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         parameters {
             stringParam('DISPLAY_NAME', '', 'Setup a specific build display name')

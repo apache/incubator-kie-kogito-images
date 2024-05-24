@@ -236,7 +236,7 @@ pipeline {
                     """
                     release.gpgImportKeyFromFileWithPassword(getReleaseGpgSignKeyCredsId(), getReleaseGpgSignPassphraseCredsId())
                     release.gpgSignFileDetachedSignatureWithPassword(resultingFileName, signatureFileName, getReleaseGpgSignPassphraseCredsId())
-                    release.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), resultingFileName, signatureFileName)
+                    release.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getReleaseVersion(), resultingFileName, signatureFileName)
                 }
             }
             post {

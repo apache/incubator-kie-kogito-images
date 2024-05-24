@@ -232,7 +232,7 @@ pipeline {
                     def signatureFileName = "${resultingFileName}.asc"
                     sh """
                         docker pull ${getBuiltImageTag()}
-                        docker save ${getBuiltImageTag()} > ${resultingFileName}
+                        docker save ${getBuiltImageTag()} | gzip > ${resultingFileName}
                     """
                     release.gpgImportKeyFromFileWithPassword(getReleaseGpgSignKeyCredsId(), getReleaseGpgSignPassphraseCredsId())
                     release.gpgSignFileDetachedSignatureWithPassword(resultingFileName, signatureFileName, getReleaseGpgSignPassphraseCredsId())

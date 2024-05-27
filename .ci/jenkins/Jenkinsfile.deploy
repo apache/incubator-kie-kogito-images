@@ -213,6 +213,12 @@ pipeline {
                         }
                         String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getGitAuthorPushCredsId())
                         deployProperties["${getRepoName()}.pr.link"] = prLink
+
+
+                        // Create a new tag
+                        githubscm.setUserConfigFromCreds(getGitAuthorPushCredsId())
+                        githubscm.tagRepository(getProjectVersion())
+                        githubscm.pushRemoteTag('origin', getProjectVersion(), getGitAuthorPushCredsId())
                     }
                 }
             }
@@ -227,6 +233,7 @@ pipeline {
                 }
             }
         }
+
         stage('Finalize') {
             steps {
                 script {

@@ -172,8 +172,8 @@ void setupBuildImageJob(JobType jobType) {
 
         RELEASE_GPG_SIGN_KEY_CREDS_ID: Utils.getReleaseGpgSignKeyCredentialsId(this),
         RELEASE_GPG_SIGN_PASSPHRASE_CREDS_ID: Utils.getReleaseGpgSignPassphraseCredentialsId(this),
-        RELEASE_SVN_REPOSITORY: Utils.getReleaseSvnCredentialsId(),
-        RELEASE_SVN_CREDS_ID: Utils.getReleaseSvnStagingRepository()
+        RELEASE_SVN_REPOSITORY: Utils.getReleaseSvnCredentialsId(this),
+        RELEASE_SVN_CREDS_ID: Utils.getReleaseSvnStagingRepository(this)
     ])
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         logRotator {

@@ -228,7 +228,7 @@ pipeline {
                         setDeployPropertyIfNeeded("${getRepoName()}.pr.source.ref", getPRBranch())
                         setDeployPropertyIfNeeded("${getRepoName()}.pr.target.uri", "https://github.com/${getGitAuthor()}/${getRepoName()}")
                         setDeployPropertyIfNeeded("${getRepoName()}.pr.target.ref", getBuildBranch())
-                        setDeployPropertyIfNeeded("${getRepoName()}.tag.name", geGitTagName())
+                        setDeployPropertyIfNeeded("${getRepoName()}.tag.name", getGitTagName())
                     }
                 }
             }

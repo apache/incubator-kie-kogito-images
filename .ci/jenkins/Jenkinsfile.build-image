@@ -214,7 +214,7 @@ pipeline {
             }
             steps {
                 script {
-                    def resultingFileName = "incubator-kie-${getReleaseVersion()}-${getBuildImageName()}.tar.gz"
+                    def resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}.tar.gz"
                     def signatureFileName = "${resultingFileName}.asc"
                     sh """
                         docker pull ${getBuiltImageTag()}
@@ -222,7 +222,7 @@ pipeline {
                     """
                     release.gpgImportKeyFromFileWithPassword(getReleaseGpgSignKeyCredsId(), getReleaseGpgSignPassphraseCredsId())
                     release.gpgSignFileDetachedSignatureWithPassword(resultingFileName, signatureFileName, getReleaseGpgSignPassphraseCredsId())
-                    release.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getReleaseVersion(), resultingFileName, signatureFileName)
+                    release.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseVersion(), resultingFileName, signatureFileName)
                 }
             }
             post {
@@ -457,6 +457,6 @@ String getReleaseSvnCredsId() {
     return env.RELEASE_SVN_CREDS_ID
 }
 
-String getReleaseVersion() {
-    return env.RELEASE_VERSION
+String getImageArtifactReleaseVersion() {
+    return env.IMAGE_ARTIFACT_RELEASE_VERSION
 }

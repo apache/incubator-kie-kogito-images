@@ -214,11 +214,10 @@ pipeline {
                         String prLink = githubscm.createPR(commitMsg, prBody, getBuildBranch(), getGitAuthorPushCredsId())
                         deployProperties["${getRepoName()}.pr.link"] = prLink
 
-
                         // Create a new tag
                         githubscm.setUserConfigFromCreds(getGitAuthorPushCredsId())
-                        githubscm.tagRepository(getProjectVersion())
-                        githubscm.pushRemoteTag('origin', getProjectVersion(), getGitAuthorPushCredsId())
+                        githubscm.tagRepository(getGitTagName())
+                        githubscm.pushRemoteTag('origin', getGitTagName(), getGitAuthorPushCredsId())
                     }
                 }
             }
@@ -229,6 +228,7 @@ pipeline {
                         setDeployPropertyIfNeeded("${getRepoName()}.pr.source.ref", getPRBranch())
                         setDeployPropertyIfNeeded("${getRepoName()}.pr.target.uri", "https://github.com/${getGitAuthor()}/${getRepoName()}")
                         setDeployPropertyIfNeeded("${getRepoName()}.pr.target.ref", getBuildBranch())
+                        setDeployPropertyIfNeeded("${getRepoName()}.tag.name", geGitTagName())
                     }
                 }
             }
@@ -315,7 +315,7 @@ void createBuildAndTestStageClosure(String image) {
             buildParams.add(string(name: 'DEPLOY_IMAGE_NAME_SUFFIX', value: getDeployImageNameSuffix()))
             buildParams.add(string(name: 'DEPLOY_IMAGE_TAG', value: getDeployImageTag()))
             buildParams.add(booleanParam(name: 'DEPLOY_WITH_LATEST_TAG', value: isDeployLatestTag()))
-            buildParams.add(string(name: 'RELEASE_VERSION', value: getProjectVersion()))
+            buildParams.add(string(name: 'IMAGE_ARTIFACT_RELEASE_VERSION', value: getGitTagName()))
 
             def job = build(job: 'kogito-images.build-image', wait: true, parameters: buildParams, propagate: false)
             if (job.result != 'SUCCESS') {
@@ -458,4 +458,8 @@ String[] getImages() {
 
 String getQuarkusPlatformVersion() {
     return params.QUARKUS_PLATFORM_VERSION
+}
+
+String getGitTagName() {
+    return params.GIT_TAG_NAME
 }

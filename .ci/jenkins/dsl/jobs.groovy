@@ -210,6 +210,7 @@ void setupBuildImageJob(JobType jobType) {
             stringParam('DEPLOY_IMAGE_TAG', '', 'Image tag to use to deploy images')
             booleanParam('DEPLOY_WITH_LATEST_TAG', false, 'Set to true if you want the deployed images to also be with the `latest` tag')
             booleanParam('EXPORT_AND_GPG_SIGN_IMAGE', jobType == JobType.RELEASE, 'Set to true if should images be exported and signed.')
+            stringParam('RELEASE_VERSION', '', 'Set the release version to be attached to the images artifacts names')
         }
     }
 }

@@ -173,20 +173,6 @@ void promoteImage(String oldImageName, String newImageName) {
     cloud.skopeoCopyRegistryImages(oldImageName, newImageName, Integer.parseInt(env.MAX_REGISTRY_RETRIES))
 }
 
-// Set images public on quay. Useful when new images are introduced.
-void makeQuayNewImagesPublic() {
-    String namespace = getNewImageNamespace()
-    for (String imageName : getImages()) {
-        String repository = getFinalImageName(imageName, getNewImageNameSuffix())
-        echo "Check and set public if needed Quay repository ${namespace}/${repository}"
-        try {
-            cloud.makeQuayImagePublic(namespace, repository, [ usernamePassword: getNewImageRegistryCredentials()])
-        } catch (err) {
-            echo "[ERROR] Cannot set image quay.io/${namespace}/${repository} as visible"
-        }
-    }
-}
-
 String getOldImageFullTag(String imageName) {
     return "${getOldImageRegistry()}/${getOldImageNamespace()}/${getFinalImageName(imageName, getOldImageNameSuffix())}:${getOldImageTag()}"
 }
@@ -294,10 +280,6 @@ String getGitAuthorCredsId() {
 
 String getGitAuthorPushCredsId() {
     return env.GIT_AUTHOR_PUSH_CREDS_ID
-}
-
-boolean isQuayRegistry(String registry) {
-    return registry == 'quay.io'
 }
 
 ////////////////////////////////////////////////////////////////////////

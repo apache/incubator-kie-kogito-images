@@ -66,8 +66,8 @@ pipeline {
                         if (isDeployImageInOpenshiftRegistry()) {
                             cloud.loginOpenShift(getOpenShiftAPI(), env.OPENSHIFT_CREDS_KEY)
                             cloud.loginOpenshiftRegistry(env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
-                        } else if (getDeployImageRegistryCredentials()) {
-                            cloud.loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryCredentials(), env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
+                        } else if (getDeployImageRegistryUserCredentialsId() && getDeployImageRegistryTokenCredentialsId()) {
+                            cloud.loginContainerRegistry(getDeployImageRegistry(), getDeployImageRegistryUserCredentialsId(), getDeployImageRegistryTokenCredentialsId(), env.CONTAINER_ENGINE, env.CONTAINER_ENGINE_TLS_OPTIONS ?: '')
                         }
                     }
                 }
@@ -295,8 +295,12 @@ boolean isDeployImageInOpenshiftRegistry() {
     return params.DEPLOY_IMAGE_USE_OPENSHIFT_REGISTRY
 }
 
-String getDeployImageRegistryCredentials() {
-    return params.DEPLOY_IMAGE_REGISTRY_CREDENTIALS
+String getDeployImageRegistryUserCredentialsId() {
+    return params.DEPLOY_IMAGE_REGISTRY_USER_CREDENTIALS_ID
+}
+
+String getDeployImageRegistryTokenCredentialsId() {
+    return params.DEPLOY_IMAGE_REGISTRY_TOKEN_CREDENTIALS_ID
 }
 
 String getDeployImageRegistry() {

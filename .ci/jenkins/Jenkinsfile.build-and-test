@@ -155,6 +155,10 @@ String getTargetAuthor() {
     return env.TARGET_AUTHOR
 }
 
+String getTargetBranch() {
+    return params.TARGET_BRANCH
+}
+
 String getGitAuthorCredentialsId() {
     return env.GIT_AUTHOR_CREDS_ID
 }

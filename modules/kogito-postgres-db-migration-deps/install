@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+mkdir -p /home/default
+cd /home/default
+
+microdnf install --nodocs tar gzip wget
+
+wget https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/10.15.2/flyway-commandline-10.15.2-linux-x64.tar.gz
+mv flyway-commandline-10.15.2-linux-x64.tar.gz flyway.tar.gz
+
+tar -xf /home/default/flyway.tar.gz
+mv flyway-10.15.2 flyway
+
+chmod a+x migration.sh
+
+chgrp -R 0 /home/default
+chown -R 0 /home/default
+chmod -R g=u /home/default
+
+ls -al /home/default
+ls -al /home/default/flyway
+ls -al /home/default/db-migration-files
+
+microdnf clean all

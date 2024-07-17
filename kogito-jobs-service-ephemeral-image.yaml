@@ -19,13 +19,13 @@
 schema_version: 1
 
 name: "docker.io/apache/incubator-kie-kogito-jobs-service-ephemeral"
-version: "999-SNAPSHOT"
+version: "10.0.999-snapshot"
 from: "registry.access.redhat.com/ubi8/openjdk-17-runtime:1.19"
 description: "Runtime image for Kogito in memory Jobs Service"
 
 labels:
   - name: "org.kie.kogito.version"
-    value: "999-SNAPSHOT"
+    value: "10.0.999-SNAPSHOT"
   - name: "maintainer"
     value: "Apache KIE <dev@kie.apache.org>"
   - name: "io.k8s.description"

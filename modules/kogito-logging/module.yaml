@@ -18,7 +18,7 @@
 #
 schema_version: 1
 name: org.kie.kogito.logging
-version: "999-SNAPSHOT"
+version: "10.0.999-snapshot"
 
 execute:
   - script: configure

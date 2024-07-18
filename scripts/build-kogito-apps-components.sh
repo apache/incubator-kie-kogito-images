@@ -51,6 +51,9 @@ if [ ! -z "${CYPRESS_BINARY_URL}" ]; then
 fi
 
 case ${imageName} in
+    "kogito-postgres-db-migration")
+        contextDir=""
+        ;;
     "kogito-data-index-ephemeral")
         contextDir="data-index/data-index-service/data-index-service-inmemory"
         ;;

@@ -16,8 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-name: "quay.io/rhkp/flyway-image"
-version: 1.0
+name: "docker.io/apache/incubator-kie-kogito-postgres-db-migration"
+version: "999-SNAPSHOT"
 from: --platform=linux/x86_64 registry.access.redhat.com/ubi8/openjdk-17-runtime:1.19
 description: Flyway image for DI/JS database migration
 modules:

@@ -26,3 +26,10 @@ Feature: kogito-postgres-db-migration DB migration for postgresql feature.
       And the image should contain label io.k8s.description with value Kogito DB Migration creates schemas and tables for Data Index and Jobs Service for PostgreSQL database
       And the image should contain label io.k8s.display-name with value Kogito DB Migration for Data Index and Jobs Service - PostgreSQL
       And the image should contain label io.openshift.tags with value kogito,db-migration
+
+  Scenario: Verify log entries
+    When container is started with command bash -c '/home/default/migration.sh'
+    Then container log should contain PASSED PARAMS
+    And container log should contain LISTING SQL DIR
+    And container log should contain V1.44.0__data_index_definitions.sql
+    And container log should contain V2.0.1__job_details_increase_job_id_size.sql

@@ -116,7 +116,8 @@ void setupDeployJob(JobType jobType) {
 
         QUARKUS_PLATFORM_NEXUS_URL: Utils.getMavenQuarkusPlatformRepositoryUrl(this),
 
-        DISABLE_IMAGES_DEPLOY: (jobType==JobType.NIGHTLY) ? true : Utils.isImagesDeployDisabled(this)
+        // during 10.0.x release automated push of images is disabled, in nightly behaves based on configuration in branch.yaml
+        DISABLE_IMAGES_DEPLOY: (jobType==JobType.NIGHTLY) ? Utils.isImagesDeployDisabled(this) : true
     ])
     if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
         jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))

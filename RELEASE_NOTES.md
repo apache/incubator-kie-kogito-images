@@ -19,6 +19,7 @@
 
 <!-- Keep them in alphabetical order -->
 ## Enhancements
+Added Data Index and Jobs Service database migration image for use by a Kubernetes/OpenShift Job, before the Data Index and Jobs Service are deployed.
 
 ## Bug Fixes
 

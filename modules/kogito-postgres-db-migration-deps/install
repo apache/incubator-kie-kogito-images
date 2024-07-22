@@ -23,11 +23,11 @@ cd /home/default
 
 microdnf install --nodocs tar gzip wget
 
-wget https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/10.15.2/flyway-commandline-10.15.2-linux-x64.tar.gz
-mv flyway-commandline-10.15.2-linux-x64.tar.gz flyway.tar.gz
+wget https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/10.16.0/flyway-commandline-10.16.0-linux-x64.tar.gz
+mv flyway-commandline-10.16.0-linux-x64.tar.gz flyway.tar.gz
 
 tar -xf /home/default/flyway.tar.gz
-mv flyway-10.15.2 flyway
+mv flyway-10.16.0 flyway
 
 chmod a+x migration.sh
 

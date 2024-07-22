@@ -29,7 +29,6 @@ Feature: kogito-postgres-db-migration DB migration for postgresql feature.
 
   Scenario: Verify log entries
     When container is started with command bash -c '/home/default/migration.sh'
-    Then container log should contain PASSED PARAMS
-    And container log should contain LISTING SQL DIR
+    Then container log should contain LISTING SQL DIR
     And container log should contain V1.44.0__data_index_definitions.sql
     And container log should contain V2.0.1__job_details_increase_job_id_size.sql

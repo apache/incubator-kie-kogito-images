@@ -459,5 +459,5 @@ String getReleaseSvnCredsId() {
 }
 
 String getImageArtifactReleaseVersion() {
-    return env.IMAGE_ARTIFACT_RELEASE_VERSION
+    return params.IMAGE_ARTIFACT_RELEASE_VERSION
 }

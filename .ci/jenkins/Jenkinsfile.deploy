@@ -233,7 +233,6 @@ pipeline {
                 }
             }
         }
-
         stage('Finalize') {
             steps {
                 script {

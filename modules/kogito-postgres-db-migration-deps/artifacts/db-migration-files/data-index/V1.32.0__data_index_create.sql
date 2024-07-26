@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-SET SEARCH_PATH="data-index-service";
+SET SEARCH_PATH="$DATA_INDEX_SCHEMA";
 
 create table IF NOT EXISTS attachments
 (

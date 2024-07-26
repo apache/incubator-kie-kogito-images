@@ -17,10 +17,14 @@
  * under the License.
  */
 
-SET SEARCH_PATH="jobs-service";
+SET SEARCH_PATH="$JOBS_SERVICE_SCHEMA";
 
 ALTER TABLE job_details
-    ALTER COLUMN id TYPE varchar(50);
+    ADD COLUMN created TIMESTAMPTZ;
 
-ALTER TABLE job_details
-    ALTER COLUMN correlation_id TYPE varchar(50);
+UPDATE job_details
+SET created = last_update
+WHERE created is null;
+
+CREATE INDEX job_details_created_idx
+    ON job_details (created);

@@ -17,8 +17,10 @@
  * under the License.
  */
 
-SET SEARCH_PATH="data-index-service";
+SET SEARCH_PATH="$JOBS_SERVICE_SCHEMA";
 
-ALTER TABLE IF exists processes
-    ADD COLUMN IF NOT EXISTS created_by character varying,
-    ADD COLUMN IF NOT EXISTS updated_by character varying;
+ALTER TABLE job_details
+    ALTER COLUMN id TYPE varchar(50);
+
+ALTER TABLE job_details
+    ALTER COLUMN correlation_id TYPE varchar(50);

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-SET SEARCH_PATH="data-index-service";
+SET SEARCH_PATH="$DATA_INDEX_SCHEMA";
 
 create table IF NOT EXISTS definitions_nodes
 (

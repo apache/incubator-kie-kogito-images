@@ -17,7 +17,7 @@
  * under the License.
  */
 
-SET SEARCH_PATH="data-index-service";
+SET SEARCH_PATH="$DATA_INDEX_SCHEMA";
 
 create index if not exists idx_attachments_tid on attachments(task_id);
 create index if not exists idx_comments_tid on comments(task_id);

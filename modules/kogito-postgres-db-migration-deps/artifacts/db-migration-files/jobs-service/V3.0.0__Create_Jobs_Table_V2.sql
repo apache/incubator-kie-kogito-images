@@ -17,14 +17,28 @@
  * under the License.
  */
 
-SET SEARCH_PATH="jobs-service";
+SET SEARCH_PATH="$JOBS_SERVICE_SCHEMA";
 
 ALTER TABLE job_details
-    ADD COLUMN created TIMESTAMPTZ;
+    RENAME TO job_details_v1;
 
-UPDATE job_details
-SET created = last_update
-WHERE created is null;
+DROP INDEX job_details_fire_time_idx;
+DROP INDEX status_date;
 
-CREATE INDEX job_details_created_idx
-    ON job_details (created);
+CREATE TABLE job_details
+(
+  id VARCHAR(50) PRIMARY KEY,
+  correlation_id VARCHAR(50),
+  status VARCHAR(40),
+  last_update TIMESTAMPTZ,
+  retries INT4,
+  execution_counter INT4,
+  scheduled_id VARCHAR(40),
+  priority INT4,
+  recipient JSONB,
+  trigger JSONB,
+  fire_time TIMESTAMPTZ
+);
+
+CREATE INDEX job_details_fire_time_idx
+    ON job_details (fire_time);

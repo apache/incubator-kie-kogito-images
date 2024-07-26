@@ -17,7 +17,7 @@
  * under the License.
  */
 
-SET SEARCH_PATH="jobs-service";
+SET SEARCH_PATH="$JOBS_SERVICE_SCHEMA";
 
 CREATE TYPE JOB_STATUS AS ENUM
 (

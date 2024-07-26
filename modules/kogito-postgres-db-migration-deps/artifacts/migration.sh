@@ -18,8 +18,56 @@
 # under the License.
 #
 
-echo LISTING SQL DIR
-ls /home/default/db-migration-files
+if [ -z "$MIGRATE_DATA_INDEX" ]; then
+    MIGRATE_DATA_INDEX=true
+    echo "Migrating data index: $MIGRATE_DATA_INDEX"
+fi
 
-/home/default/flyway/flyway -url="$1" -user="$2" -password="$3" -mixed="true" -locations="filesystem:/home/default/db-migration-files" -schemas="public,data-index-service,jobs-service"  migrate
-/home/default/flyway/flyway -url="$1" -user="$2" -password="$3" -mixed="true" -locations="filesystem:/home/default/db-migration-files" -schemas="public,data-index-service,jobs-service" info
+if [ -z "$MIGRATE_JOBS_SERVICE" ]; then
+    MIGRATE_JOBS_SERVICE=true
+    echo "Migrating jobs service: $MIGRATE_JOBS_SERVICE"
+fi
+
+if $MIGRATE_DATA_INDEX
+then 
+    echo DI DB ENV VARS
+    echo URL=$DI_DB_URL USER=$DI_DB_USER PWD=$DI_DB_PWD
+
+    if [ -z "$DATA_INDEX_SCHEMA" ]; then
+        DATA_INDEX_SCHEMA=data-index-service
+        echo "Using the data index schema: $DATA_INDEX_SCHEMA"
+    fi
+
+    # Update $DATA_INDEX_SCHEMA for data index sql files
+    cd /home/default/db-migration-files/data-index
+    for FILE in *; do sed -i.bak 's/$DATA_INDEX_SCHEMA/'$DATA_INDEX_SCHEMA'/' $FILE; done
+    rm -rf *.bak
+
+    echo LISTING SQL DIR: DATA-INDEX
+    ls /home/default/db-migration-files/data-index
+
+    /home/default/flyway/flyway -url="$DI_DB_URL" -user="$DI_DB_USER" -password="$DI_DB_PWD" -mixed="true" -locations="filesystem:/home/default/db-migration-files/data-index" -schemas="$DATA_INDEX_SCHEMA"  migrate
+    /home/default/flyway/flyway -url="$DI_DB_URL" -user="$DI_DB_USER" -password="$DI_DB_PWD" -mixed="true" -locations="filesystem:/home/default/db-migration-files/data-index" -schemas="$DATA_INDEX_SCHEMA" info
+fi
+
+if $MIGRATE_JOBS_SERVICE
+then 
+    echo JS DB ENV VARS
+    echo URL=$JS_DB_URL USER=$JS_DB_USER PWD=$JS_DB_PWD
+
+    if [ -z "$JOBS_SERVICE_SCHEMA" ]; then
+        JOBS_SERVICE_SCHEMA=jobs-service
+        echo "Using the jobs service schema: $JOBS_SERVICE_SCHEMA"
+    fi
+
+    # Update $JOBS_SERVICE_SCHEMA for jobs service sql files
+    cd /home/default/db-migration-files/jobs-service
+    for FILE in *; do sed -i.bak 's/$JOBS_SERVICE_SCHEMA/'$JOBS_SERVICE_SCHEMA'/' $FILE; done
+    rm -rf *.bak
+
+    echo LISTING SQL DIR: JOBS-SERVICE
+    ls /home/default/db-migration-files/jobs-service
+
+    /home/default/flyway/flyway -url="$JS_DB_URL" -user="$JS_DB_USER" -password="$JS_DB_PWD" -mixed="true" -locations="filesystem:/home/default/db-migration-files/jobs-service" -schemas="$JOBS_SERVICE_SCHEMA"  migrate
+    /home/default/flyway/flyway -url="$JS_DB_URL" -user="$JS_DB_USER" -password="$JS_DB_PWD" -mixed="true" -locations="filesystem:/home/default/db-migration-files/jobs-service" -schemas="$JOBS_SERVICE_SCHEMA" info
+fi

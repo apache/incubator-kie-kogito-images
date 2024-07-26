@@ -17,7 +17,7 @@
  * under the License.
  */
 
-SET SEARCH_PATH="jobs-service";
+SET SEARCH_PATH="$JOBS_SERVICE_SCHEMA";
 
 INSERT INTO job_details (id, correlation_id, status, last_update, fire_time, retries, execution_counter, scheduled_id, priority, trigger, recipient)
     SELECT job.id AS id,

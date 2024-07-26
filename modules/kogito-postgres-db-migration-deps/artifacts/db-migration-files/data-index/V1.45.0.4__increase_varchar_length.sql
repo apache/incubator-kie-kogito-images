@@ -17,10 +17,6 @@
  * under the License.
  */
 
-SET SEARCH_PATH="jobs-service";
+SET SEARCH_PATH="$DATA_INDEX_SCHEMA";
 
-ALTER TABLE job_details
-    ADD COLUMN fire_time TIMESTAMPTZ;
-
-CREATE INDEX job_details_fire_time_idx
-    ON job_details (fire_time);
+alter table if exists processes alter column message type varchar(65535)

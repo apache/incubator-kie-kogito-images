@@ -17,10 +17,8 @@
  * under the License.
  */
 
-SET SEARCH_PATH="jobs-service";
+SET SEARCH_PATH="$DATA_INDEX_SCHEMA";
 
-ALTER TABLE job_details
-    ADD COLUMN execution_timeout BIGINT;
-
-ALTER TABLE job_details
-    ADD COLUMN execution_timeout_unit VARCHAR(40);
+ALTER TABLE IF exists processes
+    ADD COLUMN IF NOT EXISTS created_by character varying,
+    ADD COLUMN IF NOT EXISTS updated_by character varying;

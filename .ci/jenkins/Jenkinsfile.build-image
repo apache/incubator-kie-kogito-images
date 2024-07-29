@@ -208,7 +208,7 @@ pipeline {
             }
             steps {
                 script {
-                    def resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}.tar.gz"
+                    def resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}-image.tar.gz"
                     def signatureFileName = "${resultingFileName}.asc"
                     sh """
                         docker pull ${getBuiltImageTag()}

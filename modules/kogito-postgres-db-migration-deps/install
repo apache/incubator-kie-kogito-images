@@ -21,7 +21,10 @@
 mkdir -p /home/default
 cd /home/default
 
-microdnf install --nodocs tar gzip wget
+microdnf install --nodocs tar gzip wget unzip
+
+wget https://repository.apache.org/content/groups/snapshots/org/kie/kogito/kogito-ddl/10.0.999-SNAPSHOT/kogito-ddl-10.0.999-20240726.011627-10-db-scripts.zip
+unzip kogito-ddl-10.0.999-20240726.011627-10-db-scripts.zip
 
 wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/10.17.0/flyway-commandline-10.17.0-linux-x64.tar.gz
 mv flyway-commandline-10.17.0-linux-x64.tar.gz flyway.tar.gz

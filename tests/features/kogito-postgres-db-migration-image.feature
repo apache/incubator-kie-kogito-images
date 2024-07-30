@@ -17,7 +17,7 @@
 # under the License.
 #
 
-@docker.io/apache/incubator-kie-kogito-postgres-db-migration
+@docker.io/apache/incubator-kie-kogito-service-db-migration-postgresql
 Feature: kogito-postgres-db-migration DB migration for postgresql feature.
 
   Scenario: verify if all labels are correctly set on kogito-postgres-db-migration-image image

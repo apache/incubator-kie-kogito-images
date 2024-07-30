@@ -20,9 +20,6 @@ schema_version: 1
 name: kogito-postgres-db-migration-deps
 version: "1.0"
 artifacts:
-  - name: db-migration-files
-    path: artifacts/db-migration-files
-    dest: /home/default/db-migration-files
   - name: migration.sh
     path: artifacts/migration.sh
     dest: /home/default

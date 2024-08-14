@@ -214,9 +214,9 @@ pipeline {
                         docker pull ${getBuiltImageTag()}
                         docker save ${getBuiltImageTag()} | gzip > ${resultingFileName}
                     """
-                    release.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
-                    release.gpgSignFileDetachedSignatureWithoutPassword(resultingFileName, signatureFileName)
-                    release.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseVersion(), resultingFileName, signatureFileName)
+                    releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
+                    releaseUtils.gpgSignFileDetachedSignatureWithoutPassword(resultingFileName, signatureFileName)
+                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseVersion(), resultingFileName, signatureFileName)
                 }
             }
             post {

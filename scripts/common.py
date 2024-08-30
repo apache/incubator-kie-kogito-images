@@ -430,6 +430,19 @@ def update_maven_repo_in_setup_maven(repo_url, replace_default_repository):
         replacement = 'export MAVEN_REPO_URL="{}"'.format(repo_url)
     update_in_file(SETUP_MAVEN_SCRIPT, pattern, replacement)
 
+def update_maven_repos_in_setup_maven(repos_url):
+    """
+    Update maven repositories into setup-maven.sh script
+    :param repos_url: Maven repositories urls
+    """
+    repo_list = repos_url.split(',')
+    print("Set maven repos {} in setup-maven script".format(repo_list))
+    pattern = re.compile(r'(# export MAVEN_REPO_URL=.*)')
+    replacement = f"export MAVEN_REPOS={','.join(['REPO_' + str(i) for i, _ in enumerate(repo_list)])}\n"
+    for i, value in enumerate(repo_list):
+        replacement += f"export REPO_{i}_MAVEN_REPO_URL={value}\n"
+    update_in_file(SETUP_MAVEN_SCRIPT, pattern, replacement)
+
 def update_env_value(env_name, env_value):
     """
     Update environment value into the given yaml module/image file

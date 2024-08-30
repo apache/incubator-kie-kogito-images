@@ -24,7 +24,7 @@ TEST_FAILED_IMAGES = Collections.synchronizedList([])
 
 pipeline {
     agent {
-        docker { 
+        docker {
             image env.AGENT_DOCKER_BUILDER_IMAGE
             args env.AGENT_DOCKER_BUILDER_ARGS
             label util.avoidFaultyNodes()
@@ -99,14 +99,12 @@ pipeline {
                     dir(getRepoName()) {
                         versionCmd = "python scripts/manage-kogito-version.py --bump-to ${getProjectVersion()} --confirm"
                         if (getBuildBranch() != 'main') {
-                            versionCmd += " --examples-ref ${!isRelease() ? 'nightly-' : ''}${getBuildBranch()}"
+                            versionCmd += " --examples-ref ${getBuildBranch()}"
                         }
                         if (getKogitoArtifactsVersion()) {
                             versionCmd += " --artifacts-version ${getKogitoArtifactsVersion()}"
                         }
                         sh versionCmd
-
-                        commitAndTagChanges("[${getBuildBranch()}] Update version to ${getProjectVersion()}")
                     }
                 }
             }
@@ -154,6 +152,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Commit and Tag changes') {
+            when {
+                expression { return isRelease() }
+            }
+            steps {
+                script {
+                    if (!getBuildFailedImages()) {
+                        dir(getRepoName()) {
+                            commitAndTagChanges("[${getBuildBranch()}] Update version to ${getProjectVersion()}")
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Finalize') {
             steps {
                 script {
@@ -217,15 +231,17 @@ void createBuildAndTestStageClosure(String image) {
             List buildParams = []
             buildParams.add(string(name: 'DISPLAY_NAME', value: "${params.DISPLAY_NAME} - ${image}"))
             buildParams.add(string(name: 'BUILD_IMAGE_NAME', value: image))
-            buildParams.add(string(name: 'SOURCE_AUTHOR', value: isRelease() ? getGitAuthor() : getGitAuthor()))
-            buildParams.add(string(name: 'SOURCE_BRANCH', value: isRelease() ? getPRBranch() : getBuildBranch()))
+            buildParams.add(string(name: 'SOURCE_AUTHOR', value: getGitAuthor()))
+            buildParams.add(string(name: 'SOURCE_BRANCH', value: getBuildBranch()))
 
-            buildParams.add(string(name: 'MAVEN_ARTIFACTS_REPOSITORY', value: env.MAVEN_ARTIFACT_REPOSITORY ?: (isRelease() ? env.DEFAULT_STAGING_REPOSITORY : '')))
+            buildParams.add(string(name: 'MAVEN_ARTIFACTS_REPOSITORY', value: env.MAVEN_ARTIFACT_REPOSITORY))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_URI', value: params.APPS_URI))
             buildParams.add(string(name: 'BUILD_KOGITO_APPS_REF', value: params.APPS_REF))
             buildParams.add(booleanParam(name: 'SKIP_TESTS', value: params.SKIP_TESTS))
             buildParams.add(string(name: 'TESTS_KOGITO_EXAMPLES_URI', value: params.EXAMPLES_URI))
             buildParams.add(string(name: 'TESTS_KOGITO_EXAMPLES_REF', value: params.EXAMPLES_REF))
+
+            buildParams.add(string(name: 'UPDATE_KOGITO_VERSION', value: isRelease() ? getProjectVersion() : ''))
 
             buildParams.add(booleanParam(name: 'DEPLOY_IMAGE', value: isDeployImage()))
             buildParams.add(booleanParam(name: 'DEPLOY_IMAGE_USE_OPENSHIFT_REGISTRY', value: isDeployImageInOpenshiftRegistry()))

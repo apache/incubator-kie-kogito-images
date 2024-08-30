@@ -32,6 +32,7 @@ import argparse
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Update Maven information in repo from the given artifact url and '
                                                  'version.')
+    parser.add_argument('--repo-urls', dest='repo_urls', help='Defines the urls of the repositories to setup maven, comma (,) separated')
     parser.add_argument('--repo-url', dest='repo_url', help='Defines the url of the repository to setup into the tests')
     parser.add_argument('--replace-default-repo', dest='replace_default_repo', default=False, action='store_true',
                         help='Enable if repo-url should replace the default repository')
@@ -52,6 +53,9 @@ if __name__ == "__main__":
 
     parser.add_argument('--tests-only', dest='tests_only', default=False, action='store_true', help='Update product modules/images')
     args = parser.parse_args()
+
+    if args.repo_urls:
+        common.update_maven_repos_in_setup_maven(args.repo_urls)
 
     if args.repo_url:
         common.update_maven_repo_in_build_config(args.repo_url, args.replace_default_repo)

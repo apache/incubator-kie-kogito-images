@@ -87,19 +87,23 @@ pipeline {
 
                     if (getMavenArtifactRepository()) {
                         echo "Setup Repository url to '${getMavenArtifactRepository()}'"
-                        runPythonCommand("python scripts/update-repository.py  --repo-url ${getMavenArtifactRepository()}")
+                        runPythonCommand("python scripts/update-repository.py --repo-urls ${getMavenArtifactRepository()}")
                     }
                 }
             }
         }
 
-        stage('Update kogito version') {
+        stage('Update project version') {
             when {
                 expression { params.UPDATE_KOGITO_VERSION != '' }
             }
             steps {
                 script {
-                    runPythonCommand("python scripts/manage-kogito-version.py --bump-to ${params.UPDATE_KOGITO_VERSION} --confirm")
+                    versionCmd = "python scripts/manage-kogito-version.py --bump-to ${params.UPDATE_KOGITO_VERSION} --confirm"
+                    if (isRelease()) {
+                        versionCmd += " --examples-ref ${getSourceBranch()}"
+                    }
+                    sh versionCmd
                 }
             }
         }
@@ -128,7 +132,7 @@ pipeline {
 
                     int freePort = cloud.findFreePort()
                     env.localRegistryUrl = cloud.startLocalRegistry(freePort)
-                    cloud.prepareForDockerMultiplatformBuild([env.localRegistryUrl],[cloud.getDockerIOMirrorRegistryConfig()], false)
+                    cloud.prepareForDockerMultiplatformBuild([env.localRegistryUrl], [cloud.getDockerIOMirrorRegistryConfig()], false)
 
                     // Generate the Dockerfile
                     runPythonCommand("make build-image ${getMakeBuildImageArgs()} image_name=${getBuildImageName()} ignore_test=true ignore_tag=true build_options='--dry-run'")
@@ -184,7 +188,7 @@ pipeline {
                 script {
                     updateGithubCommitStatus('PENDING', 'Tests in progress')
 
-                    String testImageTag = "docker.io/apache/incubator-kie-${getBuildImageName()}:${getImageVersion()}"
+                    String testImageTag = "${getDeployImageRegistry()}/${getDeployImageNamespace()}/incubator-kie-${getBuildImageName()}:${getImageVersion()}"
                     String builtImageTag = getBuiltImageTag()
                     // Pull and tag to test image
                     sh """
@@ -208,11 +212,12 @@ pipeline {
             }
             steps {
                 script {
-                    def resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}-image.tar.gz"
-                    def signatureFileName = "${resultingFileName}.asc"
+                    String resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}-image.tar.gz"
+                    String signatureFileName = "${resultingFileName}.asc"
                     sh """
                         docker pull ${getBuiltImageTag()}
-                        docker save ${getBuiltImageTag()} | gzip > ${resultingFileName}
+                        docker tag ${getBuiltImageTag()} ${getBuiltDeployImageTag()}
+                        docker save ${getBuiltDeployImageTag()} | gzip > ${resultingFileName}
                     """
                     releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
                     releaseUtils.gpgSignFileDetachedSignatureWithoutPassword(resultingFileName, signatureFileName)
@@ -269,9 +274,13 @@ String getImageVersion() {
     return runPythonCommand('make display-image-version', true).trim()
 }
 
+String getBuiltDeployImageTag(String imageTag = '') {
+    return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${getFinalImageName()}:${imageTag ?: getDeployImageTag()}"
+}
+
 String getBuiltImageTag(String imageTag = '') {
     if (shouldDeployImage()) {
-        return "${getDeployImageRegistry()}/${getDeployImageNamespace()}/${getFinalImageName()}:${imageTag ?: getDeployImageTag()}"
+        return getBuiltDeployImageTag(imageTag)
     }
     return "${env.localRegistryUrl}/${getBuildImageName()}:${githubscm.getCommitHash()}"
 }
@@ -316,7 +325,7 @@ String getDeployImageTag() {
 }
 
 String getFinalImageName() {
-    return "incubator-kie-" + getBuildImageName() + (getDeployImageNameSuffix() ? "-${getDeployImageNameSuffix()}" : '')
+    return 'incubator-kie-' + getBuildImageName() + (getDeployImageNameSuffix() ? "-${getDeployImageNameSuffix()}" : '')
 }
 
 boolean isDeployLatestTag() {
@@ -440,7 +449,7 @@ String getTriggeringProjectName() {
     if (currentBuild.upstreamBuilds) {
         return currentBuild.upstreamBuilds[0].projectName
     }
-    return ""
+    return ''
 }
 String getReleaseGpgSignKeyCredsId() {
     return env.RELEASE_GPG_SIGN_KEY_CREDS_ID
@@ -460,4 +469,8 @@ String getReleaseSvnCredsId() {
 
 String getImageArtifactReleaseVersion() {
     return params.IMAGE_ARTIFACT_RELEASE_VERSION
+}
+
+boolean isRelease() {
+    return env.RELEASE ? env.RELEASE.toBoolean() : false
 }

@@ -214,6 +214,7 @@ pipeline {
                 script {
                     String resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}-image.tar.gz"
                     String signatureFileName = "${resultingFileName}.asc"
+                    String checksumFileName = "${resultingFileName}.sha512"
                     sh """
                         docker pull ${getBuiltImageTag()}
                         docker tag ${getBuiltImageTag()} ${getBuiltDeployImageTag()}
@@ -221,7 +222,7 @@ pipeline {
                     """
                     releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
                     releaseUtils.gpgSignFileDetachedSignatureWithoutPassword(resultingFileName, signatureFileName)
-                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseVersion(), resultingFileName, signatureFileName)
+                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseVersion(), resultingFileName, signatureFileName, checksumFileName)
                 }
             }
             post {

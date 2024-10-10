@@ -212,7 +212,7 @@ pipeline {
             }
             steps {
                 script {
-                    String resultingFileName = "incubator-kie-${getImageArtifactReleaseVersion()}-${getBuildImageName()}-image.tar.gz"
+                    String resultingFileName = "apache-kie-${getImageArtifactReleaseVersion()}-incubating-${getBuildImageName()}-image.tar.gz"
                     String signatureFileName = "${resultingFileName}.asc"
                     String checksumFileName = "${resultingFileName}.sha512"
                     sh """
@@ -222,7 +222,7 @@ pipeline {
                     """
                     releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
                     releaseUtils.gpgSignFileDetachedSignatureWithoutPassword(resultingFileName, signatureFileName)
-                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseVersion(), resultingFileName, signatureFileName, checksumFileName)
+                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseCandidateVersion(), resultingFileName, signatureFileName, checksumFileName)
                 }
             }
             post {
@@ -470,6 +470,10 @@ String getReleaseSvnCredsId() {
 
 String getImageArtifactReleaseVersion() {
     return params.IMAGE_ARTIFACT_RELEASE_VERSION
+}
+
+String getImageArtifactReleaseCandidateVersion() {
+    return params.IMAGE_ARTIFACT_RELEASE_CANDIDATE_VERSION
 }
 
 boolean isRelease() {

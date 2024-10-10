@@ -118,7 +118,7 @@ void setupDeployJob(JobType jobType) {
         QUARKUS_PLATFORM_NEXUS_URL: Utils.getMavenQuarkusPlatformRepositoryUrl(this),
 
         // during 10.0.x release automated push of images is disabled, in nightly behaves based on configuration in branch.yaml
-        DISABLE_IMAGES_DEPLOY: (jobType==JobType.NIGHTLY) ? Utils.isImagesDeployDisabled(this) : true
+        DISABLE_IMAGES_DEPLOY: (jobType == JobType.RELEASE) ? true : Utils.isImagesDeployDisabled(this)
     ])
     if (Utils.hasBindingValue(this, 'CLOUD_IMAGES')) {
         jobParams.env.put('IMAGES_LIST', Utils.getBindingValue(this, 'CLOUD_IMAGES'))
@@ -218,6 +218,7 @@ void setupBuildImageJob(JobType jobType) {
             booleanParam('DEPLOY_WITH_LATEST_TAG', false, 'Set to true if you want the deployed images to also be with the `latest` tag')
             booleanParam('EXPORT_AND_GPG_SIGN_IMAGE', jobType == JobType.RELEASE, 'Set to true if should images be exported and signed.')
             stringParam('IMAGE_ARTIFACT_RELEASE_VERSION', '', 'Optional if not RELEASE. Set the release version to be attached to the images artifacts names')
+            stringParam('IMAGE_ARTIFACT_RELEASE_CANDIDATE_VERSION', '', 'Optional if not RELEASE. Set the release candidate version to define the SVN directory where the images artifacts will be uploaded')
         }
     }
 }

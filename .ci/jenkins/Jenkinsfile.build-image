@@ -212,17 +212,22 @@ pipeline {
             }
             steps {
                 script {
-                    String resultingFileName = "apache-kie-${getImageArtifactReleaseVersion()}-incubating-${getBuildImageName()}-image.tar.gz"
+                    String resultingFileNameTarGz = "apache-kie-${getImageArtifactReleaseVersion()}-incubating-${getBuildImageName()}-image.tar.gz"
+                    String resultingFileNameTar = resultingFileNameTarGz.replace('.gz', '')
                     String signatureFileName = "${resultingFileName}.asc"
                     String checksumFileName = "${resultingFileName}.sha512"
                     sh """
                         docker pull ${getBuiltImageTag()}
                         docker tag ${getBuiltImageTag()} ${getBuiltDeployImageTag()}
                         docker save ${getBuiltDeployImageTag()} | gzip > ${resultingFileName}
+
+                        zcat ${resultingFileNameTarGz} | dd of=${resultingFileNameTar} bs=512 skip=1
+                        tar -rvf ${resultingFileNameTar} ./LICENSE ./NOTICE ./DISCLAIMER-WIP
+                        gzip -q -c ${resultingFileNameTar} > ${resultingFileNameTarGz}
                     """
                     releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
                     releaseUtils.gpgSignFileDetachedSignatureWithoutPassword(resultingFileName, signatureFileName)
-                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseCandidateVersion(), resultingFileName, signatureFileName, checksumFileName)
+                    releaseUtils.svnUploadFileToRepository(getReleaseSvnRepository(), getReleaseSvnCredsId(), getImageArtifactReleaseCandidateVersion(), resultingFileNameTarGz, signatureFileName, checksumFileName)
                 }
             }
             post {
